@@ -1,0 +1,12 @@
+C:\Users\BrunoLisa\OneDrive\Projetos\SoluçãoNFSE\NFSE\EnvioTeste\bin\Debug\EnvioTeste.exe.config
+C:\Users\BrunoLisa\OneDrive\Projetos\SoluçãoNFSE\NFSE\EnvioTeste\bin\Debug\EnvioTeste.exe
+C:\Users\BrunoLisa\OneDrive\Projetos\SoluçãoNFSE\NFSE\EnvioTeste\bin\Debug\EnvioTeste.pdb
+C:\Users\BrunoLisa\OneDrive\Projetos\SoluçãoNFSE\NFSE\EnvioTeste\obj\Debug\EnvioTeste.csprojResolveAssemblyReference.cache
+C:\Users\BrunoLisa\OneDrive\Projetos\SoluçãoNFSE\NFSE\EnvioTeste\obj\Debug\EnvioTeste.exe
+C:\Users\BrunoLisa\OneDrive\Projetos\SoluçãoNFSE\NFSE\EnvioTeste\obj\Debug\EnvioTeste.pdb
+C:\Users\Bruno Werneck\Downloads\folder\NFSE\EnvioTeste\bin\Debug\EnvioTeste.exe.config
+C:\Users\Bruno Werneck\Downloads\folder\NFSE\EnvioTeste\obj\Debug\EnvioTeste.exe
+C:\Users\Bruno Werneck\Downloads\folder\NFSE\EnvioTeste\obj\Debug\EnvioTeste.pdb
+C:\Users\Bruno Werneck\Downloads\folder\NFSE\EnvioTeste\bin\Debug\EnvioTeste.exe
+C:\Users\Bruno Werneck\Downloads\folder\NFSE\EnvioTeste\bin\Debug\EnvioTeste.pdb
+C:\Users\Bruno Werneck\Downloads\folder\NFSE\EnvioTeste\obj\Debug\EnvioTeste.csprojResolveAssemblyReference.cache

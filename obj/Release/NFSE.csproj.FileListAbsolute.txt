@@ -1,0 +1,7 @@
+C:\Users\Bruno Werneck\Downloads\folder\NFSE\bin\NFSE.dll
+C:\Users\Bruno Werneck\Downloads\folder\NFSE\bin\NFSE.pdb
+C:\Users\Bruno Werneck\Downloads\folder\NFSE\bin\Negocio.dll
+C:\Users\Bruno Werneck\Downloads\folder\NFSE\bin\Negocio.pdb
+C:\Users\Bruno Werneck\Downloads\folder\NFSE\obj\Release\NFSE.csprojResolveAssemblyReference.cache
+C:\Users\Bruno Werneck\Downloads\folder\NFSE\obj\Release\NFSE.dll
+C:\Users\Bruno Werneck\Downloads\folder\NFSE\obj\Release\NFSE.pdb

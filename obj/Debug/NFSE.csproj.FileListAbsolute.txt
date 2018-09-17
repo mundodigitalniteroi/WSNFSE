@@ -1,0 +1,14 @@
+C:\Users\BrunoLisa\OneDrive\Projetos\SoluçãoNFSE\NFSE\bin\NFSE.dll
+C:\Users\BrunoLisa\OneDrive\Projetos\SoluçãoNFSE\NFSE\bin\NFSE.pdb
+C:\Users\BrunoLisa\OneDrive\Projetos\SoluçãoNFSE\NFSE\bin\Negocio.dll
+C:\Users\BrunoLisa\OneDrive\Projetos\SoluçãoNFSE\NFSE\bin\Negocio.pdb
+C:\Users\BrunoLisa\OneDrive\Projetos\SoluçãoNFSE\NFSE\obj\Debug\NFSE.csprojResolveAssemblyReference.cache
+C:\Users\BrunoLisa\OneDrive\Projetos\SoluçãoNFSE\NFSE\obj\Debug\NFSE.dll
+C:\Users\BrunoLisa\OneDrive\Projetos\SoluçãoNFSE\NFSE\obj\Debug\NFSE.pdb
+C:\Users\Bruno Werneck\Downloads\folder\NFSE\bin\NFSE.dll
+C:\Users\Bruno Werneck\Downloads\folder\NFSE\bin\NFSE.pdb
+C:\Users\Bruno Werneck\Downloads\folder\NFSE\bin\Negocio.dll
+C:\Users\Bruno Werneck\Downloads\folder\NFSE\bin\Negocio.pdb
+C:\Users\Bruno Werneck\Downloads\folder\NFSE\obj\Debug\NFSE.csprojResolveAssemblyReference.cache
+C:\Users\Bruno Werneck\Downloads\folder\NFSE\obj\Debug\NFSE.dll
+C:\Users\Bruno Werneck\Downloads\folder\NFSE\obj\Debug\NFSE.pdb
