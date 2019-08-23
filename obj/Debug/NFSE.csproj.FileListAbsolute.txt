@@ -12,3 +12,10 @@ C:\Users\Bruno Werneck\Downloads\folder\NFSE\bin\Negocio.pdb
 C:\Users\Bruno Werneck\Downloads\folder\NFSE\obj\Debug\NFSE.csprojResolveAssemblyReference.cache
 C:\Users\Bruno Werneck\Downloads\folder\NFSE\obj\Debug\NFSE.dll
 C:\Users\Bruno Werneck\Downloads\folder\NFSE\obj\Debug\NFSE.pdb
+C:\Users\Bruno Werneck\Documents\GitHub\WSNFSE\obj\Debug\NFSE.csprojResolveAssemblyReference.cache
+C:\Users\Bruno Werneck\Documents\GitHub\WSNFSE\obj\Debug\NFSE.dll
+C:\Users\Bruno Werneck\Documents\GitHub\WSNFSE\obj\Debug\NFSE.pdb
+C:\Users\Bruno Werneck\Documents\GitHub\WSNFSE\bin\NFSE.dll
+C:\Users\Bruno Werneck\Documents\GitHub\WSNFSE\bin\NFSE.pdb
+C:\Users\Bruno Werneck\Documents\GitHub\WSNFSE\bin\Negocio.dll
+C:\Users\Bruno Werneck\Documents\GitHub\WSNFSE\bin\Negocio.pdb

@@ -12,22 +12,22 @@ by editing this MSBuild file. In order to learn more about this please visit htt
   </PropertyGroup>
   <ItemGroup>
     <File Include="bin/Negocio.dll">
-      <publishTime>09/03/2018 17:07:15</publishTime>
+      <publishTime>02/10/2019 12:50:44</publishTime>
     </File>
     <File Include="bin/Negocio.pdb">
       <publishTime>03/09/2018 16:23:22</publishTime>
     </File>
     <File Include="bin/NFSE.dll">
-      <publishTime>09/03/2018 17:07:16</publishTime>
+      <publishTime>02/10/2019 12:50:46</publishTime>
     </File>
     <File Include="bin/NFSE.pdb">
       <publishTime>03/09/2018 16:23:23</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>09/03/2018 16:28:33</publishTime>
+      <publishTime>02/07/2019 08:13:23</publishTime>
     </File>
     <File Include="WSnfse.asmx">
-      <publishTime>02/27/2018 02:04:40</publishTime>
+      <publishTime>12/19/2018 17:12:05</publishTime>
     </File>
   </ItemGroup>
 </Project>

@@ -77,8 +77,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Negocio\Negocio.csproj">
-      <Project>{19cd4518-61f0-4d91-ae80-52ab40237ec7}</Project>
+    <ProjectReference Include="Negocio\Negocio.csproj">
+      <Project>{56a6f667-9178-4018-8a09-16c7690756ad}</Project>
       <Name>Negocio</Name>
     </ProjectReference>
   </ItemGroup>
