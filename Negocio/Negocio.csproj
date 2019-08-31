@@ -47,9 +47,11 @@
     <Compile Include="Modelo\Cancelar.cs" />
     <Compile Include="Modelo\Consultar.cs" />
     <Compile Include="Modelo\Endereco.cs" />
+    <Compile Include="Modelo\NotaFiscal.cs" />
     <Compile Include="Modelo\Prestador.cs" />
     <Compile Include="Modelo\PrestadorAcesso.cs" />
     <Compile Include="Modelo\RetornoConsulta.cs" />
+    <Compile Include="Modelo\RetornoErro.cs" />
     <Compile Include="Modelo\Servico.cs" />
     <Compile Include="Modelo\Tomador.cs" />
     <Compile Include="Util\ConnectionFactory.cs" />

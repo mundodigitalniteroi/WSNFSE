@@ -1,9 +1,6 @@
 ﻿using Negocio;
 using Negocio.Modelo;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Services;
 
 namespace NFSE
@@ -16,9 +13,8 @@ namespace NFSE
     [System.ComponentModel.ToolboxItem(false)]
     // To allow this Web Service to be called from script, using ASP.NET AJAX, uncomment the following line. 
     // [System.Web.Script.Services.ScriptService]
-    public class WSnfse : System.Web.Services.WebService
+    public class WSnfse : WebService
     {
-
         [WebMethod]
         public string Autorizar(CapaAutorizacaoNfse obj)
         {

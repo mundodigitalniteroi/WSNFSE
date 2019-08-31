@@ -1,102 +1,95 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Negocio;
+using System;
 
 namespace EnvioTeste
 {
     class Program
     {
         static void Main(string[] args)
-        {           
-            
-            
-            
-            nfse.CapaAutorizacaoNfse obj = new nfse.CapaAutorizacaoNfse();
-            nfse.WSnfseSoapClient zxk = new nfse.WSnfseSoapClient();
-            /*obj.homologacao = true;
-           
-           
+        {
+            var capaAutorizacaoNfse = new nfse.CapaAutorizacaoNfse
+            {
+                homologacao = true,
+                identificador_nota = 700067,
 
-            obj.autorizar = new nfse.Autorizar();
-            obj.autorizar.data_emissao = "2018-08-08T09:34:43";
-            obj.autorizar.natureza_operacao = "1";
-            obj.autorizar.optante_simples_nacional = "false";
+                autorizar = new nfse.Autorizar
+                {
+                    data_emissao = "2019-08-28T04:34:06",
+                    natureza_operacao = "1",
+                    optante_simples_nacional = "false",
 
-           
-            obj.autorizar.prestador = new nfse.Prestador();
-            obj.autorizar.prestador.cnpj = "27947093000112";
-            obj.autorizar.prestador.inscricao_municipal = "60376000190";
-            obj.autorizar.prestador.codigo_municipio = "2927408";
+                    prestador = new nfse.Prestador
+                    {
+                        cnpj = "08397160003658",
+                        codigo_municipio = "5103403",
+                        inscricao_municipal = "172692"
+                    },
 
-            obj.autorizar.tomador = new nfse.Tomador();
-            obj.autorizar.tomador.cpf = "34950246976";
-            obj.autorizar.tomador.razao_social = "NICOLAS FELIPE PEIXOTO";
-            obj.autorizar.tomador.email = "contato@mob-link.net.br";
+                    servico = new nfse.Servico
+                    {
+                        aliquota = "5.00",
+                        codigo_cnae = "5223100",
+                        codigo_tributario_municipio = "",
+                        discriminacao = @"ISS Tributado de acordo com a Lei Complementar Nº 460 de 22/10/2008 Processo Nº 9094604500 - Carga Tributária 18,45% fonte IBPT Serviços de Transporte/Remoção de Veículos",
+                        item_lista_servico = "1101",
+                        iss_retido = "false",
+                        valor_iss = "0.05",
+                        valor_servicos = "1.0"
+                    },
 
+                    tomador = new nfse.Tomador()
+                    {
+                        cpf = "07172853750",
+                        email = "cristineysoares@gmail.com",
+                        razao_social = "CRISTINEY SOARES",
+                        telefone = "2199999999",
 
-            obj.autorizar.tomador.endereco = new nfse.Endereco();
-            obj.autorizar.tomador.endereco.logradouro = "2ª TRAVESSA OGUNJA";
-            obj.autorizar.tomador.endereco.numero="32";
-            obj.autorizar.tomador.endereco.complemento = "...";
-            obj.autorizar.tomador.endereco.bairro = "ACUPE DE BROTAS";
-            obj.autorizar.tomador.endereco.codigo_municipio = null;
-            obj.autorizar.tomador.endereco.uf="BA";
-            obj.autorizar.tomador.endereco.cep = "40290650";
+                        endereco = new nfse.Endereco
+                        {
+                            bairro = "Maria Paula",
+                            cep = "24756660",
+                            complemento = "Bloco 12 Apto 403",
+                            logradouro = "estrada da paciencia",
+                            numero = "2939",
+                            uf = "RJ"
+                        }
+                    }
+                }
+            };
 
-            obj.autorizar.servico = new nfse.Servico();
-            obj.autorizar.servico.aliquota = null;
-            obj.autorizar.servico.discriminacao = "SERVIÇOS DE REMOÇÃO E ACAUTELAMENTO DE VEÍCULOS CONFORME PROCESSO 89163";
-            obj.autorizar.servico.iss_retido = "false";
-            obj.autorizar.servico.valor_iss = "0";
-            obj.autorizar.servico.item_lista_servico = "1101";
-            obj.autorizar.servico.codigo_tributario_municipio = "1101";
-            obj.autorizar.servico.valor_servicos = "1.0";
-            
-            
+            try
+            {
+                string result = string.Empty;
 
-            //obj.homologacao = true;
-            obj.identificador_nota = 547959;*/
+                using (var ws = new nfse.WSnfseSoapClient())
+                {
+                    // result = ws.Autorizar(capaAutorizacaoNfse);
+                }
 
-
-
-
-
-            //string asa = zxk.Autorizar(obj);
-
-            //Console.WriteLine(asa);
-
-            
-            Console.WriteLine("Testando consulta nota");
-
-            nfse.Consultar objConsulta = new nfse.Consultar();
-
-            objConsulta.homologacao = false;
-            objConsulta.referencia = "280470";
-            objConsulta.cnpj_prestador = "13053777000247";
-            objConsulta.id_usuario = 0;
-            string testeconsulta = zxk.Consultar(objConsulta);
-
-            Console.WriteLine(testeconsulta);
-            
-
-            Console.WriteLine("Testando cancela nota");
-
-            /*nfse.Cancelar objcanc = new nfse.Cancelar();
-
-            objcanc.homologacao = false;
-            objcanc.justificativa = "Testes de canecelamentos";
-            objcanc.referencia = "12361";
+                Console.WriteLine(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERRO: " + ex.Message);
+            }
 
 
-
-            string testecancela = zxk.Cancelar(objcanc);
-
-            Console.WriteLine(testecancela);*/
+            try
+            {
+                var aux = new ControlarEnvio().Consultar_obj(new Negocio.Modelo.Consultar
+                {
+                    referencia = "700069",
+                    cnpj_prestador = "08397160003658",
+                    homologacao = true,
+                    id_usuario = 1
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERRO: " + ex.Message);
+            }
 
             Console.ReadLine();
-
         }
     }
 }
