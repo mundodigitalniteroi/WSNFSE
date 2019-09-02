@@ -59,14 +59,14 @@ namespace Negocio
             return resposta;
         }
 
-        private void InserirNota(PrestadorAcesso _param, CapaAutorizacaoNfse obj, string resposta)
+        private int InserirNota(PrestadorAcesso _param, CapaAutorizacaoNfse obj, string resposta)
         {
-            ConnectionFactory.Executar(string.Format("INSERT INTO {0}.dbo.tb_nfse_autorizacao_dp_nf(referencia_externa,resposta_envio,id_nfse_prestador, id_usuario, flag_ambiente, data_emissao, natureza_operacao, optante_simples_nacional, tomador_cpf_cnpj, tomador_cnpj, tomador_nome_razao_social, tomador_telefone, tomador_email, tomador_endereco_logradouro, tomador_endereco_numero, tomador_endereco_complemento, tomador_endereco_bairro, tomador_endereco_codigo_municipio, tomador_endereco_uf, tomador_endereco_cep, servico_aliquota, servico_discriminacao, servico_iss_retido, servico_valor_iss, servico_codigo_cnae, servico_item_lista_servico, servico_valor_servicos) \r\n                    VALUES      (", (object)_param._base).ToString() + "'" + (object)obj.identificador_nota + "'," + "'" + resposta + "'," + _param.id_nfse_prestador + "," + (object)obj.id_usuario + "," + "'" + (object)Convert.ToInt32(obj.homologacao) + "'," + "'" + (string.IsNullOrEmpty(obj.autorizar.data_emissao) ? "" : obj.autorizar.data_emissao) + "'," + "'" + (string.IsNullOrEmpty(obj.autorizar.natureza_operacao) ? "" : obj.autorizar.natureza_operacao) + "'," + "'" + (string.IsNullOrEmpty(obj.autorizar.optante_simples_nacional) ? "" : Convert.ToInt32(Convert.ToBoolean(obj.autorizar.optante_simples_nacional)).ToString()) + "'," + "'" + (string.IsNullOrEmpty(obj.autorizar.tomador.cpf) ? "" : obj.autorizar.tomador.cpf) + "'," + "'" + (string.IsNullOrEmpty(obj.autorizar.tomador.cnpj) ? "" : obj.autorizar.tomador.cnpj) + "'," + "'" + (string.IsNullOrEmpty(obj.autorizar.tomador.razao_social) ? "" : obj.autorizar.tomador.razao_social) + "'," + "'" + (string.IsNullOrEmpty(obj.autorizar.tomador.telefone) ? "" : obj.autorizar.tomador.telefone) + "'," + "'" + (string.IsNullOrEmpty(obj.autorizar.tomador.email) ? "" : obj.autorizar.tomador.email) + "'," + "'" + (string.IsNullOrEmpty(obj.autorizar.tomador.endereco.logradouro) ? "" : obj.autorizar.tomador.endereco.logradouro) + "'," + "'" + (string.IsNullOrEmpty(obj.autorizar.tomador.endereco.numero) ? "" : obj.autorizar.tomador.endereco.numero) + "'," + "'" + (string.IsNullOrEmpty(obj.autorizar.tomador.endereco.complemento) ? "" : obj.autorizar.tomador.endereco.complemento) + "'," + "'" + (string.IsNullOrEmpty(obj.autorizar.tomador.endereco.bairro) ? "" : obj.autorizar.tomador.endereco.bairro) + "'," + "'" + (string.IsNullOrEmpty(obj.autorizar.tomador.endereco.codigo_municipio) ? "" : obj.autorizar.tomador.endereco.codigo_municipio) + "'," + "'" + (string.IsNullOrEmpty(obj.autorizar.tomador.endereco.uf) ? "" : obj.autorizar.tomador.endereco.uf) + "'," + "'" + (string.IsNullOrEmpty(obj.autorizar.tomador.endereco.cep) ? "" : obj.autorizar.tomador.endereco.cep) + "'," + "'" + (string.IsNullOrEmpty(obj.autorizar.servico.aliquota) ? "" : obj.autorizar.servico.aliquota) + "'," + "'" + (string.IsNullOrEmpty(obj.autorizar.servico.discriminacao) ? "" : obj.autorizar.servico.discriminacao) + "'," + "'" + (string.IsNullOrEmpty(obj.autorizar.servico.iss_retido) ? "" : Convert.ToInt32(Convert.ToBoolean(obj.autorizar.servico.iss_retido)).ToString()) + "'," + "'" + (string.IsNullOrEmpty(obj.autorizar.servico.valor_iss) ? "" : obj.autorizar.servico.valor_iss) + "'," + "'" + (string.IsNullOrEmpty(obj.autorizar.servico.codigo_cnae) ? "" : obj.autorizar.servico.codigo_cnae) + "'," + "'" + (string.IsNullOrEmpty(obj.autorizar.servico.item_lista_servico) ? "" : obj.autorizar.servico.item_lista_servico) + "'," + "'" + (string.IsNullOrEmpty(obj.autorizar.servico.valor_servicos) ? "" : obj.autorizar.servico.valor_servicos) + "')", false);
+            return GlobalDataBaseController.Execute(string.Format("INSERT INTO {0}.dbo.tb_nfse_autorizacao_dp_nf(referencia_externa,resposta_envio,id_nfse_prestador, id_usuario, flag_ambiente, data_emissao, natureza_operacao, optante_simples_nacional, tomador_cpf_cnpj, tomador_cnpj, tomador_nome_razao_social, tomador_telefone, tomador_email, tomador_endereco_logradouro, tomador_endereco_numero, tomador_endereco_complemento, tomador_endereco_bairro, tomador_endereco_codigo_municipio, tomador_endereco_uf, tomador_endereco_cep, servico_aliquota, servico_discriminacao, servico_iss_retido, servico_valor_iss, servico_codigo_cnae, servico_item_lista_servico, servico_valor_servicos) \r\n                    VALUES      (", _param._base).ToString() + "'" + obj.identificador_nota + "'," + "'" + resposta + "'," + _param.id_nfse_prestador + "," + obj.id_usuario + "," + "'" + Convert.ToInt32(obj.homologacao) + "'," + "'" + (string.IsNullOrEmpty(obj.autorizar.data_emissao) ? "" : obj.autorizar.data_emissao) + "'," + "'" + (string.IsNullOrEmpty(obj.autorizar.natureza_operacao) ? "" : obj.autorizar.natureza_operacao) + "'," + "'" + (string.IsNullOrEmpty(obj.autorizar.optante_simples_nacional) ? "" : Convert.ToInt32(Convert.ToBoolean(obj.autorizar.optante_simples_nacional)).ToString()) + "'," + "'" + (string.IsNullOrEmpty(obj.autorizar.tomador.cpf) ? "" : obj.autorizar.tomador.cpf) + "'," + "'" + (string.IsNullOrEmpty(obj.autorizar.tomador.cnpj) ? "" : obj.autorizar.tomador.cnpj) + "'," + "'" + (string.IsNullOrEmpty(obj.autorizar.tomador.razao_social) ? "" : obj.autorizar.tomador.razao_social) + "'," + "'" + (string.IsNullOrEmpty(obj.autorizar.tomador.telefone) ? "" : obj.autorizar.tomador.telefone) + "'," + "'" + (string.IsNullOrEmpty(obj.autorizar.tomador.email) ? "" : obj.autorizar.tomador.email) + "'," + "'" + (string.IsNullOrEmpty(obj.autorizar.tomador.endereco.logradouro) ? "" : obj.autorizar.tomador.endereco.logradouro) + "'," + "'" + (string.IsNullOrEmpty(obj.autorizar.tomador.endereco.numero) ? "" : obj.autorizar.tomador.endereco.numero) + "'," + "'" + (string.IsNullOrEmpty(obj.autorizar.tomador.endereco.complemento) ? "" : obj.autorizar.tomador.endereco.complemento) + "'," + "'" + (string.IsNullOrEmpty(obj.autorizar.tomador.endereco.bairro) ? "" : obj.autorizar.tomador.endereco.bairro) + "'," + "'" + (string.IsNullOrEmpty(obj.autorizar.tomador.endereco.codigo_municipio) ? "" : obj.autorizar.tomador.endereco.codigo_municipio) + "'," + "'" + (string.IsNullOrEmpty(obj.autorizar.tomador.endereco.uf) ? "" : obj.autorizar.tomador.endereco.uf) + "'," + "'" + (string.IsNullOrEmpty(obj.autorizar.tomador.endereco.cep) ? "" : obj.autorizar.tomador.endereco.cep) + "'," + "'" + (string.IsNullOrEmpty(obj.autorizar.servico.aliquota) ? "" : obj.autorizar.servico.aliquota) + "'," + "'" + (string.IsNullOrEmpty(obj.autorizar.servico.discriminacao) ? "" : obj.autorizar.servico.discriminacao) + "'," + "'" + (string.IsNullOrEmpty(obj.autorizar.servico.iss_retido) ? "" : Convert.ToInt32(Convert.ToBoolean(obj.autorizar.servico.iss_retido)).ToString()) + "'," + "'" + (string.IsNullOrEmpty(obj.autorizar.servico.valor_iss) ? "" : obj.autorizar.servico.valor_iss) + "'," + "'" + (string.IsNullOrEmpty(obj.autorizar.servico.codigo_cnae) ? "" : obj.autorizar.servico.codigo_cnae) + "'," + "'" + (string.IsNullOrEmpty(obj.autorizar.servico.item_lista_servico) ? "" : obj.autorizar.servico.item_lista_servico) + "'," + "'" + (string.IsNullOrEmpty(obj.autorizar.servico.valor_servicos) ? "" : obj.autorizar.servico.valor_servicos) + "')");
         }
 
         public string Consultar(Consultar obj)
         {
-            PrestadorAcesso prestadorAcesso = this.VerificarPrestador(obj.cnpj_prestador.Replace("/", "").Replace(".", "").Replace("-", ""), obj.homologacao);
+            PrestadorAcesso prestadorAcesso = VerificarPrestador(obj.cnpj_prestador.Replace("/", "").Replace(".", "").Replace("-", ""), obj.homologacao);
 
             if (string.IsNullOrEmpty(prestadorAcesso.prestador_chave))
                 return "Prestador não configurado";
@@ -89,76 +89,15 @@ namespace Negocio
             return str;
         }
 
-        private string InserirConsulta(PrestadorAcesso _param, Consultar obj, string retorno)
+        private string InserirConsulta(PrestadorAcesso prestadorAcesso, Consultar consultar, string retorno)
         {
-            SqlConnection sqlConnection = new SqlConnection(ConnectionFactory.connectionString);
-            SqlCommand sqlCommand = new SqlCommand();
-            sqlConnection.Open();
-            Tools tools = new Tools();
-
-            if (sqlConnection.State == ConnectionState.Open)
-                sqlCommand.Connection = sqlConnection;
-            RetornoConsulta retornoConsulta = new JavaScriptSerializer()
-            {
-                MaxJsonLength = int.MaxValue
-            }.Deserialize<RetornoConsulta>(retorno);
-
-            if (retornoConsulta.url.Equals(""))
-            {
-                string str = string.Format("INSERT INTO {0}.dbo.tb_nfse_consultar_dp_nf (id_autorizacao_nf, id_usuario, flag_ambiente, status_nf, numero_nf, codigo_verificacao, data_emissao, url_nota_fiscal, caminho_xml_nota_fiscal) VALUES (@id_autorizacao_nf, @id_usuario, @flag_ambiente, @status_nf, @numero_nf, @codigo_verificacao, @data_emissao, @url_nota_fiscal, @caminho_xml_nota_fiscal)", (object)_param._base);
-                sqlCommand.CommandText = str;
-                sqlCommand.Parameters.Add("@id_autorizacao_nf", SqlDbType.Int).Value = (object)obj.referencia;
-                sqlCommand.Parameters.Add("@id_usuario", SqlDbType.Int).Value = (object)obj.id_usuario;
-                sqlCommand.Parameters.Add("@flag_ambiente", SqlDbType.Int).Value = (object)Convert.ToInt32(obj.homologacao);
-                sqlCommand.Parameters.Add("@status_nf", SqlDbType.VarChar).Value = (object)retornoConsulta.status;
-                sqlCommand.Parameters.Add("@numero_nf", SqlDbType.VarChar).Value = (object)retornoConsulta.numero;
-                sqlCommand.Parameters.Add("@codigo_verificacao", SqlDbType.VarChar).Value = (object)retornoConsulta.codigo_verificacao;
-                sqlCommand.Parameters.Add("@data_emissao", SqlDbType.VarChar).Value = (object)retornoConsulta.data_emissao;
-                sqlCommand.Parameters.Add("@url_nota_fiscal", SqlDbType.VarChar).Value = (object)retornoConsulta.url;
-                sqlCommand.Parameters.Add("@caminho_xml_nota_fiscal", SqlDbType.VarChar).Value = (object)retornoConsulta.caminho_xml_nota_fiscal;
-                sqlCommand.ExecuteNonQuery();
-                sqlCommand.Dispose();
-                sqlCommand.Parameters.Clear();
-            }
-            else
-            {
-                byte[] numArray = (byte[])null;
-
-                using (MemoryStream memoryStream = new MemoryStream())
-                {
-                    retornoConsulta.url = retornoConsulta.url.Replace("nfse.aspx", "/NFSE/contribuinte/notaprintimg.aspx");
-                    tools.ObterImagemEndereco(retornoConsulta.url).Save((Stream)memoryStream, ImageFormat.Jpeg);
-                    numArray = memoryStream.ToArray();
-                }
-
-                string str = string.Format("INSERT INTO {0}.dbo.tb_nfse_consultar_dp_nf (id_autorizacao_nf, id_usuario, flag_ambiente, status_nf, numero_nf, codigo_verificacao, data_emissao, url_nota_fiscal, caminho_xml_nota_fiscal, imagem_nota_fiscal)\r\n                                            VALUES (@id_autorizacao_nf, @id_usuario, @flag_ambiente, @status_nf, @numero_nf, @codigo_verificacao, @data_emissao, @url_nota_fiscal, @caminho_xml_nota_fiscal, @imagem_nota_fiscal)", (object)_param._base);
-
-                sqlCommand.CommandText = str;
-                sqlCommand.Parameters.Add("@imagem_nota_fiscal", SqlDbType.VarBinary, numArray.Length).Value = (object)numArray;
-                sqlCommand.Parameters.Add("@id_autorizacao_nf", SqlDbType.Int).Value = (object)obj.referencia;
-                sqlCommand.Parameters.Add("@id_usuario", SqlDbType.Int).Value = (object)obj.id_usuario;
-                sqlCommand.Parameters.Add("@flag_ambiente", SqlDbType.Int).Value = (object)Convert.ToInt32(obj.homologacao);
-                sqlCommand.Parameters.Add("@status_nf", SqlDbType.VarChar).Value = (object)retornoConsulta.status;
-                sqlCommand.Parameters.Add("@numero_nf", SqlDbType.VarChar).Value = (object)retornoConsulta.numero;
-                sqlCommand.Parameters.Add("@codigo_verificacao", SqlDbType.VarChar).Value = (object)retornoConsulta.codigo_verificacao;
-                sqlCommand.Parameters.Add("@data_emissao", SqlDbType.VarChar).Value = (object)retornoConsulta.data_emissao;
-                sqlCommand.Parameters.Add("@url_nota_fiscal", SqlDbType.VarChar).Value = (object)retornoConsulta.url;
-                sqlCommand.Parameters.Add("@caminho_xml_nota_fiscal", SqlDbType.VarChar).Value = (object)retornoConsulta.caminho_xml_nota_fiscal;
-
-                sqlCommand.ExecuteNonQuery();
-                sqlCommand.Dispose();
-                sqlCommand.Parameters.Clear();
-
-                retornoConsulta.ImagemNotaFiscal = numArray;
-            }
-
-            sqlConnection.Close();
-
-            return new JavaScriptSerializer().Serialize((object)retornoConsulta);
+            return new JavaScriptSerializer().Serialize((object)InserirConsulta_obj(prestadorAcesso, consultar, retorno));
         }
 
-        private RetornoConsulta InserirConsulta_obj(PrestadorAcesso _param, Consultar obj, string retorno)
+        private RetornoConsulta InserirConsulta_obj(PrestadorAcesso prestadorAcesso, Consultar consultar, string retorno)
         {
+            GlobalDataBaseController.DatabaseEnvironment = consultar.homologacao ? EnvironmentEnum.Development : EnvironmentEnum.Production;
+
             var retornoConsulta = new JavaScriptSerializer()
             {
                 MaxJsonLength = int.MaxValue
@@ -174,12 +113,12 @@ namespace Negocio
                     MaxJsonLength = int.MaxValue
                 }.Deserialize<RetornoErro>(retorno);
 
-                retornoErro.AutorizacaoNotaFiscalId = int.Parse(obj.referencia);
-                retornoErro.UsuarioId = obj.id_usuario;
+                retornoErro.AutorizacaoNotaFiscalId = int.Parse(consultar.referencia);
+                retornoErro.UsuarioId = consultar.id_usuario;
                 retornoErro.CodigoErro = retornoErro.CodigoErro.Trim().ToUpper();
                 retornoErro.MensagemErro = retornoErro.MensagemErro.Trim();
 
-                retornoConsulta.NotaFiscalErroId = CadastrarRetornoErroNotaFiscal(_param._base, retornoErro);
+                retornoConsulta.NotaFiscalErroId = CadastrarRetornoErroNotaFiscal(prestadorAcesso._base, retornoErro);
 
                 retornoConsulta.AutorizacaoNotaFiscalId = retornoErro.AutorizacaoNotaFiscalId;
                 retornoConsulta.UsuarioId = retornoErro.UsuarioId;
@@ -191,9 +130,9 @@ namespace Negocio
 
             var notaFiscal = new NotaFiscal
             {
-                AutorizacaoNotaFiscalId = int.Parse(obj.referencia),
-                UsuarioId = obj.id_usuario,
-                FlagAmbiente = obj.homologacao ? "1" : "0",
+                AutorizacaoNotaFiscalId = int.Parse(consultar.referencia),
+                UsuarioId = consultar.id_usuario,
+                FlagAmbiente = consultar.homologacao ? "1" : "0",
                 StatusNotaFiscal = retornoConsulta.status,
                 NumeroNotaFiscal = retornoConsulta.numero,
                 CodigoVerificacao = retornoConsulta.codigo_verificacao,
@@ -208,7 +147,7 @@ namespace Negocio
                 {
                     notaFiscal.UrlNotaFiscal = retornoConsulta.url.Replace("nfse.aspx", "/NFSE/contribuinte/notaprintimg.aspx");
 
-                    new Tools().ObterImagemEndereco(notaFiscal.UrlNotaFiscal).Save((Stream)memoryStream, ImageFormat.Jpeg);
+                    new Tools().ObterImagemEndereco(notaFiscal.UrlNotaFiscal).Save(memoryStream, ImageFormat.Jpeg);
 
                     notaFiscal.ImagemNotaFiscal = memoryStream.ToArray();
                 }
@@ -218,7 +157,7 @@ namespace Negocio
 
             try
             {
-                retornoConsulta.NotaFiscalId = CadastrarRetornoNotaFiscal(_param._base, notaFiscal);
+                retornoConsulta.NotaFiscalId = CadastrarRetornoNotaFiscal(prestadorAcesso._base, notaFiscal);
             }
             catch (Exception ex)
             {
@@ -230,23 +169,23 @@ namespace Negocio
 
         public string Cancelar(Cancelar obj)
         {
+            GlobalDataBaseController.DatabaseEnvironment = obj.homologacao ? EnvironmentEnum.Development : EnvironmentEnum.Production;
+
             string str1 = obj.referencia.ToString();
-            string str2;
+            string server = GetRemoteServer(obj.homologacao);
             string token;
 
             if (obj.homologacao)
             {
-                str2 = "http://homologacao.acrasnfe.acras.com.br/";
                 token = "2D6xPXxoXRyIuTyUjS6HbiLao7Xr50Mb";
             }
             else
             {
-                str2 = "https://api.focusnfe.com.br/";
                 token = "1Zrf7fOmWSdLwtOZZVGcFJRhl9SFps1x";
             }
 
-            string uri = str2 + "v2/nfse/" + str1;
-            Tools tools = new Tools();
+            string uri = server + "v2/nfse/" + str1;
+            var tools = new Tools();
             string json = tools.ObjToJSON((object)new Dictionary<string, string>()
             {
                 {
@@ -258,13 +197,13 @@ namespace Negocio
             return tools.CancelarNfse(uri, json, token);
         }
 
-        public string GerarNota(int id_grv, bool _isdev)
+        public string GerarNota(int id_grv, bool isDev)
         {
-            ConnectionFactory.connectionString = !_isdev ? "Data Source=179.107.47.90;Initial Catalog=dbMobLinkDepositoPublicoProducao;Persist Security Info=True;User ID=ws_patio;Password=Studio55#" : "Data Source=179.107.47.90;Initial Catalog=dbMobLinkDepositoPublicoDesenvolvimento;Persist Security Info=True;User ID=ws_patio;Password=Studio55#";
+            GlobalDataBaseController.DatabaseEnvironment = isDev ? EnvironmentEnum.Development : EnvironmentEnum.Production;
 
             Thread.CurrentThread.CurrentCulture = new CultureInfo("pt-BR");
 
-            DataTable dataTable = ConnectionFactory.Consultar(string.Format("SELECT TOP 1\r\n                 tb_dep_Grv.id_grv\r\n                , tb_dep_Grv.id_status_operacao\r\n                , tb_dep_grv.id_cliente\r\n                , tb_dep_Grv.numero_formulario_grv\r\n                , db_global..tb_glo_emp_empresas.nome\r\n                , db_global..tb_glo_emp_empresas.inscricao_municipal\r\n                , db_global..tb_glo_emp_empresas.cnpj\r\n                , tb_dep_clientes.nome\r\n                , tb_glo_loc_municipios.codigo_municipio_ibge\r\n                , tb_dep_atendimento.nota_fiscal_nome\r\n                , tb_dep_atendimento.nota_fiscal_cpf\r\n                , tb_dep_atendimento.nota_fiscal_endereco\r\n                , tb_dep_atendimento.nota_fiscal_numero\r\n                , tb_dep_atendimento.nota_fiscal_complemento\r\n                , tb_dep_atendimento.nota_fiscal_bairro\r\n                , tb_dep_atendimento.nota_fiscal_municipio\r\n                , tb_dep_atendimento.nota_fiscal_uf\r\n                , tb_dep_atendimento.nota_fiscal_cep\r\n                , tb_dep_atendimento.nota_fiscal_ddd\r\n                , tb_dep_atendimento.nota_fiscal_telefone\r\n                , tb_dep_atendimento.nota_fiscal_email\r\n                , tb_dep_faturamento.id_faturamento\r\n                , tb_dep_faturamento.data_pagamento\r\n                , tb_dep_faturamento.valor_pagamento\r\n                FROM tb_dep_Grv\r\n                JOIN tb_dep_clientes ON tb_dep_grv.id_cliente = tb_dep_clientes.id_cliente\r\n                JOIN  db_global..tb_glo_emp_empresas ON db_global..tb_glo_emp_empresas.id_empresa = tb_dep_clientes.id_empresa \r\n                JOIN  db_global..tb_glo_loc_cep ON db_global..tb_glo_loc_cep.id_cep = tb_dep_clientes.id_cep\r\n                JOIN  db_global..tb_glo_loc_municipios ON db_global..tb_glo_loc_municipios.id_municipio = db_global..tb_glo_loc_cep.id_municipio\r\n                JOIN tb_dep_atendimento ON tb_dep_atendimento.id_grv = tb_dep_grv.id_grv\r\n                JOIN tb_dep_faturamento ON tb_dep_faturamento.id_atendimento = tb_dep_atendimento.id_atendimento\r\n                WHERE tb_dep_Grv.id_grv IN ({0})\r\n                AND   tb_dep_Grv.id_status_operacao = 'E'", (object)id_grv).ToString(), false);
+            var dataTable = GlobalDataBaseController.Select("SELECT TOP 1\r\n                 tb_dep_Grv.id_grv\r\n                , tb_dep_Grv.id_status_operacao\r\n                , tb_dep_grv.id_cliente\r\n                , tb_dep_Grv.numero_formulario_grv\r\n                , db_global..tb_glo_emp_empresas.nome\r\n                , db_global..tb_glo_emp_empresas.inscricao_municipal\r\n                , db_global..tb_glo_emp_empresas.cnpj\r\n                , tb_dep_clientes.nome\r\n                , tb_glo_loc_municipios.codigo_municipio_ibge\r\n                , tb_dep_atendimento.nota_fiscal_nome\r\n                , tb_dep_atendimento.nota_fiscal_cpf\r\n                , tb_dep_atendimento.nota_fiscal_endereco\r\n                , tb_dep_atendimento.nota_fiscal_numero\r\n                , tb_dep_atendimento.nota_fiscal_complemento\r\n                , tb_dep_atendimento.nota_fiscal_bairro\r\n                , tb_dep_atendimento.nota_fiscal_municipio\r\n                , tb_dep_atendimento.nota_fiscal_uf\r\n                , tb_dep_atendimento.nota_fiscal_cep\r\n                , tb_dep_atendimento.nota_fiscal_ddd\r\n                , tb_dep_atendimento.nota_fiscal_telefone\r\n                , tb_dep_atendimento.nota_fiscal_email\r\n                , tb_dep_faturamento.id_faturamento\r\n                , tb_dep_faturamento.data_pagamento\r\n                , tb_dep_faturamento.valor_pagamento\r\n                FROM tb_dep_Grv\r\n                JOIN tb_dep_clientes ON tb_dep_grv.id_cliente = tb_dep_clientes.id_cliente\r\n                JOIN  db_global..tb_glo_emp_empresas ON db_global..tb_glo_emp_empresas.id_empresa = tb_dep_clientes.id_empresa \r\n                JOIN  db_global..tb_glo_loc_cep ON db_global..tb_glo_loc_cep.id_cep = tb_dep_clientes.id_cep\r\n                JOIN  db_global..tb_glo_loc_municipios ON db_global..tb_glo_loc_municipios.id_municipio = db_global..tb_glo_loc_cep.id_municipio\r\n                JOIN tb_dep_atendimento ON tb_dep_atendimento.id_grv = tb_dep_grv.id_grv\r\n                JOIN tb_dep_faturamento ON tb_dep_faturamento.id_atendimento = tb_dep_atendimento.id_atendimento\r\n                WHERE tb_dep_Grv.id_grv IN (" + id_grv + ")\r\n                AND   tb_dep_Grv.id_status_operacao = 'E'");
 
             if (dataTable == null)
                 return "Sem dados para geração da nota!";
@@ -274,7 +213,7 @@ namespace Negocio
                 if (row["nota_fiscal_nome"].ToString().Equals(""))
                     return "Dados insuficientes para geração da nota";
 
-                capaAutorizacaoNfse.homologacao = _isdev;
+                capaAutorizacaoNfse.homologacao = isDev;
 
                 capaAutorizacaoNfse.autorizar = new Autorizar
                 {
@@ -329,30 +268,26 @@ namespace Negocio
             return this.AutorizarNfse(capaAutorizacaoNfse);
         }
 
-        public PrestadorAcesso VerificarPrestador(string cnpj, bool _isdev, CapaAutorizacaoNfse obj)
+        public PrestadorAcesso VerificarPrestador(string cnpj, bool isDev, CapaAutorizacaoNfse obj)
         {
             var prestadorAcesso = new PrestadorAcesso();
 
-            if (_isdev)
+            if (isDev)
             {
-                prestadorAcesso.connection = "Data Source=179.107.47.90;Initial Catalog=dbMobLinkDepositoPublicoDesenvolvimento;Persist Security Info=True;User ID=ws_patio;Password=Studio55#";
                 prestadorAcesso._base = "db_NfseDev";
-                // prestadorAcesso.server = "http://homologacao.acrasnfe.acras.com.br/";
             }
             else
             {
-                prestadorAcesso.connection = "Data Source=179.107.47.90;Initial Catalog=dbMobLinkDepositoPublicoProducao;Persist Security Info=True;User ID=ws_patio;Password=Studio55#";
                 prestadorAcesso._base = "db_Nfse";
-                // prestadorAcesso.server = "https://api.focusnfe.com.br/";
             }
 
-            ConnectionFactory.connectionString = prestadorAcesso.connection;
+            GlobalDataBaseController.DatabaseEnvironment = isDev ? EnvironmentEnum.Development : EnvironmentEnum.Production;
 
-            prestadorAcesso.server = GetRemoteServer(_isdev);
+            prestadorAcesso.server = GetRemoteServer(isDev);
 
             Thread.CurrentThread.CurrentCulture = new CultureInfo("pt-BR");
 
-            var dtPrestador = ConnectionFactory.Consultar(string.Format(@"SELECT a.id_nfse_prestador,
+            var dtPrestador = GlobalDataBaseController.Select(string.Format(@"SELECT a.id_nfse_prestador,
                                            a.prestador_cnpj,
                                            a.prestador_nome,
                                            a.prestador_inscricao_municipal,
@@ -366,10 +301,12 @@ namespace Negocio
                                            b.codigo_ibge = a.prestador_codigo_municipio_ibge
                                            WHERE  prestador_cnpj='{0}'
 						                          and b.item_lista_servico = '{2}'
-                                                  and a.prestador_codigo_municipio_ibge = '{3}'", (object)cnpj, (object)prestadorAcesso._base, obj.autorizar.servico.item_lista_servico, obj.autorizar.prestador.codigo_municipio).ToString(), false);
+                                                  and a.prestador_codigo_municipio_ibge = '{3}'", (object)cnpj, (object)prestadorAcesso._base, obj.autorizar.servico.item_lista_servico, obj.autorizar.prestador.codigo_municipio).ToString());
 
             if (dtPrestador == null)
+            {
                 return prestadorAcesso;
+            }
 
             foreach (DataRow row in (InternalDataCollectionBase)dtPrestador.Rows)
             {
@@ -384,35 +321,31 @@ namespace Negocio
                 prestadorAcesso.codigo_cnae = row["codigo_cnae"].ToString();
             }
 
-            ConnectionFactory.Desconectar();
+            GlobalDataBaseController.DisconnectDataBase();
 
             return prestadorAcesso;
         }
 
-        public PrestadorAcesso VerificarPrestador(string cnpj, bool _isdev)
+        public PrestadorAcesso VerificarPrestador(string cnpj, bool isDev)
         {
             var prestadorAcesso = new PrestadorAcesso();
 
-            if (_isdev)
+            if (isDev)
             {
-                prestadorAcesso.connection = "Data Source=179.107.47.90;Initial Catalog=dbMobLinkDepositoPublicoDesenvolvimento;Persist Security Info=True;User ID=ws_patio;Password=Studio55#";
                 prestadorAcesso._base = "db_NfseDev";
-                // prestadorAcesso.server = "http://homologacao.acrasnfe.acras.com.br/";
             }
             else
             {
-                prestadorAcesso.connection = "Data Source=179.107.47.90;Initial Catalog=dbMobLinkDepositoPublicoProducao;Persist Security Info=True;User ID=ws_patio;Password=Studio55#";
                 prestadorAcesso._base = "db_Nfse";
-                // prestadorAcesso.server = "https://api.focusnfe.com.br/";
             }
 
-            ConnectionFactory.connectionString = prestadorAcesso.connection;
+            GlobalDataBaseController.DatabaseEnvironment = isDev ? EnvironmentEnum.Development : EnvironmentEnum.Production;
 
-            prestadorAcesso.server = GetRemoteServer(_isdev);
+            prestadorAcesso.server = GetRemoteServer(isDev);
 
             Thread.CurrentThread.CurrentCulture = new CultureInfo("pt-BR");
 
-            DataTable dataTable = ConnectionFactory.Consultar(string.Format(@"SELECT a.id_nfse_prestador,
+            DataTable dataTable = GlobalDataBaseController.Select(string.Format(@"SELECT a.id_nfse_prestador,
                                            a.prestador_cnpj,
                                            a.prestador_nome,
                                            a.prestador_inscricao_municipal,
@@ -424,7 +357,7 @@ namespace Negocio
                                            b.codigo_cnae  
                                     FROM   {1}.dbo.tb_nfse_prestador a left join  {1}.dbo.tb_nfse_parametro_municipio b  on
                                            b.codigo_ibge = a.prestador_codigo_municipio_ibge
-                                           WHERE  prestador_cnpj='{0}'", (object)cnpj, (object)prestadorAcesso._base).ToString(), false);
+                                           WHERE  prestador_cnpj='{0}'", cnpj, prestadorAcesso._base).ToString());
 
             if (dataTable == null)
             {
@@ -444,21 +377,39 @@ namespace Negocio
                 prestadorAcesso.codigo_cnae = row["codigo_cnae"].ToString();
             }
 
-            ConnectionFactory.Desconectar();
+            GlobalDataBaseController.DisconnectDataBase();
 
             return prestadorAcesso;
         }
 
         public RetornoConsulta Consultar_obj(Consultar obj)
         {
-            PrestadorAcesso prestadorAcesso = VerificarPrestador(obj.cnpj_prestador.Replace("/", "").Replace(".", "").Replace("-", ""), obj.homologacao);
+            var prestadorAcesso = new PrestadorAcesso();
+
+            try
+            {
+                prestadorAcesso = VerificarPrestador(obj.cnpj_prestador.Replace("/", "").Replace(".", "").Replace("-", ""), obj.homologacao);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
 
             if (string.IsNullOrEmpty(prestadorAcesso.prestador_chave))
             {
                 return (RetornoConsulta)null;
             }
 
-            string nfse = new Tools().GetNfse(prestadorAcesso.server + "v2/nfse/" + obj.referencia, prestadorAcesso.prestador_chave);
+            string nfse;
+
+            try
+            {
+                nfse = new Tools().GetNfse(prestadorAcesso.server + "v2/nfse/" + obj.referencia, prestadorAcesso.prestador_chave);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
 
             try
             {
@@ -477,125 +428,115 @@ namespace Negocio
             SQL.AppendLine("SELECT Server");
             SQL.AppendLine("  FROM " + (isDev ? "db_NfseDev" : "db_Nfse") + ".dbo.tb_nfse_configuracoes");
 
-            var dtConfiguracoes = ConnectionFactory.Consultar(SQL.ToString());
+            var dtConfiguracoes = GlobalDataBaseController.Select(SQL);
 
             return dtConfiguracoes.Rows[0]["Server"].ToString();
         }
 
         private int CadastrarRetornoNotaFiscal(string dataBase, NotaFiscal model)
         {
-            using (var sqlConnection = new SqlConnection(ConnectionFactory.connectionString))
+            var SQL = new StringBuilder();
+
+            SQL.AppendLine("INSERT INTO " + dataBase + ".dbo.tb_nfse_consultar_dp_nf");
+
+            SQL.AppendLine("    (id_autorizacao_nf");
+            SQL.AppendLine("    ,id_usuario");
+            SQL.AppendLine("    ,flag_ambiente");
+            SQL.AppendLine("    ,status_nf");
+            SQL.AppendLine("    ,numero_nf");
+            SQL.AppendLine("    ,codigo_verificacao");
+            SQL.AppendLine("    ,data_emissao");
+            SQL.AppendLine("    ,url_nota_fiscal");
+
+            if (model.ImagemNotaFiscal != null)
             {
-                sqlConnection.Open();
-
-                using (var sqlCommand = new SqlCommand())
-                {
-                    if (sqlConnection.State == ConnectionState.Open)
-                    {
-                        sqlCommand.Connection = sqlConnection;
-                    }
-
-                    var SQL = new StringBuilder();
-
-                    SQL.AppendLine("INSERT INTO " + dataBase + ".dbo.tb_nfse_consultar_dp_nf");
-
-                    SQL.AppendLine("    (id_autorizacao_nf");
-                    SQL.AppendLine("    ,id_usuario");
-                    SQL.AppendLine("    ,flag_ambiente");
-                    SQL.AppendLine("    ,status_nf");
-                    SQL.AppendLine("    ,numero_nf");
-                    SQL.AppendLine("    ,codigo_verificacao");
-                    SQL.AppendLine("    ,data_emissao");
-                    SQL.AppendLine("    ,url_nota_fiscal");
-
-                    if (model.ImagemNotaFiscal != null)
-                    {
-                        SQL.AppendLine("    ,imagem_nota_fiscal");
-                    }
-
-                    SQL.AppendLine("    ,caminho_xml_nota_fiscal)");
-
-                    SQL.AppendLine("VALUES");
-
-                    SQL.AppendLine("        (@id_autorizacao_nf");
-                    SQL.AppendLine("        ,@id_usuario");
-                    SQL.AppendLine("        ,@flag_ambiente");
-                    SQL.AppendLine("        ,@status_nf");
-                    SQL.AppendLine("        ,@numero_nf");
-                    SQL.AppendLine("        ,@codigo_verificacao");
-                    SQL.AppendLine("        ,@data_emissao");
-                    SQL.AppendLine("        ,@url_nota_fiscal");
-
-                    if (model.ImagemNotaFiscal != null)
-                    {
-                        SQL.AppendLine("        ,@imagem_nota_fiscal");
-                    }
-
-                    SQL.AppendLine("        ,@caminho_xml_nota_fiscal)");
-
-                    sqlCommand.CommandText = SQL.ToString();
-
-                    sqlCommand.Parameters.Add("@id_autorizacao_nf", SqlDbType.Int).Value = model.AutorizacaoNotaFiscalId;
-                    sqlCommand.Parameters.Add("@id_usuario", SqlDbType.Int).Value = model.UsuarioId;
-                    sqlCommand.Parameters.Add("@flag_ambiente", SqlDbType.VarChar).Value = model.FlagAmbiente;
-                    sqlCommand.Parameters.Add("@status_nf", SqlDbType.VarChar).Value = model.StatusNotaFiscal;
-                    sqlCommand.Parameters.Add("@numero_nf", SqlDbType.VarChar).Value = model.NumeroNotaFiscal;
-                    sqlCommand.Parameters.Add("@codigo_verificacao", SqlDbType.VarChar).Value = model.CodigoVerificacao;
-                    sqlCommand.Parameters.Add("@data_emissao", SqlDbType.DateTime).Value = model.DataEmissao;
-                    sqlCommand.Parameters.Add("@url_nota_fiscal", SqlDbType.VarChar).Value = model.UrlNotaFiscal;
-                    sqlCommand.Parameters.Add("@caminho_xml_nota_fiscal", SqlDbType.VarChar).Value = model.CaminhoNotaFiscal;
-
-                    if (model.ImagemNotaFiscal != null)
-                    {
-                        sqlCommand.Parameters.Add("@imagem_nota_fiscal", SqlDbType.VarBinary, model.ImagemNotaFiscal.Length).Value = model.ImagemNotaFiscal;
-                    }
-
-                    sqlCommand.CommandText = SQL.ToString() + "; SELECT CAST(scope_identity() AS INT)";
-
-                    return (Int32)sqlCommand.ExecuteScalar();
-                }
+                SQL.AppendLine("    ,imagem_nota_fiscal");
             }
+
+            SQL.AppendLine("    ,caminho_xml_nota_fiscal)");
+
+            SQL.AppendLine("VALUES");
+
+            SQL.AppendLine("        (@id_autorizacao_nf");
+            SQL.AppendLine("        ,@id_usuario");
+            SQL.AppendLine("        ,@flag_ambiente");
+            SQL.AppendLine("        ,@status_nf");
+            SQL.AppendLine("        ,@numero_nf");
+            SQL.AppendLine("        ,@codigo_verificacao");
+            SQL.AppendLine("        ,@data_emissao");
+            SQL.AppendLine("        ,@url_nota_fiscal");
+
+            if (model.ImagemNotaFiscal != null)
+            {
+                SQL.AppendLine("        ,@imagem_nota_fiscal");
+            }
+
+            SQL.AppendLine("        ,@caminho_xml_nota_fiscal)");
+
+
+            SqlParameter[] param =
+            {
+                new SqlParameter("@id_autorizacao_nf",SqlDbType.Int) { Value = model.AutorizacaoNotaFiscalId },
+                new SqlParameter("@id_usuario",SqlDbType.Int) { Value = model.UsuarioId },
+                new SqlParameter("@flag_ambiente",SqlDbType.VarChar) {Value = model.FlagAmbiente },
+                new SqlParameter("@status_nf",SqlDbType.VarChar) { Value = model.StatusNotaFiscal },
+                new SqlParameter("@numero_nf",SqlDbType.VarChar) {Value = model.NumeroNotaFiscal },
+                new SqlParameter("@codigo_verificacao",SqlDbType.VarChar) { Value = model.CodigoVerificacao },
+                new SqlParameter("@data_emissao",SqlDbType.DateTime) { Value = model.DataEmissao },
+                new SqlParameter("@url_nota_fiscal",SqlDbType.VarChar) { Value = model.UrlNotaFiscal },
+                new SqlParameter("@caminho_xml_nota_fiscal",SqlDbType.VarChar) { Value = model.CaminhoNotaFiscal }
+            };
+
+
+            if (model.ImagemNotaFiscal != null)
+            {
+                param = GlobalDataBaseController.AddNewParameter(param, "@imagem_nota_fiscal", model.ImagemNotaFiscal, SqlDbType.VarBinary, model.ImagemNotaFiscal.Length);
+            }
+
+            return GlobalDataBaseController.Execute(SQL, param);
         }
 
         private int CadastrarRetornoErroNotaFiscal(string dataBase, RetornoErro model)
         {
-            using (var sqlConnection = new SqlConnection(ConnectionFactory.connectionString))
+            var SQL = new StringBuilder();
+
+            SQL.AppendLine("INSERT INTO " + dataBase + ".dbo.tb_nfse_consultar_dp_nf_erro");
+
+            SQL.AppendLine("    (AutorizacaoNotaFiscalId");
+            SQL.AppendLine("    ,UsuarioId");
+            SQL.AppendLine("    ,CodigoErro");
+            SQL.AppendLine("    ,MensagemErro)");
+
+            SQL.AppendLine("VALUES");
+
+            SQL.AppendLine("    (@AutorizacaoNotaFiscalId");
+            SQL.AppendLine("    ,@UsuarioId");
+            SQL.AppendLine("    ,@CodigoErro");
+            SQL.AppendLine("    ,@MensagemErro)");
+
+            var sqlParameter = new SqlParameter[4];
+
+            sqlParameter[0] = new SqlParameter("@AutorizacaoNotaFiscalId", SqlDbType.Int)
             {
-                sqlConnection.Open();
+                Value = model.AutorizacaoNotaFiscalId
+            };
 
-                using (var sqlCommand = new SqlCommand())
-                {
-                    if (sqlConnection.State == ConnectionState.Open)
-                    {
-                        sqlCommand.Connection = sqlConnection;
-                    }
+            sqlParameter[1] = new SqlParameter("@UsuarioId", SqlDbType.Int)
+            {
+                Value = model.UsuarioId
+            };
 
-                    var SQL = new StringBuilder();
+            sqlParameter[2] = new SqlParameter("@CodigoErro", SqlDbType.VarChar)
+            {
+                Value = model.CodigoErro
+            };
 
-                    SQL.AppendLine("INSERT INTO " + dataBase + ".dbo.tb_nfse_consultar_dp_nf_erro");
+            sqlParameter[3] = new SqlParameter("@MensagemErro", SqlDbType.VarChar)
+            {
+                Value = model.MensagemErro
+            };
 
-                    SQL.AppendLine("    (AutorizacaoNotaFiscalId");
-                    SQL.AppendLine("    ,UsuarioId");
-                    SQL.AppendLine("    ,CodigoErro");
-                    SQL.AppendLine("    ,MensagemErro)");
-
-                    SQL.AppendLine("VALUES");
-
-                    SQL.AppendLine("    (@AutorizacaoNotaFiscalId");
-                    SQL.AppendLine("    ,@UsuarioId");
-                    SQL.AppendLine("    ,@CodigoErro");
-                    SQL.AppendLine("    ,@MensagemErro)");
-
-                    sqlCommand.Parameters.Add("@AutorizacaoNotaFiscalId", SqlDbType.Int).Value = model.AutorizacaoNotaFiscalId;
-                    sqlCommand.Parameters.Add("@UsuarioId", SqlDbType.Int).Value = model.UsuarioId;
-                    sqlCommand.Parameters.Add("@CodigoErro", SqlDbType.VarChar).Value = model.CodigoErro;
-                    sqlCommand.Parameters.Add("@MensagemErro", SqlDbType.VarChar).Value = model.MensagemErro;
-
-                    sqlCommand.CommandText = SQL.ToString() + "; SELECT CAST(scope_identity() AS INT)";
-
-                    return (Int32)sqlCommand.ExecuteScalar();
-                }
-            }
+            return GlobalDataBaseController.Execute(SQL, sqlParameter);
         }
     }
 }

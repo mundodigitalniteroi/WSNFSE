@@ -1,16 +1,14 @@
 ﻿using Negocio;
 using Negocio.Modelo;
 using System;
+using System.ComponentModel;
 using System.Web.Services;
 
 namespace NFSE
 {
-    /// <summary>
-    /// Summary description for WSnfse
-    /// </summary>
     [WebService(Namespace = "http://tempuri.org/")]
     [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
-    [System.ComponentModel.ToolboxItem(false)]
+    [ToolboxItem(false)]
     // To allow this Web Service to be called from script, using ASP.NET AJAX, uncomment the following line. 
     // [System.Web.Script.Services.ScriptService]
     public class WSnfse : WebService
@@ -34,7 +32,7 @@ namespace NFSE
         }
 
         [WebMethod]
-        public string Consultar_testes(string referencia)
+        public string ConsultarTestes(string referencia)
         {
             return new ControlarEnvio().Consultar(new Consultar()
             {
@@ -44,7 +42,7 @@ namespace NFSE
         }
 
         [WebMethod]
-        public RetornoConsulta ConsultarRetornoClassetestes(string referencia)
+        public RetornoConsulta ConsultarRetornoClasseTestes(string referencia)
         {
             return new ControlarEnvio().Consultar_obj(new Consultar()
             {
@@ -61,7 +59,7 @@ namespace NFSE
         }
 
         [WebMethod]
-        public string Cancelar_testes(string referencia)
+        public string CancelarTestes(string referencia)
         {
             return new ControlarEnvio().Cancelar(new Cancelar()
             {
@@ -72,12 +70,11 @@ namespace NFSE
         }
 
         [WebMethod]
-        public string GerarNfse(int id_grv, bool _isdev)
+        public string GerarNfse(int grvId, bool isDev)
         {
-            ControlarEnvio controlarEnvio = new ControlarEnvio();
             try
             {
-                return controlarEnvio.GerarNota(id_grv, _isdev);
+                return new ControlarEnvio().GerarNota(grvId, isDev);
             }
             catch (Exception ex)
             {

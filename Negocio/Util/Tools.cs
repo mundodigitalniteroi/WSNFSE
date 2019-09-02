@@ -161,7 +161,7 @@ namespace Negocio.Util
         {
             Bitmap Retorno = (Bitmap)null;
 
-            var thread = new Thread((ThreadStart)(() => Retorno = new Bitmap((Image)this.CaptureWebPage(url))));
+            var thread = new Thread(() => Retorno = new Bitmap(CaptureWebPage(url)));
             thread.SetApartmentState(ApartmentState.STA);
             thread.Start();
 
@@ -182,13 +182,18 @@ namespace Negocio.Util
 
         public Bitmap CaptureWebPage(string URL)
         {
-            WebBrowser webBrowser = new WebBrowser();
-            webBrowser.ScrollBarsEnabled = false;
-            webBrowser.ScriptErrorsSuppressed = true;
+            WebBrowser webBrowser = new WebBrowser
+            {
+                ScrollBarsEnabled = false,
+                ScriptErrorsSuppressed = true
+            };
+
             webBrowser.Navigate(URL);
 
             while (webBrowser.ReadyState != WebBrowserReadyState.Complete)
+            {
                 Application.DoEvents();
+            }
 
             Thread.Sleep(2500);
 

@@ -33,6 +33,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MSDAL">
+      <HintPath>External\MSDAL.dll</HintPath>
+    </Reference>
+    <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
@@ -42,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ControlarEnvio.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Modelo\CapaAutorizacaoNfse.cs" />
     <Compile Include="Modelo\Autorizar.cs" />
     <Compile Include="Modelo\Cancelar.cs" />
@@ -54,7 +59,8 @@
     <Compile Include="Modelo\RetornoErro.cs" />
     <Compile Include="Modelo\Servico.cs" />
     <Compile Include="Modelo\Tomador.cs" />
-    <Compile Include="Util\ConnectionFactory.cs" />
+    <Compile Include="Util\EnvironmentEnum.cs" />
+    <Compile Include="Util\GlobalDataBaseController.cs" />
     <Compile Include="Util\Tools.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,5 +1,6 @@
 ﻿using Negocio;
 using System;
+using System.Configuration;
 
 namespace EnvioTeste
 {
@@ -82,6 +83,24 @@ namespace EnvioTeste
                     cnpj_prestador = "08397160003658",
                     homologacao = true,
                     id_usuario = 1
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERRO: " + ex.Message);
+            }
+
+            var connection = ConfigurationManager.ConnectionStrings["ConnectionStringDev"].ConnectionString;
+
+
+
+            try
+            {
+                var aux = new ControlarEnvio().Cancelar(new Negocio.Modelo.Cancelar
+                {
+                    referencia = "700069",
+                    justificativa = "TESTES",
+                    homologacao = true
                 });
             }
             catch (Exception ex)
