@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Negocio.Modelo
+namespace NFSE.Domain.Entities
 {
     public class RetornoConsulta : RetornoErro
     {

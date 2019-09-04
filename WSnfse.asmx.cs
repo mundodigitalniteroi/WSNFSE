@@ -1,5 +1,5 @@
 ﻿using Negocio;
-using Negocio.Modelo;
+using NFSE.Domain.Entities;
 using System;
 using System.ComponentModel;
 using System.Web.Services;

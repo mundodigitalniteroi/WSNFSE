@@ -7,7 +7,7 @@
     <ProjectGuid>{56A6F667-9178-4018-8A09-16C7690756AD}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AssemblyName>Negocio</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile />
     <ApplicationVersion>1.0.0.0</ApplicationVersion>
     <FileAlignment>512</FileAlignment>
@@ -22,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -31,12 +32,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MSDAL">
-      <HintPath>External\MSDAL.dll</HintPath>
-    </Reference>
-    <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
@@ -47,21 +45,22 @@
   <ItemGroup>
     <Compile Include="ControlarEnvio.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Modelo\CapaAutorizacaoNfse.cs" />
-    <Compile Include="Modelo\Autorizar.cs" />
-    <Compile Include="Modelo\Cancelar.cs" />
-    <Compile Include="Modelo\Consultar.cs" />
-    <Compile Include="Modelo\Endereco.cs" />
-    <Compile Include="Modelo\NotaFiscal.cs" />
-    <Compile Include="Modelo\Prestador.cs" />
-    <Compile Include="Modelo\PrestadorAcesso.cs" />
-    <Compile Include="Modelo\RetornoConsulta.cs" />
-    <Compile Include="Modelo\RetornoErro.cs" />
-    <Compile Include="Modelo\Servico.cs" />
-    <Compile Include="Modelo\Tomador.cs" />
-    <Compile Include="Util\EnvironmentEnum.cs" />
-    <Compile Include="Util\GlobalDataBaseController.cs" />
+    <Compile Include="Tabelas\AutorizacaoNotaFiscal.cs" />
+    <Compile Include="Tabelas\Grv.cs" />
+    <Compile Include="Tabelas\NotaFiscal.cs" />
+    <Compile Include="Tabelas\Prestador.cs" />
     <Compile Include="Util\Tools.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NFSE.Domain\NFSE.Domain.csproj">
+      <Project>{6d4463ef-7a19-4bf4-8333-d2a17552ed26}</Project>
+      <Name>NFSE.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NFSE.Infra\NFSE.Infra.csproj">
+      <Project>{4ded3e67-6931-4148-a31b-82009a3e9743}</Project>
+      <Name>NFSE.Infra</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

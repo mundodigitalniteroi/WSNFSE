@@ -1,20 +1,23 @@
 ﻿using MSDAL;
+using NFSE.Domain.Enum;
+using System;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Text;
 
-namespace Negocio.Util
+namespace NFSE.Infra.Data
 {
-    public class GlobalDataBaseController
+    public class DataBase
     {
-        private static EnvironmentEnum databaseEnvironment;
+        private static SystemEnvironment databaseEnvironment;
 
-        public static EnvironmentEnum DatabaseEnvironment
+        public static SystemEnvironment SystemEnvironment
         {
             get
             {
-                return DatabaseEnvironment;
+                return SystemEnvironment;
             }
             set
             {
@@ -24,14 +27,26 @@ namespace Negocio.Util
             }
         }
 
+        public static string GetNfeDatabase()
+        {
+            if (databaseEnvironment == SystemEnvironment.Development)
+            {
+                return "db_NfseDev";
+            }
+            else
+            {
+                return "db_Nfse";
+            }
+        }
+
         #region Set Connection String
         private static void SetConnectionString()
         {
-            if (databaseEnvironment == EnvironmentEnum.Development)
+            if (databaseEnvironment == SystemEnvironment.Development)
             {
                 ConnectionFactory.connectionString = ConfigurationManager.ConnectionStrings["ConnectionStringDev"].ConnectionString;
             }
-            else if (databaseEnvironment == EnvironmentEnum.Production)
+            else if (databaseEnvironment == SystemEnvironment.Production)
             {
                 ConnectionFactory.connectionString = ConfigurationManager.ConnectionStrings["ConnectionStringProd"].ConnectionString;
             }
@@ -58,6 +73,8 @@ namespace Negocio.Util
         #region Select
         public static DataTable Select(string SQL)
         {
+            Debug.WriteLine(SQL.Trim() + Environment.NewLine + "GO" + Environment.NewLine);
+
             return ConnectionFactory.Consultar(SQL.ToString());
         }
 
@@ -68,6 +85,8 @@ namespace Negocio.Util
 
         public static DataTable Select(string SQL, SqlParameter[] parameters)
         {
+            Debug.WriteLine(SQL.Trim() + Environment.NewLine + "GO" + Environment.NewLine);
+
             return ConnectionFactory.SelectWithParameters(SQL, parameters);
         }
         #endregion Select
@@ -96,6 +115,8 @@ namespace Negocio.Util
         #region Execute
         public static int Execute(string SQL)
         {
+            Debug.WriteLine(SQL.Trim() + Environment.NewLine + "GO" + Environment.NewLine);
+
             if (!ConnectionFactory.IsConnected())
             {
                 ConnectDataBase();
@@ -111,6 +132,8 @@ namespace Negocio.Util
 
         public static int Execute(string SQL, SqlParameter[] parameters)
         {
+            Debug.WriteLine(SQL.Trim() + Environment.NewLine + "GO" + Environment.NewLine);
+
             if (!ConnectionFactory.IsConnected())
             {
                 ConnectDataBase();

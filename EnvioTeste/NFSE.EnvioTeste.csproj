@@ -48,15 +48,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.XML" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GlobalSuppressions.cs" />
@@ -113,9 +107,13 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Negocio\Negocio.csproj">
+    <ProjectReference Include="..\Negocio\NFSE.Business.csproj">
       <Project>{56A6F667-9178-4018-8A09-16C7690756AD}</Project>
-      <Name>Negocio</Name>
+      <Name>NFSE.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NFSE.Domain\NFSE.Domain.csproj">
+      <Project>{6D4463EF-7A19-4BF4-8333-D2A17552ED26}</Project>
+      <Name>NFSE.Domain</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

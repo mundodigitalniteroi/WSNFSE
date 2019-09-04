@@ -19,6 +19,8 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <Use64BitIISExpress />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -39,22 +41,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Web.DynamicData" />
-    <Reference Include="System.Web.Entity" />
-    <Reference Include="System.Web.ApplicationServices" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
-    <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Web.config" />
@@ -77,9 +65,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="Negocio\Negocio.csproj">
+    <ProjectReference Include="Negocio\NFSE.Business.csproj">
       <Project>{56a6f667-9178-4018-8a09-16c7690756ad}</Project>
-      <Name>Negocio</Name>
+      <Name>NFSE.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="NFSE.Domain\NFSE.Domain.csproj">
+      <Project>{6D4463EF-7A19-4BF4-8333-D2A17552ED26}</Project>
+      <Name>NFSE.Domain</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

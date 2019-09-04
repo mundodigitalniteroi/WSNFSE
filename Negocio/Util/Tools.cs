@@ -52,7 +52,9 @@ namespace Negocio.Util
             httpWebRequest.Method = "DELETE";
 
             string base64String = Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes(token + ":" + ""));
+
             httpWebRequest.Headers.Add("Authorization", "Basic " + base64String);
+
             httpWebRequest.PreAuthenticate = true;
 
             byte[] bytes = new UTF8Encoding().GetBytes(json);
@@ -60,52 +62,24 @@ namespace Negocio.Util
             httpWebRequest.ContentLength = (long)bytes.Length;
 
             using (Stream requestStream = httpWebRequest.GetRequestStream())
+            {
                 requestStream.Write(bytes, 0, bytes.Length);
+            }
 
             try
             {
                 using (HttpWebResponse response = (HttpWebResponse)httpWebRequest.GetResponse())
                 {
-                    using (StreamReader streamReader = new StreamReader(response.GetResponseStream()))
+                    using (var streamReader = new StreamReader(response.GetResponseStream()))
+                    {
                         return streamReader.ReadToEnd().Trim();
+                    }
                 }
             }
             catch (WebException ex)
             {
                 return new StreamReader(ex.Response.GetResponseStream()).ReadToEnd();
             }
-        }
-
-        private CredentialCache GetCredential(string url)
-        {
-            return new CredentialCache()
-            {
-                {
-                    new Uri(url),
-                    "Basic",
-                    new NetworkCredential("2D6xPXxoXRyIuTyUjS6HbiLao7Xr50Mb", "")
-                }
-            };
-        }
-
-        public string DataTableToJSON(DataTable table)
-        {
-            List<Dictionary<string, object>> dictionaryList = new List<Dictionary<string, object>>();
-
-            foreach (DataRow row in (InternalDataCollectionBase)table.Rows)
-            {
-                Dictionary<string, object> dictionary = new Dictionary<string, object>();
-
-                foreach (DataColumn column in (InternalDataCollectionBase)table.Columns)
-                    dictionary[column.ColumnName] = (object)Convert.ToString(row[column]);
-
-                dictionaryList.Add(dictionary);
-            }
-
-            return new JavaScriptSerializer()
-            {
-                MaxJsonLength = int.MaxValue
-            }.Serialize((object)dictionaryList);
         }
 
         public string ObjToJSON(object obj)
@@ -159,7 +133,7 @@ namespace Negocio.Util
 
         public Bitmap ObterImagemEndereco(string url)
         {
-            Bitmap Retorno = (Bitmap)null;
+            Bitmap Retorno = null;
 
             var thread = new Thread(() => Retorno = new Bitmap(CaptureWebPage(url)));
             thread.SetApartmentState(ApartmentState.STA);
@@ -239,6 +213,40 @@ namespace Negocio.Util
             {
                 return new StreamReader(ex.Response.GetResponseStream()).ReadToEnd();
             }
+        }
+
+        private CredentialCache GetCredential(string url)
+        {
+            return new CredentialCache()
+            {
+                {
+                    new Uri(url),
+                    "Basic",
+                    new NetworkCredential("2D6xPXxoXRyIuTyUjS6HbiLao7Xr50Mb", "")
+                }
+            };
+        }
+
+        public string DataTableToJSON(DataTable table)
+        {
+            List<Dictionary<string, object>> dictionaryList = new List<Dictionary<string, object>>();
+
+            foreach (DataRow row in (InternalDataCollectionBase)table.Rows)
+            {
+                Dictionary<string, object> dictionary = new Dictionary<string, object>();
+
+                foreach (DataColumn column in (InternalDataCollectionBase)table.Columns)
+                {
+                    dictionary[column.ColumnName] = (object)Convert.ToString(row[column]);
+                }
+
+                dictionaryList.Add(dictionary);
+            }
+
+            return new JavaScriptSerializer()
+            {
+                MaxJsonLength = int.MaxValue
+            }.Serialize((object)dictionaryList);
         }
     }
 }

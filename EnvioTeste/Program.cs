@@ -1,4 +1,5 @@
 ﻿using Negocio;
+using NFSE.Domain.Entities;
 using System;
 using System.Configuration;
 
@@ -74,10 +75,9 @@ namespace EnvioTeste
                 Console.WriteLine("ERRO: " + ex.Message);
             }
 
-
             try
             {
-                var aux = new ControlarEnvio().Consultar_obj(new Negocio.Modelo.Consultar
+                var aux = new ControlarEnvio().Consultar_obj(new Consultar
                 {
                     referencia = "700069",
                     cnpj_prestador = "08397160003658",
@@ -90,13 +90,9 @@ namespace EnvioTeste
                 Console.WriteLine("ERRO: " + ex.Message);
             }
 
-            var connection = ConfigurationManager.ConnectionStrings["ConnectionStringDev"].ConnectionString;
-
-
-
             try
             {
-                var aux = new ControlarEnvio().Cancelar(new Negocio.Modelo.Cancelar
+                var aux = new ControlarEnvio().Cancelar(new Cancelar
                 {
                     referencia = "700069",
                     justificativa = "TESTES",
