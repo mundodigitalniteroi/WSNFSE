@@ -1,4 +1,4 @@
-﻿using Negocio;
+﻿using NFSE.Business;
 using NFSE.Domain.Entities;
 using System.ComponentModel;
 using System.Web.Services;
@@ -15,19 +15,19 @@ namespace NFSE
         [WebMethod]
         public string SolicitarEmissaoNotaFiscal(CapaAutorizacaoNfse model)
         {
-            return new ControlarEnvio().SolicitarEmissaoNotaFiscal(model);
+            return new Main().SolicitarEmissaoNotaFiscal(model);
         }
 
         [WebMethod]
         public RetornoNotaFiscal ReceberNotaFiscal(Consulta model)
         {
-            return new ControlarEnvio().ReceberNotaFiscal(model);
+            return new Main().ReceberNotaFiscal(model);
         }
 
         [WebMethod]
         public string CancelarNotaFiscal(Cancelamento model)
         {
-            return new ControlarEnvio().CancelarNotaFiscal(model);
+            return new Main().CancelarNotaFiscal(model);
         }
 
         //[WebMethod]

@@ -6,7 +6,7 @@
 
         public bool Homologacao { get; set; }
 
-        public int CodigoRetorno { get; set; }
+        public int IdentificadorNota { get; set; }
 
         public int UsuarioId { get; set; }
     }

@@ -4,7 +4,7 @@
     {
         public int UsuarioId { get; set; }
 
-        public int CodigoRetorno { get; set; }
+        public int IdentificadorNota { get; set; }
 
         public string CnpjPrestador { get; set; }
 

@@ -1,33 +1,31 @@
-﻿using NFSE.Business;
-using NFSE.Domain.Entities;
-using System;
+﻿using System;
 
-namespace EnvioTeste
+namespace NFSE.TesteUsuario
 {
     class Program
     {
         static void Main(string[] args)
         {
-            var capaAutorizacaoNfse = new CapaAutorizacaoNfse
+            var capaAutorizacaoNfse = new nfse.CapaAutorizacaoNfse
             {
                 Homologacao = true,
-                IdentificadorNota = 700074,
+                IdentificadorNota = 700067,
                 UsuarioId = 1,
 
-                Autorizacao = new Autorizacao
+                Autorizacao = new nfse.Autorizacao
                 {
                     data_emissao = "2019-08-28T04:34:06",
                     natureza_operacao = "1",
                     optante_simples_nacional = "false",
 
-                    prestador = new Prestador
+                    prestador = new nfse.Prestador
                     {
                         cnpj = "08397160003658",
                         codigo_municipio = "5103403",
                         inscricao_municipal = "172692"
                     },
 
-                    servico = new Servico
+                    servico = new nfse.Servico
                     {
                         aliquota = "5.00",
                         codigo_cnae = "5223100",
@@ -39,14 +37,14 @@ namespace EnvioTeste
                         valor_servicos = "1.0"
                     },
 
-                    tomador = new Tomador()
+                    tomador = new nfse.Tomador()
                     {
                         cpf = "07172853750",
                         email = "cristineysoares@gmail.com",
                         razao_social = "CRISTINEY SOARES",
                         telefone = "2199999999",
 
-                        endereco = new Endereco
+                        endereco = new nfse.Endereco
                         {
                             bairro = "Maria Paula",
                             cep = "24756660",
@@ -59,56 +57,14 @@ namespace EnvioTeste
                 }
             };
 
-            //try
-            //{
-            //    string result = string.Empty;
-
-            //    using (var ws = new nfse.WSnfseSoapClient())
-            //    {
-            //        result = ws.SolicitarEmissaoNotaFiscal(capaAutorizacaoNfse);
-            //    }
-
-            //    Console.WriteLine(result);
-            //}
-            //catch (Exception ex)
-            //{
-            //    Console.WriteLine("ERRO: " + ex.Message);
-            //}
-
             try
             {
-                var aux = new Main().SolicitarEmissaoNotaFiscal(capaAutorizacaoNfse);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("ERRO: " + ex.Message);
-            }
+                string result = string.Empty;
 
-            try
-            {
-                var aux = new Main().ReceberNotaFiscal(new Consulta
+                using (var ws = new nfse.WSnfseSoapClient())
                 {
-                    IdentificadorNota = 700069,
-                    CnpjPrestador = "08397160003658",
-                    Homologacao = true,
-                    UsuarioId = 1
-                });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("ERRO: " + ex.Message);
-            }
-
-            try
-            {
-                var aux = new Main().CancelarNotaFiscal(new Cancelamento
-                {
-                    IdentificadorNota = 700069,
-                    CnpjPrestador = "08397160003658",
-                    Justificativa = "TESTES",
-                    Homologacao = true,
-                    UsuarioId = 1
-                });
+                    result = ws.SolicitarEmissaoNotaFiscal(capaAutorizacaoNfse);
+                }
             }
             catch (Exception ex)
             {

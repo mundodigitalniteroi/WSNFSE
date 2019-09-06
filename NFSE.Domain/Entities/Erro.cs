@@ -10,7 +10,7 @@ namespace NFSE.Domain.Entities
 
         public int? GrvId { get; set; }
 
-        public int? CodigoRetorno { get; set; }
+        public int? IdentificadorNota { get; set; }
 
         public char OrigemErro { get; set; }
 
