@@ -9,116 +9,87 @@
 //------------------------------------------------------------------------------
 
 namespace EnvioTeste.nfse {
+    using System.Runtime.Serialization;
+    using System;
     
     
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="nfse.WSnfseSoap")]
-    public interface WSnfseSoap {
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/Autorizar", ReplyAction="*")]
-        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        string Autorizar(EnvioTeste.nfse.CapaAutorizacaoNfse obj);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/Autorizar", ReplyAction="*")]
-        System.Threading.Tasks.Task<string> AutorizarAsync(EnvioTeste.nfse.CapaAutorizacaoNfse obj);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/Consultar", ReplyAction="*")]
-        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        string Consultar(EnvioTeste.nfse.Consultar referencia);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/Consultar", ReplyAction="*")]
-        System.Threading.Tasks.Task<string> ConsultarAsync(EnvioTeste.nfse.Consultar referencia);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/Consultar_testes", ReplyAction="*")]
-        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        string Consultar_testes(string referencia);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/Consultar_testes", ReplyAction="*")]
-        System.Threading.Tasks.Task<string> Consultar_testesAsync(string referencia);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/Cancelar", ReplyAction="*")]
-        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        string Cancelar(EnvioTeste.nfse.Cancelar referencia);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/Cancelar", ReplyAction="*")]
-        System.Threading.Tasks.Task<string> CancelarAsync(EnvioTeste.nfse.Cancelar referencia);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/Cancelar_testes", ReplyAction="*")]
-        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        string Cancelar_testes(string referencia);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/Cancelar_testes", ReplyAction="*")]
-        System.Threading.Tasks.Task<string> Cancelar_testesAsync(string referencia);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GerarNfse", ReplyAction="*")]
-        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
-        string GerarNfse(int id_grv, bool _isdev);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GerarNfse", ReplyAction="*")]
-        System.Threading.Tasks.Task<string> GerarNfseAsync(int id_grv, bool _isdev);
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.3056.0")]
-    [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
-    public partial class CapaAutorizacaoNfse : object, System.ComponentModel.INotifyPropertyChanged {
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="CapaAutorizacaoNfse", Namespace="http://tempuri.org/")]
+    [System.SerializableAttribute()]
+    public partial class CapaAutorizacaoNfse : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
-        private Autorizar autorizarField;
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
-        private bool homologacaoField;
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private EnvioTeste.nfse.Autorizacao AutorizacaoField;
         
-        private int identificador_notaField;
+        private bool HomologacaoField;
         
-        private int id_usuarioField;
+        private int CodigoRetornoField;
         
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
-        public Autorizar autorizar {
+        private int UsuarioIdField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
-                return this.autorizarField;
+                return this.extensionDataField;
             }
             set {
-                this.autorizarField = value;
-                this.RaisePropertyChanged("autorizar");
+                this.extensionDataField = value;
             }
         }
         
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
-        public bool homologacao {
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
+        public EnvioTeste.nfse.Autorizacao Autorizacao {
             get {
-                return this.homologacaoField;
+                return this.AutorizacaoField;
             }
             set {
-                this.homologacaoField = value;
-                this.RaisePropertyChanged("homologacao");
+                if ((object.ReferenceEquals(this.AutorizacaoField, value) != true)) {
+                    this.AutorizacaoField = value;
+                    this.RaisePropertyChanged("Autorizacao");
+                }
             }
         }
         
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
-        public int identificador_nota {
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
+        public bool Homologacao {
             get {
-                return this.identificador_notaField;
+                return this.HomologacaoField;
             }
             set {
-                this.identificador_notaField = value;
-                this.RaisePropertyChanged("identificador_nota");
+                if ((this.HomologacaoField.Equals(value) != true)) {
+                    this.HomologacaoField = value;
+                    this.RaisePropertyChanged("Homologacao");
+                }
             }
         }
         
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=3)]
-        public int id_usuario {
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=2)]
+        public int CodigoRetorno {
             get {
-                return this.id_usuarioField;
+                return this.CodigoRetornoField;
             }
             set {
-                this.id_usuarioField = value;
-                this.RaisePropertyChanged("id_usuario");
+                if ((this.CodigoRetornoField.Equals(value) != true)) {
+                    this.CodigoRetornoField = value;
+                    this.RaisePropertyChanged("CodigoRetorno");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=3)]
+        public int UsuarioId {
+            get {
+                return this.UsuarioIdField;
+            }
+            set {
+                if ((this.UsuarioIdField.Equals(value) != true)) {
+                    this.UsuarioIdField = value;
+                    this.RaisePropertyChanged("UsuarioId");
+                }
             }
         }
         
@@ -132,165 +103,198 @@ namespace EnvioTeste.nfse {
         }
     }
     
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.3056.0")]
-    [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
-    public partial class Autorizar : object, System.ComponentModel.INotifyPropertyChanged {
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="Autorizacao", Namespace="http://tempuri.org/")]
+    [System.SerializableAttribute()]
+    public partial class Autorizacao : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string data_emissaoField;
         
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string natureza_operacaoField;
         
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string regime_especial_tributacaoField;
         
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string optante_simples_nacionalField;
         
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string incentivador_culturalField;
         
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string tributacao_rpsField;
         
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string codigo_obraField;
         
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string artField;
         
-        private Prestador prestadorField;
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private EnvioTeste.nfse.Prestador prestadorField;
         
-        private Tomador tomadorField;
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private EnvioTeste.nfse.Tomador tomadorField;
         
-        private Servico servicoField;
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private EnvioTeste.nfse.Servico servicoField;
         
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public string data_emissao {
             get {
                 return this.data_emissaoField;
             }
             set {
-                this.data_emissaoField = value;
-                this.RaisePropertyChanged("data_emissao");
+                if ((object.ReferenceEquals(this.data_emissaoField, value) != true)) {
+                    this.data_emissaoField = value;
+                    this.RaisePropertyChanged("data_emissao");
+                }
             }
         }
         
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public string natureza_operacao {
             get {
                 return this.natureza_operacaoField;
             }
             set {
-                this.natureza_operacaoField = value;
-                this.RaisePropertyChanged("natureza_operacao");
+                if ((object.ReferenceEquals(this.natureza_operacaoField, value) != true)) {
+                    this.natureza_operacaoField = value;
+                    this.RaisePropertyChanged("natureza_operacao");
+                }
             }
         }
         
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public string regime_especial_tributacao {
             get {
                 return this.regime_especial_tributacaoField;
             }
             set {
-                this.regime_especial_tributacaoField = value;
-                this.RaisePropertyChanged("regime_especial_tributacao");
+                if ((object.ReferenceEquals(this.regime_especial_tributacaoField, value) != true)) {
+                    this.regime_especial_tributacaoField = value;
+                    this.RaisePropertyChanged("regime_especial_tributacao");
+                }
             }
         }
         
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=3)]
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=3)]
         public string optante_simples_nacional {
             get {
                 return this.optante_simples_nacionalField;
             }
             set {
-                this.optante_simples_nacionalField = value;
-                this.RaisePropertyChanged("optante_simples_nacional");
+                if ((object.ReferenceEquals(this.optante_simples_nacionalField, value) != true)) {
+                    this.optante_simples_nacionalField = value;
+                    this.RaisePropertyChanged("optante_simples_nacional");
+                }
             }
         }
         
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=4)]
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=4)]
         public string incentivador_cultural {
             get {
                 return this.incentivador_culturalField;
             }
             set {
-                this.incentivador_culturalField = value;
-                this.RaisePropertyChanged("incentivador_cultural");
+                if ((object.ReferenceEquals(this.incentivador_culturalField, value) != true)) {
+                    this.incentivador_culturalField = value;
+                    this.RaisePropertyChanged("incentivador_cultural");
+                }
             }
         }
         
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=5)]
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=5)]
         public string tributacao_rps {
             get {
                 return this.tributacao_rpsField;
             }
             set {
-                this.tributacao_rpsField = value;
-                this.RaisePropertyChanged("tributacao_rps");
+                if ((object.ReferenceEquals(this.tributacao_rpsField, value) != true)) {
+                    this.tributacao_rpsField = value;
+                    this.RaisePropertyChanged("tributacao_rps");
+                }
             }
         }
         
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=6)]
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=6)]
         public string codigo_obra {
             get {
                 return this.codigo_obraField;
             }
             set {
-                this.codigo_obraField = value;
-                this.RaisePropertyChanged("codigo_obra");
+                if ((object.ReferenceEquals(this.codigo_obraField, value) != true)) {
+                    this.codigo_obraField = value;
+                    this.RaisePropertyChanged("codigo_obra");
+                }
             }
         }
         
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=7)]
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=7)]
         public string art {
             get {
                 return this.artField;
             }
             set {
-                this.artField = value;
-                this.RaisePropertyChanged("art");
+                if ((object.ReferenceEquals(this.artField, value) != true)) {
+                    this.artField = value;
+                    this.RaisePropertyChanged("art");
+                }
             }
         }
         
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=8)]
-        public Prestador prestador {
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=8)]
+        public EnvioTeste.nfse.Prestador prestador {
             get {
                 return this.prestadorField;
             }
             set {
-                this.prestadorField = value;
-                this.RaisePropertyChanged("prestador");
+                if ((object.ReferenceEquals(this.prestadorField, value) != true)) {
+                    this.prestadorField = value;
+                    this.RaisePropertyChanged("prestador");
+                }
             }
         }
         
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=9)]
-        public Tomador tomador {
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=9)]
+        public EnvioTeste.nfse.Tomador tomador {
             get {
                 return this.tomadorField;
             }
             set {
-                this.tomadorField = value;
-                this.RaisePropertyChanged("tomador");
+                if ((object.ReferenceEquals(this.tomadorField, value) != true)) {
+                    this.tomadorField = value;
+                    this.RaisePropertyChanged("tomador");
+                }
             }
         }
         
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=10)]
-        public Servico servico {
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=10)]
+        public EnvioTeste.nfse.Servico servico {
             get {
                 return this.servicoField;
             }
             set {
-                this.servicoField = value;
-                this.RaisePropertyChanged("servico");
+                if ((object.ReferenceEquals(this.servicoField, value) != true)) {
+                    this.servicoField = value;
+                    this.RaisePropertyChanged("servico");
+                }
             }
         }
         
@@ -304,53 +308,70 @@ namespace EnvioTeste.nfse {
         }
     }
     
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.3056.0")]
-    [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
-    public partial class Prestador : object, System.ComponentModel.INotifyPropertyChanged {
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="Prestador", Namespace="http://tempuri.org/")]
+    [System.SerializableAttribute()]
+    public partial class Prestador : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string cnpjField;
         
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string inscricao_municipalField;
         
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string codigo_municipioField;
         
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public string cnpj {
             get {
                 return this.cnpjField;
             }
             set {
-                this.cnpjField = value;
-                this.RaisePropertyChanged("cnpj");
+                if ((object.ReferenceEquals(this.cnpjField, value) != true)) {
+                    this.cnpjField = value;
+                    this.RaisePropertyChanged("cnpj");
+                }
             }
         }
         
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public string inscricao_municipal {
             get {
                 return this.inscricao_municipalField;
             }
             set {
-                this.inscricao_municipalField = value;
-                this.RaisePropertyChanged("inscricao_municipal");
+                if ((object.ReferenceEquals(this.inscricao_municipalField, value) != true)) {
+                    this.inscricao_municipalField = value;
+                    this.RaisePropertyChanged("inscricao_municipal");
+                }
             }
         }
         
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=2)]
         public string codigo_municipio {
             get {
                 return this.codigo_municipioField;
             }
             set {
-                this.codigo_municipioField = value;
-                this.RaisePropertyChanged("codigo_municipio");
+                if ((object.ReferenceEquals(this.codigo_municipioField, value) != true)) {
+                    this.codigo_municipioField = value;
+                    this.RaisePropertyChanged("codigo_municipio");
+                }
             }
         }
         
@@ -364,699 +385,134 @@ namespace EnvioTeste.nfse {
         }
     }
     
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.3056.0")]
-    [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
-    public partial class Cancelar : object, System.ComponentModel.INotifyPropertyChanged {
-        
-        private string referenciaField;
-        
-        private string justificativaField;
-        
-        private bool homologacaoField;
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
-        public string referencia {
-            get {
-                return this.referenciaField;
-            }
-            set {
-                this.referenciaField = value;
-                this.RaisePropertyChanged("referencia");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
-        public string justificativa {
-            get {
-                return this.justificativaField;
-            }
-            set {
-                this.justificativaField = value;
-                this.RaisePropertyChanged("justificativa");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
-        public bool homologacao {
-            get {
-                return this.homologacaoField;
-            }
-            set {
-                this.homologacaoField = value;
-                this.RaisePropertyChanged("homologacao");
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.3056.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="Tomador", Namespace="http://tempuri.org/")]
     [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
-    public partial class Consultar : object, System.ComponentModel.INotifyPropertyChanged {
+    public partial class Tomador : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
-        private string referenciaField;
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
-        private string cnpj_prestadorField;
-        
-        private bool homologacaoField;
-        
-        private int id_usuarioField;
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
-        public string referencia {
-            get {
-                return this.referenciaField;
-            }
-            set {
-                this.referenciaField = value;
-                this.RaisePropertyChanged("referencia");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
-        public string cnpj_prestador {
-            get {
-                return this.cnpj_prestadorField;
-            }
-            set {
-                this.cnpj_prestadorField = value;
-                this.RaisePropertyChanged("cnpj_prestador");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
-        public bool homologacao {
-            get {
-                return this.homologacaoField;
-            }
-            set {
-                this.homologacaoField = value;
-                this.RaisePropertyChanged("homologacao");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=3)]
-        public int id_usuario {
-            get {
-                return this.id_usuarioField;
-            }
-            set {
-                this.id_usuarioField = value;
-                this.RaisePropertyChanged("id_usuario");
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.3056.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
-    public partial class Servico : object, System.ComponentModel.INotifyPropertyChanged {
-        
-        private string aliquotaField;
-        
-        private string discriminacaoField;
-        
-        private string iss_retidoField;
-        
-        private string item_lista_servicoField;
-        
-        private string codigo_tributario_municipioField;
-        
-        private string valor_servicosField;
-        
-        private string valor_deducoesField;
-        
-        private string valor_pisField;
-        
-        private string valor_cofinsField;
-        
-        private string valor_inssField;
-        
-        private string valor_irField;
-        
-        private string valor_csllField;
-        
-        private string valor_issField;
-        
-        private string valor_iss_retidoField;
-        
-        private string outras_retencoesField;
-        
-        private string base_calculoField;
-        
-        private string desconto_incondicionadoField;
-        
-        private string desconto_condicionadoField;
-        
-        private string codigo_cnaeField;
-        
-        private string codigo_municipioField;
-        
-        private string percentual_total_tributosField;
-        
-        private string fonte_total_tributosField;
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
-        public string aliquota {
-            get {
-                return this.aliquotaField;
-            }
-            set {
-                this.aliquotaField = value;
-                this.RaisePropertyChanged("aliquota");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
-        public string discriminacao {
-            get {
-                return this.discriminacaoField;
-            }
-            set {
-                this.discriminacaoField = value;
-                this.RaisePropertyChanged("discriminacao");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
-        public string iss_retido {
-            get {
-                return this.iss_retidoField;
-            }
-            set {
-                this.iss_retidoField = value;
-                this.RaisePropertyChanged("iss_retido");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=3)]
-        public string item_lista_servico {
-            get {
-                return this.item_lista_servicoField;
-            }
-            set {
-                this.item_lista_servicoField = value;
-                this.RaisePropertyChanged("item_lista_servico");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=4)]
-        public string codigo_tributario_municipio {
-            get {
-                return this.codigo_tributario_municipioField;
-            }
-            set {
-                this.codigo_tributario_municipioField = value;
-                this.RaisePropertyChanged("codigo_tributario_municipio");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=5)]
-        public string valor_servicos {
-            get {
-                return this.valor_servicosField;
-            }
-            set {
-                this.valor_servicosField = value;
-                this.RaisePropertyChanged("valor_servicos");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=6)]
-        public string valor_deducoes {
-            get {
-                return this.valor_deducoesField;
-            }
-            set {
-                this.valor_deducoesField = value;
-                this.RaisePropertyChanged("valor_deducoes");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=7)]
-        public string valor_pis {
-            get {
-                return this.valor_pisField;
-            }
-            set {
-                this.valor_pisField = value;
-                this.RaisePropertyChanged("valor_pis");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=8)]
-        public string valor_cofins {
-            get {
-                return this.valor_cofinsField;
-            }
-            set {
-                this.valor_cofinsField = value;
-                this.RaisePropertyChanged("valor_cofins");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=9)]
-        public string valor_inss {
-            get {
-                return this.valor_inssField;
-            }
-            set {
-                this.valor_inssField = value;
-                this.RaisePropertyChanged("valor_inss");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=10)]
-        public string valor_ir {
-            get {
-                return this.valor_irField;
-            }
-            set {
-                this.valor_irField = value;
-                this.RaisePropertyChanged("valor_ir");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=11)]
-        public string valor_csll {
-            get {
-                return this.valor_csllField;
-            }
-            set {
-                this.valor_csllField = value;
-                this.RaisePropertyChanged("valor_csll");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=12)]
-        public string valor_iss {
-            get {
-                return this.valor_issField;
-            }
-            set {
-                this.valor_issField = value;
-                this.RaisePropertyChanged("valor_iss");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=13)]
-        public string valor_iss_retido {
-            get {
-                return this.valor_iss_retidoField;
-            }
-            set {
-                this.valor_iss_retidoField = value;
-                this.RaisePropertyChanged("valor_iss_retido");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=14)]
-        public string outras_retencoes {
-            get {
-                return this.outras_retencoesField;
-            }
-            set {
-                this.outras_retencoesField = value;
-                this.RaisePropertyChanged("outras_retencoes");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=15)]
-        public string base_calculo {
-            get {
-                return this.base_calculoField;
-            }
-            set {
-                this.base_calculoField = value;
-                this.RaisePropertyChanged("base_calculo");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=16)]
-        public string desconto_incondicionado {
-            get {
-                return this.desconto_incondicionadoField;
-            }
-            set {
-                this.desconto_incondicionadoField = value;
-                this.RaisePropertyChanged("desconto_incondicionado");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=17)]
-        public string desconto_condicionado {
-            get {
-                return this.desconto_condicionadoField;
-            }
-            set {
-                this.desconto_condicionadoField = value;
-                this.RaisePropertyChanged("desconto_condicionado");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=18)]
-        public string codigo_cnae {
-            get {
-                return this.codigo_cnaeField;
-            }
-            set {
-                this.codigo_cnaeField = value;
-                this.RaisePropertyChanged("codigo_cnae");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=19)]
-        public string codigo_municipio {
-            get {
-                return this.codigo_municipioField;
-            }
-            set {
-                this.codigo_municipioField = value;
-                this.RaisePropertyChanged("codigo_municipio");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=20)]
-        public string percentual_total_tributos {
-            get {
-                return this.percentual_total_tributosField;
-            }
-            set {
-                this.percentual_total_tributosField = value;
-                this.RaisePropertyChanged("percentual_total_tributos");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=21)]
-        public string fonte_total_tributos {
-            get {
-                return this.fonte_total_tributosField;
-            }
-            set {
-                this.fonte_total_tributosField = value;
-                this.RaisePropertyChanged("fonte_total_tributos");
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.3056.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
-    public partial class Endereco : object, System.ComponentModel.INotifyPropertyChanged {
-        
-        private string logradouroField;
-        
-        private string tipo_logradouroField;
-        
-        private string numeroField;
-        
-        private string complementoField;
-        
-        private string bairroField;
-        
-        private string codigo_municipioField;
-        
-        private string ufField;
-        
-        private string cepField;
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
-        public string logradouro {
-            get {
-                return this.logradouroField;
-            }
-            set {
-                this.logradouroField = value;
-                this.RaisePropertyChanged("logradouro");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
-        public string tipo_logradouro {
-            get {
-                return this.tipo_logradouroField;
-            }
-            set {
-                this.tipo_logradouroField = value;
-                this.RaisePropertyChanged("tipo_logradouro");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
-        public string numero {
-            get {
-                return this.numeroField;
-            }
-            set {
-                this.numeroField = value;
-                this.RaisePropertyChanged("numero");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=3)]
-        public string complemento {
-            get {
-                return this.complementoField;
-            }
-            set {
-                this.complementoField = value;
-                this.RaisePropertyChanged("complemento");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=4)]
-        public string bairro {
-            get {
-                return this.bairroField;
-            }
-            set {
-                this.bairroField = value;
-                this.RaisePropertyChanged("bairro");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=5)]
-        public string codigo_municipio {
-            get {
-                return this.codigo_municipioField;
-            }
-            set {
-                this.codigo_municipioField = value;
-                this.RaisePropertyChanged("codigo_municipio");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=6)]
-        public string uf {
-            get {
-                return this.ufField;
-            }
-            set {
-                this.ufField = value;
-                this.RaisePropertyChanged("uf");
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=7)]
-        public string cep {
-            get {
-                return this.cepField;
-            }
-            set {
-                this.cepField = value;
-                this.RaisePropertyChanged("cep");
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.3056.0")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://tempuri.org/")]
-    public partial class Tomador : object, System.ComponentModel.INotifyPropertyChanged {
-        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string cnpjField;
         
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string cpfField;
         
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string razao_socialField;
         
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string emailField;
         
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string inscricao_municipalField;
         
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string telefoneField;
         
-        private Endereco enderecoField;
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private EnvioTeste.nfse.Endereco enderecoField;
         
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=0)]
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public string cnpj {
             get {
                 return this.cnpjField;
             }
             set {
-                this.cnpjField = value;
-                this.RaisePropertyChanged("cnpj");
+                if ((object.ReferenceEquals(this.cnpjField, value) != true)) {
+                    this.cnpjField = value;
+                    this.RaisePropertyChanged("cnpj");
+                }
             }
         }
         
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=1)]
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public string cpf {
             get {
                 return this.cpfField;
             }
             set {
-                this.cpfField = value;
-                this.RaisePropertyChanged("cpf");
+                if ((object.ReferenceEquals(this.cpfField, value) != true)) {
+                    this.cpfField = value;
+                    this.RaisePropertyChanged("cpf");
+                }
             }
         }
         
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=2)]
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
         public string razao_social {
             get {
                 return this.razao_socialField;
             }
             set {
-                this.razao_socialField = value;
-                this.RaisePropertyChanged("razao_social");
+                if ((object.ReferenceEquals(this.razao_socialField, value) != true)) {
+                    this.razao_socialField = value;
+                    this.RaisePropertyChanged("razao_social");
+                }
             }
         }
         
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=3)]
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=3)]
         public string email {
             get {
                 return this.emailField;
             }
             set {
-                this.emailField = value;
-                this.RaisePropertyChanged("email");
+                if ((object.ReferenceEquals(this.emailField, value) != true)) {
+                    this.emailField = value;
+                    this.RaisePropertyChanged("email");
+                }
             }
         }
         
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=4)]
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=4)]
         public string inscricao_municipal {
             get {
                 return this.inscricao_municipalField;
             }
             set {
-                this.inscricao_municipalField = value;
-                this.RaisePropertyChanged("inscricao_municipal");
+                if ((object.ReferenceEquals(this.inscricao_municipalField, value) != true)) {
+                    this.inscricao_municipalField = value;
+                    this.RaisePropertyChanged("inscricao_municipal");
+                }
             }
         }
         
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=5)]
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=5)]
         public string telefone {
             get {
                 return this.telefoneField;
             }
             set {
-                this.telefoneField = value;
-                this.RaisePropertyChanged("telefone");
+                if ((object.ReferenceEquals(this.telefoneField, value) != true)) {
+                    this.telefoneField = value;
+                    this.RaisePropertyChanged("telefone");
+                }
             }
         }
         
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=6)]
-        public Endereco endereco {
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=6)]
+        public EnvioTeste.nfse.Endereco endereco {
             get {
                 return this.enderecoField;
             }
             set {
-                this.enderecoField = value;
-                this.RaisePropertyChanged("endereco");
+                if ((object.ReferenceEquals(this.enderecoField, value) != true)) {
+                    this.enderecoField = value;
+                    this.RaisePropertyChanged("endereco");
+                }
             }
         }
         
@@ -1067,6 +523,1242 @@ namespace EnvioTeste.nfse {
             if ((propertyChanged != null)) {
                 propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="Servico", Namespace="http://tempuri.org/")]
+    [System.SerializableAttribute()]
+    public partial class Servico : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string aliquotaField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string discriminacaoField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string iss_retidoField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string item_lista_servicoField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string codigo_tributario_municipioField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string valor_servicosField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string valor_deducoesField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string valor_pisField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string valor_cofinsField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string valor_inssField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string valor_irField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string valor_csllField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string valor_issField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string valor_iss_retidoField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string outras_retencoesField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string base_calculoField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string desconto_incondicionadoField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string desconto_condicionadoField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string codigo_cnaeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string codigo_municipioField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string percentual_total_tributosField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string fonte_total_tributosField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
+        public string aliquota {
+            get {
+                return this.aliquotaField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.aliquotaField, value) != true)) {
+                    this.aliquotaField = value;
+                    this.RaisePropertyChanged("aliquota");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
+        public string discriminacao {
+            get {
+                return this.discriminacaoField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.discriminacaoField, value) != true)) {
+                    this.discriminacaoField = value;
+                    this.RaisePropertyChanged("discriminacao");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
+        public string iss_retido {
+            get {
+                return this.iss_retidoField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.iss_retidoField, value) != true)) {
+                    this.iss_retidoField = value;
+                    this.RaisePropertyChanged("iss_retido");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
+        public string item_lista_servico {
+            get {
+                return this.item_lista_servicoField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.item_lista_servicoField, value) != true)) {
+                    this.item_lista_servicoField = value;
+                    this.RaisePropertyChanged("item_lista_servico");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=4)]
+        public string codigo_tributario_municipio {
+            get {
+                return this.codigo_tributario_municipioField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.codigo_tributario_municipioField, value) != true)) {
+                    this.codigo_tributario_municipioField = value;
+                    this.RaisePropertyChanged("codigo_tributario_municipio");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=5)]
+        public string valor_servicos {
+            get {
+                return this.valor_servicosField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.valor_servicosField, value) != true)) {
+                    this.valor_servicosField = value;
+                    this.RaisePropertyChanged("valor_servicos");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=6)]
+        public string valor_deducoes {
+            get {
+                return this.valor_deducoesField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.valor_deducoesField, value) != true)) {
+                    this.valor_deducoesField = value;
+                    this.RaisePropertyChanged("valor_deducoes");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=7)]
+        public string valor_pis {
+            get {
+                return this.valor_pisField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.valor_pisField, value) != true)) {
+                    this.valor_pisField = value;
+                    this.RaisePropertyChanged("valor_pis");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=8)]
+        public string valor_cofins {
+            get {
+                return this.valor_cofinsField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.valor_cofinsField, value) != true)) {
+                    this.valor_cofinsField = value;
+                    this.RaisePropertyChanged("valor_cofins");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=9)]
+        public string valor_inss {
+            get {
+                return this.valor_inssField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.valor_inssField, value) != true)) {
+                    this.valor_inssField = value;
+                    this.RaisePropertyChanged("valor_inss");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=10)]
+        public string valor_ir {
+            get {
+                return this.valor_irField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.valor_irField, value) != true)) {
+                    this.valor_irField = value;
+                    this.RaisePropertyChanged("valor_ir");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=11)]
+        public string valor_csll {
+            get {
+                return this.valor_csllField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.valor_csllField, value) != true)) {
+                    this.valor_csllField = value;
+                    this.RaisePropertyChanged("valor_csll");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=12)]
+        public string valor_iss {
+            get {
+                return this.valor_issField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.valor_issField, value) != true)) {
+                    this.valor_issField = value;
+                    this.RaisePropertyChanged("valor_iss");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=13)]
+        public string valor_iss_retido {
+            get {
+                return this.valor_iss_retidoField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.valor_iss_retidoField, value) != true)) {
+                    this.valor_iss_retidoField = value;
+                    this.RaisePropertyChanged("valor_iss_retido");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=14)]
+        public string outras_retencoes {
+            get {
+                return this.outras_retencoesField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.outras_retencoesField, value) != true)) {
+                    this.outras_retencoesField = value;
+                    this.RaisePropertyChanged("outras_retencoes");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=15)]
+        public string base_calculo {
+            get {
+                return this.base_calculoField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.base_calculoField, value) != true)) {
+                    this.base_calculoField = value;
+                    this.RaisePropertyChanged("base_calculo");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=16)]
+        public string desconto_incondicionado {
+            get {
+                return this.desconto_incondicionadoField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.desconto_incondicionadoField, value) != true)) {
+                    this.desconto_incondicionadoField = value;
+                    this.RaisePropertyChanged("desconto_incondicionado");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=17)]
+        public string desconto_condicionado {
+            get {
+                return this.desconto_condicionadoField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.desconto_condicionadoField, value) != true)) {
+                    this.desconto_condicionadoField = value;
+                    this.RaisePropertyChanged("desconto_condicionado");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=18)]
+        public string codigo_cnae {
+            get {
+                return this.codigo_cnaeField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.codigo_cnaeField, value) != true)) {
+                    this.codigo_cnaeField = value;
+                    this.RaisePropertyChanged("codigo_cnae");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=19)]
+        public string codigo_municipio {
+            get {
+                return this.codigo_municipioField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.codigo_municipioField, value) != true)) {
+                    this.codigo_municipioField = value;
+                    this.RaisePropertyChanged("codigo_municipio");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=20)]
+        public string percentual_total_tributos {
+            get {
+                return this.percentual_total_tributosField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.percentual_total_tributosField, value) != true)) {
+                    this.percentual_total_tributosField = value;
+                    this.RaisePropertyChanged("percentual_total_tributos");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=21)]
+        public string fonte_total_tributos {
+            get {
+                return this.fonte_total_tributosField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.fonte_total_tributosField, value) != true)) {
+                    this.fonte_total_tributosField = value;
+                    this.RaisePropertyChanged("fonte_total_tributos");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="Endereco", Namespace="http://tempuri.org/")]
+    [System.SerializableAttribute()]
+    public partial class Endereco : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string logradouroField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string tipo_logradouroField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string numeroField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string complementoField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string bairroField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string codigo_municipioField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ufField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string cepField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
+        public string logradouro {
+            get {
+                return this.logradouroField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.logradouroField, value) != true)) {
+                    this.logradouroField = value;
+                    this.RaisePropertyChanged("logradouro");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
+        public string tipo_logradouro {
+            get {
+                return this.tipo_logradouroField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.tipo_logradouroField, value) != true)) {
+                    this.tipo_logradouroField = value;
+                    this.RaisePropertyChanged("tipo_logradouro");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=2)]
+        public string numero {
+            get {
+                return this.numeroField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.numeroField, value) != true)) {
+                    this.numeroField = value;
+                    this.RaisePropertyChanged("numero");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=3)]
+        public string complemento {
+            get {
+                return this.complementoField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.complementoField, value) != true)) {
+                    this.complementoField = value;
+                    this.RaisePropertyChanged("complemento");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=4)]
+        public string bairro {
+            get {
+                return this.bairroField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.bairroField, value) != true)) {
+                    this.bairroField = value;
+                    this.RaisePropertyChanged("bairro");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=5)]
+        public string codigo_municipio {
+            get {
+                return this.codigo_municipioField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.codigo_municipioField, value) != true)) {
+                    this.codigo_municipioField = value;
+                    this.RaisePropertyChanged("codigo_municipio");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=6)]
+        public string uf {
+            get {
+                return this.ufField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ufField, value) != true)) {
+                    this.ufField = value;
+                    this.RaisePropertyChanged("uf");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=7)]
+        public string cep {
+            get {
+                return this.cepField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.cepField, value) != true)) {
+                    this.cepField = value;
+                    this.RaisePropertyChanged("cep");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="Consulta", Namespace="http://tempuri.org/")]
+    [System.SerializableAttribute()]
+    public partial class Consulta : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        private int UsuarioIdField;
+        
+        private int CodigoRetornoField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string CnpjPrestadorField;
+        
+        private bool HomologacaoField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
+        public int UsuarioId {
+            get {
+                return this.UsuarioIdField;
+            }
+            set {
+                if ((this.UsuarioIdField.Equals(value) != true)) {
+                    this.UsuarioIdField = value;
+                    this.RaisePropertyChanged("UsuarioId");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=1)]
+        public int CodigoRetorno {
+            get {
+                return this.CodigoRetornoField;
+            }
+            set {
+                if ((this.CodigoRetornoField.Equals(value) != true)) {
+                    this.CodigoRetornoField = value;
+                    this.RaisePropertyChanged("CodigoRetorno");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=2)]
+        public string CnpjPrestador {
+            get {
+                return this.CnpjPrestadorField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.CnpjPrestadorField, value) != true)) {
+                    this.CnpjPrestadorField = value;
+                    this.RaisePropertyChanged("CnpjPrestador");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=3)]
+        public bool Homologacao {
+            get {
+                return this.HomologacaoField;
+            }
+            set {
+                if ((this.HomologacaoField.Equals(value) != true)) {
+                    this.HomologacaoField = value;
+                    this.RaisePropertyChanged("Homologacao");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="RetornoErro", Namespace="http://tempuri.org/")]
+    [System.SerializableAttribute()]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(EnvioTeste.nfse.RetornoNotaFiscal))]
+    public partial class RetornoErro : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        private int NotaFiscalErroIdField;
+        
+        private int AutorizacaoNotaFiscalIdField;
+        
+        private int UsuarioIdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string CodigoErroField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string MensagemErroField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
+        public int NotaFiscalErroId {
+            get {
+                return this.NotaFiscalErroIdField;
+            }
+            set {
+                if ((this.NotaFiscalErroIdField.Equals(value) != true)) {
+                    this.NotaFiscalErroIdField = value;
+                    this.RaisePropertyChanged("NotaFiscalErroId");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=1)]
+        public int AutorizacaoNotaFiscalId {
+            get {
+                return this.AutorizacaoNotaFiscalIdField;
+            }
+            set {
+                if ((this.AutorizacaoNotaFiscalIdField.Equals(value) != true)) {
+                    this.AutorizacaoNotaFiscalIdField = value;
+                    this.RaisePropertyChanged("AutorizacaoNotaFiscalId");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=2)]
+        public int UsuarioId {
+            get {
+                return this.UsuarioIdField;
+            }
+            set {
+                if ((this.UsuarioIdField.Equals(value) != true)) {
+                    this.UsuarioIdField = value;
+                    this.RaisePropertyChanged("UsuarioId");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=3)]
+        public string CodigoErro {
+            get {
+                return this.CodigoErroField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.CodigoErroField, value) != true)) {
+                    this.CodigoErroField = value;
+                    this.RaisePropertyChanged("CodigoErro");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=4)]
+        public string MensagemErro {
+            get {
+                return this.MensagemErroField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.MensagemErroField, value) != true)) {
+                    this.MensagemErroField = value;
+                    this.RaisePropertyChanged("MensagemErro");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="RetornoNotaFiscal", Namespace="http://tempuri.org/")]
+    [System.SerializableAttribute()]
+    public partial class RetornoNotaFiscal : EnvioTeste.nfse.RetornoErro {
+        
+        private int NotaFiscalIdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string cnpj_prestadorField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string refField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string statusField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string numeroField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string codigo_verificacaoField;
+        
+        private System.DateTime data_emissaoField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string urlField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string caminho_xml_nota_fiscalField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private byte[] ImagemNotaFiscalField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
+        public int NotaFiscalId {
+            get {
+                return this.NotaFiscalIdField;
+            }
+            set {
+                if ((this.NotaFiscalIdField.Equals(value) != true)) {
+                    this.NotaFiscalIdField = value;
+                    this.RaisePropertyChanged("NotaFiscalId");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
+        public string cnpj_prestador {
+            get {
+                return this.cnpj_prestadorField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.cnpj_prestadorField, value) != true)) {
+                    this.cnpj_prestadorField = value;
+                    this.RaisePropertyChanged("cnpj_prestador");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
+        public string @ref {
+            get {
+                return this.refField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.refField, value) != true)) {
+                    this.refField = value;
+                    this.RaisePropertyChanged("ref");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
+        public string status {
+            get {
+                return this.statusField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.statusField, value) != true)) {
+                    this.statusField = value;
+                    this.RaisePropertyChanged("status");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=4)]
+        public string numero {
+            get {
+                return this.numeroField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.numeroField, value) != true)) {
+                    this.numeroField = value;
+                    this.RaisePropertyChanged("numero");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=5)]
+        public string codigo_verificacao {
+            get {
+                return this.codigo_verificacaoField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.codigo_verificacaoField, value) != true)) {
+                    this.codigo_verificacaoField = value;
+                    this.RaisePropertyChanged("codigo_verificacao");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=6)]
+        public System.DateTime data_emissao {
+            get {
+                return this.data_emissaoField;
+            }
+            set {
+                if ((this.data_emissaoField.Equals(value) != true)) {
+                    this.data_emissaoField = value;
+                    this.RaisePropertyChanged("data_emissao");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=7)]
+        public string url {
+            get {
+                return this.urlField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.urlField, value) != true)) {
+                    this.urlField = value;
+                    this.RaisePropertyChanged("url");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=8)]
+        public string caminho_xml_nota_fiscal {
+            get {
+                return this.caminho_xml_nota_fiscalField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.caminho_xml_nota_fiscalField, value) != true)) {
+                    this.caminho_xml_nota_fiscalField = value;
+                    this.RaisePropertyChanged("caminho_xml_nota_fiscal");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=9)]
+        public byte[] ImagemNotaFiscal {
+            get {
+                return this.ImagemNotaFiscalField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ImagemNotaFiscalField, value) != true)) {
+                    this.ImagemNotaFiscalField = value;
+                    this.RaisePropertyChanged("ImagemNotaFiscal");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="Cancelamento", Namespace="http://tempuri.org/")]
+    [System.SerializableAttribute()]
+    public partial class Cancelamento : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        private int UsuarioIdField;
+        
+        private int CodigoRetornoField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string CnpjPrestadorField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string JustificativaField;
+        
+        private bool HomologacaoField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
+        public int UsuarioId {
+            get {
+                return this.UsuarioIdField;
+            }
+            set {
+                if ((this.UsuarioIdField.Equals(value) != true)) {
+                    this.UsuarioIdField = value;
+                    this.RaisePropertyChanged("UsuarioId");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=1)]
+        public int CodigoRetorno {
+            get {
+                return this.CodigoRetornoField;
+            }
+            set {
+                if ((this.CodigoRetornoField.Equals(value) != true)) {
+                    this.CodigoRetornoField = value;
+                    this.RaisePropertyChanged("CodigoRetorno");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=2)]
+        public string CnpjPrestador {
+            get {
+                return this.CnpjPrestadorField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.CnpjPrestadorField, value) != true)) {
+                    this.CnpjPrestadorField = value;
+                    this.RaisePropertyChanged("CnpjPrestador");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=3)]
+        public string Justificativa {
+            get {
+                return this.JustificativaField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.JustificativaField, value) != true)) {
+                    this.JustificativaField = value;
+                    this.RaisePropertyChanged("Justificativa");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=4)]
+        public bool Homologacao {
+            get {
+                return this.HomologacaoField;
+            }
+            set {
+                if ((this.HomologacaoField.Equals(value) != true)) {
+                    this.HomologacaoField = value;
+                    this.RaisePropertyChanged("Homologacao");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="nfse.WSnfseSoap")]
+    public interface WSnfseSoap {
+        
+        // CODEGEN: Generating message contract since element name model from namespace http://tempuri.org/ is not marked nillable
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/EmitirNotaFiscal", ReplyAction="*")]
+        EnvioTeste.nfse.EmitirNotaFiscalResponse EmitirNotaFiscal(EnvioTeste.nfse.EmitirNotaFiscalRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/EmitirNotaFiscal", ReplyAction="*")]
+        System.Threading.Tasks.Task<EnvioTeste.nfse.EmitirNotaFiscalResponse> EmitirNotaFiscalAsync(EnvioTeste.nfse.EmitirNotaFiscalRequest request);
+        
+        // CODEGEN: Generating message contract since element name model from namespace http://tempuri.org/ is not marked nillable
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ReceberNotaFiscal", ReplyAction="*")]
+        EnvioTeste.nfse.ReceberNotaFiscalResponse ReceberNotaFiscal(EnvioTeste.nfse.ReceberNotaFiscalRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ReceberNotaFiscal", ReplyAction="*")]
+        System.Threading.Tasks.Task<EnvioTeste.nfse.ReceberNotaFiscalResponse> ReceberNotaFiscalAsync(EnvioTeste.nfse.ReceberNotaFiscalRequest request);
+        
+        // CODEGEN: Generating message contract since element name model from namespace http://tempuri.org/ is not marked nillable
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/CancelarNotaFiscal", ReplyAction="*")]
+        EnvioTeste.nfse.CancelarNotaFiscalResponse CancelarNotaFiscal(EnvioTeste.nfse.CancelarNotaFiscalRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/CancelarNotaFiscal", ReplyAction="*")]
+        System.Threading.Tasks.Task<EnvioTeste.nfse.CancelarNotaFiscalResponse> CancelarNotaFiscalAsync(EnvioTeste.nfse.CancelarNotaFiscalRequest request);
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class EmitirNotaFiscalRequest {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Name="EmitirNotaFiscal", Namespace="http://tempuri.org/", Order=0)]
+        public EnvioTeste.nfse.EmitirNotaFiscalRequestBody Body;
+        
+        public EmitirNotaFiscalRequest() {
+        }
+        
+        public EmitirNotaFiscalRequest(EnvioTeste.nfse.EmitirNotaFiscalRequestBody Body) {
+            this.Body = Body;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.Runtime.Serialization.DataContractAttribute(Namespace="http://tempuri.org/")]
+    public partial class EmitirNotaFiscalRequestBody {
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
+        public EnvioTeste.nfse.CapaAutorizacaoNfse model;
+        
+        public EmitirNotaFiscalRequestBody() {
+        }
+        
+        public EmitirNotaFiscalRequestBody(EnvioTeste.nfse.CapaAutorizacaoNfse model) {
+            this.model = model;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class EmitirNotaFiscalResponse {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Name="EmitirNotaFiscalResponse", Namespace="http://tempuri.org/", Order=0)]
+        public EnvioTeste.nfse.EmitirNotaFiscalResponseBody Body;
+        
+        public EmitirNotaFiscalResponse() {
+        }
+        
+        public EmitirNotaFiscalResponse(EnvioTeste.nfse.EmitirNotaFiscalResponseBody Body) {
+            this.Body = Body;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.Runtime.Serialization.DataContractAttribute(Namespace="http://tempuri.org/")]
+    public partial class EmitirNotaFiscalResponseBody {
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
+        public string EmitirNotaFiscalResult;
+        
+        public EmitirNotaFiscalResponseBody() {
+        }
+        
+        public EmitirNotaFiscalResponseBody(string EmitirNotaFiscalResult) {
+            this.EmitirNotaFiscalResult = EmitirNotaFiscalResult;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class ReceberNotaFiscalRequest {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Name="ReceberNotaFiscal", Namespace="http://tempuri.org/", Order=0)]
+        public EnvioTeste.nfse.ReceberNotaFiscalRequestBody Body;
+        
+        public ReceberNotaFiscalRequest() {
+        }
+        
+        public ReceberNotaFiscalRequest(EnvioTeste.nfse.ReceberNotaFiscalRequestBody Body) {
+            this.Body = Body;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.Runtime.Serialization.DataContractAttribute(Namespace="http://tempuri.org/")]
+    public partial class ReceberNotaFiscalRequestBody {
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
+        public EnvioTeste.nfse.Consulta model;
+        
+        public ReceberNotaFiscalRequestBody() {
+        }
+        
+        public ReceberNotaFiscalRequestBody(EnvioTeste.nfse.Consulta model) {
+            this.model = model;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class ReceberNotaFiscalResponse {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Name="ReceberNotaFiscalResponse", Namespace="http://tempuri.org/", Order=0)]
+        public EnvioTeste.nfse.ReceberNotaFiscalResponseBody Body;
+        
+        public ReceberNotaFiscalResponse() {
+        }
+        
+        public ReceberNotaFiscalResponse(EnvioTeste.nfse.ReceberNotaFiscalResponseBody Body) {
+            this.Body = Body;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.Runtime.Serialization.DataContractAttribute(Namespace="http://tempuri.org/")]
+    public partial class ReceberNotaFiscalResponseBody {
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
+        public EnvioTeste.nfse.RetornoNotaFiscal ReceberNotaFiscalResult;
+        
+        public ReceberNotaFiscalResponseBody() {
+        }
+        
+        public ReceberNotaFiscalResponseBody(EnvioTeste.nfse.RetornoNotaFiscal ReceberNotaFiscalResult) {
+            this.ReceberNotaFiscalResult = ReceberNotaFiscalResult;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class CancelarNotaFiscalRequest {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Name="CancelarNotaFiscal", Namespace="http://tempuri.org/", Order=0)]
+        public EnvioTeste.nfse.CancelarNotaFiscalRequestBody Body;
+        
+        public CancelarNotaFiscalRequest() {
+        }
+        
+        public CancelarNotaFiscalRequest(EnvioTeste.nfse.CancelarNotaFiscalRequestBody Body) {
+            this.Body = Body;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.Runtime.Serialization.DataContractAttribute(Namespace="http://tempuri.org/")]
+    public partial class CancelarNotaFiscalRequestBody {
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
+        public EnvioTeste.nfse.Cancelamento model;
+        
+        public CancelarNotaFiscalRequestBody() {
+        }
+        
+        public CancelarNotaFiscalRequestBody(EnvioTeste.nfse.Cancelamento model) {
+            this.model = model;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class CancelarNotaFiscalResponse {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Name="CancelarNotaFiscalResponse", Namespace="http://tempuri.org/", Order=0)]
+        public EnvioTeste.nfse.CancelarNotaFiscalResponseBody Body;
+        
+        public CancelarNotaFiscalResponse() {
+        }
+        
+        public CancelarNotaFiscalResponse(EnvioTeste.nfse.CancelarNotaFiscalResponseBody Body) {
+            this.Body = Body;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.Runtime.Serialization.DataContractAttribute(Namespace="http://tempuri.org/")]
+    public partial class CancelarNotaFiscalResponseBody {
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
+        public string CancelarNotaFiscalResult;
+        
+        public CancelarNotaFiscalResponseBody() {
+        }
+        
+        public CancelarNotaFiscalResponseBody(string CancelarNotaFiscalResult) {
+            this.CancelarNotaFiscalResult = CancelarNotaFiscalResult;
         }
     }
     
@@ -1097,52 +1789,79 @@ namespace EnvioTeste.nfse {
                 base(binding, remoteAddress) {
         }
         
-        public string Autorizar(EnvioTeste.nfse.CapaAutorizacaoNfse obj) {
-            return base.Channel.Autorizar(obj);
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        EnvioTeste.nfse.EmitirNotaFiscalResponse EnvioTeste.nfse.WSnfseSoap.EmitirNotaFiscal(EnvioTeste.nfse.EmitirNotaFiscalRequest request) {
+            return base.Channel.EmitirNotaFiscal(request);
         }
         
-        public System.Threading.Tasks.Task<string> AutorizarAsync(EnvioTeste.nfse.CapaAutorizacaoNfse obj) {
-            return base.Channel.AutorizarAsync(obj);
+        public string EmitirNotaFiscal(EnvioTeste.nfse.CapaAutorizacaoNfse model) {
+            EnvioTeste.nfse.EmitirNotaFiscalRequest inValue = new EnvioTeste.nfse.EmitirNotaFiscalRequest();
+            inValue.Body = new EnvioTeste.nfse.EmitirNotaFiscalRequestBody();
+            inValue.Body.model = model;
+            EnvioTeste.nfse.EmitirNotaFiscalResponse retVal = ((EnvioTeste.nfse.WSnfseSoap)(this)).EmitirNotaFiscal(inValue);
+            return retVal.Body.EmitirNotaFiscalResult;
         }
         
-        public string Consultar(EnvioTeste.nfse.Consultar referencia) {
-            return base.Channel.Consultar(referencia);
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.Threading.Tasks.Task<EnvioTeste.nfse.EmitirNotaFiscalResponse> EnvioTeste.nfse.WSnfseSoap.EmitirNotaFiscalAsync(EnvioTeste.nfse.EmitirNotaFiscalRequest request) {
+            return base.Channel.EmitirNotaFiscalAsync(request);
         }
         
-        public System.Threading.Tasks.Task<string> ConsultarAsync(EnvioTeste.nfse.Consultar referencia) {
-            return base.Channel.ConsultarAsync(referencia);
+        public System.Threading.Tasks.Task<EnvioTeste.nfse.EmitirNotaFiscalResponse> EmitirNotaFiscalAsync(EnvioTeste.nfse.CapaAutorizacaoNfse model) {
+            EnvioTeste.nfse.EmitirNotaFiscalRequest inValue = new EnvioTeste.nfse.EmitirNotaFiscalRequest();
+            inValue.Body = new EnvioTeste.nfse.EmitirNotaFiscalRequestBody();
+            inValue.Body.model = model;
+            return ((EnvioTeste.nfse.WSnfseSoap)(this)).EmitirNotaFiscalAsync(inValue);
         }
         
-        public string Consultar_testes(string referencia) {
-            return base.Channel.Consultar_testes(referencia);
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        EnvioTeste.nfse.ReceberNotaFiscalResponse EnvioTeste.nfse.WSnfseSoap.ReceberNotaFiscal(EnvioTeste.nfse.ReceberNotaFiscalRequest request) {
+            return base.Channel.ReceberNotaFiscal(request);
         }
         
-        public System.Threading.Tasks.Task<string> Consultar_testesAsync(string referencia) {
-            return base.Channel.Consultar_testesAsync(referencia);
+        public EnvioTeste.nfse.RetornoNotaFiscal ReceberNotaFiscal(EnvioTeste.nfse.Consulta model) {
+            EnvioTeste.nfse.ReceberNotaFiscalRequest inValue = new EnvioTeste.nfse.ReceberNotaFiscalRequest();
+            inValue.Body = new EnvioTeste.nfse.ReceberNotaFiscalRequestBody();
+            inValue.Body.model = model;
+            EnvioTeste.nfse.ReceberNotaFiscalResponse retVal = ((EnvioTeste.nfse.WSnfseSoap)(this)).ReceberNotaFiscal(inValue);
+            return retVal.Body.ReceberNotaFiscalResult;
         }
         
-        public string Cancelar(EnvioTeste.nfse.Cancelar referencia) {
-            return base.Channel.Cancelar(referencia);
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.Threading.Tasks.Task<EnvioTeste.nfse.ReceberNotaFiscalResponse> EnvioTeste.nfse.WSnfseSoap.ReceberNotaFiscalAsync(EnvioTeste.nfse.ReceberNotaFiscalRequest request) {
+            return base.Channel.ReceberNotaFiscalAsync(request);
         }
         
-        public System.Threading.Tasks.Task<string> CancelarAsync(EnvioTeste.nfse.Cancelar referencia) {
-            return base.Channel.CancelarAsync(referencia);
+        public System.Threading.Tasks.Task<EnvioTeste.nfse.ReceberNotaFiscalResponse> ReceberNotaFiscalAsync(EnvioTeste.nfse.Consulta model) {
+            EnvioTeste.nfse.ReceberNotaFiscalRequest inValue = new EnvioTeste.nfse.ReceberNotaFiscalRequest();
+            inValue.Body = new EnvioTeste.nfse.ReceberNotaFiscalRequestBody();
+            inValue.Body.model = model;
+            return ((EnvioTeste.nfse.WSnfseSoap)(this)).ReceberNotaFiscalAsync(inValue);
         }
         
-        public string Cancelar_testes(string referencia) {
-            return base.Channel.Cancelar_testes(referencia);
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        EnvioTeste.nfse.CancelarNotaFiscalResponse EnvioTeste.nfse.WSnfseSoap.CancelarNotaFiscal(EnvioTeste.nfse.CancelarNotaFiscalRequest request) {
+            return base.Channel.CancelarNotaFiscal(request);
         }
         
-        public System.Threading.Tasks.Task<string> Cancelar_testesAsync(string referencia) {
-            return base.Channel.Cancelar_testesAsync(referencia);
+        public string CancelarNotaFiscal(EnvioTeste.nfse.Cancelamento model) {
+            EnvioTeste.nfse.CancelarNotaFiscalRequest inValue = new EnvioTeste.nfse.CancelarNotaFiscalRequest();
+            inValue.Body = new EnvioTeste.nfse.CancelarNotaFiscalRequestBody();
+            inValue.Body.model = model;
+            EnvioTeste.nfse.CancelarNotaFiscalResponse retVal = ((EnvioTeste.nfse.WSnfseSoap)(this)).CancelarNotaFiscal(inValue);
+            return retVal.Body.CancelarNotaFiscalResult;
         }
         
-        public string GerarNfse(int id_grv, bool _isdev) {
-            return base.Channel.GerarNfse(id_grv, _isdev);
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.Threading.Tasks.Task<EnvioTeste.nfse.CancelarNotaFiscalResponse> EnvioTeste.nfse.WSnfseSoap.CancelarNotaFiscalAsync(EnvioTeste.nfse.CancelarNotaFiscalRequest request) {
+            return base.Channel.CancelarNotaFiscalAsync(request);
         }
         
-        public System.Threading.Tasks.Task<string> GerarNfseAsync(int id_grv, bool _isdev) {
-            return base.Channel.GerarNfseAsync(id_grv, _isdev);
+        public System.Threading.Tasks.Task<EnvioTeste.nfse.CancelarNotaFiscalResponse> CancelarNotaFiscalAsync(EnvioTeste.nfse.Cancelamento model) {
+            EnvioTeste.nfse.CancelarNotaFiscalRequest inValue = new EnvioTeste.nfse.CancelarNotaFiscalRequest();
+            inValue.Body = new EnvioTeste.nfse.CancelarNotaFiscalRequestBody();
+            inValue.Body.model = model;
+            return ((EnvioTeste.nfse.WSnfseSoap)(this)).CancelarNotaFiscalAsync(inValue);
         }
     }
 }

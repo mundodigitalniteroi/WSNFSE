@@ -28,14 +28,14 @@ namespace Negocio.Tabelas
 
             if (capaAutorizacaoNfse != null)
             {
-                SQL.AppendLine("   AND b.item_lista_servico = '" + capaAutorizacaoNfse.autorizar.servico.item_lista_servico + "'");
+                SQL.AppendLine("   AND b.item_lista_servico = '" + capaAutorizacaoNfse.Autorizacao.servico.item_lista_servico + "'");
             }
 
             SQL.AppendLine(" WHERE a.prestador_cnpj = '" + cnpj + "'");
 
             if (capaAutorizacaoNfse != null)
             {
-                SQL.AppendLine("   AND a.prestador_codigo_municipio_ibge = '" + capaAutorizacaoNfse.autorizar.prestador.codigo_municipio + "'");
+                SQL.AppendLine("   AND a.prestador_codigo_municipio_ibge = '" + capaAutorizacaoNfse.Autorizacao.prestador.codigo_municipio + "'");
             }
 
             return DataBase.Select(SQL);

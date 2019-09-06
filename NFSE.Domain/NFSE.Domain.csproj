@@ -35,18 +35,21 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entities\Autorizar.cs" />
-    <Compile Include="Entities\Cancelar.cs" />
+    <Compile Include="Entities\Autorizacao.cs" />
+    <Compile Include="Entities\Cancelamento.cs" />
     <Compile Include="Entities\CapaAutorizacaoNfse.cs" />
-    <Compile Include="Entities\Consultar.cs" />
+    <Compile Include="Entities\Consulta.cs" />
     <Compile Include="Entities\Endereco.cs" />
+    <Compile Include="Entities\Erro.cs" />
+    <Compile Include="Entities\DP\Nfe.cs" />
     <Compile Include="Entities\NotaFiscal.cs" />
     <Compile Include="Entities\Prestador.cs" />
     <Compile Include="Entities\PrestadorAcesso.cs" />
-    <Compile Include="Entities\RetornoConsulta.cs" />
+    <Compile Include="Entities\RetornoNotaFiscal.cs" />
     <Compile Include="Entities\RetornoErro.cs" />
     <Compile Include="Entities\Servico.cs" />
     <Compile Include="Entities\Tomador.cs" />
+    <Compile Include="Enum\OrigemErro.cs" />
     <Compile Include="Enum\SystemEnvironment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

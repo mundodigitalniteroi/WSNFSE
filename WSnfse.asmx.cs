@@ -14,72 +14,34 @@ namespace NFSE
     public class WSnfse : WebService
     {
         [WebMethod]
-        public string Autorizar(CapaAutorizacaoNfse obj)
+        public string EmitirNotaFiscal(CapaAutorizacaoNfse model)
         {
-            return new ControlarEnvio().AutorizarNfse(obj);
+            return new ControlarEnvio().SolicitarEmissaoNotaFiscal(model);
         }
 
         [WebMethod]
-        public string Consultar(Consultar referencia)
+        public RetornoNotaFiscal ReceberNotaFiscal(Consulta model)
         {
-            return new ControlarEnvio().Consultar(referencia);
+            return new ControlarEnvio().ReceberNotaFiscal(model);
         }
 
         [WebMethod]
-        public RetornoConsulta ConsultarRetornoClasse(Consultar referencia)
+        public string CancelarNotaFiscal(Cancelamento model)
         {
-            return new ControlarEnvio().Consultar_obj(referencia);
+            return new ControlarEnvio().CancelarNotaFiscal(model);
         }
 
-        [WebMethod]
-        public string ConsultarTestes(string referencia)
-        {
-            return new ControlarEnvio().Consultar(new Consultar()
-            {
-                referencia = referencia,
-                homologacao = false
-            });
-        }
-
-        [WebMethod]
-        public RetornoConsulta ConsultarRetornoClasseTestes(string referencia)
-        {
-            return new ControlarEnvio().Consultar_obj(new Consultar()
-            {
-                referencia = referencia,
-                cnpj_prestador = "25329339000248",
-                homologacao = false
-            });
-        }
-
-        [WebMethod]
-        public string Cancelar(Cancelar referencia)
-        {
-            return new ControlarEnvio().Cancelar(referencia);
-        }
-
-        [WebMethod]
-        public string CancelarTestes(string referencia)
-        {
-            return new ControlarEnvio().Cancelar(new Cancelar()
-            {
-                referencia = referencia,
-                justificativa = "Testes de cancelamento",
-                homologacao = false
-            });
-        }
-
-        [WebMethod]
-        public string GerarNfse(int grvId, bool isDev)
-        {
-            try
-            {
-                return new ControlarEnvio().GerarNota(grvId, isDev);
-            }
-            catch (Exception ex)
-            {
-                return "NOK: " + ex.Message.ToString();
-            }
-        }
+        //[WebMethod]
+        //public string GerarNfse(int grvId, bool isDev)
+        //{
+        //    try
+        //    {
+        //        return new ControlarEnvio().GerarNota(grvId, isDev);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return "NOK: " + ex.Message.ToString();
+        //    }
+        //}
     }
 }

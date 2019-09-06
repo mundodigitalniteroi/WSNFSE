@@ -1,6 +1,6 @@
 ﻿namespace NFSE.Domain.Entities
 {
-    public class PrestadorAcesso
+    public class PrestadorServico
     {
         public string id_nfse_prestador { get; set; }
 

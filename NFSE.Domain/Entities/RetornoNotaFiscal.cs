@@ -2,7 +2,7 @@
 
 namespace NFSE.Domain.Entities
 {
-    public class RetornoConsulta : RetornoErro
+    public class RetornoNotaFiscal : RetornoErro
     {
         public int NotaFiscalId { get; set; }
 

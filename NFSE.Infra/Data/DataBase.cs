@@ -89,6 +89,11 @@ namespace NFSE.Infra.Data
 
             return ConnectionFactory.SelectWithParameters(SQL, parameters);
         }
+
+        public static DataTable Select(StringBuilder SQL, SqlParameter[] parameters)
+        {
+            return Select(SQL.ToString(), parameters);
+        }
         #endregion Select
 
         #region Parameters

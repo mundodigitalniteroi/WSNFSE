@@ -2,12 +2,12 @@
 {
     public class CapaAutorizacaoNfse
     {
-        public Autorizar autorizar { get; set; }
+        public Autorizacao Autorizacao { get; set; }
 
-        public bool homologacao { get; set; }
+        public bool Homologacao { get; set; }
 
-        public int identificador_nota { get; set; }
+        public int CodigoRetorno { get; set; }
 
-        public int id_usuario { get; set; }
+        public int UsuarioId { get; set; }
     }
 }

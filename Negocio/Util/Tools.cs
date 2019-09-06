@@ -78,7 +78,8 @@ namespace Negocio.Util
             }
             catch (WebException ex)
             {
-                return new StreamReader(ex.Response.GetResponseStream()).ReadToEnd();
+                // return new StreamReader(ex.Response.GetResponseStream()).ReadToEnd();
+                throw;
             }
         }
 
@@ -199,19 +200,12 @@ namespace Negocio.Util
 
             var utF8Encoding = new UTF8Encoding();
 
-            try
+            using (HttpWebResponse response = (HttpWebResponse)httpWebRequest.GetResponse())
             {
-                using (HttpWebResponse response = (HttpWebResponse)httpWebRequest.GetResponse())
+                using (StreamReader streamReader = new StreamReader(response.GetResponseStream()))
                 {
-                    using (StreamReader streamReader = new StreamReader(response.GetResponseStream()))
-                    {
-                        return streamReader.ReadToEnd().Trim();
-                    }
+                    return streamReader.ReadToEnd().Trim();
                 }
-            }
-            catch (WebException ex)
-            {
-                return new StreamReader(ex.Response.GetResponseStream()).ReadToEnd();
             }
         }
 

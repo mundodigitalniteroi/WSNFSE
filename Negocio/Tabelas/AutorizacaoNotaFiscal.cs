@@ -49,7 +49,7 @@ namespace Negocio.Tabelas
             return DataBase.Select(SQL);
         }
 
-        public int Cadastrar(PrestadorAcesso prestadorAcesso, CapaAutorizacaoNfse capaAutorizacaoNfse, string resposta)
+        public int Cadastrar(PrestadorServico prestadorAcesso, CapaAutorizacaoNfse capaAutorizacaoNfse, string resposta)
         {
             var SQL = new StringBuilder();
 
@@ -85,34 +85,34 @@ namespace Negocio.Tabelas
 
             SQL.AppendLine("VALUES");
 
-            SQL.AppendLine("      ('" + capaAutorizacaoNfse.identificador_nota + "'");
+            SQL.AppendLine("      ('" + capaAutorizacaoNfse.CodigoRetorno + "'");
             SQL.AppendLine("      ,'" + resposta + "'");
             SQL.AppendLine("      ," + prestadorAcesso.id_nfse_prestador);
-            SQL.AppendLine("      ," + capaAutorizacaoNfse.id_usuario);
-            SQL.AppendLine("      ,'" + Convert.ToInt32(capaAutorizacaoNfse.homologacao) + "'");
-            SQL.AppendLine("      ,'" + Convert.ToInt32(capaAutorizacaoNfse.homologacao) + "'");
-            SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.autorizar.data_emissao) ? "" : capaAutorizacaoNfse.autorizar.data_emissao) + "'");
-            SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.autorizar.natureza_operacao) ? "" : capaAutorizacaoNfse.autorizar.natureza_operacao) + "'");
-            SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.autorizar.optante_simples_nacional) ? "" : Convert.ToInt32(Convert.ToBoolean(capaAutorizacaoNfse.autorizar.optante_simples_nacional)).ToString()) + "'");
-            SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.autorizar.tomador.cpf) ? "" : capaAutorizacaoNfse.autorizar.tomador.cpf) + "'");
-            SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.autorizar.tomador.cnpj) ? "" : capaAutorizacaoNfse.autorizar.tomador.cnpj) + "'");
-            SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.autorizar.tomador.razao_social) ? "" : capaAutorizacaoNfse.autorizar.tomador.razao_social) + "'");
-            SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.autorizar.tomador.telefone) ? "" : capaAutorizacaoNfse.autorizar.tomador.telefone) + "'");
-            SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.autorizar.tomador.email) ? "" : capaAutorizacaoNfse.autorizar.tomador.email) + "'");
-            SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.autorizar.tomador.endereco.logradouro) ? "" : capaAutorizacaoNfse.autorizar.tomador.endereco.logradouro) + "'");
-            SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.autorizar.tomador.endereco.numero) ? "" : capaAutorizacaoNfse.autorizar.tomador.endereco.numero) + "'");
-            SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.autorizar.tomador.endereco.complemento) ? "" : capaAutorizacaoNfse.autorizar.tomador.endereco.complemento) + "'");
-            SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.autorizar.tomador.endereco.bairro) ? "" : capaAutorizacaoNfse.autorizar.tomador.endereco.bairro) + "'");
-            SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.autorizar.tomador.endereco.codigo_municipio) ? "" : capaAutorizacaoNfse.autorizar.tomador.endereco.codigo_municipio) + "'");
-            SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.autorizar.tomador.endereco.uf) ? "" : capaAutorizacaoNfse.autorizar.tomador.endereco.uf) + "'");
-            SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.autorizar.tomador.endereco.cep) ? "" : capaAutorizacaoNfse.autorizar.tomador.endereco.cep) + "'");
-            SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.autorizar.servico.aliquota) ? "" : capaAutorizacaoNfse.autorizar.servico.aliquota) + "'");
-            SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.autorizar.servico.discriminacao) ? "" : capaAutorizacaoNfse.autorizar.servico.discriminacao) + "'");
-            SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.autorizar.servico.iss_retido) ? "" : Convert.ToInt32(Convert.ToBoolean(capaAutorizacaoNfse.autorizar.servico.iss_retido)).ToString()) + "'");
-            SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.autorizar.servico.valor_iss) ? "" : capaAutorizacaoNfse.autorizar.servico.valor_iss) + "'");
-            SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.autorizar.servico.codigo_cnae) ? "" : capaAutorizacaoNfse.autorizar.servico.codigo_cnae) + "'");
-            SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.autorizar.servico.item_lista_servico) ? "" : capaAutorizacaoNfse.autorizar.servico.item_lista_servico) + "'");
-            SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.autorizar.servico.valor_servicos) ? "" : capaAutorizacaoNfse.autorizar.servico.valor_servicos) + "')");
+            SQL.AppendLine("      ," + capaAutorizacaoNfse.UsuarioId);
+            SQL.AppendLine("      ,'" + Convert.ToInt32(capaAutorizacaoNfse.Homologacao) + "'");
+            SQL.AppendLine("      ,'" + Convert.ToInt32(capaAutorizacaoNfse.Homologacao) + "'");
+            SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.Autorizacao.data_emissao) ? "" : capaAutorizacaoNfse.Autorizacao.data_emissao) + "'");
+            SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.Autorizacao.natureza_operacao) ? "" : capaAutorizacaoNfse.Autorizacao.natureza_operacao) + "'");
+            SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.Autorizacao.optante_simples_nacional) ? "" : Convert.ToInt32(Convert.ToBoolean(capaAutorizacaoNfse.Autorizacao.optante_simples_nacional)).ToString()) + "'");
+            SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.Autorizacao.tomador.cpf) ? "" : capaAutorizacaoNfse.Autorizacao.tomador.cpf) + "'");
+            SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.Autorizacao.tomador.cnpj) ? "" : capaAutorizacaoNfse.Autorizacao.tomador.cnpj) + "'");
+            SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.Autorizacao.tomador.razao_social) ? "" : capaAutorizacaoNfse.Autorizacao.tomador.razao_social) + "'");
+            SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.Autorizacao.tomador.telefone) ? "" : capaAutorizacaoNfse.Autorizacao.tomador.telefone) + "'");
+            SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.Autorizacao.tomador.email) ? "" : capaAutorizacaoNfse.Autorizacao.tomador.email) + "'");
+            SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.Autorizacao.tomador.endereco.logradouro) ? "" : capaAutorizacaoNfse.Autorizacao.tomador.endereco.logradouro) + "'");
+            SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.Autorizacao.tomador.endereco.numero) ? "" : capaAutorizacaoNfse.Autorizacao.tomador.endereco.numero) + "'");
+            SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.Autorizacao.tomador.endereco.complemento) ? "" : capaAutorizacaoNfse.Autorizacao.tomador.endereco.complemento) + "'");
+            SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.Autorizacao.tomador.endereco.bairro) ? "" : capaAutorizacaoNfse.Autorizacao.tomador.endereco.bairro) + "'");
+            SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.Autorizacao.tomador.endereco.codigo_municipio) ? "" : capaAutorizacaoNfse.Autorizacao.tomador.endereco.codigo_municipio) + "'");
+            SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.Autorizacao.tomador.endereco.uf) ? "" : capaAutorizacaoNfse.Autorizacao.tomador.endereco.uf) + "'");
+            SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.Autorizacao.tomador.endereco.cep) ? "" : capaAutorizacaoNfse.Autorizacao.tomador.endereco.cep) + "'");
+            SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.Autorizacao.servico.aliquota) ? "" : capaAutorizacaoNfse.Autorizacao.servico.aliquota) + "'");
+            SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.Autorizacao.servico.discriminacao) ? "" : capaAutorizacaoNfse.Autorizacao.servico.discriminacao) + "'");
+            SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.Autorizacao.servico.iss_retido) ? "" : Convert.ToInt32(Convert.ToBoolean(capaAutorizacaoNfse.Autorizacao.servico.iss_retido)).ToString()) + "'");
+            SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.Autorizacao.servico.valor_iss) ? "" : capaAutorizacaoNfse.Autorizacao.servico.valor_iss) + "'");
+            SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.Autorizacao.servico.codigo_cnae) ? "" : capaAutorizacaoNfse.Autorizacao.servico.codigo_cnae) + "'");
+            SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.Autorizacao.servico.item_lista_servico) ? "" : capaAutorizacaoNfse.Autorizacao.servico.item_lista_servico) + "'");
+            SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.Autorizacao.servico.valor_servicos) ? "" : capaAutorizacaoNfse.Autorizacao.servico.valor_servicos) + "')");
 
             return DataBase.Execute(SQL);
         }

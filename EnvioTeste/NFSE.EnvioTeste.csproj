@@ -48,6 +48,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.XML" />
     <Reference Include="Microsoft.CSharp" />
@@ -65,6 +66,18 @@
   <ItemGroup>
     <None Include="App.config">
       <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\nfse\EnvioTeste.nfse.CancelarNotaFiscalResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\nfse\EnvioTeste.nfse.EmitirNotaFiscalResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\nfse\EnvioTeste.nfse.ReceberNotaFiscalResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\nfse\EnvioTeste.nfse.RetornoNotaFiscal.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\nfse\WSnfse.wsdl" />
   </ItemGroup>

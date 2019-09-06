@@ -1,14 +1,15 @@
 ﻿using Negocio.Util;
 using NFSE.Domain.Entities;
+using NFSE.Domain.Entities.DP;
 using NFSE.Domain.Enum;
 using NFSE.Infra.Data;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Web.Script.Serialization;
@@ -17,26 +18,23 @@ namespace Negocio
 {
     public class ControlarEnvio
     {
-        public string AutorizarNfse(CapaAutorizacaoNfse model)
+        public string SolicitarEmissaoNotaFiscal(CapaAutorizacaoNfse capaAutorizacaoNfse)
         {
-            string str = model.identificador_nota.ToString();
+            DataBase.SystemEnvironment = capaAutorizacaoNfse.Homologacao ? SystemEnvironment.Development : SystemEnvironment.Production;
 
-            PrestadorAcesso prestadorAcesso = VerificarPrestador(model.autorizar.prestador.cnpj.Replace("/", "").Replace(".", "").Replace("-", ""), model.homologacao, model);
+            var nfe = ConsultarNotaFiscal(capaAutorizacaoNfse.UsuarioId, capaAutorizacaoNfse.CodigoRetorno, 0);
 
-            if (string.IsNullOrEmpty(prestadorAcesso.prestador_chave))
-            {
-                return "Prestador não configurado";
-            }
+            var prestadorAcesso = ConsultarPrestadorServico(capaAutorizacaoNfse.UsuarioId, capaAutorizacaoNfse.Autorizacao.prestador.cnpj, nfe, capaAutorizacaoNfse);
 
-            string uri = prestadorAcesso.server + "v2/nfse?ref=" + str;
+            string uri = prestadorAcesso.server + "?ref=" + capaAutorizacaoNfse.CodigoRetorno;
 
-            model.autorizar.servico.codigo_tributario_municipio = !prestadorAcesso.codigo_tributario_municipio.Equals("") ? prestadorAcesso.codigo_tributario_municipio : (string)null;
-            model.autorizar.servico.item_lista_servico = prestadorAcesso.item_lista_servico;
-            model.autorizar.servico.codigo_cnae = prestadorAcesso.codigo_cnae;
+            capaAutorizacaoNfse.Autorizacao.servico.codigo_tributario_municipio = !prestadorAcesso.codigo_tributario_municipio.Equals(string.Empty) ? prestadorAcesso.codigo_tributario_municipio : null;
+            capaAutorizacaoNfse.Autorizacao.servico.item_lista_servico = prestadorAcesso.item_lista_servico;
+            capaAutorizacaoNfse.Autorizacao.servico.codigo_cnae = prestadorAcesso.codigo_cnae;
 
             var tools = new Tools();
 
-            string json = tools.ObjToJSON((object)model.autorizar);
+            string json = tools.ObjToJSON(capaAutorizacaoNfse.Autorizacao);
 
             string resposta;
 
@@ -46,104 +44,69 @@ namespace Negocio
             }
             catch (Exception ex)
             {
-                return "Ocorreu um erro ao executar o WebService:\n\n" + ex.Message;
+                CadastrarErroGenerico(capaAutorizacaoNfse.UsuarioId, nfe.GrvID, nfe.CodigoRetorno, OrigemErro.WebService, "Ocorreu um erro ao solicitar a Nota Fiscal: " + ex.Message);
+
+                throw new Exception("Ocorreu um erro ao solicitar a Nota Fiscal (" + capaAutorizacaoNfse.CodigoRetorno + "): " + ex.Message);
             }
 
             try
             {
-                new Tabelas.AutorizacaoNotaFiscal().Cadastrar(prestadorAcesso, model, resposta);
+                new Tabelas.AutorizacaoNotaFiscal().Cadastrar(prestadorAcesso, capaAutorizacaoNfse, resposta);
             }
             catch (Exception ex)
             {
-                return "Ocorreu um erro ao cadastrar a Nota:\n\n" + ex.Message;
+                CadastrarErroGenerico(capaAutorizacaoNfse.UsuarioId, nfe.GrvID, nfe.CodigoRetorno, OrigemErro.MobLink, "Ocorreu um erro ao cadastrar a solicitação da Nota Fiscal: " + ex.Message);
+
+                throw new Exception("Ocorreu um erro ao cadastrar a solicitação da Nota Fiscal (" + capaAutorizacaoNfse.CodigoRetorno + "): " + ex.Message);
             }
 
             return resposta;
         }
 
+        //public string ReceberNotaFiscal(Consultar model)
+        //{
+        //    return new JavaScriptSerializer().Serialize(Consultar_obj(model));
+        //}
 
-        public string Consultar(Consultar obj)
+        public RetornoNotaFiscal ReceberNotaFiscal(Consulta notaFiscal)
         {
-            PrestadorAcesso prestadorAcesso = VerificarPrestador(obj.cnpj_prestador.Replace("/", "").Replace(".", "").Replace("-", ""), obj.homologacao);
+            DataBase.SystemEnvironment = notaFiscal.Homologacao ? SystemEnvironment.Development : SystemEnvironment.Production;
 
-            if (string.IsNullOrEmpty(prestadorAcesso.prestador_chave))
-            {
-                return "Prestador não configurado";
-            }
+            var nfe = ConsultarNotaFiscal(notaFiscal.UsuarioId, notaFiscal.CodigoRetorno, 0);
 
-            string nfse = new Tools().GetNfse(prestadorAcesso.server + "v2/nfse/" + obj.referencia, prestadorAcesso.prestador_chave);
-
-            string str = "";
-
-            try
-            {
-                str = InserirConsulta(prestadorAcesso, obj, nfse);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Ocorreu um erro ao cadastrar a Nota Fiscal:\n\n" + ex.Message);
-            }
-
-            if (string.IsNullOrWhiteSpace(str))
-            {
-                return nfse;
-            }
-
-            return str;
-        }
-
-        public RetornoConsulta Consultar_obj(Consultar obj)
-        {
-            var prestadorAcesso = new PrestadorAcesso();
-
-            try
-            {
-                prestadorAcesso = VerificarPrestador(obj.cnpj_prestador.Replace("/", "").Replace(".", "").Replace("-", ""), obj.homologacao);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
-            if (string.IsNullOrEmpty(prestadorAcesso.prestador_chave))
-            {
-                throw new Exception("Prestador sem chave configurada (token)");
-            }
+            var prestadorAcesso = ConsultarPrestadorServico(notaFiscal.UsuarioId, notaFiscal.CnpjPrestador, nfe);
 
             string nfse;
 
             try
             {
-                nfse = new Tools().GetNfse(prestadorAcesso.server + "v2/nfse/" + obj.referencia, prestadorAcesso.prestador_chave);
+                nfse = new Tools().GetNfse(prestadorAcesso.server + "/" + notaFiscal.CodigoRetorno, prestadorAcesso.prestador_chave);
             }
             catch (Exception ex)
             {
-                throw ex;
+                CadastrarErroGenerico(notaFiscal.UsuarioId, nfe.GrvID, nfe.CodigoRetorno, OrigemErro.WebService, "Ocorreu um erro receber a Nota Fiscal: " + ex.Message);
+
+                throw new Exception("Ocorreu um erro receber a Nota Fiscal (" + notaFiscal.CodigoRetorno + "): " + ex.Message);
             }
 
             try
             {
-                return InserirConsulta_obj(prestadorAcesso, obj, nfse);
+                return CadastrarNotaFiscalRecebida(notaFiscal, nfse);
             }
             catch (Exception ex)
             {
-                throw ex;
+                CadastrarErroGenerico(notaFiscal.UsuarioId, nfe.GrvID, nfe.CodigoRetorno, OrigemErro.MobLink, "Ocorreu um erro cadastrar a Nota Fiscal: " + ex.Message);
+
+                throw new Exception("Ocorreu um erro consultar a Nota Fiscal (" + notaFiscal.CodigoRetorno + "): " + ex.Message);
             }
         }
 
-        private string InserirConsulta(PrestadorAcesso prestadorAcesso, Consultar consultar, string retorno)
+        private RetornoNotaFiscal CadastrarNotaFiscalRecebida(Consulta notaFiscalRecebida, string retorno)
         {
-            return new JavaScriptSerializer().Serialize((object)InserirConsulta_obj(prestadorAcesso, consultar, retorno));
-        }
-
-        private RetornoConsulta InserirConsulta_obj(PrestadorAcesso prestadorAcesso, Consultar consultar, string retorno)
-        {
-            DataBase.SystemEnvironment = consultar.homologacao ? SystemEnvironment.Development : SystemEnvironment.Production;
-
             var retornoConsulta = new JavaScriptSerializer()
             {
                 MaxJsonLength = int.MaxValue
-            }.Deserialize<RetornoConsulta>(retorno);
+            }.Deserialize<RetornoNotaFiscal>(retorno);
 
             if (retornoConsulta.url == null)
             {
@@ -155,8 +118,8 @@ namespace Negocio
                     MaxJsonLength = int.MaxValue
                 }.Deserialize<RetornoErro>(retorno);
 
-                retornoErro.AutorizacaoNotaFiscalId = int.Parse(consultar.referencia);
-                retornoErro.UsuarioId = consultar.id_usuario;
+                retornoErro.AutorizacaoNotaFiscalId = notaFiscalRecebida.CodigoRetorno;
+                retornoErro.UsuarioId = notaFiscalRecebida.UsuarioId;
                 retornoErro.CodigoErro = retornoErro.CodigoErro.Trim().ToUpper();
                 retornoErro.MensagemErro = retornoErro.MensagemErro.Trim();
 
@@ -172,9 +135,9 @@ namespace Negocio
 
             var notaFiscal = new NotaFiscal
             {
-                AutorizacaoNotaFiscalId = int.Parse(consultar.referencia),
-                UsuarioId = consultar.id_usuario,
-                FlagAmbiente = consultar.homologacao ? "1" : "0",
+                AutorizacaoNotaFiscalId = notaFiscalRecebida.CodigoRetorno,
+                UsuarioId = notaFiscalRecebida.UsuarioId,
+                FlagAmbiente = notaFiscalRecebida.Homologacao ? "1" : "0",
                 StatusNotaFiscal = retornoConsulta.status,
                 NumeroNotaFiscal = retornoConsulta.numero,
                 CodigoVerificacao = retornoConsulta.codigo_verificacao,
@@ -197,201 +160,249 @@ namespace Negocio
                 retornoConsulta.ImagemNotaFiscal = notaFiscal.ImagemNotaFiscal;
             }
 
-            try
-            {
-                retornoConsulta.NotaFiscalId = new Tabelas.NotaFiscal().Cadastrar(notaFiscal);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Ocorreu um erro ao cadastrar a Nota Fiscal:\n\n" + ex.Message);
-            }
+            retornoConsulta.NotaFiscalId = new Tabelas.NotaFiscal().Cadastrar(notaFiscal);
 
             return retornoConsulta;
         }
 
-        public string Cancelar(Cancelar cancelar)
+        public string CancelarNotaFiscal(Cancelamento model)
         {
-            DataBase.SystemEnvironment = cancelar.homologacao ? SystemEnvironment.Development : SystemEnvironment.Production;
+            DataBase.SystemEnvironment = model.Homologacao ? SystemEnvironment.Development : SystemEnvironment.Production;
 
-            string str1 = cancelar.referencia.ToString();
-            string server = GetRemoteServer();
-            string token;
+            var nfe = ConsultarNotaFiscal(model.UsuarioId, model.CodigoRetorno, 0);
 
-            if (cancelar.homologacao)
-            {
-                token = "2D6xPXxoXRyIuTyUjS6HbiLao7Xr50Mb";
-            }
-            else
-            {
-                token = "1Zrf7fOmWSdLwtOZZVGcFJRhl9SFps1x";
-            }
-
-            string uri = server + "v2/nfse/" + str1;
+            var prestadorAcesso = ConsultarPrestadorServico(model.UsuarioId, model.CnpjPrestador, nfe);
 
             var tools = new Tools();
 
-            string json = tools.ObjToJSON((object)new Dictionary<string, string>()
+            string json = tools.ObjToJSON(new Dictionary<string, string>()
             {
                 {
                     "justificativa",
-                    cancelar.justificativa
+                    model.Justificativa
                 }
             });
 
-            return tools.CancelarNfse(uri, json, token);
+            try
+            {
+                return tools.CancelarNfse(prestadorAcesso.server + "/" + model.CodigoRetorno, json, prestadorAcesso.prestador_chave);
+            }
+            catch (Exception ex)
+            {
+                CadastrarErroGenerico(model.UsuarioId, nfe.GrvID, nfe.CodigoRetorno, OrigemErro.WebService, "Ocorreu um erro cancelar a Nota Fiscal: " + ex.Message);
+
+                throw new Exception("Ocorreu um erro cancelar a Nota Fiscal (" + model.CodigoRetorno + "): " + ex.Message);
+            }
         }
 
-        public string GerarNota(int id_grv, bool isDev)
+        private void CadastrarErroGenerico(int usuarioId, int? idGrv, int? codigoRetorno, OrigemErro origemErro, string mensagemErro)
         {
-            DataBase.SystemEnvironment = isDev ? SystemEnvironment.Development : SystemEnvironment.Production;
+            var erro = new Erro
+            {
+                UsuarioId = usuarioId,
+                GrvId = idGrv != null ? idGrv : null,
+                CodigoRetorno = codigoRetorno != null ? codigoRetorno : null,
+                OrigemErro = origemErro == OrigemErro.MobLink ? 'M' : 'W',
+                MensagemErro = mensagemErro.ToUpper().Trim()
+            };
 
+            try
+            {
+                new Tabelas.Erro().Cadastrar(erro);
+            }
+            catch { }
+        }
+
+        private Nfe ConsultarNotaFiscal(int usuarioId, int codigoRetorno, int idGrv)
+        {
+            var nfe = new List<Nfe>();
+
+            try
+            {
+                if (codigoRetorno > 0)
+                {
+                    nfe = new Tabelas.Nfe().ConsultarPorCodigoRetorno(codigoRetorno);
+                }
+                else if (idGrv > 0)
+                {
+                    nfe = new Tabelas.Nfe().ConsultarPorGrv(idGrv);
+                }
+            }
+            catch (Exception ex)
+            {
+                CadastrarErroGenerico(usuarioId, idGrv, codigoRetorno, OrigemErro.MobLink, "Ocorreu um erro ao consultar a Nota Fiscal: " + ex.Message);
+
+                throw new Exception("Ocorreu um erro ao consultar a Nota Fiscal (" + codigoRetorno + "): " + ex.Message);
+            }
+
+            if (nfe == null)
+            {
+                CadastrarErroGenerico(usuarioId, idGrv, codigoRetorno, OrigemErro.MobLink, "Nota Fiscal não encontrada no cadastro do Depósito Público");
+
+                throw new Exception("Nota Fiscal não encontrada no cadastro do Depósito Público (" + codigoRetorno);
+            }
+
+            return nfe.FirstOrDefault();
+        }
+
+        private PrestadorServico ConsultarPrestadorServico(int usuarioId, string cnpj, Nfe nfe, CapaAutorizacaoNfse capaAutorizacaoNfse = null)
+        {
             Thread.CurrentThread.CurrentCulture = new CultureInfo("pt-BR");
 
-            var dataTable = new Tabelas.Grv().Consultar(id_grv);
+            cnpj = cnpj.Replace("/", "").Replace(".", "").Replace("-", "");
 
-            if (dataTable == null)
-                return "Sem dados para geração da nota!";
-            CapaAutorizacaoNfse capaAutorizacaoNfse = new CapaAutorizacaoNfse();
-            foreach (DataRow row in (InternalDataCollectionBase)dataTable.Rows)
+            var prestadorAcesso = new PrestadorServico();
+
+            try
             {
-                if (row["nota_fiscal_nome"].ToString().Equals(""))
-                    return "Dados insuficientes para geração da nota";
+                prestadorAcesso.server = new Tabelas.Server().GetRemoteServer();
+            }
+            catch (Exception ex)
+            {
+                CadastrarErroGenerico(usuarioId, nfe.GrvID, nfe.CodigoRetorno, OrigemErro.MobLink, "Ocorreu um erro ao consultar os dados do Servidor: " + ex);
 
-                capaAutorizacaoNfse.homologacao = isDev;
+                throw new Exception("Ocorreu um erro ao consultar os dados do Servidor: " + ex);
+            }
 
-                capaAutorizacaoNfse.autorizar = new Autorizar
+            try
+            {
+                using (var dtPrestador = new Tabelas.Prestador().Consultar(cnpj, capaAutorizacaoNfse))
                 {
-                    data_emissao = DateTime.Now.ToString("yyyy-MM-ddThh:mm:ss"),
-                    natureza_operacao = "1",
-                    optante_simples_nacional = "false",
-
-                    prestador = new Prestador
+                    if (dtPrestador == null)
                     {
-                        cnpj = row["cnpj"].ToString(),
-                        inscricao_municipal = row["inscricao_municipal"].ToString(),
-                        codigo_municipio = row["codigo_municipio_ibge"].ToString()
-                    },
+                        CadastrarErroGenerico(usuarioId, nfe.GrvID, nfe.CodigoRetorno, OrigemErro.MobLink, "Prestador de Serviços não configurado. CNPJ: " + cnpj);
 
-                    tomador = new Tomador
-                    {
-                        razao_social = row["nota_fiscal_nome"].ToString(),
-                        email = row["nota_fiscal_email"].ToString()
+                        throw new Exception("Prestador de Serviços não configurado. CNPJ: " + cnpj);
                     }
-                };
 
-                if (row["nota_fiscal_cpf"].ToString().Length > 11)
-                    capaAutorizacaoNfse.autorizar.tomador.cnpj = row["nota_fiscal_cpf"].ToString();
-                else
-                    capaAutorizacaoNfse.autorizar.tomador.cpf = row["nota_fiscal_cpf"].ToString();
-
-                capaAutorizacaoNfse.autorizar.tomador.endereco = new Endereco
-                {
-                    logradouro = row["nota_fiscal_endereco"].ToString(),
-                    numero = row["nota_fiscal_numero"].ToString(),
-                    complemento = row["nota_fiscal_complemento"].ToString(),
-                    bairro = row["nota_fiscal_bairro"].ToString(),
-                    codigo_municipio = row["codigo_municipio_ibge"].ToString(),
-                    uf = row["nota_fiscal_uf"].ToString(),
-                    cep = row["nota_fiscal_cep"].ToString()
-                };
-
-                capaAutorizacaoNfse.autorizar.servico = new Servico
-                {
-                    aliquota = "3.00",
-                    discriminacao = "Nota fiscal referente a serviços prestados",
-                    iss_retido = "false",
-                    valor_iss = "0",
-                    item_lista_servico = "0801",
-                    codigo_tributario_municipio = "080101",
-                    valor_servicos = row["valor_pagamento"].ToString().Replace(',', '.')
-                };
-
-                capaAutorizacaoNfse.identificador_nota = Convert.ToInt32(row["id_faturamento"]);
+                    foreach (DataRow row in (InternalDataCollectionBase)dtPrestador.Rows)
+                    {
+                        prestadorAcesso.id_nfse_prestador = row["id_nfse_prestador"].ToString();
+                        prestadorAcesso.prestador_cnpj = row["prestador_cnpj"].ToString();
+                        prestadorAcesso.prestador_nome = row["prestador_nome"].ToString();
+                        prestadorAcesso.prestador_inscricao_municipal = row["prestador_inscricao_municipal"].ToString();
+                        prestadorAcesso.prestador_codigo_municipio_ibge = row["prestador_codigo_municipio_ibge"].ToString();
+                        prestadorAcesso.prestador_chave = row["prestador_chave"].ToString();
+                        prestadorAcesso.item_lista_servico = row["item_lista_servico"].ToString();
+                        prestadorAcesso.codigo_tributario_municipio = row["codigo_tributario_municipio"].ToString();
+                        prestadorAcesso.codigo_cnae = row["codigo_cnae"].ToString();
+                    }
+                }
             }
-
-            return AutorizarNfse(capaAutorizacaoNfse);
-        }
-
-        public PrestadorAcesso VerificarPrestador(string cnpj, bool isDev, CapaAutorizacaoNfse capaAutorizacaoNfse)
-        {
-            var prestadorAcesso = new PrestadorAcesso();
-
-            DataBase.SystemEnvironment = isDev ? SystemEnvironment.Development : SystemEnvironment.Production;
-
-            prestadorAcesso.server = GetRemoteServer();
-
-            Thread.CurrentThread.CurrentCulture = new CultureInfo("pt-BR");
-
-            var dtPrestador = new Tabelas.Prestador().Consultar(cnpj, capaAutorizacaoNfse);
-
-            if (dtPrestador == null)
+            catch (Exception ex)
             {
-                return prestadorAcesso;
+                CadastrarErroGenerico(usuarioId, nfe.GrvID, nfe.CodigoRetorno, OrigemErro.MobLink, "Ocorreu um erro consultar o Prestador de Serviços: " + ex.Message);
+
+                throw new Exception("Ocorreu um erro consultar o Prestador de Serviços: " + ex.Message);
             }
 
-            foreach (DataRow row in (InternalDataCollectionBase)dtPrestador.Rows)
+            if (string.IsNullOrEmpty(prestadorAcesso.prestador_chave))
             {
-                prestadorAcesso.id_nfse_prestador = row["id_nfse_prestador"].ToString();
-                prestadorAcesso.prestador_cnpj = row["prestador_cnpj"].ToString();
-                prestadorAcesso.prestador_nome = row["prestador_nome"].ToString();
-                prestadorAcesso.prestador_inscricao_municipal = row["prestador_inscricao_municipal"].ToString();
-                prestadorAcesso.prestador_codigo_municipio_ibge = row["prestador_codigo_municipio_ibge"].ToString();
-                prestadorAcesso.prestador_chave = row["prestador_chave"].ToString();
-                prestadorAcesso.item_lista_servico = row["item_lista_servico"].ToString();
-                prestadorAcesso.codigo_tributario_municipio = row["codigo_tributario_municipio"].ToString();
-                prestadorAcesso.codigo_cnae = row["codigo_cnae"].ToString();
-            }
+                CadastrarErroGenerico(usuarioId, nfe.GrvID, nfe.CodigoRetorno, OrigemErro.MobLink, "Prestador de Serviços sem chave configurada (token). CNPJ: " + cnpj);
 
-            DataBase.DisconnectDataBase();
+                throw new Exception("Prestador de Serviços sem chave configurada (token). CNPJ: " + cnpj);
+            }
 
             return prestadorAcesso;
         }
 
-        public PrestadorAcesso VerificarPrestador(string cnpj, bool isDev)
-        {
-            DataBase.SystemEnvironment = isDev ? SystemEnvironment.Development : SystemEnvironment.Production;
+        /// <summary>
+        /// Método obsoleto que seleciona os registros necessários para a Emissão da Nota Fiscal
+        /// </summary>
+        /// <param name="grvId"></param>
+        /// <param name="isDev"></param>
+        /// <returns></returns>
+        //public string GerarNota(int grvId, bool isDev)
+        //{
+        //    DataBase.SystemEnvironment = isDev ? SystemEnvironment.Development : SystemEnvironment.Production;
 
-            var prestadorAcesso = new PrestadorAcesso();
+        //    Thread.CurrentThread.CurrentCulture = new CultureInfo("pt-BR");
 
-            prestadorAcesso.server = GetRemoteServer();
+        //    var nfe = new List<Nfe>();
 
-            Thread.CurrentThread.CurrentCulture = new CultureInfo("pt-BR");
+        //    try
+        //    {
+        //        nfe = new Tabelas.Nfe().ConsultarPorGrv(grvId);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("Ocorreu um erro ao consultar a Nota Fiscal: " + ex.Message);
+        //    }
 
-            var dtPrestador = new Tabelas.Prestador().Consultar(cnpj);
+        //    if (nfe == null)
+        //    {
+        //        throw new Exception("Nota Fiscal não encontrada no cadastro do Depósito Público.");
+        //    }
 
-            if (dtPrestador == null)
-            {
-                return prestadorAcesso;
-            }
+        //    var dataTable = new Tabelas.Grv().Consultar(grvId);
 
-            foreach (DataRow row in (InternalDataCollectionBase)dtPrestador.Rows)
-            {
-                prestadorAcesso.id_nfse_prestador = row["id_nfse_prestador"].ToString();
-                prestadorAcesso.prestador_cnpj = row["prestador_cnpj"].ToString();
-                prestadorAcesso.prestador_nome = row["prestador_nome"].ToString();
-                prestadorAcesso.prestador_inscricao_municipal = row["prestador_inscricao_municipal"].ToString();
-                prestadorAcesso.prestador_codigo_municipio_ibge = row["prestador_codigo_municipio_ibge"].ToString();
-                prestadorAcesso.prestador_chave = row["prestador_chave"].ToString();
-                prestadorAcesso.item_lista_servico = row["item_lista_servico"].ToString();
-                prestadorAcesso.codigo_tributario_municipio = row["codigo_tributario_municipio"].ToString();
-                prestadorAcesso.codigo_cnae = row["codigo_cnae"].ToString();
-            }
+        //    if (dataTable == null)
+        //    {
 
-            DataBase.DisconnectDataBase();
 
-            return prestadorAcesso;
-        }
+        //        return "Sem dados para geração da nota!";
+        //    }
 
-        public string GetRemoteServer()
-        {
-            var SQL = new StringBuilder();
+        //    CapaAutorizacaoNfse capaAutorizacaoNfse = new CapaAutorizacaoNfse();
 
-            SQL.AppendLine("SELECT Server");
-            SQL.AppendLine("  FROM " + DataBase.GetNfeDatabase() + ".dbo.tb_nfse_configuracoes");
+        //    foreach (DataRow row in (InternalDataCollectionBase)dataTable.Rows)
+        //    {
+        //        if (row["nota_fiscal_nome"].ToString().Equals(""))
+        //            return "Dados insuficientes para geração da nota";
 
-            var dtConfiguracoes = DataBase.Select(SQL);
+        //        capaAutorizacaoNfse.Homologacao = isDev;
 
-            return dtConfiguracoes.Rows[0]["Server"].ToString();
-        }
+        //        capaAutorizacaoNfse.Autorizar = new Autorizar
+        //        {
+        //            data_emissao = DateTime.Now.ToString("yyyy-MM-ddThh:mm:ss"),
+        //            natureza_operacao = "1",
+        //            optante_simples_nacional = "false",
+
+        //            prestador = new Prestador
+        //            {
+        //                cnpj = row["cnpj"].ToString(),
+        //                inscricao_municipal = row["inscricao_municipal"].ToString(),
+        //                codigo_municipio = row["codigo_municipio_ibge"].ToString()
+        //            },
+
+        //            tomador = new Tomador
+        //            {
+        //                razao_social = row["nota_fiscal_nome"].ToString(),
+        //                email = row["nota_fiscal_email"].ToString()
+        //            }
+        //        };
+
+        //        if (row["nota_fiscal_cpf"].ToString().Length > 11)
+        //            capaAutorizacaoNfse.Autorizar.tomador.cnpj = row["nota_fiscal_cpf"].ToString();
+        //        else
+        //            capaAutorizacaoNfse.Autorizar.tomador.cpf = row["nota_fiscal_cpf"].ToString();
+
+        //        capaAutorizacaoNfse.Autorizar.tomador.endereco = new Endereco
+        //        {
+        //            logradouro = row["nota_fiscal_endereco"].ToString(),
+        //            numero = row["nota_fiscal_numero"].ToString(),
+        //            complemento = row["nota_fiscal_complemento"].ToString(),
+        //            bairro = row["nota_fiscal_bairro"].ToString(),
+        //            codigo_municipio = row["codigo_municipio_ibge"].ToString(),
+        //            uf = row["nota_fiscal_uf"].ToString(),
+        //            cep = row["nota_fiscal_cep"].ToString()
+        //        };
+
+        //        capaAutorizacaoNfse.Autorizar.servico = new Servico
+        //        {
+        //            aliquota = "3.00",
+        //            discriminacao = "Nota fiscal referente a serviços prestados",
+        //            iss_retido = "false",
+        //            valor_iss = "0",
+        //            item_lista_servico = "0801",
+        //            codigo_tributario_municipio = "080101",
+        //            valor_servicos = row["valor_pagamento"].ToString().Replace(',', '.')
+        //        };
+
+        //        capaAutorizacaoNfse.CodigoRetorno = Convert.ToInt32(row["id_faturamento"]);
+        //    }
+
+        //    return AutorizarNfse(capaAutorizacaoNfse);
+        //}
     }
 }

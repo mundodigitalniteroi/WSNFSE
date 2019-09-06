@@ -1,6 +1,6 @@
 ﻿namespace NFSE.Domain.Entities
 {
-    public class Autorizar
+    public class Autorizacao
     {
         public string data_emissao { get; set; }
 

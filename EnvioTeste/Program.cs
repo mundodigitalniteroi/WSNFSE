@@ -1,7 +1,6 @@
 ﻿using Negocio;
 using NFSE.Domain.Entities;
 using System;
-using System.Configuration;
 
 namespace EnvioTeste
 {
@@ -11,10 +10,10 @@ namespace EnvioTeste
         {
             var capaAutorizacaoNfse = new nfse.CapaAutorizacaoNfse
             {
-                homologacao = true,
-                identificador_nota = 700067,
+                Homologacao = true,
+                CodigoRetorno = 700067,
 
-                autorizar = new nfse.Autorizar
+                Autorizacao = new nfse.Autorizacao
                 {
                     data_emissao = "2019-08-28T04:34:06",
                     natureza_operacao = "1",
@@ -65,7 +64,7 @@ namespace EnvioTeste
 
                 using (var ws = new nfse.WSnfseSoapClient())
                 {
-                    // result = ws.Autorizar(capaAutorizacaoNfse);
+                    result = ws.EmitirNotaFiscal(capaAutorizacaoNfse);
                 }
 
                 Console.WriteLine(result);
@@ -77,12 +76,12 @@ namespace EnvioTeste
 
             try
             {
-                var aux = new ControlarEnvio().Consultar_obj(new Consultar
+                var aux = new ControlarEnvio().ReceberNotaFiscal(new Consulta
                 {
-                    referencia = "700069",
-                    cnpj_prestador = "08397160003658",
-                    homologacao = true,
-                    id_usuario = 1
+                    CodigoRetorno = 700069,
+                    CnpjPrestador = "08397160003658",
+                    Homologacao = true,
+                    UsuarioId = 1
                 });
             }
             catch (Exception ex)
@@ -92,11 +91,13 @@ namespace EnvioTeste
 
             try
             {
-                var aux = new ControlarEnvio().Cancelar(new Cancelar
+                var aux = new ControlarEnvio().CancelarNotaFiscal(new Cancelamento
                 {
-                    referencia = "700069",
-                    justificativa = "TESTES",
-                    homologacao = true
+                    CodigoRetorno = 700069,
+                    CnpjPrestador = "08397160003658",
+                    Justificativa = "TESTES",
+                    Homologacao = true,
+                    UsuarioId = 1
                 });
             }
             catch (Exception ex)

@@ -46,9 +46,12 @@
     <Compile Include="ControlarEnvio.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Tabelas\AutorizacaoNotaFiscal.cs" />
+    <Compile Include="Tabelas\Erro.cs" />
     <Compile Include="Tabelas\Grv.cs" />
+    <Compile Include="Tabelas\Nfe.cs" />
     <Compile Include="Tabelas\NotaFiscal.cs" />
     <Compile Include="Tabelas\Prestador.cs" />
+    <Compile Include="Tabelas\Server.cs" />
     <Compile Include="Util\Tools.cs" />
   </ItemGroup>
   <ItemGroup>
