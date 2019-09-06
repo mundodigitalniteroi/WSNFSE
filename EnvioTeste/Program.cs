@@ -64,7 +64,7 @@ namespace EnvioTeste
 
                 using (var ws = new nfse.WSnfseSoapClient())
                 {
-                    result = ws.EmitirNotaFiscal(capaAutorizacaoNfse);
+                    result = ws.SolicitarEmissaoNotaFiscal(capaAutorizacaoNfse);
                 }
 
                 Console.WriteLine(result);

@@ -1,6 +1,5 @@
 ﻿using Negocio;
 using NFSE.Domain.Entities;
-using System;
 using System.ComponentModel;
 using System.Web.Services;
 
@@ -14,7 +13,7 @@ namespace NFSE
     public class WSnfse : WebService
     {
         [WebMethod]
-        public string EmitirNotaFiscal(CapaAutorizacaoNfse model)
+        public string SolicitarEmissaoNotaFiscal(CapaAutorizacaoNfse model)
         {
             return new ControlarEnvio().SolicitarEmissaoNotaFiscal(model);
         }

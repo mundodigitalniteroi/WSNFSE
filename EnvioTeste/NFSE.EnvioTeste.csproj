@@ -70,13 +70,13 @@
     <None Include="Service References\nfse\EnvioTeste.nfse.CancelarNotaFiscalResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Service References\nfse\EnvioTeste.nfse.EmitirNotaFiscalResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
     <None Include="Service References\nfse\EnvioTeste.nfse.ReceberNotaFiscalResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\nfse\EnvioTeste.nfse.RetornoNotaFiscal.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\nfse\EnvioTeste.nfse.SolicitarEmissaoNotaFiscalResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\nfse\WSnfse.wsdl" />

@@ -2,7 +2,7 @@
 <wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
     <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
-      <s:element name="EmitirNotaFiscal">
+      <s:element name="SolicitarEmissaoNotaFiscal">
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="0" maxOccurs="1" name="model" type="tns:CapaAutorizacaoNfse" />
@@ -88,10 +88,10 @@
           <s:element minOccurs="0" maxOccurs="1" name="fonte_total_tributos" type="s:string" />
         </s:sequence>
       </s:complexType>
-      <s:element name="EmitirNotaFiscalResponse">
+      <s:element name="SolicitarEmissaoNotaFiscalResponse">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" name="EmitirNotaFiscalResult" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="SolicitarEmissaoNotaFiscalResult" type="s:string" />
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -169,11 +169,11 @@
       </s:element>
     </s:schema>
   </wsdl:types>
-  <wsdl:message name="EmitirNotaFiscalSoapIn">
-    <wsdl:part name="parameters" element="tns:EmitirNotaFiscal" />
+  <wsdl:message name="SolicitarEmissaoNotaFiscalSoapIn">
+    <wsdl:part name="parameters" element="tns:SolicitarEmissaoNotaFiscal" />
   </wsdl:message>
-  <wsdl:message name="EmitirNotaFiscalSoapOut">
-    <wsdl:part name="parameters" element="tns:EmitirNotaFiscalResponse" />
+  <wsdl:message name="SolicitarEmissaoNotaFiscalSoapOut">
+    <wsdl:part name="parameters" element="tns:SolicitarEmissaoNotaFiscalResponse" />
   </wsdl:message>
   <wsdl:message name="ReceberNotaFiscalSoapIn">
     <wsdl:part name="parameters" element="tns:ReceberNotaFiscal" />
@@ -188,9 +188,9 @@
     <wsdl:part name="parameters" element="tns:CancelarNotaFiscalResponse" />
   </wsdl:message>
   <wsdl:portType name="WSnfseSoap">
-    <wsdl:operation name="EmitirNotaFiscal">
-      <wsdl:input message="tns:EmitirNotaFiscalSoapIn" />
-      <wsdl:output message="tns:EmitirNotaFiscalSoapOut" />
+    <wsdl:operation name="SolicitarEmissaoNotaFiscal">
+      <wsdl:input message="tns:SolicitarEmissaoNotaFiscalSoapIn" />
+      <wsdl:output message="tns:SolicitarEmissaoNotaFiscalSoapOut" />
     </wsdl:operation>
     <wsdl:operation name="ReceberNotaFiscal">
       <wsdl:input message="tns:ReceberNotaFiscalSoapIn" />
@@ -203,8 +203,8 @@
   </wsdl:portType>
   <wsdl:binding name="WSnfseSoap" type="tns:WSnfseSoap">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
-    <wsdl:operation name="EmitirNotaFiscal">
-      <soap:operation soapAction="http://tempuri.org/EmitirNotaFiscal" style="document" />
+    <wsdl:operation name="SolicitarEmissaoNotaFiscal">
+      <soap:operation soapAction="http://tempuri.org/SolicitarEmissaoNotaFiscal" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -233,8 +233,8 @@
   </wsdl:binding>
   <wsdl:binding name="WSnfseSoap12" type="tns:WSnfseSoap">
     <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
-    <wsdl:operation name="EmitirNotaFiscal">
-      <soap12:operation soapAction="http://tempuri.org/EmitirNotaFiscal" style="document" />
+    <wsdl:operation name="SolicitarEmissaoNotaFiscal">
+      <soap12:operation soapAction="http://tempuri.org/SolicitarEmissaoNotaFiscal" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

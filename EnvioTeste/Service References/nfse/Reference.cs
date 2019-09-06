@@ -1537,11 +1537,11 @@ namespace EnvioTeste.nfse {
     public interface WSnfseSoap {
         
         // CODEGEN: Generating message contract since element name model from namespace http://tempuri.org/ is not marked nillable
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/EmitirNotaFiscal", ReplyAction="*")]
-        EnvioTeste.nfse.EmitirNotaFiscalResponse EmitirNotaFiscal(EnvioTeste.nfse.EmitirNotaFiscalRequest request);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/SolicitarEmissaoNotaFiscal", ReplyAction="*")]
+        EnvioTeste.nfse.SolicitarEmissaoNotaFiscalResponse SolicitarEmissaoNotaFiscal(EnvioTeste.nfse.SolicitarEmissaoNotaFiscalRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/EmitirNotaFiscal", ReplyAction="*")]
-        System.Threading.Tasks.Task<EnvioTeste.nfse.EmitirNotaFiscalResponse> EmitirNotaFiscalAsync(EnvioTeste.nfse.EmitirNotaFiscalRequest request);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/SolicitarEmissaoNotaFiscal", ReplyAction="*")]
+        System.Threading.Tasks.Task<EnvioTeste.nfse.SolicitarEmissaoNotaFiscalResponse> SolicitarEmissaoNotaFiscalAsync(EnvioTeste.nfse.SolicitarEmissaoNotaFiscalRequest request);
         
         // CODEGEN: Generating message contract since element name model from namespace http://tempuri.org/ is not marked nillable
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ReceberNotaFiscal", ReplyAction="*")]
@@ -1562,15 +1562,15 @@ namespace EnvioTeste.nfse {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
-    public partial class EmitirNotaFiscalRequest {
+    public partial class SolicitarEmissaoNotaFiscalRequest {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Name="EmitirNotaFiscal", Namespace="http://tempuri.org/", Order=0)]
-        public EnvioTeste.nfse.EmitirNotaFiscalRequestBody Body;
+        [System.ServiceModel.MessageBodyMemberAttribute(Name="SolicitarEmissaoNotaFiscal", Namespace="http://tempuri.org/", Order=0)]
+        public EnvioTeste.nfse.SolicitarEmissaoNotaFiscalRequestBody Body;
         
-        public EmitirNotaFiscalRequest() {
+        public SolicitarEmissaoNotaFiscalRequest() {
         }
         
-        public EmitirNotaFiscalRequest(EnvioTeste.nfse.EmitirNotaFiscalRequestBody Body) {
+        public SolicitarEmissaoNotaFiscalRequest(EnvioTeste.nfse.SolicitarEmissaoNotaFiscalRequestBody Body) {
             this.Body = Body;
         }
     }
@@ -1579,15 +1579,15 @@ namespace EnvioTeste.nfse {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute(Namespace="http://tempuri.org/")]
-    public partial class EmitirNotaFiscalRequestBody {
+    public partial class SolicitarEmissaoNotaFiscalRequestBody {
         
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
         public EnvioTeste.nfse.CapaAutorizacaoNfse model;
         
-        public EmitirNotaFiscalRequestBody() {
+        public SolicitarEmissaoNotaFiscalRequestBody() {
         }
         
-        public EmitirNotaFiscalRequestBody(EnvioTeste.nfse.CapaAutorizacaoNfse model) {
+        public SolicitarEmissaoNotaFiscalRequestBody(EnvioTeste.nfse.CapaAutorizacaoNfse model) {
             this.model = model;
         }
     }
@@ -1596,15 +1596,15 @@ namespace EnvioTeste.nfse {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
-    public partial class EmitirNotaFiscalResponse {
+    public partial class SolicitarEmissaoNotaFiscalResponse {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Name="EmitirNotaFiscalResponse", Namespace="http://tempuri.org/", Order=0)]
-        public EnvioTeste.nfse.EmitirNotaFiscalResponseBody Body;
+        [System.ServiceModel.MessageBodyMemberAttribute(Name="SolicitarEmissaoNotaFiscalResponse", Namespace="http://tempuri.org/", Order=0)]
+        public EnvioTeste.nfse.SolicitarEmissaoNotaFiscalResponseBody Body;
         
-        public EmitirNotaFiscalResponse() {
+        public SolicitarEmissaoNotaFiscalResponse() {
         }
         
-        public EmitirNotaFiscalResponse(EnvioTeste.nfse.EmitirNotaFiscalResponseBody Body) {
+        public SolicitarEmissaoNotaFiscalResponse(EnvioTeste.nfse.SolicitarEmissaoNotaFiscalResponseBody Body) {
             this.Body = Body;
         }
     }
@@ -1613,16 +1613,16 @@ namespace EnvioTeste.nfse {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute(Namespace="http://tempuri.org/")]
-    public partial class EmitirNotaFiscalResponseBody {
+    public partial class SolicitarEmissaoNotaFiscalResponseBody {
         
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
-        public string EmitirNotaFiscalResult;
+        public string SolicitarEmissaoNotaFiscalResult;
         
-        public EmitirNotaFiscalResponseBody() {
+        public SolicitarEmissaoNotaFiscalResponseBody() {
         }
         
-        public EmitirNotaFiscalResponseBody(string EmitirNotaFiscalResult) {
-            this.EmitirNotaFiscalResult = EmitirNotaFiscalResult;
+        public SolicitarEmissaoNotaFiscalResponseBody(string SolicitarEmissaoNotaFiscalResult) {
+            this.SolicitarEmissaoNotaFiscalResult = SolicitarEmissaoNotaFiscalResult;
         }
     }
     
@@ -1790,28 +1790,28 @@ namespace EnvioTeste.nfse {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        EnvioTeste.nfse.EmitirNotaFiscalResponse EnvioTeste.nfse.WSnfseSoap.EmitirNotaFiscal(EnvioTeste.nfse.EmitirNotaFiscalRequest request) {
-            return base.Channel.EmitirNotaFiscal(request);
+        EnvioTeste.nfse.SolicitarEmissaoNotaFiscalResponse EnvioTeste.nfse.WSnfseSoap.SolicitarEmissaoNotaFiscal(EnvioTeste.nfse.SolicitarEmissaoNotaFiscalRequest request) {
+            return base.Channel.SolicitarEmissaoNotaFiscal(request);
         }
         
-        public string EmitirNotaFiscal(EnvioTeste.nfse.CapaAutorizacaoNfse model) {
-            EnvioTeste.nfse.EmitirNotaFiscalRequest inValue = new EnvioTeste.nfse.EmitirNotaFiscalRequest();
-            inValue.Body = new EnvioTeste.nfse.EmitirNotaFiscalRequestBody();
+        public string SolicitarEmissaoNotaFiscal(EnvioTeste.nfse.CapaAutorizacaoNfse model) {
+            EnvioTeste.nfse.SolicitarEmissaoNotaFiscalRequest inValue = new EnvioTeste.nfse.SolicitarEmissaoNotaFiscalRequest();
+            inValue.Body = new EnvioTeste.nfse.SolicitarEmissaoNotaFiscalRequestBody();
             inValue.Body.model = model;
-            EnvioTeste.nfse.EmitirNotaFiscalResponse retVal = ((EnvioTeste.nfse.WSnfseSoap)(this)).EmitirNotaFiscal(inValue);
-            return retVal.Body.EmitirNotaFiscalResult;
+            EnvioTeste.nfse.SolicitarEmissaoNotaFiscalResponse retVal = ((EnvioTeste.nfse.WSnfseSoap)(this)).SolicitarEmissaoNotaFiscal(inValue);
+            return retVal.Body.SolicitarEmissaoNotaFiscalResult;
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<EnvioTeste.nfse.EmitirNotaFiscalResponse> EnvioTeste.nfse.WSnfseSoap.EmitirNotaFiscalAsync(EnvioTeste.nfse.EmitirNotaFiscalRequest request) {
-            return base.Channel.EmitirNotaFiscalAsync(request);
+        System.Threading.Tasks.Task<EnvioTeste.nfse.SolicitarEmissaoNotaFiscalResponse> EnvioTeste.nfse.WSnfseSoap.SolicitarEmissaoNotaFiscalAsync(EnvioTeste.nfse.SolicitarEmissaoNotaFiscalRequest request) {
+            return base.Channel.SolicitarEmissaoNotaFiscalAsync(request);
         }
         
-        public System.Threading.Tasks.Task<EnvioTeste.nfse.EmitirNotaFiscalResponse> EmitirNotaFiscalAsync(EnvioTeste.nfse.CapaAutorizacaoNfse model) {
-            EnvioTeste.nfse.EmitirNotaFiscalRequest inValue = new EnvioTeste.nfse.EmitirNotaFiscalRequest();
-            inValue.Body = new EnvioTeste.nfse.EmitirNotaFiscalRequestBody();
+        public System.Threading.Tasks.Task<EnvioTeste.nfse.SolicitarEmissaoNotaFiscalResponse> SolicitarEmissaoNotaFiscalAsync(EnvioTeste.nfse.CapaAutorizacaoNfse model) {
+            EnvioTeste.nfse.SolicitarEmissaoNotaFiscalRequest inValue = new EnvioTeste.nfse.SolicitarEmissaoNotaFiscalRequest();
+            inValue.Body = new EnvioTeste.nfse.SolicitarEmissaoNotaFiscalRequestBody();
             inValue.Body.model = model;
-            return ((EnvioTeste.nfse.WSnfseSoap)(this)).EmitirNotaFiscalAsync(inValue);
+            return ((EnvioTeste.nfse.WSnfseSoap)(this)).SolicitarEmissaoNotaFiscalAsync(inValue);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
