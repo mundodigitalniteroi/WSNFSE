@@ -1156,25 +1156,37 @@ namespace NFSE.TesteUsuario.nfse {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="RetornoErro", Namespace="http://tempuri.org/")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="NfeWsErroModel", Namespace="http://tempuri.org/")]
     [System.SerializableAttribute()]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(NFSE.TesteUsuario.nfse.RetornoNotaFiscal))]
-    public partial class RetornoErro : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    public partial class NfeWsErroModel : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
-        private int NotaFiscalErroIdField;
+        private int ErroIdField;
         
-        private int AutorizacaoNotaFiscalIdField;
+        private int IdentificadorNotaField;
         
         private int UsuarioIdField;
+        
+        private char AcaoField;
+        
+        private char OrigemErroField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string StatusField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string CodigoErroField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string MensagemErroField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string CorrecaoErroField;
+        
+        private System.DateTime DataHoraCadastroField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
@@ -1187,32 +1199,32 @@ namespace NFSE.TesteUsuario.nfse {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
-        public int NotaFiscalErroId {
+        public int ErroId {
             get {
-                return this.NotaFiscalErroIdField;
+                return this.ErroIdField;
             }
             set {
-                if ((this.NotaFiscalErroIdField.Equals(value) != true)) {
-                    this.NotaFiscalErroIdField = value;
-                    this.RaisePropertyChanged("NotaFiscalErroId");
+                if ((this.ErroIdField.Equals(value) != true)) {
+                    this.ErroIdField = value;
+                    this.RaisePropertyChanged("ErroId");
                 }
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=1)]
-        public int AutorizacaoNotaFiscalId {
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
+        public int IdentificadorNota {
             get {
-                return this.AutorizacaoNotaFiscalIdField;
+                return this.IdentificadorNotaField;
             }
             set {
-                if ((this.AutorizacaoNotaFiscalIdField.Equals(value) != true)) {
-                    this.AutorizacaoNotaFiscalIdField = value;
-                    this.RaisePropertyChanged("AutorizacaoNotaFiscalId");
+                if ((this.IdentificadorNotaField.Equals(value) != true)) {
+                    this.IdentificadorNotaField = value;
+                    this.RaisePropertyChanged("IdentificadorNota");
                 }
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=2)]
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
         public int UsuarioId {
             get {
                 return this.UsuarioIdField;
@@ -1225,7 +1237,46 @@ namespace NFSE.TesteUsuario.nfse {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=3)]
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=3)]
+        public char Acao {
+            get {
+                return this.AcaoField;
+            }
+            set {
+                if ((this.AcaoField.Equals(value) != true)) {
+                    this.AcaoField = value;
+                    this.RaisePropertyChanged("Acao");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=4)]
+        public char OrigemErro {
+            get {
+                return this.OrigemErroField;
+            }
+            set {
+                if ((this.OrigemErroField.Equals(value) != true)) {
+                    this.OrigemErroField = value;
+                    this.RaisePropertyChanged("OrigemErro");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=5)]
+        public string Status {
+            get {
+                return this.StatusField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.StatusField, value) != true)) {
+                    this.StatusField = value;
+                    this.RaisePropertyChanged("Status");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=6)]
         public string CodigoErro {
             get {
                 return this.CodigoErroField;
@@ -1238,7 +1289,7 @@ namespace NFSE.TesteUsuario.nfse {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=4)]
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=7)]
         public string MensagemErro {
             get {
                 return this.MensagemErroField;
@@ -1247,6 +1298,32 @@ namespace NFSE.TesteUsuario.nfse {
                 if ((object.ReferenceEquals(this.MensagemErroField, value) != true)) {
                     this.MensagemErroField = value;
                     this.RaisePropertyChanged("MensagemErro");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=8)]
+        public string CorrecaoErro {
+            get {
+                return this.CorrecaoErroField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.CorrecaoErroField, value) != true)) {
+                    this.CorrecaoErroField = value;
+                    this.RaisePropertyChanged("CorrecaoErro");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=9)]
+        public System.DateTime DataHoraCadastro {
+            get {
+                return this.DataHoraCadastroField;
+            }
+            set {
+                if ((this.DataHoraCadastroField.Equals(value) != true)) {
+                    this.DataHoraCadastroField = value;
+                    this.RaisePropertyChanged("DataHoraCadastro");
                 }
             }
         }
@@ -1265,7 +1342,7 @@ namespace NFSE.TesteUsuario.nfse {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="RetornoNotaFiscal", Namespace="http://tempuri.org/")]
     [System.SerializableAttribute()]
-    public partial class RetornoNotaFiscal : NFSE.TesteUsuario.nfse.RetornoErro {
+    public partial class RetornoNotaFiscal : NFSE.TesteUsuario.nfse.NfeWsErroModel {
         
         private int NotaFiscalIdField;
         
@@ -1274,9 +1351,6 @@ namespace NFSE.TesteUsuario.nfse {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string refField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string statusField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string numeroField;
@@ -1334,20 +1408,7 @@ namespace NFSE.TesteUsuario.nfse {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
-        public string status {
-            get {
-                return this.statusField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.statusField, value) != true)) {
-                    this.statusField = value;
-                    this.RaisePropertyChanged("status");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=4)]
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=3)]
         public string numero {
             get {
                 return this.numeroField;
@@ -1360,7 +1421,7 @@ namespace NFSE.TesteUsuario.nfse {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=5)]
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=4)]
         public string codigo_verificacao {
             get {
                 return this.codigo_verificacaoField;
@@ -1373,7 +1434,7 @@ namespace NFSE.TesteUsuario.nfse {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=6)]
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=5)]
         public System.DateTime data_emissao {
             get {
                 return this.data_emissaoField;
@@ -1386,7 +1447,7 @@ namespace NFSE.TesteUsuario.nfse {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=7)]
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=6)]
         public string url {
             get {
                 return this.urlField;
@@ -1399,7 +1460,7 @@ namespace NFSE.TesteUsuario.nfse {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=8)]
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=7)]
         public string caminho_xml_nota_fiscal {
             get {
                 return this.caminho_xml_nota_fiscalField;
@@ -1412,7 +1473,7 @@ namespace NFSE.TesteUsuario.nfse {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=9)]
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=8)]
         public byte[] ImagemNotaFiscal {
             get {
                 return this.ImagemNotaFiscalField;

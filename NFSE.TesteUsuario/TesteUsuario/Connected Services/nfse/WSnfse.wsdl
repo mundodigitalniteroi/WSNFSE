@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:s1="http://microsoft.com/wsdl/types/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
     <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:import namespace="http://microsoft.com/wsdl/types/" />
       <s:element name="SolicitarEmissaoNotaFiscal">
         <s:complexType>
           <s:sequence>
@@ -119,12 +120,11 @@
       </s:element>
       <s:complexType name="RetornoNotaFiscal">
         <s:complexContent mixed="false">
-          <s:extension base="tns:RetornoErro">
+          <s:extension base="tns:NfeWsErroModel">
             <s:sequence>
               <s:element minOccurs="1" maxOccurs="1" name="NotaFiscalId" type="s:int" />
               <s:element minOccurs="0" maxOccurs="1" name="cnpj_prestador" type="s:string" />
               <s:element minOccurs="0" maxOccurs="1" name="ref" type="s:string" />
-              <s:element minOccurs="0" maxOccurs="1" name="status" type="s:string" />
               <s:element minOccurs="0" maxOccurs="1" name="numero" type="s:string" />
               <s:element minOccurs="0" maxOccurs="1" name="codigo_verificacao" type="s:string" />
               <s:element minOccurs="1" maxOccurs="1" name="data_emissao" type="s:dateTime" />
@@ -135,13 +135,18 @@
           </s:extension>
         </s:complexContent>
       </s:complexType>
-      <s:complexType name="RetornoErro">
+      <s:complexType name="NfeWsErroModel">
         <s:sequence>
-          <s:element minOccurs="1" maxOccurs="1" name="NotaFiscalErroId" type="s:int" />
-          <s:element minOccurs="1" maxOccurs="1" name="AutorizacaoNotaFiscalId" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="ErroId" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="IdentificadorNota" type="s:int" />
           <s:element minOccurs="1" maxOccurs="1" name="UsuarioId" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="Acao" type="s1:char" />
+          <s:element minOccurs="1" maxOccurs="1" name="OrigemErro" type="s1:char" />
+          <s:element minOccurs="0" maxOccurs="1" name="Status" type="s:string" />
           <s:element minOccurs="0" maxOccurs="1" name="CodigoErro" type="s:string" />
           <s:element minOccurs="0" maxOccurs="1" name="MensagemErro" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CorrecaoErro" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="DataHoraCadastro" type="s:dateTime" />
         </s:sequence>
       </s:complexType>
       <s:element name="CancelarNotaFiscal">
@@ -167,6 +172,11 @@
           </s:sequence>
         </s:complexType>
       </s:element>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://microsoft.com/wsdl/types/">
+      <s:simpleType name="char">
+        <s:restriction base="s:unsignedShort" />
+      </s:simpleType>
     </s:schema>
   </wsdl:types>
   <wsdl:message name="SolicitarEmissaoNotaFiscalSoapIn">

@@ -2,7 +2,7 @@
 {
     public enum SystemEnvironment
     {
-        Development = 1,
-        Production = 2
+        Development = 'D',
+        Production = 'P'
     }
 }

@@ -2,15 +2,13 @@
 
 namespace NFSE.Domain.Entities
 {
-    public class NotaFiscal
+    public class NfeRetornoModel
     {
         public int NotaFiscalId { get; set; }
 
         public int AutorizacaoNotaFiscalId { get; set; }
 
         public int UsuarioId { get; set; }
-
-        public string FlagAmbiente { get; set; }
 
         public string StatusNotaFiscal { get; set; }
 

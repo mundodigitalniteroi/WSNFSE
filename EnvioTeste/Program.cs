@@ -77,18 +77,9 @@ namespace EnvioTeste
 
             try
             {
-                var aux = new Main().SolicitarEmissaoNotaFiscal(capaAutorizacaoNfse);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("ERRO: " + ex.Message);
-            }
-
-            try
-            {
                 var aux = new Main().ReceberNotaFiscal(new Consulta
                 {
-                    IdentificadorNota = 700069,
+                    IdentificadorNota = 700068,
                     CnpjPrestador = "08397160003658",
                     Homologacao = true,
                     UsuarioId = 1

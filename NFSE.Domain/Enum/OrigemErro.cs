@@ -2,7 +2,7 @@
 {
     public enum OrigemErro
     {
-        MobLink = 1,
-        WebService = 2
+        MobLink = 'M',
+        WebService = 'W'
     }
 }

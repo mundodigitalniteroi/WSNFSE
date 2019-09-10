@@ -1,4 +1,5 @@
-﻿using NFSE.Business.Util;
+﻿using Newtonsoft.Json.Linq;
+using NFSE.Business.Util;
 using NFSE.Domain.Entities;
 using NFSE.Domain.Entities.DP;
 using NFSE.Domain.Enum;
@@ -21,9 +22,9 @@ namespace NFSE.Business
         {
             DataBase.SystemEnvironment = capaAutorizacaoNfse.Homologacao ? SystemEnvironment.Development : SystemEnvironment.Production;
 
-            var nfe = ConsultarNotaFiscal(capaAutorizacaoNfse.UsuarioId, capaAutorizacaoNfse.IdentificadorNota, 0);
+            var nfe = ConsultarNotaFiscal(capaAutorizacaoNfse.UsuarioId, capaAutorizacaoNfse.IdentificadorNota, Acao.Solicitação);
 
-            var prestadorAcesso = ConsultarPrestadorServico(capaAutorizacaoNfse.UsuarioId, capaAutorizacaoNfse.Autorizacao.prestador.cnpj, nfe, capaAutorizacaoNfse);
+            var prestadorAcesso = ConsultarPrestadorServico(capaAutorizacaoNfse.UsuarioId, capaAutorizacaoNfse.Autorizacao.prestador.cnpj, Acao.Solicitação, nfe, capaAutorizacaoNfse);
 
             string uri = prestadorAcesso.server + "?ref=" + capaAutorizacaoNfse.IdentificadorNota;
 
@@ -43,7 +44,7 @@ namespace NFSE.Business
             }
             catch (Exception ex)
             {
-                CadastrarErroGenerico(capaAutorizacaoNfse.UsuarioId, nfe.GrvID, nfe.IdentificadorNota, OrigemErro.WebService, "Ocorreu um erro ao solicitar a Nota Fiscal: " + ex.Message);
+                CadastrarErroGenerico(capaAutorizacaoNfse.UsuarioId, nfe.IdentificadorNota.Value, OrigemErro.WebService, Acao.Solicitação, "Ocorreu um erro ao solicitar a Nota Fiscal: " + ex.Message);
 
                 throw new Exception("Ocorreu um erro ao solicitar a Nota Fiscal (" + capaAutorizacaoNfse.IdentificadorNota + "): " + ex.Message);
             }
@@ -54,7 +55,7 @@ namespace NFSE.Business
             }
             catch (Exception ex)
             {
-                CadastrarErroGenerico(capaAutorizacaoNfse.UsuarioId, nfe.GrvID, nfe.IdentificadorNota, OrigemErro.MobLink, "Ocorreu um erro ao cadastrar a solicitação da Nota Fiscal: " + ex.Message);
+                CadastrarErroGenerico(capaAutorizacaoNfse.UsuarioId, nfe.IdentificadorNota.Value, OrigemErro.MobLink, Acao.Solicitação, "Ocorreu um erro ao cadastrar a solicitação da Nota Fiscal: " + ex.Message);
 
                 throw new Exception("Ocorreu um erro ao cadastrar a solicitação da Nota Fiscal (" + capaAutorizacaoNfse.IdentificadorNota + "): " + ex.Message);
             }
@@ -71,9 +72,9 @@ namespace NFSE.Business
         {
             DataBase.SystemEnvironment = notaFiscal.Homologacao ? SystemEnvironment.Development : SystemEnvironment.Production;
 
-            var nfe = ConsultarNotaFiscal(notaFiscal.UsuarioId, notaFiscal.IdentificadorNota, 0);
+            var nfe = ConsultarNotaFiscal(notaFiscal.UsuarioId, notaFiscal.IdentificadorNota, Acao.Retorno);
 
-            var prestadorAcesso = ConsultarPrestadorServico(notaFiscal.UsuarioId, notaFiscal.CnpjPrestador, nfe);
+            var prestadorAcesso = ConsultarPrestadorServico(notaFiscal.UsuarioId, notaFiscal.CnpjPrestador, Acao.Retorno, nfe);
 
             string nfse;
 
@@ -83,7 +84,7 @@ namespace NFSE.Business
             }
             catch (Exception ex)
             {
-                CadastrarErroGenerico(notaFiscal.UsuarioId, nfe.GrvID, nfe.IdentificadorNota, OrigemErro.WebService, "Ocorreu um erro receber a Nota Fiscal: " + ex.Message);
+                CadastrarErroGenerico(notaFiscal.UsuarioId, nfe.IdentificadorNota.Value, OrigemErro.WebService, Acao.Retorno, "Ocorreu um erro receber a Nota Fiscal: " + ex.Message);
 
                 throw new Exception("Ocorreu um erro receber a Nota Fiscal (" + notaFiscal.IdentificadorNota + "): " + ex.Message);
             }
@@ -94,7 +95,7 @@ namespace NFSE.Business
             }
             catch (Exception ex)
             {
-                CadastrarErroGenerico(notaFiscal.UsuarioId, nfe.GrvID, nfe.IdentificadorNota, OrigemErro.MobLink, "Ocorreu um erro cadastrar a Nota Fiscal: " + ex.Message);
+                CadastrarErroGenerico(notaFiscal.UsuarioId, nfe.IdentificadorNota.Value, OrigemErro.MobLink, Acao.Retorno, "Ocorreu um erro cadastrar a Nota Fiscal: " + ex.Message);
 
                 throw new Exception("Ocorreu um erro consultar a Nota Fiscal (" + notaFiscal.IdentificadorNota + "): " + ex.Message);
             }
@@ -109,37 +110,62 @@ namespace NFSE.Business
 
             if (retornoConsulta.url == null)
             {
-                retorno = retorno.Replace("\"codigo\"", "\"codigoerro\"");
-                retorno = retorno.Replace("\"mensagem\"", "\"mensagemerro\"");
+                retorno = retorno.Replace("\"codigo\"", "\"CodigoErro\"");
+                retorno = retorno.Replace("\"mensagem\"", "\"MensagemErro\"");
+                retorno = retorno.Replace("\"correcao\"", "\"CorrecaoErro\"");
+                retorno = retorno.Replace("[", "");
+                retorno = retorno.Replace("]", "");
 
                 var retornoErro = new JavaScriptSerializer()
                 {
                     MaxJsonLength = int.MaxValue
-                }.Deserialize<RetornoErro>(retorno);
+                }.Deserialize<NfeWsErroModel>(retorno);
 
-                retornoErro.AutorizacaoNotaFiscalId = notaFiscalRecebida.IdentificadorNota;
+                JObject jsonErro = JObject.Parse(retorno);
+
+                if ((string)jsonErro.SelectToken("erros.CodigoErro") != null)
+                {
+                    retornoErro.CodigoErro = ((string)jsonErro.SelectToken("erros.CodigoErro")).Trim().ToUpper();
+                }
+
+                if ((string)jsonErro.SelectToken("erros.MensagemErro") != null)
+                {
+                    retornoErro.MensagemErro = ((string)jsonErro.SelectToken("erros.MensagemErro")).Trim();
+                }
+
+                if ((string)jsonErro.SelectToken("erros.CorrecaoErro") != null)
+                {
+                    retornoErro.CorrecaoErro = ((string)jsonErro.SelectToken("erros.CorrecaoErro")).Trim();
+                }
+
+                retornoErro.IdentificadorNota = notaFiscalRecebida.IdentificadorNota;
                 retornoErro.UsuarioId = notaFiscalRecebida.UsuarioId;
-                retornoErro.CodigoErro = retornoErro.CodigoErro.Trim().ToUpper();
-                retornoErro.MensagemErro = retornoErro.MensagemErro.Trim();
+                retornoErro.Acao = (char)Acao.Retorno;
+                retornoErro.OrigemErro = (char)OrigemErro.WebService;
+                retornoErro.Status = retornoErro.Status.Trim().ToUpper();
 
-                retornoConsulta.NotaFiscalErroId = new Tabelas.NotaFiscal().CadastrarErro(retornoErro);
+                retornoErro.ErroId = new Tabelas.NfeWsErroController().Cadastrar(retornoErro);
 
-                retornoConsulta.AutorizacaoNotaFiscalId = retornoErro.AutorizacaoNotaFiscalId;
+                retornoConsulta.ErroId = retornoErro.ErroId;
+                retornoConsulta.IdentificadorNota = retornoErro.IdentificadorNota;
                 retornoConsulta.UsuarioId = retornoErro.UsuarioId;
+                retornoConsulta.Acao = retornoErro.Acao;
+                retornoConsulta.OrigemErro = retornoErro.OrigemErro;
+                retornoConsulta.Status = retornoErro.Status;
                 retornoConsulta.CodigoErro = retornoErro.CodigoErro;
                 retornoConsulta.MensagemErro = retornoErro.MensagemErro;
+                retornoConsulta.CorrecaoErro = retornoErro.CorrecaoErro;
 
                 return retornoConsulta;
             }
 
-            var notaFiscal = new NotaFiscal
+            var notaFiscal = new NfeRetornoModel
             {
                 AutorizacaoNotaFiscalId = notaFiscalRecebida.IdentificadorNota,
                 UsuarioId = notaFiscalRecebida.UsuarioId,
-                FlagAmbiente = notaFiscalRecebida.Homologacao ? "1" : "0",
-                StatusNotaFiscal = retornoConsulta.status,
+                StatusNotaFiscal = retornoConsulta.Status.ToUpper(),
                 NumeroNotaFiscal = retornoConsulta.numero,
-                CodigoVerificacao = retornoConsulta.codigo_verificacao,
+                CodigoVerificacao = retornoConsulta.codigo_verificacao.Trim(),
                 DataEmissao = retornoConsulta.data_emissao,
                 UrlNotaFiscal = retornoConsulta.url,
                 CaminhoNotaFiscal = retornoConsulta.caminho_xml_nota_fiscal
@@ -159,7 +185,7 @@ namespace NFSE.Business
                 retornoConsulta.ImagemNotaFiscal = notaFiscal.ImagemNotaFiscal;
             }
 
-            retornoConsulta.NotaFiscalId = new Tabelas.NotaFiscal().Cadastrar(notaFiscal);
+            retornoConsulta.NotaFiscalId = new Tabelas.NfeRetornoController().Cadastrar(notaFiscal);
 
             return retornoConsulta;
         }
@@ -168,9 +194,9 @@ namespace NFSE.Business
         {
             DataBase.SystemEnvironment = model.Homologacao ? SystemEnvironment.Development : SystemEnvironment.Production;
 
-            var nfe = ConsultarNotaFiscal(model.UsuarioId, model.IdentificadorNota, 0);
+            var nfe = ConsultarNotaFiscal(model.UsuarioId, model.IdentificadorNota, Acao.Cancelamento);
 
-            var prestadorAcesso = ConsultarPrestadorServico(model.UsuarioId, model.CnpjPrestador, nfe);
+            var prestadorAcesso = ConsultarPrestadorServico(model.UsuarioId, model.CnpjPrestador, Acao.Cancelamento, nfe);
 
             var tools = new Tools();
 
@@ -188,55 +214,48 @@ namespace NFSE.Business
             }
             catch (Exception ex)
             {
-                CadastrarErroGenerico(model.UsuarioId, nfe.GrvID, nfe.IdentificadorNota, OrigemErro.WebService, "Ocorreu um erro cancelar a Nota Fiscal: " + ex.Message);
+                CadastrarErroGenerico(model.UsuarioId, nfe.IdentificadorNota.Value, OrigemErro.WebService, Acao.Cancelamento, "Ocorreu um erro cancelar a Nota Fiscal: " + ex.Message);
 
                 throw new Exception("Ocorreu um erro cancelar a Nota Fiscal (" + model.IdentificadorNota + "): " + ex.Message);
             }
         }
 
-        private void CadastrarErroGenerico(int usuarioId, int? idGrv, int? identificadorNota, OrigemErro origemErro, string mensagemErro)
+        private void CadastrarErroGenerico(int usuarioId, int identificadorNota, OrigemErro origemErro, Acao acao, string mensagemErro)
         {
-            var erro = new Erro
+            var erro = new NfeWsErroModel
             {
+                IdentificadorNota = identificadorNota,
                 UsuarioId = usuarioId,
-                GrvId = idGrv != null ? idGrv : null,
-                IdentificadorNota = identificadorNota != null ? identificadorNota : null,
-                OrigemErro = origemErro == OrigemErro.MobLink ? 'M' : 'W',
+                Acao = (char)acao,
+                OrigemErro = (char)origemErro,
                 MensagemErro = mensagemErro.ToUpper().Trim()
             };
 
             try
             {
-                new Tabelas.Erro().Cadastrar(erro);
+                new Tabelas.NfeWsErroController().Cadastrar(erro);
             }
             catch { }
         }
 
-        private Nfe ConsultarNotaFiscal(int usuarioId, int identificadorNota, int idGrv)
+        private Nfe ConsultarNotaFiscal(int usuarioId, int identificadorNota, Acao acao)
         {
             var nfe = new List<Nfe>();
 
             try
             {
-                if (identificadorNota > 0)
-                {
-                    nfe = new Tabelas.Nfe().ConsultarPorIdentificadorNota(identificadorNota);
-                }
-                else if (idGrv > 0)
-                {
-                    nfe = new Tabelas.Nfe().ConsultarPorGrv(idGrv);
-                }
+                nfe = new Tabelas.Nfe().Consultar(identificadorNota);
             }
             catch (Exception ex)
             {
-                CadastrarErroGenerico(usuarioId, idGrv, identificadorNota, OrigemErro.MobLink, "Ocorreu um erro ao consultar a Nota Fiscal: " + ex.Message);
+                CadastrarErroGenerico(usuarioId, identificadorNota, OrigemErro.MobLink, acao, "Ocorreu um erro ao consultar a Nota Fiscal: " + ex.Message);
 
                 throw new Exception("Ocorreu um erro ao consultar a Nota Fiscal (" + identificadorNota + "): " + ex.Message);
             }
 
             if (nfe == null)
             {
-                CadastrarErroGenerico(usuarioId, idGrv, identificadorNota, OrigemErro.MobLink, "Nota Fiscal não encontrada no cadastro do Depósito Público");
+                CadastrarErroGenerico(usuarioId, identificadorNota, OrigemErro.MobLink, acao, "Nota Fiscal não encontrada no cadastro do Depósito Público");
 
                 throw new Exception("Nota Fiscal não encontrada no cadastro do Depósito Público (" + identificadorNota + ")");
             }
@@ -244,7 +263,7 @@ namespace NFSE.Business
             return nfe.FirstOrDefault();
         }
 
-        private PrestadorServico ConsultarPrestadorServico(int usuarioId, string cnpj, Nfe nfe, CapaAutorizacaoNfse capaAutorizacaoNfse = null)
+        private PrestadorServico ConsultarPrestadorServico(int usuarioId, string cnpj, Acao acao, Nfe nfe, CapaAutorizacaoNfse capaAutorizacaoNfse = null)
         {
             Thread.CurrentThread.CurrentCulture = new CultureInfo("pt-BR");
 
@@ -258,7 +277,7 @@ namespace NFSE.Business
             }
             catch (Exception ex)
             {
-                CadastrarErroGenerico(usuarioId, nfe.GrvID, nfe.IdentificadorNota, OrigemErro.MobLink, "Ocorreu um erro ao consultar os dados do Servidor: " + ex);
+                CadastrarErroGenerico(usuarioId, nfe.IdentificadorNota.Value, OrigemErro.MobLink, acao, "Ocorreu um erro ao consultar os dados do Servidor: " + ex);
 
                 throw new Exception("Ocorreu um erro ao consultar os dados do Servidor: " + ex);
             }
@@ -269,7 +288,7 @@ namespace NFSE.Business
                 {
                     if (dtPrestador == null)
                     {
-                        CadastrarErroGenerico(usuarioId, nfe.GrvID, nfe.IdentificadorNota, OrigemErro.MobLink, "Prestador de Serviços não configurado. CNPJ: " + cnpj);
+                        CadastrarErroGenerico(usuarioId, nfe.IdentificadorNota.Value, OrigemErro.MobLink, acao, "Prestador de Serviços não configurado. CNPJ: " + cnpj);
 
                         throw new Exception("Prestador de Serviços não configurado. CNPJ: " + cnpj);
                     }
@@ -290,14 +309,14 @@ namespace NFSE.Business
             }
             catch (Exception ex)
             {
-                CadastrarErroGenerico(usuarioId, nfe.GrvID, nfe.IdentificadorNota, OrigemErro.MobLink, "Ocorreu um erro consultar o Prestador de Serviços: " + ex.Message);
+                CadastrarErroGenerico(usuarioId, nfe.IdentificadorNota.Value, OrigemErro.MobLink, acao, "Ocorreu um erro consultar o Prestador de Serviços: " + ex.Message);
 
                 throw new Exception("Ocorreu um erro consultar o Prestador de Serviços: " + ex.Message);
             }
 
             if (string.IsNullOrEmpty(prestadorAcesso.prestador_chave))
             {
-                CadastrarErroGenerico(usuarioId, nfe.GrvID, nfe.IdentificadorNota, OrigemErro.MobLink, "Prestador de Serviços sem chave configurada (token). CNPJ: " + cnpj);
+                CadastrarErroGenerico(usuarioId, nfe.IdentificadorNota.Value, OrigemErro.MobLink, acao, "Prestador de Serviços sem chave configurada (token). CNPJ: " + cnpj);
 
                 throw new Exception("Prestador de Serviços sem chave configurada (token). CNPJ: " + cnpj);
             }

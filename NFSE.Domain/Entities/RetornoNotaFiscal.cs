@@ -2,15 +2,13 @@
 
 namespace NFSE.Domain.Entities
 {
-    public class RetornoNotaFiscal : RetornoErro
+    public class RetornoNotaFiscal : NfeWsErroModel
     {
         public int NotaFiscalId { get; set; }
 
         public string cnpj_prestador { get; set; }
 
         public string @ref { get; set; }
-
-        public string status { get; set; }
 
         public string numero { get; set; }
 

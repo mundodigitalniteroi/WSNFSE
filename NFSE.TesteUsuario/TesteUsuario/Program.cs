@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NFSE.Domain.Entities;
+using System;
 
 namespace NFSE.TesteUsuario
 {
@@ -6,10 +7,14 @@ namespace NFSE.TesteUsuario
     {
         static void Main(string[] args)
         {
+            string result = string.Empty;
+
+            Console.WriteLine("TESTE DE SOLICITACAO DA NOTA FISCAL");
+
             var capaAutorizacaoNfse = new nfse.CapaAutorizacaoNfse
             {
                 Homologacao = true,
-                IdentificadorNota = 700067,
+                IdentificadorNota = 123456,
                 UsuarioId = 1,
 
                 Autorizacao = new nfse.Autorizacao
@@ -59,11 +64,58 @@ namespace NFSE.TesteUsuario
 
             try
             {
-                string result = string.Empty;
-
                 using (var ws = new nfse.WSnfseSoapClient())
                 {
                     result = ws.SolicitarEmissaoNotaFiscal(capaAutorizacaoNfse);
+                }
+
+                Console.WriteLine(result + Environment.NewLine);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERRO: " + ex.Message);
+            }
+
+            Console.WriteLine("TESTE DE RETORNO DA NOTA FISCAL");
+
+            try
+            {
+                var retorno = new nfse.RetornoNotaFiscal();
+
+                using (var ws = new nfse.WSnfseSoapClient())
+                {
+                    retorno = ws.ReceberNotaFiscal(new nfse.Consulta
+                    {
+                        IdentificadorNota = 700005,
+                        CnpjPrestador = "08397160003658",
+                        Homologacao = true,
+                        UsuarioId = 1
+                    });
+
+                    Console.WriteLine(retorno.Status + Environment.NewLine);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERRO: " + ex.Message);
+            }
+
+            Console.WriteLine("TESTE DE CANCELAMENTO DA NOTA FISCAL");
+
+            try
+            {
+                using (var ws = new nfse.WSnfseSoapClient())
+                {
+                    result = ws.CancelarNotaFiscal(new nfse.Cancelamento
+                    {
+                        IdentificadorNota = 123456,
+                        CnpjPrestador = "08397160003658",
+                        Justificativa = "TESTE DE CANCELAMENTO",
+                        Homologacao = true,
+                        UsuarioId = 1
+                    });
+
+                    Console.WriteLine(result + Environment.NewLine);
                 }
             }
             catch (Exception ex)
