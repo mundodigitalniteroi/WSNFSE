@@ -97,7 +97,7 @@ namespace NFSE.Business
             {
                 CadastrarErroGenerico(notaFiscal.UsuarioId, nfe.IdentificadorNota.Value, OrigemErro.MobLink, Acao.Retorno, "Ocorreu um erro cadastrar a Nota Fiscal: " + ex.Message);
 
-                throw new Exception("Ocorreu um erro consultar a Nota Fiscal (" + notaFiscal.IdentificadorNota + "): " + ex.Message);
+                throw new Exception("Ocorreu um erro ao cadastrar a Nota Fiscal (" + notaFiscal.IdentificadorNota + "): " + ex.Message);
             }
         }
 
@@ -107,6 +107,11 @@ namespace NFSE.Business
             {
                 MaxJsonLength = int.MaxValue
             }.Deserialize<RetornoNotaFiscal>(retorno);
+
+            if (retornoConsulta.Status.Trim().ToUpper().Contains("PROCESSANDO_AUTORIZACAO"))
+            {
+                return retornoConsulta;
+            }
 
             if (retornoConsulta.url == null)
             {
@@ -146,6 +151,8 @@ namespace NFSE.Business
 
                 retornoErro.ErroId = new Tabelas.NfeWsErroController().Cadastrar(retornoErro);
 
+                retornoErro = new Tabelas.NfeWsErroController().Selecionar(retornoErro.ErroId).FirstOrDefault();
+
                 retornoConsulta.ErroId = retornoErro.ErroId;
                 retornoConsulta.IdentificadorNota = retornoErro.IdentificadorNota;
                 retornoConsulta.UsuarioId = retornoErro.UsuarioId;
@@ -155,6 +162,7 @@ namespace NFSE.Business
                 retornoConsulta.CodigoErro = retornoErro.CodigoErro;
                 retornoConsulta.MensagemErro = retornoErro.MensagemErro;
                 retornoConsulta.CorrecaoErro = retornoErro.CorrecaoErro;
+                retornoConsulta.DataHoraCadastro = retornoErro.DataHoraCadastro;
 
                 return retornoConsulta;
             }
@@ -228,7 +236,7 @@ namespace NFSE.Business
                 UsuarioId = usuarioId,
                 Acao = (char)acao,
                 OrigemErro = (char)origemErro,
-                MensagemErro = mensagemErro.ToUpper().Trim()
+                MensagemErro = mensagemErro
             };
 
             try
@@ -240,24 +248,22 @@ namespace NFSE.Business
 
         private Nfe ConsultarNotaFiscal(int usuarioId, int identificadorNota, Acao acao)
         {
-            var nfe = new List<Nfe>();
+            List<Nfe> nfe;
 
             try
             {
-                nfe = new Tabelas.Nfe().Consultar(identificadorNota);
+                if ((nfe = new Tabelas.Nfe().Consultar(identificadorNota)) == null)
+                {
+                    CadastrarErroGenerico(usuarioId, identificadorNota, OrigemErro.MobLink, acao, "Nota Fiscal não encontrada no cadastro do Depósito Público");
+
+                    throw new Exception("Nota Fiscal não encontrada no cadastro do Depósito Público (" + identificadorNota + ")");
+                }
             }
             catch (Exception ex)
             {
                 CadastrarErroGenerico(usuarioId, identificadorNota, OrigemErro.MobLink, acao, "Ocorreu um erro ao consultar a Nota Fiscal: " + ex.Message);
 
                 throw new Exception("Ocorreu um erro ao consultar a Nota Fiscal (" + identificadorNota + "): " + ex.Message);
-            }
-
-            if (nfe == null)
-            {
-                CadastrarErroGenerico(usuarioId, identificadorNota, OrigemErro.MobLink, acao, "Nota Fiscal não encontrada no cadastro do Depósito Público");
-
-                throw new Exception("Nota Fiscal não encontrada no cadastro do Depósito Público (" + identificadorNota + ")");
             }
 
             return nfe.FirstOrDefault();

@@ -1,6 +1,11 @@
-﻿using NFSE.Business;
+﻿using DP.Business.Nfe;
+using DP.Business.Sistema;
+using DP.Business.WebServices;
+using DP.Model.Nfe;
+using NFSE.Business;
 using NFSE.Domain.Entities;
 using System;
+using System.Configuration;
 
 namespace EnvioTeste
 {
@@ -8,6 +13,7 @@ namespace EnvioTeste
     {
         static void Main(string[] args)
         {
+            // Solicitação
             var capaAutorizacaoNfse = new CapaAutorizacaoNfse
             {
                 Homologacao = true,
@@ -75,11 +81,39 @@ namespace EnvioTeste
             //    Console.WriteLine("ERRO: " + ex.Message);
             //}
 
+            GlobalDataBaseController.SetConnectionString(ConfigurationManager.ConnectionStrings["ConnectionStringDev"].ConnectionString);
+
+            #region Emissão da Nota Fiscal Eletrônica
+            try
+            {
+                //var nfe = new NfeController().Retornar(new NfeModel { GrvID = 543687 });
+
+                //if (nfe == null)
+                //{
+                //    new WsNfeController().EmitirNotaFiscal(543687, false);
+                //}
+
+                GlobalDataBaseController.ConnectDataBase();
+
+                ConfiguracoesController.id_usuario = 1;
+
+                new WsNfeController().EmitirNotaFiscal(543687, false);
+            }
+            catch (Exception ex)
+            {
+                if (true)
+                {
+
+                }
+            }
+            #endregion Emissão da Nota Fiscal Eletrônica
+
+            // Recebimento
             try
             {
                 var aux = new Main().ReceberNotaFiscal(new Consulta
                 {
-                    IdentificadorNota = 700068,
+                    IdentificadorNota = 700092,
                     CnpjPrestador = "08397160003658",
                     Homologacao = true,
                     UsuarioId = 1
@@ -90,11 +124,12 @@ namespace EnvioTeste
                 Console.WriteLine("ERRO: " + ex.Message);
             }
 
+            // Cancelamento
             try
             {
                 var aux = new Main().CancelarNotaFiscal(new Cancelamento
                 {
-                    IdentificadorNota = 700069,
+                    IdentificadorNota = 700076,
                     CnpjPrestador = "08397160003658",
                     Justificativa = "TESTES",
                     Homologacao = true,
