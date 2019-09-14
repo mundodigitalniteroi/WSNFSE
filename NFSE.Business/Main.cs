@@ -91,9 +91,9 @@ namespace NFSE.Business
             }
             catch (Exception ex)
             {
-                CadastrarErroGenerico(nfe.GrvId, model.UsuarioId, nfe.IdentificadorNota.Value, OrigemErro.WebService, Acao.Retorno, "Ocorreu um erro receber a Nota Fiscal: " + ex.Message);
+                CadastrarErroGenerico(nfe.GrvId, model.UsuarioId, nfe.IdentificadorNota.Value, OrigemErro.WebService, Acao.Retorno, "Ocorreu um erro ao receber a Nota Fiscal: " + ex.Message);
 
-                throw new Exception("Ocorreu um erro receber a Nota Fiscal (" + model.IdentificadorNota + "): " + ex.Message);
+                throw new Exception("Ocorreu um erro ao receber a Nota Fiscal (" + model.IdentificadorNota + "): " + ex.Message);
             }
 
             try
@@ -102,7 +102,7 @@ namespace NFSE.Business
             }
             catch (Exception ex)
             {
-                CadastrarErroGenerico(nfe.GrvId, model.UsuarioId, nfe.IdentificadorNota.Value, OrigemErro.MobLink, Acao.Retorno, "Ocorreu um erro cadastrar a Nota Fiscal: " + ex.Message);
+                CadastrarErroGenerico(nfe.GrvId, model.UsuarioId, nfe.IdentificadorNota.Value, OrigemErro.MobLink, Acao.Retorno, "Ocorreu um erro ao cadastrar a Nota Fiscal: " + ex.Message);
 
                 throw new Exception("Ocorreu um erro ao cadastrar a Nota Fiscal (" + model.IdentificadorNota + "): " + ex.Message);
             }
@@ -229,9 +229,9 @@ namespace NFSE.Business
             }
             catch (Exception ex)
             {
-                CadastrarErroGenerico(nfe.GrvId, model.UsuarioId, nfe.IdentificadorNota.Value, OrigemErro.WebService, Acao.Cancelamento, "Ocorreu um erro cancelar a Nota Fiscal: " + ex.Message);
+                CadastrarErroGenerico(nfe.GrvId, model.UsuarioId, nfe.IdentificadorNota.Value, OrigemErro.WebService, Acao.Cancelamento, "Ocorreu um erro ao cancelar a Nota Fiscal: " + ex.Message);
 
-                throw new Exception("Ocorreu um erro cancelar a Nota Fiscal (" + model.IdentificadorNota + "): " + ex.Message);
+                throw new Exception("Ocorreu um erro ao cancelar a Nota Fiscal (" + model.IdentificadorNota + "): " + ex.Message);
             }
         }
 
@@ -323,9 +323,9 @@ namespace NFSE.Business
             }
             catch (Exception ex)
             {
-                CadastrarErroGenerico(grvId, usuarioId, nfe.IdentificadorNota.Value, OrigemErro.MobLink, acao, "Ocorreu um erro consultar o Prestador de Serviços: " + ex.Message);
+                CadastrarErroGenerico(grvId, usuarioId, nfe.IdentificadorNota.Value, OrigemErro.MobLink, acao, "Ocorreu um erro ao consultar o Prestador de Serviços: " + ex.Message);
 
-                throw new Exception("Ocorreu um erro consultar o Prestador de Serviços: " + ex.Message);
+                throw new Exception("Ocorreu um erro ao consultar o Prestador de Serviços: " + ex.Message);
             }
 
             if (string.IsNullOrEmpty(prestadorAcesso.prestador_chave))
