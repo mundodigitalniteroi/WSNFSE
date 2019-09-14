@@ -113,7 +113,7 @@ namespace NFSE.Business.Tabelas
             SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.Autorizacao.servico.item_lista_servico) ? "" : capaAutorizacaoNfse.Autorizacao.servico.item_lista_servico) + "'");
             SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.Autorizacao.servico.valor_servicos) ? "" : capaAutorizacaoNfse.Autorizacao.servico.valor_servicos) + "')");
 
-            return DataBase.Execute(SQL);
+            return DataBase.ExecuteScalar(SQL);
         }
     }
 }

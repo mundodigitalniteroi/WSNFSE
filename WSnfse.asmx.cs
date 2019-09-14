@@ -1,5 +1,7 @@
 ﻿using NFSE.Business;
 using NFSE.Domain.Entities;
+using NFSE.Domain.Entities.NFe;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Web.Services;
 
@@ -19,7 +21,7 @@ namespace NFSE
         }
 
         [WebMethod]
-        public RetornoNotaFiscal ReceberNotaFiscal(Consulta model)
+        public RetornoNotaFiscalEntity ReceberNotaFiscal(Consulta model)
         {
             return new Main().ReceberNotaFiscal(model);
         }
@@ -30,17 +32,10 @@ namespace NFSE
             return new Main().CancelarNotaFiscal(model);
         }
 
-        //[WebMethod]
-        //public string GerarNfse(int grvId, bool isDev)
-        //{
-        //    try
-        //    {
-        //        return new ControlarEnvio().GerarNota(grvId, isDev);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return "NOK: " + ex.Message.ToString();
-        //    }
-        //}
+        [WebMethod]
+        public List<string> GerarNotaFiscal(int grvId, int usuarioId, bool isDev)
+        {
+            return new Main().GerarNotaFiscal(grvId, usuarioId, isDev);
+        }
     }
 }

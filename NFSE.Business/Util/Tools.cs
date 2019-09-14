@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -16,12 +17,16 @@ namespace NFSE.Business.Util
     {
         public string PostNfse(string uri, string json, string token)
         {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("pt-BR");
+
+            string base64String = Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes(token + ":" + ""));
+
             HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(uri);
 
             httpWebRequest.Method = "POST";
 
-            string base64String = Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes(token + ":" + ""));
             httpWebRequest.Headers.Add("Authorization", "Basic " + base64String);
+
             httpWebRequest.PreAuthenticate = true;
 
             byte[] bytes = new UTF8Encoding().GetBytes(json);
@@ -29,14 +34,18 @@ namespace NFSE.Business.Util
             httpWebRequest.ContentLength = (long)bytes.Length;
 
             using (Stream requestStream = httpWebRequest.GetRequestStream())
+            {
                 requestStream.Write(bytes, 0, bytes.Length);
+            }
 
             try
             {
                 using (HttpWebResponse response = (HttpWebResponse)httpWebRequest.GetResponse())
                 {
                     using (StreamReader streamReader = new StreamReader(response.GetResponseStream()))
+                    {
                         return streamReader.ReadToEnd().Trim();
+                    }
                 }
             }
             catch (WebException ex)

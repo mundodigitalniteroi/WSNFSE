@@ -152,5 +152,61 @@ namespace NFSE.Infra.Data
             return Execute(SQL.ToString(), parameters);
         }
         #endregion Execute
+
+        #region Execute Scalar
+        public static int ExecuteScalar(string SQL)
+        {
+            Debug.WriteLine(SQL.Trim() + Environment.NewLine + "GO" + Environment.NewLine);
+
+            if (!ConnectionFactory.IsConnected())
+            {
+                ConnectDataBase();
+            }
+
+            return ConnectionFactory.ExecuteScalar(SQL.ToString());
+        }
+
+        public static int ExecuteScalar(StringBuilder SQL)
+        {
+            return ExecuteScalar(SQL.ToString());
+        }
+
+        public static int ExecuteScalar(string SQL, SqlParameter[] parameters)
+        {
+            Debug.WriteLine(SQL.Trim() + Environment.NewLine + "GO" + Environment.NewLine);
+
+            if (!ConnectionFactory.IsConnected())
+            {
+                ConnectDataBase();
+            }
+
+            return ConnectionFactory.ExecuteWithParameters(SQL, parameters);
+        }
+
+        public static int ExecuteScalar(StringBuilder SQL, SqlParameter[] parameters)
+        {
+            return ExecuteScalar(SQL.ToString(), parameters);
+        }
+        #endregion Execute Scalar
+
+        public static int ExecuteStoredProcedureThanReturnValue(SqlParameter[] parameters)
+        {
+            if (!ConnectionFactory.IsConnected())
+            {
+                ConnectDataBase();
+            }
+
+            return ConnectionFactory.ExecuteStoredProcedureThanReturnValue("dbo.SequenceGetNewValue", parameters);
+        }
+
+        public static void SetContextInfo(int usuarioId)
+        {
+            if (!ConnectionFactory.IsConnected())
+            {
+                ConnectDataBase();
+            }
+
+            ConnectionFactory.SetContextInfo(usuarioId.ToString());
+        }
     }
 }

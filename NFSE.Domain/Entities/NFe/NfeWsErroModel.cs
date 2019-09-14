@@ -1,12 +1,14 @@
 ﻿using System;
 
-namespace NFSE.Domain.Entities
+namespace NFSE.Domain.Entities.NFe
 {
     public class NfeWsErroModel
     {
         public int ErroId { get; set; }
 
-        public int IdentificadorNota { get; set; }
+        public int GrvId { get; set; }
+
+        public int? IdentificadorNota { get; set; }
 
         public int UsuarioId { get; set; }
 

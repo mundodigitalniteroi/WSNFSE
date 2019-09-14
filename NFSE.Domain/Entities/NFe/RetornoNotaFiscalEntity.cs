@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace NFSE.Domain.Entities
+namespace NFSE.Domain.Entities.NFe
 {
-    public class RetornoNotaFiscal : NfeWsErroModel
+    public class RetornoNotaFiscalEntity : NfeWsErroModel
     {
         public int NotaFiscalId { get; set; }
 

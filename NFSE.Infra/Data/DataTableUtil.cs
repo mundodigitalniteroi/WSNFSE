@@ -10,32 +10,30 @@ namespace NFSE.Infra.Data
     {
         public static List<T> DataTableToList<T>(DataTable dataTable)
         {
-            if (dataTable == null | dataTable.Rows.Count.Equals(0))
+            if (dataTable == null || dataTable.Rows.Count.Equals(0) || dataTable.Columns.Count.Equals(0))
+            {
                 return null;
+            }
 
-            List<DataRow> lines = new List<DataRow>();
+            var lines = new List<DataRow>();
 
             foreach (DataRow row in dataTable.Rows)
-
+            {
                 lines.Add(row);
+            }
 
             return ConvertDataRowToList<T>(lines);
         }
 
-        private static List<T> ConvertDataRowToList<T>(List<DataRow> linhas)
+        private static List<T> ConvertDataRowToList<T>(List<DataRow> lines)
         {
-            List<T> list = null;
+            var list = new List<T>();
 
-            if (linhas != null)
+            foreach (DataRow linha in lines)
             {
-                list = new List<T>();
+                T item = CreateItem<T>(linha);
 
-                foreach (DataRow linha in linhas)
-                {
-                    T item = CreateItem<T>(linha);
-
-                    list.Add(item);
-                }
+                list.Add(item);
             }
 
             return list;
@@ -43,42 +41,38 @@ namespace NFSE.Infra.Data
 
         private static T CreateItem<T>(DataRow row)
         {
-            if (row == null)
-                return default(T);
+            T objectInstance = Activator.CreateInstance<T>();
 
-            // converte um DataRow para um objeto T
-            string nomeDaColuna = default(string);
+            string columnName;
 
-            T objeto = default(T);
-
-            objeto = Activator.CreateInstance<T>();
-
-            foreach (DataColumn coluna in row.Table.Columns)
+            foreach (DataColumn dataColumn in row.Table.Columns)
             {
-                nomeDaColuna = coluna.ColumnName;
+                columnName = dataColumn.ColumnName;
 
-                // Pega a propriedade com a mesma coluna
-                Type objType = objeto.GetType();
+                var property = objectInstance.GetType().GetProperty(columnName);
 
-                PropertyInfo prop = objType.GetProperty(nomeDaColuna, (BindingFlags)(BindingFlags)(int)BindingFlags.IgnoreCase + (int)BindingFlags.Public + (int)BindingFlags.Instance);
-
-                try
+                if (property != null)
                 {
-                    // Pega o valor da coluna
-                    object value = default(object);
+                    Type type = Nullable.GetUnderlyingType(property.PropertyType) ?? property.PropertyType;
 
-                    value = (row[nomeDaColuna].GetType() == typeof(DBNull)) ? null : row[nomeDaColuna];
+                    object value = default;
 
-                    // Define o valor da propriedade
-                    prop.SetValue(objeto, value, null);
-                }
-                catch
-                {
-                    throw;
+                    value = row[columnName];
+
+                    try
+                    {
+                        object safeValue = (value == DBNull.Value) ? null : Convert.ChangeType(value, type);
+
+                        property.SetValue(objectInstance, safeValue, null);
+                    }
+                    catch (Exception)
+                    {
+                        throw;
+                    }
                 }
             }
 
-            return objeto;
+            return objectInstance;
         }
     }
 }

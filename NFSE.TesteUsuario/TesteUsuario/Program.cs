@@ -88,6 +88,7 @@ namespace NFSE.TesteUsuario
                 {
                     retorno = ws.ReceberNotaFiscal(new nfse.Consulta
                     {
+
                         IdentificadorNota = 700005,
                         CnpjPrestador = "08397160003658",
                         Homologacao = true,

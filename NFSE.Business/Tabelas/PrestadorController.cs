@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NFSE.Business.Tabelas
 {
-    public class Prestador
+    public class PrestadorController
     {
         public DataTable Consultar(string cnpj, CapaAutorizacaoNfse capaAutorizacaoNfse = null)
         {

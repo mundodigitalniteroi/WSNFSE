@@ -1,14 +1,14 @@
 ﻿using System;
 
-namespace NFSE.Domain.Entities.DP
+namespace NFSE.Domain.Entities.NFe
 {
-    public class Nfe
+    public class NfeEntity
     {
-        public int NfeID { get; set; }
+        public int NfeId { get; set; }
 
-        public int GrvID { get; set; }
+        public int GrvId { get; set; }
 
-        public int UsuarioCadastroID { get; set; }
+        public int UsuarioCadastroId { get; set; }
 
         public string Cnpj { get; set; }
 
@@ -24,7 +24,7 @@ namespace NFSE.Domain.Entities.DP
 
         public string Url { get; set; }
 
-        public string Status { get; set; }
+        public char Status { get; set; }
 
         public DateTime DataCadastro { get; set; }
 

@@ -13,6 +13,8 @@ namespace EnvioTeste
     {
         static void Main(string[] args)
         {
+            GlobalDataBaseController.SetConnectionString(ConfigurationManager.ConnectionStrings["ConnectionStringDev"].ConnectionString);
+
             // Solicitação
             var capaAutorizacaoNfse = new CapaAutorizacaoNfse
             {
@@ -81,8 +83,7 @@ namespace EnvioTeste
             //    Console.WriteLine("ERRO: " + ex.Message);
             //}
 
-            GlobalDataBaseController.SetConnectionString(ConfigurationManager.ConnectionStrings["ConnectionStringDev"].ConnectionString);
-
+            
             #region Emissão da Nota Fiscal Eletrônica
             try
             {
@@ -93,18 +94,33 @@ namespace EnvioTeste
                 //    new WsNfeController().EmitirNotaFiscal(543687, false);
                 //}
 
-                GlobalDataBaseController.ConnectDataBase();
+                //GlobalDataBaseController.ConnectDataBase();
 
-                ConfiguracoesController.id_usuario = 1;
+                //ConfiguracoesController.id_usuario = 1;
 
-                new WsNfeController().EmitirNotaFiscal(543687, false);
+                //new WsNfeController().EmitirNotaFiscal(543687, false);
             }
             catch (Exception ex)
             {
-                if (true)
-                {
+                Console.WriteLine("ERRO: " + ex.Message);
+            }
+            #endregion Emissão da Nota Fiscal Eletrônica
 
-                }
+
+
+            #region Emissão da Nota Fiscal Eletrônica
+            try
+            {
+                var result = new Main().GerarNotaFiscal(543525, 1, true);
+
+                foreach (var item in result)
+                {
+                    Console.WriteLine("JSON: " + item);
+                } 
+            }
+            catch (Exception ex)
+            {     
+                Console.WriteLine("ERRO: " + ex.Message);
             }
             #endregion Emissão da Nota Fiscal Eletrônica
 
@@ -113,7 +129,8 @@ namespace EnvioTeste
             {
                 var aux = new Main().ReceberNotaFiscal(new Consulta
                 {
-                    IdentificadorNota = 700092,
+                    GrvId = 543525,
+                    IdentificadorNota = 700121,
                     CnpjPrestador = "08397160003658",
                     Homologacao = true,
                     UsuarioId = 1
@@ -129,7 +146,8 @@ namespace EnvioTeste
             {
                 var aux = new Main().CancelarNotaFiscal(new Cancelamento
                 {
-                    IdentificadorNota = 700076,
+                    GrvId = 543525,
+                    IdentificadorNota = 700121,
                     CnpjPrestador = "08397160003658",
                     Justificativa = "TESTES",
                     Homologacao = true,

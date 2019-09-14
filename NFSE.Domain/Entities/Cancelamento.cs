@@ -2,9 +2,11 @@
 {
     public class Cancelamento
     {
-        public int UsuarioId { get; set; }
+        public int GrvId { get; set; }
 
         public int IdentificadorNota { get; set; }
+
+        public int UsuarioId { get; set; }
 
         public string CnpjPrestador { get; set; }
 

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NFSE.Domain.Entities
+namespace NFSE.Domain.Entities.NFe
 {
     public class NfeRetornoModel
     {

@@ -1,15 +1,14 @@
-﻿using NFSE.Domain.Entities;
+﻿using NFSE.Domain.Entities.NFe;
 using NFSE.Infra.Data;
-using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Text;
 
-namespace NFSE.Business.Tabelas
+namespace NFSE.Business.Tabelas.NFe
 {
     public class NfeRetornoController
     {
-        public int Cadastrar(NFSE.Domain.Entities.NfeRetornoModel model)
+        public int Cadastrar(NfeRetornoModel model)
         {
             var SQL = new StringBuilder();
 
@@ -64,7 +63,7 @@ namespace NFSE.Business.Tabelas
                 sqlParameters = DataBase.AddNewParameter(sqlParameters, "@imagem_nota_fiscal", model.ImagemNotaFiscal, SqlDbType.VarBinary, model.ImagemNotaFiscal.Length);
             }
 
-            return DataBase.Execute(SQL, sqlParameters);
+            return DataBase.ExecuteScalar(SQL, sqlParameters);
         }
     }
 }

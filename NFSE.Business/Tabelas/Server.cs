@@ -17,5 +17,10 @@ namespace NFSE.Business.Tabelas
                 return dtConfiguracoes.Rows[0]["Server"].ToString();
             }
         }
+
+        public void SetContextInfo(int usuarioId)
+        {
+            DataBase.SetContextInfo(usuarioId);
+        }
     }
 }
