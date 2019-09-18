@@ -1,5 +1,4 @@
 ﻿using NFSE.Business.Tabelas.NFe;
-using NFSE.Domain.Entities;
 using NFSE.Domain.Entities.NFe;
 using System;
 
