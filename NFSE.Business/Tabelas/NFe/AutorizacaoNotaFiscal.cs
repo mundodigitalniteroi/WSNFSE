@@ -1,10 +1,11 @@
-﻿using NFSE.Domain.Entities;
+﻿using NFSE.Domain.Entities.NFe;
 using NFSE.Infra.Data;
 using System;
 using System.Data;
+using System.Data.SqlClient;
 using System.Text;
 
-namespace NFSE.Business.Tabelas
+namespace NFSE.Business.Tabelas.NFe
 {
     public class AutorizacaoNotaFiscal
     {
@@ -86,7 +87,7 @@ namespace NFSE.Business.Tabelas
             SQL.AppendLine("VALUES");
 
             SQL.AppendLine("      ('" + capaAutorizacaoNfse.IdentificadorNota + "'");
-            SQL.AppendLine("      ,'" + resposta + "'");
+            SQL.AppendLine("      ,@resposta_envio"); // '" + resposta + "'");
             SQL.AppendLine("      ," + prestadorAcesso.id_nfse_prestador);
             SQL.AppendLine("      ," + capaAutorizacaoNfse.UsuarioId);
             SQL.AppendLine("      ,'" + Convert.ToInt32(capaAutorizacaoNfse.Homologacao) + "'");
@@ -113,7 +114,14 @@ namespace NFSE.Business.Tabelas
             SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.Autorizacao.servico.item_lista_servico) ? "" : capaAutorizacaoNfse.Autorizacao.servico.item_lista_servico) + "'");
             SQL.AppendLine("      ,'" + (string.IsNullOrEmpty(capaAutorizacaoNfse.Autorizacao.servico.valor_servicos) ? "" : capaAutorizacaoNfse.Autorizacao.servico.valor_servicos) + "')");
 
-            return DataBase.ExecuteScalar(SQL);
+            var sqlParameters = new SqlParameter[1];
+
+            sqlParameters[0] = new SqlParameter("@resposta_envio", SqlDbType.VarChar)
+            {
+                Value = resposta
+            };
+
+            return DataBase.ExecuteScopeIdentity(SQL, sqlParameters);
         }
     }
 }

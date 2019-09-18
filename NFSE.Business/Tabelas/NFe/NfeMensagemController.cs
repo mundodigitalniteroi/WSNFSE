@@ -52,10 +52,10 @@ namespace NFSE.Business.Tabelas.DP
             SQL.AppendLine("VALUES");
 
             SQL.AppendLine("      (" + model.NfeId);
-            SQL.AppendLine("      ,'" + model.Mensagem + "'");
-            SQL.AppendLine("      ,'" + model.Tipo + "'");
+            SQL.AppendLine("      ,'" + model.Mensagem.Trim().ToUpper() + "'");
+            SQL.AppendLine("      ,'" + model.Tipo + "')");
 
-            return DataBase.ExecuteScalar(SQL);
+            return DataBase.ExecuteScopeIdentity(SQL);
         }
     }
 }

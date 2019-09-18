@@ -1,14 +1,16 @@
-﻿namespace NFSE.Domain.Entities
+﻿namespace NFSE.Domain.Entities.NFe
 {
-    public class CapaAutorizacaoNfse
+    public class Consulta
     {
-        public Autorizacao Autorizacao { get; set; }
-
         public int GrvId { get; set; }
+
+        public int NfeId { get; set; }
 
         public int IdentificadorNota { get; set; }
 
         public int UsuarioId { get; set; }
+
+        public string CnpjPrestador { get; set; }
 
         public bool Homologacao { get; set; }
     }

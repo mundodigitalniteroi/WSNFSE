@@ -1,4 +1,5 @@
 ﻿using NFSE.Domain.Entities.NFe;
+using NFSE.Domain.Enum;
 using NFSE.Infra.Data;
 using System.Collections.Generic;
 using System.Data;
@@ -139,7 +140,28 @@ namespace NFSE.Business.Tabelas.NFe
                 new SqlParameter("@CorrecaoErro", SqlDbType.VarChar) { Value = model.CorrecaoErro }
             };
 
-            return DataBase.ExecuteScalar(SQL, sqlParameters);
+            return DataBase.ExecuteScopeIdentity(SQL, sqlParameters);
+        }
+
+
+
+        public void CadastrarErroGenerico(int grvId, int usuarioId, int? identificadorNota, OrigemErro origemErro, Acao acao, string mensagemErro)
+        {
+            var erro = new NfeWsErroModel
+            {
+                GrvId = grvId,
+                IdentificadorNota = identificadorNota,
+                UsuarioId = usuarioId,
+                Acao = (char)acao,
+                OrigemErro = (char)origemErro,
+                MensagemErro = mensagemErro
+            };
+
+            try
+            {
+                new NfeWsErroController().Cadastrar(erro);
+            }
+            catch { }
         }
     }
 }

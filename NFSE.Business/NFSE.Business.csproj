@@ -47,9 +47,9 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Main.cs" />
+    <Compile Include="Tabelas\NFe\NfeSolicitarEmissaoNotaFiscalController.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Tabelas\AutorizacaoNotaFiscal.cs" />
+    <Compile Include="Tabelas\NFe\AutorizacaoNotaFiscal.cs" />
     <Compile Include="Tabelas\NFe\DetranController.cs" />
     <Compile Include="Tabelas\DP\AtendimentoController.cs" />
     <Compile Include="Tabelas\DP\DepositoController.cs" />
@@ -64,13 +64,17 @@
     <Compile Include="Tabelas\DP\TipoRegraFaturamentoController.cs" />
     <Compile Include="Tabelas\Global\EstadoController.cs" />
     <Compile Include="Tabelas\Global\MunicipioController.cs" />
-    <Compile Include="Tabelas\Grv.cs" />
+    <Compile Include="Tabelas\DP\Grv.cs" />
+    <Compile Include="Tabelas\NFe\NfeCancelamentoController.cs" />
     <Compile Include="Tabelas\NFe\NfeController.cs" />
+    <Compile Include="Tabelas\NFe\NfeGerarNotaFiscalController.cs" />
+    <Compile Include="Tabelas\NFe\NfeReceberNotaFiscalController.cs" />
     <Compile Include="Tabelas\NFe\NfeWsErroController.cs" />
     <Compile Include="Tabelas\NFe\NfeRetornoController.cs" />
     <Compile Include="Tabelas\NFe\NfeMensagemController.cs" />
-    <Compile Include="Tabelas\PrestadorController.cs" />
-    <Compile Include="Tabelas\Server.cs" />
+    <Compile Include="Tabelas\Global\ParametroMunicipioController.cs" />
+    <Compile Include="Tabelas\NFe\PrestadorController.cs" />
+    <Compile Include="Tabelas\NFe\NfeConfiguracao.cs" />
     <Compile Include="Util\Tools.cs" />
   </ItemGroup>
   <ItemGroup>

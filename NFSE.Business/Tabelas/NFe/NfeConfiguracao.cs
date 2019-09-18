@@ -1,16 +1,16 @@
 ﻿using NFSE.Infra.Data;
 using System.Text;
 
-namespace NFSE.Business.Tabelas
+namespace NFSE.Business.Tabelas.NFe
 {
-    public class Server
+    public class NfeConfiguracao
     {
         public string GetRemoteServer()
         {
             var SQL = new StringBuilder();
 
             SQL.AppendLine("SELECT Server");
-            SQL.AppendLine("  FROM " + DataBase.GetNfeDatabase() + ".dbo.tb_nfse_configuracoes");
+            SQL.AppendLine("  FROM dbo.tb_dep_nfe_configuracoes");
 
             using (var dtConfiguracoes = DataBase.Select(SQL))
             {

@@ -1,5 +1,4 @@
-﻿using NFSE.Business;
-using NFSE.Domain.Entities;
+﻿using NFSE.Business.Tabelas.NFe;
 using NFSE.Domain.Entities.NFe;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,25 +16,25 @@ namespace NFSE
         [WebMethod]
         public string SolicitarEmissaoNotaFiscal(CapaAutorizacaoNfse model)
         {
-            return new Main().SolicitarEmissaoNotaFiscal(model);
+            return new NfeSolicitarEmissaoNotaFiscalController().SolicitarEmissaoNotaFiscal(model);
         }
 
         [WebMethod]
         public RetornoNotaFiscalEntity ReceberNotaFiscal(Consulta model)
         {
-            return new Main().ReceberNotaFiscal(model);
+            return new NfeReceberNotaFiscalController().ReceberNotaFiscal(model);
         }
 
         [WebMethod]
         public string CancelarNotaFiscal(Cancelamento model)
         {
-            return new Main().CancelarNotaFiscal(model);
+            return new NfeCancelamentoController().CancelarNotaFiscal(model);
         }
 
         [WebMethod]
         public List<string> GerarNotaFiscal(int grvId, int usuarioId, bool isDev)
         {
-            return new Main().GerarNotaFiscal(grvId, usuarioId, isDev);
+            return new NfeGerarNotaFiscalController().GerarNotaFiscal(grvId, usuarioId, isDev);
         }
     }
 }

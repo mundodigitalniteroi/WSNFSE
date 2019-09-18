@@ -47,22 +47,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Business">
-      <HintPath>..\..\..\DP\SourceCode\Class\Business\Business\bin\Debug\Business.dll</HintPath>
-    </Reference>
-    <Reference Include="Funcoes">
-      <HintPath>..\..\..\DP\SourceCode\Class\Business\Business\bin\Debug\Funcoes.dll</HintPath>
-    </Reference>
-    <Reference Include="Model">
-      <HintPath>..\..\..\DP\SourceCode\Class\Business\Business\bin\Debug\Model.dll</HintPath>
-    </Reference>
-    <Reference Include="MoreLinq">
-      <HintPath>..\..\..\DP\SourceCode\Class\Business\Business\bin\Debug\MoreLinq.dll</HintPath>
-    </Reference>
-    <Reference Include="MSDAL, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\DP\SourceCode\Class\Business\Business\bin\Debug\MSDAL.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Runtime.Serialization" />

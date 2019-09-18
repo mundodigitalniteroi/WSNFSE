@@ -87,7 +87,7 @@ namespace NFSE.Infra.Data
         {
             Debug.WriteLine(SQL.Trim() + Environment.NewLine + "GO" + Environment.NewLine);
 
-            return ConnectionFactory.SelectWithParameters(SQL, parameters);
+            return ConnectionFactory.Select(SQL, parameters);
         }
 
         public static DataTable Select(StringBuilder SQL, SqlParameter[] parameters)
@@ -99,21 +99,21 @@ namespace NFSE.Infra.Data
         #region Parameters
         public static SqlParameter BuildParameter(string parameterName, object value, DbType type, int size = 0)
         {
-            return ConnectionFactory.BuildParameter(parameterName, value, type, size);
+            return ParameterFactory.BuildParameter(parameterName, value, type, size);
         }
         public static SqlParameter BuildParameter(string parameterName, object value, SqlDbType type, int size = 0)
         {
-            return ConnectionFactory.BuildParameter(parameterName, value, type, size);
+            return ParameterFactory.BuildParameter(parameterName, value, type, size);
         }
 
         public static SqlParameter[] AddNewParameter(SqlParameter[] parameterArray, string parameterName, object value, DbType type, int size = 0)
         {
-            return ConnectionFactory.AddNewParameter(parameterArray, parameterName, value, type, size);
+            return ParameterFactory.AddNewParameter(parameterArray, parameterName, value, type, size);
         }
 
         public static SqlParameter[] AddNewParameter(SqlParameter[] parameterArray, string parameterName, object value, SqlDbType type, int size = 0)
         {
-            return ConnectionFactory.AddNewParameter(parameterArray, parameterName, value, type, size);
+            return ParameterFactory.AddNewParameter(parameterArray, parameterName, value, type, size);
         }
         #endregion Parameters
 
@@ -127,7 +127,7 @@ namespace NFSE.Infra.Data
                 ConnectDataBase();
             }
 
-            return ConnectionFactory.ExecuteScalar(SQL.ToString());
+            return ConnectionFactory.Execute(SQL.ToString());
         }
 
         public static int Execute(StringBuilder SQL)
@@ -144,7 +144,7 @@ namespace NFSE.Infra.Data
                 ConnectDataBase();
             }
 
-            return ConnectionFactory.ExecuteWithParameters(SQL, parameters);
+            return ConnectionFactory.Execute(SQL, parameters);
         }
 
         public static int Execute(StringBuilder SQL, SqlParameter[] parameters)
@@ -154,7 +154,7 @@ namespace NFSE.Infra.Data
         #endregion Execute
 
         #region Execute Scalar
-        public static int ExecuteScalar(string SQL)
+        public static int ExecuteScopeIdentity(string SQL)
         {
             Debug.WriteLine(SQL.Trim() + Environment.NewLine + "GO" + Environment.NewLine);
 
@@ -163,15 +163,15 @@ namespace NFSE.Infra.Data
                 ConnectDataBase();
             }
 
-            return ConnectionFactory.ExecuteScalar(SQL.ToString());
+            return ConnectionFactory.ExecuteScopeIdentity(SQL.ToString());
         }
 
-        public static int ExecuteScalar(StringBuilder SQL)
+        public static int ExecuteScopeIdentity(StringBuilder SQL)
         {
-            return ExecuteScalar(SQL.ToString());
+            return ExecuteScopeIdentity(SQL.ToString());
         }
 
-        public static int ExecuteScalar(string SQL, SqlParameter[] parameters)
+        public static int ExecuteScopeIdentity(string SQL, SqlParameter[] parameters)
         {
             Debug.WriteLine(SQL.Trim() + Environment.NewLine + "GO" + Environment.NewLine);
 
@@ -180,12 +180,12 @@ namespace NFSE.Infra.Data
                 ConnectDataBase();
             }
 
-            return ConnectionFactory.ExecuteWithParameters(SQL, parameters);
+            return ConnectionFactory.Execute(SQL, parameters);
         }
 
-        public static int ExecuteScalar(StringBuilder SQL, SqlParameter[] parameters)
+        public static int ExecuteScopeIdentity(StringBuilder SQL, SqlParameter[] parameters)
         {
-            return ExecuteScalar(SQL.ToString(), parameters);
+            return ExecuteScopeIdentity(SQL.ToString(), parameters);
         }
         #endregion Execute Scalar
 

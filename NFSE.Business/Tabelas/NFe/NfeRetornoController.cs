@@ -12,58 +12,58 @@ namespace NFSE.Business.Tabelas.NFe
         {
             var SQL = new StringBuilder();
 
-            SQL.AppendLine("INSERT INTO " + DataBase.GetNfeDatabase() + ".dbo.tb_nfse_consultar_dp_nf");
+            SQL.AppendLine("INSERT INTO dbo.tb_dep_nfe_nota_fiscal");
 
-            SQL.AppendLine("    (id_autorizacao_nf");
-            SQL.AppendLine("    ,id_usuario");
-            SQL.AppendLine("    ,status_nf");
-            SQL.AppendLine("    ,numero_nf");
-            SQL.AppendLine("    ,codigo_verificacao");
-            SQL.AppendLine("    ,data_emissao");
-            SQL.AppendLine("    ,url_nota_fiscal");
+            SQL.AppendLine("    (NfeId");
+            SQL.AppendLine("    ,UsuarioId");
+            SQL.AppendLine("    ,Status");
+            SQL.AppendLine("    ,NumeroNotaFiscal");
+            SQL.AppendLine("    ,CodigoVerificacao");
+            SQL.AppendLine("    ,UrlNotaFiscal");
+            SQL.AppendLine("    ,CaminhoXmlNotaFiscal");
 
             if (model.ImagemNotaFiscal != null)
             {
-                SQL.AppendLine("    ,imagem_nota_fiscal");
+                SQL.AppendLine("    ,ImagemNotaFiscal");
             }
 
-            SQL.AppendLine("    ,caminho_xml_nota_fiscal)");
+            SQL.AppendLine("    ,DataEmissao)");
 
             SQL.AppendLine("VALUES");
 
-            SQL.AppendLine("    (@id_autorizacao_nf");
-            SQL.AppendLine("    ,@id_usuario");
-            SQL.AppendLine("    ,@status_nf");
-            SQL.AppendLine("    ,@numero_nf");
-            SQL.AppendLine("    ,@codigo_verificacao");
-            SQL.AppendLine("    ,@data_emissao");
-            SQL.AppendLine("    ,@url_nota_fiscal");
+            SQL.AppendLine("    (@NfeId");
+            SQL.AppendLine("    ,@UsuarioId");
+            SQL.AppendLine("    ,@Status");
+            SQL.AppendLine("    ,@NumeroNotaFiscal");
+            SQL.AppendLine("    ,@CodigoVerificacao");
+            SQL.AppendLine("    ,@UrlNotaFiscal");
+            SQL.AppendLine("    ,@CaminhoXmlNotaFiscal");
 
             if (model.ImagemNotaFiscal != null)
             {
-                SQL.AppendLine("    ,@imagem_nota_fiscal");
+                SQL.AppendLine("    ,@ImagemNotaFiscal");
             }
 
-            SQL.AppendLine("    ,@caminho_xml_nota_fiscal)");
+            SQL.AppendLine("    ,@DataEmissao)");
 
             SqlParameter[] sqlParameters =
             {
-                new SqlParameter("@id_autorizacao_nf",SqlDbType.Int) { Value = model.AutorizacaoNotaFiscalId },
-                new SqlParameter("@id_usuario",SqlDbType.Int) { Value = model.UsuarioId },
-                new SqlParameter("@status_nf",SqlDbType.VarChar) { Value = model.StatusNotaFiscal },
-                new SqlParameter("@numero_nf",SqlDbType.VarChar) {Value = model.NumeroNotaFiscal },
-                new SqlParameter("@codigo_verificacao",SqlDbType.VarChar) { Value = model.CodigoVerificacao },
-                new SqlParameter("@data_emissao",SqlDbType.DateTime) { Value = model.DataEmissao },
-                new SqlParameter("@url_nota_fiscal",SqlDbType.VarChar) { Value = model.UrlNotaFiscal },
-                new SqlParameter("@caminho_xml_nota_fiscal",SqlDbType.VarChar) { Value = model.CaminhoNotaFiscal }
+                new SqlParameter("@NfeId",SqlDbType.Int) { Value = model.NfeId },
+                new SqlParameter("@UsuarioId",SqlDbType.Int) { Value = model.UsuarioId },
+                new SqlParameter("@Status",SqlDbType.VarChar) { Value = model.Status },
+                new SqlParameter("@NumeroNotaFiscal",SqlDbType.VarChar) {Value = model.NumeroNotaFiscal },
+                new SqlParameter("@CodigoVerificacao",SqlDbType.VarChar) { Value = model.CodigoVerificacao },
+                new SqlParameter("@UrlNotaFiscal",SqlDbType.VarChar) { Value = model.UrlNotaFiscal },
+                new SqlParameter("@CaminhoXmlNotaFiscal",SqlDbType.VarChar) { Value = model.CaminhoXmlNotaFiscal },
+                new SqlParameter("@DataEmissao",SqlDbType.DateTime) { Value = model.DataEmissao }
             };
 
             if (model.ImagemNotaFiscal != null)
             {
-                sqlParameters = DataBase.AddNewParameter(sqlParameters, "@imagem_nota_fiscal", model.ImagemNotaFiscal, SqlDbType.VarBinary, model.ImagemNotaFiscal.Length);
+                sqlParameters = DataBase.AddNewParameter(sqlParameters, "@ImagemNotaFiscal", model.ImagemNotaFiscal, SqlDbType.VarBinary, model.ImagemNotaFiscal.Length);
             }
 
-            return DataBase.ExecuteScalar(SQL, sqlParameters);
+            return DataBase.ExecuteScopeIdentity(SQL, sqlParameters);
         }
     }
 }

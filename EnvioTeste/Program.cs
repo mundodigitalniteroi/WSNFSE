@@ -1,11 +1,7 @@
-﻿using DP.Business.Nfe;
-using DP.Business.Sistema;
-using DP.Business.WebServices;
-using DP.Model.Nfe;
-using NFSE.Business;
+﻿using NFSE.Business.Tabelas.NFe;
 using NFSE.Domain.Entities;
+using NFSE.Domain.Entities.NFe;
 using System;
-using System.Configuration;
 
 namespace EnvioTeste
 {
@@ -13,8 +9,6 @@ namespace EnvioTeste
     {
         static void Main(string[] args)
         {
-            GlobalDataBaseController.SetConnectionString(ConfigurationManager.ConnectionStrings["ConnectionStringDev"].ConnectionString);
-
             // Solicitação
             var capaAutorizacaoNfse = new CapaAutorizacaoNfse
             {
@@ -111,7 +105,12 @@ namespace EnvioTeste
             #region Emissão da Nota Fiscal Eletrônica
             try
             {
-                var result = new Main().GerarNotaFiscal(543525, 1, true);
+                var result = new NfeGerarNotaFiscalController().GerarNotaFiscal
+                (
+                    grvId: 543697, 
+                    usuarioId: 1, 
+                    isDev: true
+                );
 
                 foreach (var item in result)
                 {
@@ -127,11 +126,11 @@ namespace EnvioTeste
             // Recebimento
             try
             {
-                var aux = new Main().ReceberNotaFiscal(new Consulta
+                var aux = new NfeReceberNotaFiscalController().ReceberNotaFiscal(new Consulta
                 {
-                    GrvId = 543525,
-                    IdentificadorNota = 700121,
-                    CnpjPrestador = "08397160003658",
+                    GrvId = 543697,
+                    IdentificadorNota = 700155,
+                    CnpjPrestador = "16952840000194",
                     Homologacao = true,
                     UsuarioId = 1
                 });
@@ -144,11 +143,11 @@ namespace EnvioTeste
             // Cancelamento
             try
             {
-                var aux = new Main().CancelarNotaFiscal(new Cancelamento
+                var aux = new NfeCancelamentoController().CancelarNotaFiscal(new Cancelamento
                 {
-                    GrvId = 543525,
-                    IdentificadorNota = 700121,
-                    CnpjPrestador = "08397160003658",
+                    GrvId = 543697,
+                    IdentificadorNota = 700143,
+                    CnpjPrestador = "16952840000194",
                     Justificativa = "TESTES",
                     Homologacao = true,
                     UsuarioId = 1

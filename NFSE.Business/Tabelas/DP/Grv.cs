@@ -1,7 +1,7 @@
 ﻿using NFSE.Infra.Data;
 using System.Data;
 
-namespace NFSE.Business.Tabelas
+namespace NFSE.Business.Tabelas.DP
 {
     public class Grv
     {

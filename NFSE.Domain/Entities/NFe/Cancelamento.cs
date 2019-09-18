@@ -1,6 +1,6 @@
-﻿namespace NFSE.Domain.Entities
+﻿namespace NFSE.Domain.Entities.NFe
 {
-    public class Consulta
+    public class Cancelamento
     {
         public int GrvId { get; set; }
 
@@ -9,6 +9,8 @@
         public int UsuarioId { get; set; }
 
         public string CnpjPrestador { get; set; }
+
+        public string Justificativa { get; set; }
 
         public bool Homologacao { get; set; }
     }

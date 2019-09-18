@@ -1,5 +1,7 @@
 ﻿using NFSE.Domain.Entities.NFe;
+using NFSE.Domain.Enum;
 using NFSE.Infra.Data;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -43,7 +45,7 @@ namespace NFSE.Business.Tabelas.NFe
             }
         }
 
-        public List<NfeEntity> Listar(int grvId)
+        public List<NfeEntity> Listar(int grvId, bool selecionarNotaFiscalCancelada = false)
         {
             var SQL = new StringBuilder();
 
@@ -65,15 +67,20 @@ namespace NFSE.Business.Tabelas.NFe
 
             SQL.AppendLine(" WHERE GrvId = " + grvId);
 
+            if (!selecionarNotaFiscalCancelada)
+            {
+                SQL.AppendLine("   AND Status != 'N'");
+            }
+
             using (var dataTable = DataBase.Select(SQL))
             {
                 return dataTable == null ? null : DataTableUtil.DataTableToList<NfeEntity>(dataTable);
             }
         }
 
-        public NfeEntity Selecionar(int grvId)
+        public NfeEntity Selecionar(int grvId, bool selecionarNotaFiscalCancelada = false)
         {
-            var list = Listar(grvId);
+            var list = Listar(grvId, selecionarNotaFiscalCancelada);
 
             return list?.FirstOrDefault();
         }
@@ -96,7 +103,7 @@ namespace NFSE.Business.Tabelas.NFe
             SQL.AppendLine("      ,'" + model.Cnpj + "'");
             SQL.AppendLine("      ," + model.IdentificadorNota + ")");
 
-            return DataBase.ExecuteScalar(SQL);
+            return DataBase.ExecuteScopeIdentity(SQL);
         }
 
         public int Atualizar(NfeEntity model)
@@ -117,6 +124,50 @@ namespace NFSE.Business.Tabelas.NFe
             SQL.AppendLine(" WHERE NfeID = " + model.NfeId);
 
             return DataBase.Execute(SQL);
+        }
+
+        public int AguardandoProcessamento(NfeEntity model)
+        {
+            var SQL = new StringBuilder();
+
+            SQL.AppendLine("UPDATE dbo.tb_dep_nfe");
+
+            SQL.AppendLine("   SET Status = 'A'");
+
+            if (model.CodigoRetorno != null && model.CodigoRetorno > 0)
+            {
+                SQL.AppendLine("       ,CodigoRetorno = " + model.CodigoRetorno);
+            }
+
+            SQL.AppendLine("      ,DataAlteracao = GETDATE()");
+
+            SQL.AppendLine(" WHERE NfeID = " + model.NfeId);
+            SQL.AppendLine("   AND Status = 'C'");
+
+            return DataBase.Execute(SQL);
+        }
+
+        public NfeEntity ConsultarNotaFiscal(int grvId, int usuarioId, int identificadorNota, Acao acao)
+        {
+            List<NfeEntity> nfe;
+
+            try
+            {
+                if ((nfe = new NfeController().ListarPorIdentificadorNota(identificadorNota)) == null)
+                {
+                    new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, "Nota Fiscal não encontrada no cadastro do Depósito Público");
+
+                    throw new Exception("Nota Fiscal não encontrada no cadastro do Depósito Público (" + identificadorNota + ")");
+                }
+            }
+            catch (Exception ex)
+            {
+                new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, "Ocorreu um erro ao consultar a Nota Fiscal: " + ex.Message);
+
+                throw new Exception("Ocorreu um erro ao consultar a Nota Fiscal (" + identificadorNota + "): " + ex.Message);
+            }
+
+            return nfe.FirstOrDefault();
         }
     }
 }

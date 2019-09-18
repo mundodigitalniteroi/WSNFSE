@@ -17,7 +17,7 @@ namespace NFSE.Business.Util
     {
         public string PostNfse(string uri, string json, string token)
         {
-            Thread.CurrentThread.CurrentCulture = new CultureInfo("pt-BR");
+            // Thread.CurrentThread.CurrentCulture = new CultureInfo("pt-BR");
 
             string base64String = Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes(token + ":" + ""));
 
@@ -58,9 +58,9 @@ namespace NFSE.Business.Util
         {
             HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(uri);
 
-            httpWebRequest.Method = "DELETE";
-
             string base64String = Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes(token + ":" + ""));
+
+            httpWebRequest.Method = "DELETE";
 
             httpWebRequest.Headers.Add("Authorization", "Basic " + base64String);
 
@@ -85,10 +85,9 @@ namespace NFSE.Business.Util
                     }
                 }
             }
-            catch (WebException)
+            catch (WebException ex)
             {
-                // return new StreamReader(ex.Response.GetResponseStream()).ReadToEnd();
-                throw;
+                return new StreamReader(ex.Response.GetResponseStream()).ReadToEnd();
             }
         }
 

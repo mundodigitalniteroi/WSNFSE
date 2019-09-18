@@ -35,10 +35,10 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entities\Autorizacao.cs" />
-    <Compile Include="Entities\Cancelamento.cs" />
-    <Compile Include="Entities\CapaAutorizacaoNfse.cs" />
-    <Compile Include="Entities\Consulta.cs" />
+    <Compile Include="Entities\NFe\Autorizacao.cs" />
+    <Compile Include="Entities\NFe\Cancelamento.cs" />
+    <Compile Include="Entities\NFe\CapaAutorizacaoNfse.cs" />
+    <Compile Include="Entities\NFe\Consulta.cs" />
     <Compile Include="Entities\DP\AtendimentoEntity.cs" />
     <Compile Include="Entities\DP\DepositoEntity.cs" />
     <Compile Include="Entities\Global\CepEntity.cs" />
@@ -49,19 +49,20 @@
     <Compile Include="Entities\DP\GrvEntity.cs" />
     <Compile Include="Entities\DP\RegraFaturamentoEntity.cs" />
     <Compile Include="Entities\DP\TipoRegraFaturamentoEntity.cs" />
-    <Compile Include="Entities\Endereco.cs" />
+    <Compile Include="Entities\NFe\Endereco.cs" />
     <Compile Include="Entities\Global\EnderecoCompletoEntity.cs" />
     <Compile Include="Entities\Global\EstadoEntity.cs" />
     <Compile Include="Entities\Global\MunicipioEntity.cs" />
     <Compile Include="Entities\NFe\NfeEntity.cs" />
     <Compile Include="Entities\NFe\NfeRetornoModel.cs" />
     <Compile Include="Entities\NFe\NfeMensagemEntity.cs" />
-    <Compile Include="Entities\Prestador.cs" />
-    <Compile Include="Entities\PrestadorAcesso.cs" />
+    <Compile Include="Entities\Global\ParametroMunicipioEntity.cs" />
+    <Compile Include="Entities\NFe\Prestador.cs" />
+    <Compile Include="Entities\NFe\PrestadorAcesso.cs" />
     <Compile Include="Entities\NFe\RetornoNotaFiscalEntity.cs" />
     <Compile Include="Entities\NFe\NfeWsErroModel.cs" />
-    <Compile Include="Entities\Servico.cs" />
-    <Compile Include="Entities\Tomador.cs" />
+    <Compile Include="Entities\NFe\Servico.cs" />
+    <Compile Include="Entities\NFe\Tomador.cs" />
     <Compile Include="Enum\Acao.cs" />
     <Compile Include="Enum\OrigemErro.cs" />
     <Compile Include="Enum\SystemEnvironment.cs" />
