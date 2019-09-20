@@ -104,20 +104,20 @@ namespace EnvioTeste
             #region Emissão da Nota Fiscal Eletrônica
             try
             {
-                var result = new NfeGerarNotaFiscalController().GerarNotaFiscal
-                (
-                    grvId: 543697, 
-                    usuarioId: 1, 
-                    isDev: true
-                );
+                //var result = new NfeGerarNotaFiscalController().GerarNotaFiscal
+                //(
+                //    grvId: 543698,
+                //    usuarioId: 1,
+                //    isDev: true
+                //);
 
-                foreach (var item in result)
-                {
-                    Console.WriteLine("JSON: " + item);
-                } 
+                //foreach (var item in result)
+                //{
+                //    Console.WriteLine("JSON: " + item);
+                //}
             }
             catch (Exception ex)
-            {     
+            {
                 Console.WriteLine("ERRO: " + ex.Message);
             }
             #endregion Emissão da Nota Fiscal Eletrônica
@@ -133,6 +133,15 @@ namespace EnvioTeste
                     Homologacao = true,
                     UsuarioId = 1
                 });
+
+                aux = new NfeReceberNotaFiscalController().ReceberNotaFiscal(new Consulta
+                {
+                    GrvId = 824684,
+                    IdentificadorNota = 708648,
+                    CnpjPrestador = "25329339000167",
+                    Homologacao = true,
+                    UsuarioId = 1
+                });
             }
             catch (Exception ex)
             {
@@ -144,7 +153,7 @@ namespace EnvioTeste
             {
                 var aux = new NfeCancelamentoController().CancelarNotaFiscal(new Cancelamento
                 {
-                    GrvId = 543697,
+                    GrvId = 824360,
                     IdentificadorNota = 700143,
                     CnpjPrestador = "16952840000194",
                     Justificativa = "TESTES",

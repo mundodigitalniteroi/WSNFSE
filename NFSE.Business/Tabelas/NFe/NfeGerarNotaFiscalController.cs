@@ -2,7 +2,6 @@
 using Newtonsoft.Json.Linq;
 using NFSE.Business.Tabelas.DP;
 using NFSE.Business.Tabelas.Global;
-using NFSE.Domain.Entities;
 using NFSE.Domain.Entities.DP;
 using NFSE.Domain.Entities.Global;
 using NFSE.Domain.Entities.NFe;
@@ -20,26 +19,42 @@ namespace NFSE.Business.Tabelas.NFe
         {
             DataBase.SystemEnvironment = isDev ? SystemEnvironment.Development : SystemEnvironment.Production;
 
-            // Thread.CurrentThread.CurrentCulture = new CultureInfo("pt-BR");
-
             DataBase.SetContextInfo(usuarioId);
 
             var acao = Acao.Solicitação;
 
             #region NFe
             var Nfe = new NfeEntity();
+            var NfeList = new List<NfeEntity>();
 
-            if ((Nfe = new NfeController().Selecionar(grvId)) != null)
+            // STATUS:
+            //   C: Cadastro;
+            //   A: Aguardando Processamento (envio da solicitação com sucesso, para a Prefeitura);
+            //   P: Processado (download da Nfe e atualização da Nfe no Sistema concluídos com sucesso);
+            //   E: Erro (quando a Prefeitura indicou algum problema);
+            //   R: Reprocessar (marcação manual para o envio de uma nova solicitação de Nfe para o mesmo GRV, esta opção gera um novo registro de Nfe);
+            //   S: Reprocessado (conclusão do reprocessamento);
+            //   I: Inválido (quando ocorreu um erro Mob-Link);
+            //   N: CaNcelado.
+
+            if ((NfeList = new NfeController().Listar(grvId)) != null)
             {
-                new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, null, OrigemErro.MobLink, acao, "GRV já possui Nota Fiscal cadastrada");
+                if (NfeList.Where(w => w.Status == 'C' || w.Status == 'C' || w.Status == 'C' || w.Status == 'C').Count() > 0)
+                {
+                    new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, null, OrigemErro.MobLink, acao, "GRV já possui Nota Fiscal cadastrada");
 
-                throw new Exception("GRV já possui Nota Fiscal cadastrada");
+                    throw new Exception("GRV já possui Nota Fiscal cadastrada");
+                }
             }
             #endregion NFe
 
             #region GRV
             var grv = new GrvController().Selecionar(grvId);
             #endregion Grv
+
+            #region Cliente
+            var Cliente = new ClienteController().Selecionar(grv.ClienteId);
+            #endregion Cliente
 
             #region Depósito
             var Deposito = new DepositoController().Selecionar(grv.DepositoId);
@@ -103,7 +118,6 @@ namespace NFSE.Business.Tabelas.NFe
 
                 throw new Exception("Composição do Faturamento não encontrado");
             }
-            #endregion Valores somados da Composição do Faturamento
 
             // TODO: Ver se devemos retirar as composições que não possuem CNAE nem ListaServico
             Composicoes = Composicoes.Where(w => w.CnaeId > 0 && w.ListaServicoId > 0).ToList();
@@ -114,6 +128,7 @@ namespace NFSE.Business.Tabelas.NFe
 
                 throw new Exception("Composição do Faturamento sem Cnae e Lista de Serviço cadastrado");
             }
+            #endregion Valores somados da Composição do Faturamento
 
             var CapaAutorizacaoNfse = new CapaAutorizacaoNfse();
 
@@ -141,16 +156,18 @@ namespace NFSE.Business.Tabelas.NFe
                 // Cadastro do Envio
                 Nfe = CadastrarEnvio(grvId, Empresa.Cnpj, 'E', CapaAutorizacaoNfse.IdentificadorNota, usuarioId);
 
+                Nfe.Cliente = Cliente.Nome;
+
+                Nfe.Deposito = Deposito.Descricao;
+
                 json = new NfeSolicitarEmissaoNotaFiscalController().SolicitarEmissaoNotaFiscal(CapaAutorizacaoNfse);
 
-                // Execuão do Web Service
-                try
+                // Execução do Web Service
+                if (!ProcessarResultado(json, usuarioId, Nfe, 'E'))
                 {
-                    ExecutarWebService(json, usuarioId, Nfe, 'E');
-                }
-                catch (Exception ex)
-                {
-                    continue;
+                    jsonList.Add(json);
+
+                    return jsonList;
                 }
 
                 jsonList.Add(json);
@@ -159,7 +176,7 @@ namespace NFSE.Business.Tabelas.NFe
             return jsonList;
         }
 
-        private void ExecutarWebService(string json, int usuarioId, NfeEntity nfe, char tipo)
+        private bool ProcessarResultado(string json, int usuarioId, NfeEntity nfe, char tipo)
         {
             try
             {
@@ -181,6 +198,8 @@ namespace NFSE.Business.Tabelas.NFe
                     nfe.Status = 'A';
 
                     new NfeController().AguardandoProcessamento(nfe);
+
+                    return true;
                 }
                 else
                 {
@@ -202,20 +221,15 @@ namespace NFSE.Business.Tabelas.NFe
                     retornoErro.ErroId = new NfeWsErroController().Cadastrar(retornoErro);
 
                     nfe.Status = 'E';
+
+                    new NfeController().Atualizar(nfe);
+
+                    return false;
                 }
             }
             catch (Exception)
             {
                 throw;
-            }
-
-            try
-            {
-                new NfeController().Atualizar(nfe);
-            }
-            catch (Exception ex)
-            {
-                // throw;
             }
         }
 
@@ -225,28 +239,18 @@ namespace NFSE.Business.Tabelas.NFe
 
             if (tipo.Equals('E'))
             {
-                try
+                Nfe.NfeId = new NfeController().Cadastrar(new NfeEntity
                 {
-                    Nfe.NfeId = new NfeController().Cadastrar(new NfeEntity
-                    {
-                        GrvId = grvId,
+                    GrvId = grvId,
 
-                        Cnpj = cnpj,
+                    Cnpj = cnpj,
 
-                        UsuarioCadastroId = usuarioId,
+                    UsuarioCadastroId = usuarioId,
 
-                        IdentificadorNota = identificadorNota
-                    });
-                }
-                catch (Exception ex)
-                {
-                    if (true)
-                    {
+                    IdentificadorNota = identificadorNota
+                });
 
-                    }
-                }
-
-                Nfe = new NfeController().Selecionar(grvId);
+                Nfe = new NfeController().ListarPorIdentificadorNota(identificadorNota).FirstOrDefault();
             }
             else
             {
@@ -379,14 +383,9 @@ namespace NFSE.Business.Tabelas.NFe
             #region Lista de Serviço
             ParametroMunicipioEntity ParametroMunicipio;
 
-            if ((ParametroMunicipio = new ParametroMunicipioController().Selecionar(new ParametroMunicipioEntity { CodigoCnae = composicao.Cnae.ToString(), CodigoMunicipioIbge = prestador.codigo_municipio })) == null)
+            if ((ParametroMunicipio = new ParametroMunicipioController().Selecionar(new ParametroMunicipioEntity { CodigoCnae = composicao.Cnae.ToString(), ItemListaServico = ListaServico.ListaServico.ToString(), CodigoMunicipioIbge = prestador.codigo_municipio })) == null)
             {
                 throw new Exception("Parâmetro do Município inexistente");
-            }
-
-            if (string.IsNullOrWhiteSpace(ListaServico.ListaServico))
-            {
-                throw new Exception("Lista de Serviço sem informação do Item da Lista de Serviço");
             }
             #endregion Lista de Serviço
 

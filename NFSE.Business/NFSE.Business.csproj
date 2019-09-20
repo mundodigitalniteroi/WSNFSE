@@ -35,6 +35,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Funcoes">
+      <HintPath>External\Funcoes.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -47,9 +50,14 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Tabelas\DP\ClienteController.cs" />
+    <Compile Include="Tabelas\DP\UsuarioController.cs" />
+    <Compile Include="Tabelas\NFe\NfeConfiguracaoImagemController.cs" />
+    <Compile Include="Tabelas\NFe\NfeImagemController.cs" />
+    <Compile Include="Tabelas\NFe\NfeRetornoSolicitacaoController.cs" />
     <Compile Include="Tabelas\NFe\NfeSolicitarEmissaoNotaFiscalController.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Tabelas\NFe\AutorizacaoNotaFiscal.cs" />
+    <Compile Include="Tabelas\NFe\AutorizacaoNotaFiscalController.cs" />
     <Compile Include="Tabelas\NFe\DetranController.cs" />
     <Compile Include="Tabelas\DP\AtendimentoController.cs" />
     <Compile Include="Tabelas\DP\DepositoController.cs" />
@@ -75,6 +83,7 @@
     <Compile Include="Tabelas\Global\ParametroMunicipioController.cs" />
     <Compile Include="Tabelas\NFe\PrestadorController.cs" />
     <Compile Include="Tabelas\NFe\NfeConfiguracao.cs" />
+    <Compile Include="Util\EmailController.cs" />
     <Compile Include="Util\Tools.cs" />
   </ItemGroup>
   <ItemGroup>

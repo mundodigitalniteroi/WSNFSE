@@ -174,18 +174,18 @@ namespace NFSE.Business.Util
                     Application.DoEvents();
                 }
 
-                Thread.Sleep(2500);
+                // Thread.Sleep(2500);
 
-                int width = 900;
+                int width = 1500;
 
-                int height = 1100; // webBrowser.Document.Body.ScrollRectangle.Height + 50;
+                int height = 1700; // webBrowser.Document.Body.ScrollRectangle.Height + 50;
 
                 webBrowser.Width = width;
                 webBrowser.Height = height;
 
                 Bitmap bitmap = new Bitmap(width, height);
 
-                webBrowser.DrawToBitmap(bitmap, new Rectangle(0, 0, width, height));
+                webBrowser.DrawToBitmap(bitmap, new Rectangle(0, 0, width, height));                
 
                 return bitmap;
             }

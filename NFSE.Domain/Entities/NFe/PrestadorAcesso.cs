@@ -14,12 +14,6 @@
 
         public string prestador_chave { get; set; }
 
-        public string item_lista_servico { get; set; }
-
-        public string codigo_tributario_municipio { get; set; }
-
-        public string codigo_cnae { get; set; }
-
         public string server { get; set; }
 
         public string _base { get; set; }

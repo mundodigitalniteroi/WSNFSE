@@ -1,6 +1,4 @@
-﻿using NFSE.Business.Tabelas.NFe;
-using NFSE.Domain.Entities;
-using NFSE.Domain.Entities.NFe;
+﻿using NFSE.Domain.Entities.NFe;
 using NFSE.Domain.Enum;
 using NFSE.Infra.Data;
 using System;
@@ -11,7 +9,7 @@ namespace NFSE.Business.Tabelas.NFe
 {
     public class PrestadorController
     {
-        public DataTable Consultar(string cnpj, CapaAutorizacaoNfse capaAutorizacaoNfse = null)
+        public DataTable Consultar(string cnpj)
         {
             var SQL = new StringBuilder();
 
@@ -20,27 +18,11 @@ namespace NFSE.Business.Tabelas.NFe
             SQL.AppendLine("      ,a.prestador_nome");
             SQL.AppendLine("      ,a.prestador_inscricao_municipal");
             SQL.AppendLine("      ,a.prestador_codigo_municipio_ibge");
-            SQL.AppendLine("      ,a.prestador_codigo_municipio_ibge");
             SQL.AppendLine("      ,a.prestador_chave");
             SQL.AppendLine("      ,a.prestador_data_cadastro");
-            SQL.AppendLine("      ,b.item_lista_servico");
-            SQL.AppendLine("      ,b.codigo_tributario_municipio");
-            SQL.AppendLine("      ,b.codigo_cnae");
             SQL.AppendLine("  FROM " + DataBase.GetNfeDatabase() + ".dbo.tb_nfse_prestador a");
-            SQL.AppendLine("  LEFT JOIN " + DataBase.GetNfeDatabase() + ".dbo.tb_nfse_parametro_municipio b");
-            SQL.AppendLine("    ON b.codigo_ibge = a.prestador_codigo_municipio_ibge");
-
-            if (capaAutorizacaoNfse != null)
-            {
-                SQL.AppendLine("   AND b.item_lista_servico = '" + capaAutorizacaoNfse.Autorizacao.servico.item_lista_servico + "'");
-            }
 
             SQL.AppendLine(" WHERE a.prestador_cnpj = '" + cnpj + "'");
-
-            if (capaAutorizacaoNfse != null)
-            {
-                SQL.AppendLine("   AND a.prestador_codigo_municipio_ibge = '" + capaAutorizacaoNfse.Autorizacao.prestador.codigo_municipio + "'");
-            }
 
             return DataBase.Select(SQL);
         }
@@ -66,7 +48,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             try
             {
-                using (var dtPrestador = new PrestadorController().Consultar(cnpj, capaAutorizacaoNfse))
+                using (var dtPrestador = new PrestadorController().Consultar(cnpj))
                 {
                     if (dtPrestador == null)
                     {
@@ -83,9 +65,6 @@ namespace NFSE.Business.Tabelas.NFe
                         prestadorAcesso.prestador_inscricao_municipal = row["prestador_inscricao_municipal"].ToString();
                         prestadorAcesso.prestador_codigo_municipio_ibge = row["prestador_codigo_municipio_ibge"].ToString();
                         prestadorAcesso.prestador_chave = row["prestador_chave"].ToString();
-                        prestadorAcesso.item_lista_servico = row["item_lista_servico"].ToString();
-                        prestadorAcesso.codigo_tributario_municipio = row["codigo_tributario_municipio"].ToString();
-                        prestadorAcesso.codigo_cnae = row["codigo_cnae"].ToString();
                     }
                 }
             }

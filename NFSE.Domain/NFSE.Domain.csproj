@@ -35,7 +35,10 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\DP\ClienteEntity.cs" />
+    <Compile Include="Entities\DP\UsuarioEntity.cs" />
     <Compile Include="Entities\NFe\Autorizacao.cs" />
+    <Compile Include="Entities\NFe\NfeRetornoSolicitacaoEntity.cs" />
     <Compile Include="Entities\NFe\Cancelamento.cs" />
     <Compile Include="Entities\NFe\CapaAutorizacaoNfse.cs" />
     <Compile Include="Entities\NFe\Consulta.cs" />
@@ -53,6 +56,8 @@
     <Compile Include="Entities\Global\EnderecoCompletoEntity.cs" />
     <Compile Include="Entities\Global\EstadoEntity.cs" />
     <Compile Include="Entities\Global\MunicipioEntity.cs" />
+    <Compile Include="Entities\NFe\Erros.cs" />
+    <Compile Include="Entities\NFe\NfeConfiguracaoImagemEntity.cs" />
     <Compile Include="Entities\NFe\NfeEntity.cs" />
     <Compile Include="Entities\NFe\NfeRetornoModel.cs" />
     <Compile Include="Entities\NFe\NfeMensagemEntity.cs" />
@@ -63,6 +68,7 @@
     <Compile Include="Entities\NFe\NfeWsErroModel.cs" />
     <Compile Include="Entities\NFe\Servico.cs" />
     <Compile Include="Entities\NFe\Tomador.cs" />
+    <Compile Include="Entities\Util\EmailConfiguration.cs" />
     <Compile Include="Enum\Acao.cs" />
     <Compile Include="Enum\OrigemErro.cs" />
     <Compile Include="Enum\SystemEnvironment.cs" />

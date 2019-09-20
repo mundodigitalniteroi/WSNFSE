@@ -126,6 +126,31 @@ namespace NFSE.Business.Tabelas.NFe
             return DataBase.Execute(SQL);
         }
 
+        public int AtualizarRetornoNotaFiscal(int nfeId, RetornoNotaFiscalEntity retornoNotaFiscal)
+        {
+            var SQL = new StringBuilder();
+
+            SQL.AppendLine("UPDATE dbo.tb_dep_nfe");
+
+            SQL.AppendLine("   SET Status = 'P'");
+
+            SQL.AppendLine("      ,Numero = '" + retornoNotaFiscal.numero_rps + "'");
+
+            SQL.AppendLine("      ,CodigoVerificacao = '" + retornoNotaFiscal.codigo_verificacao.Trim() + "'");
+
+            SQL.AppendLine("      ,DataEmissao = '" + retornoNotaFiscal.data_emissao.ToString("yyyyMMdd HH:mm:ss") + "'");
+
+            SQL.AppendLine("      ,StatusNfe = '" + retornoNotaFiscal.status + "'");
+
+            SQL.AppendLine("      ,Url = '" + retornoNotaFiscal.url + "'");
+
+            SQL.AppendLine("      ,DataAlteracao = GETDATE()");
+
+            SQL.AppendLine(" WHERE NfeID = " + nfeId);
+
+            return DataBase.Execute(SQL);
+        }
+
         public int AguardandoProcessamento(NfeEntity model)
         {
             var SQL = new StringBuilder();
@@ -136,7 +161,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             if (model.CodigoRetorno != null && model.CodigoRetorno > 0)
             {
-                SQL.AppendLine("       ,CodigoRetorno = " + model.CodigoRetorno);
+                SQL.AppendLine("      ,CodigoRetorno = " + model.CodigoRetorno);
             }
 
             SQL.AppendLine("      ,DataAlteracao = GETDATE()");

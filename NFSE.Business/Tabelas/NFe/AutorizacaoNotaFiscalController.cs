@@ -7,49 +7,8 @@ using System.Text;
 
 namespace NFSE.Business.Tabelas.NFe
 {
-    public class AutorizacaoNotaFiscal
+    public class AutorizacaoNotaFiscalController
     {
-        public DataTable Consultar(int referencia)
-        {
-            var SQL = new StringBuilder();
-
-            SQL.AppendLine("SELECT id_autorizacao_nf");
-            SQL.AppendLine("      ,id_grv");
-            SQL.AppendLine("      ,id_nfse_prestador");
-            SQL.AppendLine("      ,id_usuario");
-            SQL.AppendLine("      ,referencia_externa");
-            SQL.AppendLine("      ,flag_ambiente");
-            SQL.AppendLine("      ,data_emissao");
-            SQL.AppendLine("      ,natureza_operacao");
-            SQL.AppendLine("      ,optante_simples_nacional");
-            SQL.AppendLine("      ,tomador_cpf_cnpj");
-            SQL.AppendLine("      ,tomador_cnpj");
-            SQL.AppendLine("      ,tomador_nome_razao_social");
-            SQL.AppendLine("      ,tomador_telefone");
-            SQL.AppendLine("      ,tomador_email");
-            SQL.AppendLine("      ,tomador_endereco_logradouro");
-            SQL.AppendLine("      ,tomador_endereco_numero");
-            SQL.AppendLine("      ,tomador_endereco_complemento");
-            SQL.AppendLine("      ,tomador_endereco_bairro");
-            SQL.AppendLine("      ,tomador_endereco_codigo_municipio");
-            SQL.AppendLine("      ,tomador_endereco_uf");
-            SQL.AppendLine("      ,tomador_endereco_cep");
-            SQL.AppendLine("      ,servico_aliquota");
-            SQL.AppendLine("      ,servico_discriminacao");
-            SQL.AppendLine("      ,servico_iss_retido");
-            SQL.AppendLine("      ,servico_valor_iss");
-            SQL.AppendLine("      ,servico_codigo_cnae");
-            SQL.AppendLine("      ,servico_item_lista_servico");
-            SQL.AppendLine("      ,servico_valor_servicos");
-            SQL.AppendLine("      ,resposta_envio");
-
-            SQL.AppendLine("  FROM " + DataBase.GetNfeDatabase() + ".dbo.tb_nfse_autorizacao_dp_nf");
-
-            SQL.AppendLine(" WHERE referencia_externa = " + referencia);
-
-            return DataBase.Select(SQL);
-        }
-
         public int Cadastrar(PrestadorServico prestadorAcesso, CapaAutorizacaoNfse capaAutorizacaoNfse, string resposta)
         {
             var SQL = new StringBuilder();
@@ -87,7 +46,7 @@ namespace NFSE.Business.Tabelas.NFe
             SQL.AppendLine("VALUES");
 
             SQL.AppendLine("      ('" + capaAutorizacaoNfse.IdentificadorNota + "'");
-            SQL.AppendLine("      ,@resposta_envio"); // '" + resposta + "'");
+            SQL.AppendLine("      ,@resposta_envio");
             SQL.AppendLine("      ," + prestadorAcesso.id_nfse_prestador);
             SQL.AppendLine("      ," + capaAutorizacaoNfse.UsuarioId);
             SQL.AppendLine("      ,'" + Convert.ToInt32(capaAutorizacaoNfse.Homologacao) + "'");

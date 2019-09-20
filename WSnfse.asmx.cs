@@ -1,5 +1,7 @@
 ﻿using NFSE.Business.Tabelas.NFe;
+using NFSE.Business.Util;
 using NFSE.Domain.Entities.NFe;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Web.Services;
@@ -16,25 +18,61 @@ namespace NFSE
         [WebMethod]
         public string SolicitarEmissaoNotaFiscal(CapaAutorizacaoNfse model)
         {
-            return new NfeSolicitarEmissaoNotaFiscalController().SolicitarEmissaoNotaFiscal(model);
+            try
+            {
+                return new NfeSolicitarEmissaoNotaFiscalController().SolicitarEmissaoNotaFiscal(model);
+            }
+            catch (Exception ex)
+            {
+                new EmailController().Enviar(ex.Message, model.Homologacao);
+
+                throw new Exception(ex.Message);
+            }
         }
 
         [WebMethod]
         public RetornoNotaFiscalEntity ReceberNotaFiscal(Consulta model)
         {
-            return new NfeReceberNotaFiscalController().ReceberNotaFiscal(model);
+            try
+            {
+                return new NfeReceberNotaFiscalController().ReceberNotaFiscal(model);
+            }
+            catch (Exception ex)
+            {
+                new EmailController().Enviar(ex.Message, model.Homologacao);
+
+                throw new Exception(ex.Message);
+            }
         }
 
         [WebMethod]
         public string CancelarNotaFiscal(Cancelamento model)
         {
-            return new NfeCancelamentoController().CancelarNotaFiscal(model);
+            try
+            {
+                return new NfeCancelamentoController().CancelarNotaFiscal(model);
+            }
+            catch (Exception ex)
+            {
+                new EmailController().Enviar(ex.Message, model.Homologacao);
+
+                throw new Exception(ex.Message);
+            }
         }
 
         [WebMethod]
         public List<string> GerarNotaFiscal(int grvId, int usuarioId, bool isDev)
         {
-            return new NfeGerarNotaFiscalController().GerarNotaFiscal(grvId, usuarioId, isDev);
+            try
+            {
+                return new NfeGerarNotaFiscalController().GerarNotaFiscal(grvId, usuarioId, isDev);
+            }
+            catch (Exception ex)
+            {
+                new EmailController().Enviar(ex.Message, isDev);
+
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

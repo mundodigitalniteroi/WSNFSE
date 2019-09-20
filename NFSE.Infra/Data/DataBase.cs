@@ -180,7 +180,7 @@ namespace NFSE.Infra.Data
                 ConnectDataBase();
             }
 
-            return ConnectionFactory.Execute(SQL, parameters);
+            return ConnectionFactory.ExecuteScopeIdentity(SQL, parameters);
         }
 
         public static int ExecuteScopeIdentity(StringBuilder SQL, SqlParameter[] parameters)
@@ -208,5 +208,94 @@ namespace NFSE.Infra.Data
 
             ConnectionFactory.SetContextInfo(usuarioId.ToString());
         }
+
+        #region Set NULL if empty
+        public static string SetNullIfEmpty(char input)
+        {
+            if (input == '\0')
+            {
+                return "NULL";
+            }
+            else
+            {
+                return "'" + input + "'";
+            }
+        }
+
+        public static string SetNullIfEmpty(DateTime inputDateTime, string outputDateTimeFormat = "yyyyMMdd HH:mm")
+        {
+            if (inputDateTime == DateTime.MinValue)
+            {
+                return "NULL";
+            }
+            else
+            {
+                return "'" + String.Format("{0:" + outputDateTimeFormat + "}", inputDateTime) + "'";
+            }
+        }
+
+        public static string SetNullIfEmpty(DateTime? inputDateTime, string outputDateTimeFormat = "yyyyMMdd HH:mm")
+        {
+            if (inputDateTime == null)
+            {
+                return "NULL";
+            }
+            else
+            {
+                return "'" + String.Format("{0:" + outputDateTimeFormat + "}", inputDateTime) + "'";
+            }
+        }
+
+        public static string SetNullIfEmpty(decimal input)
+        {
+            return (input == 0 ? "NULL" : input.ToString());
+        }
+
+        public static string SetNullIfEmpty(double input)
+        {
+            return (input == 0 ? "NULL" : input.ToString());
+        }
+
+        public static string SetNullIfEmpty(int input)
+        {
+            return (input == 0 ? "NULL" : input.ToString());
+        }
+
+        public static string SetNullIfEmpty(short input)
+        {
+            return (input == 0 ? "NULL" : input.ToString());
+        }
+
+        public static string SetNullIfEmpty(string input)
+        {
+            if (input == null) return "NULL";
+
+            return (String.IsNullOrWhiteSpace(input) ? "NULL" : "'" + input + "'");
+        }
+
+        public static string SetNullIfEmpty(string input, string compareValue)
+        {
+            if (input == null) return "NULL";
+
+            return (String.IsNullOrWhiteSpace(compareValue) ? "NULL" : "'" + input + "'");
+        }
+
+        public static string SetNullIfEmpty(int input, string compareValue)
+        {
+            return (String.IsNullOrWhiteSpace(compareValue) ? "NULL" : input.ToString());
+        }
+
+        public static string SetNullIfEmpty(string input, int compareValue)
+        {
+            if (input == null) return "NULL";
+
+            return (compareValue == 0 ? "NULL" : "'" + input + "'");
+        }
+
+        public static string SetNullIfEmpty(int input, int compareValue)
+        {
+            return (compareValue == 0 ? "NULL" : input.ToString());
+        }
+        #endregion Set NULL if empty
     }
 }

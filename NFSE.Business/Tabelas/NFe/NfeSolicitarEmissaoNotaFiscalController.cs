@@ -18,10 +18,6 @@ namespace NFSE.Business.Tabelas.NFe
 
             string uri = prestadorAcesso.server + "?ref=" + model.IdentificadorNota;
 
-            //model.Autorizacao.servico.codigo_tributario_municipio = !prestadorAcesso.codigo_tributario_municipio.Equals(string.Empty) ? prestadorAcesso.codigo_tributario_municipio : null;
-            //model.Autorizacao.servico.item_lista_servico = prestadorAcesso.item_lista_servico;
-            //model.Autorizacao.servico.codigo_cnae = prestadorAcesso.codigo_cnae;
-
             var tools = new Tools();
 
             string json = tools.ObjToJSON(model.Autorizacao);
@@ -41,7 +37,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             try
             {
-                new AutorizacaoNotaFiscal().Cadastrar(prestadorAcesso, model, resposta);
+                new NfeRetornoSolicitacaoController().Cadastrar(nfe, prestadorAcesso, model, resposta);
             }
             catch (Exception ex)
             {
