@@ -39,7 +39,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             if ((NfeList = new NfeController().Listar(grvId)) != null)
             {
-                if (NfeList.Where(w => w.Status == 'C' || w.Status == 'C' || w.Status == 'C' || w.Status == 'C').Count() > 0)
+                if (NfeList.Where(w => w.Status == 'C' || w.Status == 'A' || w.Status == 'P' || w.Status == 'R' || w.Status == 'S').Count() > 0)
                 {
                     new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, null, OrigemErro.MobLink, acao, "GRV já possui Nota Fiscal cadastrada");
 
@@ -281,7 +281,7 @@ namespace NFSE.Business.Tabelas.NFe
 
                 optante_simples_nacional = "false",
 
-                prestador = Prestador(empresa),
+                prestador = Prestador(empresa, composicao.FlagEnviarInscricaoEstadual),
 
                 tomador = Tomador(grv, deposito, atendimento)
             };
@@ -291,11 +291,13 @@ namespace NFSE.Business.Tabelas.NFe
             return Autorizacao;
         }
 
-        private Prestador Prestador(EmpresaEntity empresa)
+        private Prestador Prestador(EmpresaEntity empresa, char flagEnviarInscricaoEstadual)
         {
             return new Prestador
             {
                 cnpj = empresa.Cnpj,
+
+                inscricao_estadual = flagEnviarInscricaoEstadual == 'S' ? empresa.InscricaoEstadual : string.Empty,
 
                 inscricao_municipal = empresa.InscricaoMunicipal,
 

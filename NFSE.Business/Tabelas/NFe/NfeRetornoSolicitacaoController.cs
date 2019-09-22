@@ -153,7 +153,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             var sqlParameters = new SqlParameter[1];
 
-            sqlParameters[0] = new SqlParameter("@resposta_envio", SqlDbType.VarChar)
+            sqlParameters[0] = new SqlParameter("@RespostaEnvio", SqlDbType.VarChar)
             {
                 Value = resposta
             };

@@ -20,6 +20,8 @@
 
         public char FlagEnviarValorIss { get; set; }
 
+        public char FlagEnviarInscricaoEstadual { get; set; }
+
         public decimal TotalComDesconto { get; set; }
     }
 }

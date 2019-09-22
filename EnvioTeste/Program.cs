@@ -1,4 +1,5 @@
-﻿using NFSE.Business.Tabelas.NFe;
+﻿using NFSE.Business.Tabelas.DP;
+using NFSE.Business.Tabelas.NFe;
 using NFSE.Domain.Entities.NFe;
 using System;
 
@@ -76,7 +77,7 @@ namespace EnvioTeste
             //    Console.WriteLine("ERRO: " + ex.Message);
             //}
 
-            
+
             #region Emissão da Nota Fiscal Eletrônica
             try
             {
@@ -99,22 +100,50 @@ namespace EnvioTeste
             }
             #endregion Emissão da Nota Fiscal Eletrônica
 
+            int[] lista = 
+            {
+                599219,
+                822930,
+                823570,
+                823780,
+                824164,
+                824270
+            };
 
 
             #region Emissão da Nota Fiscal Eletrônica
             try
             {
-                //var result = new NfeGerarNotaFiscalController().GerarNotaFiscal
-                //(
-                //    grvId: 543698,
-                //    usuarioId: 1,
-                //    isDev: true
-                //);
-
-                //foreach (var item in result)
+                //foreach (var grvId in lista)
                 //{
-                //    Console.WriteLine("JSON: " + item);
+                //    var result = new NfeGerarNotaFiscalController().GerarNotaFiscal
+                //    (
+                //        grvId: grvId,
+                //        usuarioId: 1,
+                //        isDev: false
+                //    );
+
+                //    foreach (var item in result)
+                //    {
+                //        Console.WriteLine("JSON: " + item);
+                //    }
                 //}
+
+                var grv = new GrvController().Selecionar("14059590");
+
+                int grvId = grv.GrvId;
+
+                var result = new NfeGerarNotaFiscalController().GerarNotaFiscal
+                (
+                    grvId: grv.GrvId,
+                    usuarioId: 1,
+                    isDev: true
+                );
+
+                foreach (var item in result)
+                {
+                    Console.WriteLine("JSON: " + item);
+                }
             }
             catch (Exception ex)
             {
@@ -127,19 +156,19 @@ namespace EnvioTeste
             {
                 var aux = new NfeReceberNotaFiscalController().ReceberNotaFiscal(new Consulta
                 {
-                    GrvId = 543697,
-                    IdentificadorNota = 700155,
-                    CnpjPrestador = "16952840000194",
-                    Homologacao = true,
+                    GrvId = 823578,
+                    IdentificadorNota = 708677,
+                    CnpjPrestador = "25329339000248",
+                    Homologacao = false,
                     UsuarioId = 1
                 });
 
                 aux = new NfeReceberNotaFiscalController().ReceberNotaFiscal(new Consulta
                 {
-                    GrvId = 824684,
-                    IdentificadorNota = 708648,
-                    CnpjPrestador = "25329339000167",
-                    Homologacao = true,
+                    GrvId = 823578,
+                    IdentificadorNota = 708678,
+                    CnpjPrestador = "25329339000248",
+                    Homologacao = false,
                     UsuarioId = 1
                 });
             }

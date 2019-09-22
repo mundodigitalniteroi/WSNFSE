@@ -32,6 +32,8 @@ namespace NFSE.Business.Tabelas.DP
 
             SQL.AppendLine("      ,vw_faturamento_associado_cnae.FlagEnviarValorIss");
 
+            SQL.AppendLine("      ,vw_faturamento_associado_cnae.FlagEnviarInscricaoEstadual");
+
             SQL.AppendLine("  FROM dbo.vw_faturamento_associado_cnae");
 
             SQL.AppendLine(" WHERE vw_faturamento_associado_cnae.GrvId = " + grvId);

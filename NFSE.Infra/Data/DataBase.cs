@@ -11,25 +11,11 @@ namespace NFSE.Infra.Data
 {
     public class DataBase
     {
-        private static SystemEnvironment databaseEnvironment;
-
-        public static SystemEnvironment SystemEnvironment
-        {
-            get
-            {
-                return SystemEnvironment;
-            }
-            set
-            {
-                databaseEnvironment = value;
-
-                SetConnectionString();
-            }
-        }
+        public static SystemEnvironment SystemEnvironment { get; set; } = SystemEnvironment.Development;
 
         public static string GetNfeDatabase()
         {
-            if (databaseEnvironment == SystemEnvironment.Development)
+            if (SystemEnvironment == SystemEnvironment.Development)
             {
                 return "db_NfseDev";
             }
@@ -42,18 +28,23 @@ namespace NFSE.Infra.Data
         #region Set Connection String
         private static void SetConnectionString()
         {
-            if (databaseEnvironment == SystemEnvironment.Development)
+            if (SystemEnvironment == SystemEnvironment.Development)
             {
                 ConnectionFactory.connectionString = ConfigurationManager.ConnectionStrings["ConnectionStringDev"].ConnectionString;
             }
-            else if (databaseEnvironment == SystemEnvironment.Production)
+            else if (SystemEnvironment == SystemEnvironment.Production)
             {
                 ConnectionFactory.connectionString = ConfigurationManager.ConnectionStrings["ConnectionStringProd"].ConnectionString;
             }
         }
         #endregion Set Connection String
 
-        public static void ConnectDataBase() => ConnectionFactory.ConnectDataBase();
+        public static void ConnectDataBase()
+        {
+            SetConnectionString();
+
+            ConnectionFactory.ConnectDataBase();
+        }
 
         public static void DisconnectDataBase() => ConnectionFactory.DisconnectDataBase();
 
@@ -75,6 +66,8 @@ namespace NFSE.Infra.Data
         {
             Debug.WriteLine(SQL.Trim() + Environment.NewLine + "GO" + Environment.NewLine);
 
+            SetConnectionString();
+
             return ConnectionFactory.Consultar(SQL.ToString());
         }
 
@@ -86,6 +79,8 @@ namespace NFSE.Infra.Data
         public static DataTable Select(string SQL, SqlParameter[] parameters)
         {
             Debug.WriteLine(SQL.Trim() + Environment.NewLine + "GO" + Environment.NewLine);
+
+            SetConnectionString();
 
             return ConnectionFactory.Select(SQL, parameters);
         }

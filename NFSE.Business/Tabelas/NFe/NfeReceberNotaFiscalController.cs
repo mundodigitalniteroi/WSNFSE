@@ -1,5 +1,6 @@
 ﻿using NFSE.Business.Tabelas.DP;
 using NFSE.Business.Util;
+using NFSE.Domain.Entities.DP;
 using NFSE.Domain.Entities.NFe;
 using NFSE.Domain.Enum;
 using NFSE.Infra.Data;
@@ -24,22 +25,6 @@ namespace NFSE.Business.Tabelas.NFe
 
             var grv = new GrvController().Selecionar(model.GrvId);
 
-            NfeConfiguracaoImagemEntity configuracaoImagem;
-
-            if ((configuracaoImagem = new NfeConfiguracaoImagemController().Selecionar(grv.ClienteId, grv.DepositoId)) == null)
-            {
-                new NfeWsErroController().CadastrarErroGenerico(nfe.GrvId, model.UsuarioId, nfe.IdentificadorNota.Value, OrigemErro.WebService, Acao.Retorno, "Configuração de imagem não cadastrado para o Depósito: " + grv.DepositoId);
-
-                throw new Exception("Configuração de imagem não cadastrado para o Depósito: " + grv.DepositoId);
-            }
-
-            if (configuracaoImagem.ValueX == 0 && configuracaoImagem.ValueY == 0 && configuracaoImagem.Width == 0 && configuracaoImagem.Height == 0)
-            {
-                new NfeWsErroController().CadastrarErroGenerico(nfe.GrvId, model.UsuarioId, nfe.IdentificadorNota.Value, OrigemErro.WebService, Acao.Retorno, "Configuração de imagem cadastrado mas não configurado para o Depósito: " + grv.DepositoId);
-
-                throw new Exception("Configuração de imagem cadastrado mas não configurado para o Depósito: " + grv.DepositoId);
-            }
-
             model.NfeId = nfe.NfeId;
 
             var prestadorAcesso = new PrestadorController().ConsultarPrestadorServico(model.GrvId, model.UsuarioId, model.CnpjPrestador, Acao.Retorno, nfe);
@@ -61,7 +46,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             try
             {
-                return ProcessarRetorno(nfe, model, nfse, configuracaoImagem);
+                return ProcessarRetorno(grv, nfe, model, nfse);
             }
             catch (Exception ex)
             {
@@ -73,7 +58,7 @@ namespace NFSE.Business.Tabelas.NFe
             }
         }
 
-        private RetornoNotaFiscalEntity ProcessarRetorno(NfeEntity nfe, Consulta notaFiscalRecebida, string retorno, NfeConfiguracaoImagemEntity configuracaoImagem)
+        private RetornoNotaFiscalEntity ProcessarRetorno(GrvEntity grv, NfeEntity nfe, Consulta notaFiscalRecebida, string retorno)
         {
             var retornoConsulta = new JavaScriptSerializer()
             {
@@ -121,6 +106,22 @@ namespace NFSE.Business.Tabelas.NFe
                 new NfeController().Atualizar(nfe);
 
                 return retornoConsulta;
+            }
+
+            NfeConfiguracaoImagemEntity configuracaoImagem;
+
+            if ((configuracaoImagem = new NfeConfiguracaoImagemController().Selecionar(grv.ClienteId, grv.DepositoId)) == null)
+            {
+                new NfeWsErroController().CadastrarErroGenerico(nfe.GrvId, notaFiscalRecebida.UsuarioId, nfe.IdentificadorNota.Value, OrigemErro.WebService, Acao.Retorno, "Configuração de imagem não cadastrado para o Depósito: " + grv.DepositoId);
+
+                throw new Exception("Configuração de imagem não cadastrado para o Depósito: " + grv.DepositoId);
+            }
+
+            if (configuracaoImagem.ValueX == 0 && configuracaoImagem.ValueY == 0 && configuracaoImagem.Width == 0 && configuracaoImagem.Height == 0)
+            {
+                new NfeWsErroController().CadastrarErroGenerico(nfe.GrvId, notaFiscalRecebida.UsuarioId, nfe.IdentificadorNota.Value, OrigemErro.WebService, Acao.Retorno, "Configuração de imagem cadastrado mas não configurado para o Depósito: " + grv.DepositoId);
+
+                throw new Exception("Configuração de imagem cadastrado mas não configurado para o Depósito: " + grv.DepositoId);
             }
 
             var notaFiscal = new NfeRetornoModel

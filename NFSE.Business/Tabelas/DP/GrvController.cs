@@ -8,7 +8,7 @@ namespace NFSE.Business.Tabelas.DP
 {
     public class GrvController
     {
-        public List<GrvEntity> Listar(int id)
+        public List<GrvEntity> Listar(GrvEntity model)
         {
             var SQL = new StringBuilder();
 
@@ -146,7 +146,14 @@ namespace NFSE.Business.Tabelas.DP
 
             SQL.AppendLine("  FROM dbo.tb_dep_grv");
 
-            SQL.AppendLine(" WHERE tb_dep_grv.id_grv = " + id);
+            if (model.GrvId > 0)
+            {
+                SQL.AppendLine(" WHERE tb_dep_grv.id_grv = " + model.GrvId);
+            }
+            else
+            {
+                SQL.AppendLine(" WHERE tb_dep_grv.numero_formulario_grv = '" + model.NumeroFormularioGrv + "'");
+            }
 
             using (var dataTable = DataBase.Select(SQL))
             {
@@ -154,9 +161,16 @@ namespace NFSE.Business.Tabelas.DP
             }
         }
 
-        public GrvEntity Selecionar(int id)
+        public GrvEntity Selecionar(int grvId)
         {
-            var list = Listar(id);
+            var list = Listar(new GrvEntity { GrvId = grvId } );
+
+            return list?.FirstOrDefault();
+        }
+
+        public GrvEntity Selecionar(string numeroFormularioGrv)
+        {
+            var list = Listar(new GrvEntity { NumeroFormularioGrv = numeroFormularioGrv });
 
             return list?.FirstOrDefault();
         }

@@ -1,7 +1,9 @@
-﻿using NFSE.Business.Util;
+﻿using Newtonsoft.Json.Linq;
+using NFSE.Business.Util;
 using NFSE.Domain.Entities.NFe;
 using NFSE.Domain.Enum;
 using NFSE.Infra.Data;
+using JsonUtil;
 using System;
 
 namespace NFSE.Business.Tabelas.NFe
@@ -20,7 +22,18 @@ namespace NFSE.Business.Tabelas.NFe
 
             var tools = new Tools();
 
+            var jsonUtil = new JsonUtil.JsonUtil();
+
             string json = tools.ObjToJSON(model.Autorizacao);
+
+            if (string.IsNullOrWhiteSpace(model.Autorizacao.tomador.cnpj))
+            {
+                json = jsonUtil.RemoveElement(json, "tomador", "cnpj");
+            }
+            else
+            {
+                json = jsonUtil.RemoveElement(json, "tomador", "cpf");
+            }
 
             string resposta;
 
