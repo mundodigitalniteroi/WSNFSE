@@ -26,6 +26,8 @@ namespace NFSE.Business.Tabelas.DP
 
             SQL.AppendLine("      ,vw_faturamento_associado_cnae.Servico");
 
+            SQL.AppendLine("      ,vw_faturamento_associado_cnae.ServicoAssociadoDescricao");
+
             SQL.AppendLine("      ,vw_faturamento_associado_cnae.DescricaoConfiguracaoNfe");
 
             SQL.AppendLine("      ,vw_faturamento_associado_cnae.TotalComDesconto");

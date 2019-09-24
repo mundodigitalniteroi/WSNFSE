@@ -100,50 +100,74 @@ namespace EnvioTeste
             }
             #endregion Emissão da Nota Fiscal Eletrônica
 
-            int[] lista = 
+            int[] lista =
             {
-                599219,
-                822930,
-                823570,
-                823780,
-                824164,
-                824270
+                822988, 822991, 823001,
+                823003, 823004, 823007, 823009, 823011, 823012, 823013, 823015, 823027, 823028,
+                823029, 823031, 823032, 823033, 823037, 823049, 823050, 823053, 823054, 823082,
+                823083, 823085, 823087, 823090, 823096, 823544, 823545, 823546, 823566, 823567,
+                823569, 823571, 823589, 823596, 823602, 823604, 823605, 823606, 823608, 823617,
+                823618, 823623, 823625, 823629, 823641, 823649, 823657, 823672, 823695, 823706,
+                823710, 823713, 823714, 823715, 823721, 823735, 823736, 823740, 823742, 823744,
+                823745, 823752, 823756, 823758, 823759, 823760, 823767, 823775, 823776, 823777,
+                823781, 823789, 823793, 823796, 823828, 823831, 823832, 823833, 823837, 823838,
+                823880, 823919, 823920, 823928, 823930, 823933, 823935, 823936, 823939, 823942,
+                823944, 823947, 823949, 823950, 823956, 823966, 824173, 824175, 824177, 824178,
+                824180, 824183, 824187, 824189, 824191, 824223, 824235, 824236, 824237, 824238,
+                824241, 824242, 824247, 824248, 824249, 824253, 824254, 824255, 824257, 824259,
+                824260, 824264, 824265, 824281, 824282, 824283, 824284, 824287, 824328, 824329,
+                824330, 824331, 824332, 824334, 824335, 824345, 824346, 824348, 824351, 824353,
+                824354, 824357, 824358, 824360, 824361, 824365, 824366, 824367, 824378, 824382,
+                824383, 824384, 824391, 824392, 824407, 824408, 824409, 824414, 824415, 824416,
+                824456, 824457, 824464, 824468, 824488, 824494, 824667, 824668, 824670, 824672,
+                824680, 824681, 824682, 824684, 824690, 824691, 824695, 824698, 824700, 824701,
+                824702
             };
 
-
             #region Emissão da Nota Fiscal Eletrônica
+            foreach (var grvId in lista)
+            {
+                Console.WriteLine("GRV ID: " + grvId);
+
+                try
+                {
+                    var result = new NfeGerarNotaFiscalController().GerarNotaFiscal
+                    (
+                        grvId: grvId,
+                        usuarioId: 1,
+                        isDev: false
+                    );
+
+                    foreach (var item in result)
+                    {
+                        Console.WriteLine("JSON: " + item);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("ERRO: " + ex.Message);
+                }
+            }
+
+
+
             try
             {
-                //foreach (var grvId in lista)
+                //var grv = new GrvController().Selecionar("14059590");
+
+                //int grvId = grv.GrvId;
+
+                //var result = new NfeGerarNotaFiscalController().GerarNotaFiscal
+                //(
+                //    grvId: grv.GrvId,
+                //    usuarioId: 1,
+                //    isDev: true
+                //);
+
+                //foreach (var item in result)
                 //{
-                //    var result = new NfeGerarNotaFiscalController().GerarNotaFiscal
-                //    (
-                //        grvId: grvId,
-                //        usuarioId: 1,
-                //        isDev: false
-                //    );
-
-                //    foreach (var item in result)
-                //    {
-                //        Console.WriteLine("JSON: " + item);
-                //    }
+                //    Console.WriteLine("JSON: " + item);
                 //}
-
-                var grv = new GrvController().Selecionar("14059590");
-
-                int grvId = grv.GrvId;
-
-                var result = new NfeGerarNotaFiscalController().GerarNotaFiscal
-                (
-                    grvId: grv.GrvId,
-                    usuarioId: 1,
-                    isDev: true
-                );
-
-                foreach (var item in result)
-                {
-                    Console.WriteLine("JSON: " + item);
-                }
             }
             catch (Exception ex)
             {

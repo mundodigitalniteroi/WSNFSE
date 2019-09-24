@@ -69,7 +69,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             if (!selecionarNotaFiscalCancelada)
             {
-                SQL.AppendLine("   AND Status != 'N'");
+                SQL.AppendLine("   AND Status NOT IN ('N','E','I')");
             }
 
             using (var dataTable = DataBase.Select(SQL))

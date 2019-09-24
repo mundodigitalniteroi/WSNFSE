@@ -41,9 +41,23 @@ namespace NFSE.Business.Tabelas.NFe
             {
                 if (NfeList.Where(w => w.Status == 'C' || w.Status == 'A' || w.Status == 'P' || w.Status == 'R' || w.Status == 'S').Count() > 0)
                 {
-                    new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, null, OrigemErro.MobLink, acao, "GRV já possui Nota Fiscal cadastrada");
+                    if (NfeList.Count == 1)
+                    {
+                        Nfe = NfeList.FirstOrDefault();
 
-                    throw new Exception("GRV já possui Nota Fiscal cadastrada");
+                        if (Nfe.Status == 'C' && Nfe.DataCadastro.Date < DateTime.Now.Date)
+                        {
+                            Nfe.Status = 'I';
+
+                            new NfeController().Atualizar(Nfe);
+                        }
+                    }
+                    else
+                    {
+                        new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, null, OrigemErro.MobLink, acao, "GRV já possui Nota Fiscal cadastrada");
+
+                        throw new Exception("GRV já possui Nota Fiscal cadastrada");
+                    }
                 }
             }
             #endregion NFe

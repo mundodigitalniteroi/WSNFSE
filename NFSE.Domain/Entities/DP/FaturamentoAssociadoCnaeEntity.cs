@@ -16,6 +16,8 @@
 
         public string Servico { get; set; }
 
+        public string ServicoAssociadoDescricao { get; set; }
+
         public string DescricaoConfiguracaoNfe { get; set; }
 
         public char FlagEnviarValorIss { get; set; }
