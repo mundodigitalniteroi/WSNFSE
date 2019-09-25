@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="Tabelas\DP\ClienteController.cs" />
     <Compile Include="Tabelas\DP\UsuarioController.cs" />
+    <Compile Include="Tabelas\Global\CnaeListaServicoParametroMunicipioController.cs" />
     <Compile Include="Tabelas\NFe\NfeConfiguracaoImagemController.cs" />
     <Compile Include="Tabelas\NFe\NfeImagemController.cs" />
     <Compile Include="Tabelas\NFe\NfeRetornoSolicitacaoController.cs" />

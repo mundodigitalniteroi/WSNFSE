@@ -5,6 +5,9 @@ using NFSE.Domain.Enum;
 using NFSE.Infra.Data;
 using JsonUtil;
 using System;
+using NFSE.Domain.Entities.Global;
+using NFSE.Business.Tabelas.Global;
+using NFSE.Business.Tabelas.DP;
 
 namespace NFSE.Business.Tabelas.NFe
 {
@@ -16,9 +19,20 @@ namespace NFSE.Business.Tabelas.NFe
 
             var nfe = new NfeController().ConsultarNotaFiscal(model.GrvId, model.UsuarioId, model.IdentificadorNota, Acao.Solicitação);
 
-            var prestadorAcesso = new PrestadorController().ConsultarPrestadorServico(model.GrvId, model.UsuarioId, model.Autorizacao.prestador.cnpj, Acao.Solicitação, nfe, model);
+            var grv = new GrvController().Selecionar(model.GrvId);
 
-            string uri = prestadorAcesso.server + "?ref=" + model.IdentificadorNota;
+            #region Empresa
+            EmpresaEntity Empresa;
+
+            if ((Empresa = new EmpresaController().Selecionar(new DepositoController().Selecionar(grv.DepositoId).EmpresaId)) == null)
+            {
+                new NfeWsErroController().CadastrarErroGenerico(model.GrvId, model.UsuarioId, null, OrigemErro.MobLink, Acao.Retorno, "Empresa associada não encontrada");
+
+                throw new Exception("Empresa associada não encontrada");
+            }
+            #endregion Empresa
+
+            string uri = new NfeConfiguracao().GetRemoteServer() + "?ref=" + model.IdentificadorNota;
 
             var tools = new Tools();
 
@@ -39,7 +53,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             try
             {
-                resposta = tools.PostNfse(uri, json, prestadorAcesso.prestador_chave);
+                resposta = tools.PostNfse(uri, json, Empresa.Token);
             }
             catch (Exception ex)
             {
@@ -50,7 +64,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             try
             {
-                new NfeRetornoSolicitacaoController().Cadastrar(nfe, prestadorAcesso, model, resposta);
+                new NfeRetornoSolicitacaoController().Cadastrar(nfe, model, resposta);
             }
             catch (Exception ex)
             {

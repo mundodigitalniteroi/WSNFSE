@@ -300,7 +300,7 @@ namespace NFSE.Business.Tabelas.NFe
                 tomador = Tomador(grv, deposito, atendimento)
             };
 
-            Autorizacao.servico = Servico(grv, atendimento, empresa, composicao, Autorizacao.prestador, isDev);
+            Autorizacao.servico = Servico(grv, composicao, Autorizacao.prestador, isDev);
 
             return Autorizacao;
         }
@@ -370,44 +370,25 @@ namespace NFSE.Business.Tabelas.NFe
             };
         }
 
-        private Servico Servico(GrvEntity grv, AtendimentoEntity atendimento, EmpresaEntity empresa, FaturamentoAssociadoCnaeEntity composicao, Prestador prestador, bool isDev)
+        private Servico Servico(GrvEntity grv, FaturamentoAssociadoCnaeEntity composicao, Prestador prestador, bool isDev)
         {
-            if (composicao.CnaeId == null || composicao.CnaeId.Equals(0))
+            CnaeListaServicoParametroMunicipioEntity CnaeListaServicoParametroMunicipio = new CnaeListaServicoParametroMunicipioEntity
             {
-                throw new Exception("Código CNAE não associado");
-            }
+                CnaeId = composicao.CnaeId.Value,
 
-            if (composicao.ListaServicoId == null || composicao.ListaServicoId.Equals(0))
+                ListaServicoId = composicao.ListaServicoId.Value,
+
+                CodigoMunicipioIbge = prestador.codigo_municipio
+            };
+
+            if ((CnaeListaServicoParametroMunicipio = new CnaeListaServicoParametroMunicipioController().Selecionar(CnaeListaServicoParametroMunicipio)) == null)
             {
-                throw new Exception("Lista de Serviço não associado");
+                throw new Exception("Associação entre CNAE, Lista de Serviço e Município inexistente");
             }
-
-            #region Lista de Serviço
-            CnaeListaServicoEntity ListaServico;
-
-            if ((ListaServico = new CnaeListaServicoController().Selecionar(new CnaeListaServicoEntity { CnaeId = composicao.CnaeId.Value, ListaServicoId = composicao.ListaServicoId.Value })) == null)
-            {
-                throw new Exception("Lista de Serviço inexistente");
-            }
-
-            if (string.IsNullOrWhiteSpace(ListaServico.ListaServico))
-            {
-                throw new Exception("Lista de Serviço sem informação do Item da Lista de Serviço");
-            }
-            #endregion Lista de Serviço
-
-            #region Lista de Serviço
-            ParametroMunicipioEntity ParametroMunicipio;
-
-            if ((ParametroMunicipio = new ParametroMunicipioController().Selecionar(new ParametroMunicipioEntity { CodigoCnae = composicao.Cnae.ToString(), ItemListaServico = ListaServico.ListaServico.ToString(), CodigoMunicipioIbge = prestador.codigo_municipio })) == null)
-            {
-                throw new Exception("Parâmetro do Município inexistente");
-            }
-            #endregion Lista de Serviço
 
             return new Servico
             {
-                aliquota = string.Format("{0:N2}", ListaServico.AliquotaIss).Replace(",", "."),
+                aliquota = string.Format("{0:N2}", CnaeListaServicoParametroMunicipio.AliquotaIss).Replace(",", "."),
 
                 discriminacao = composicao.DescricaoConfiguracaoNfe + " CONFORME PROCESSO " + grv.NumeroFormularioGrv,
 
@@ -415,13 +396,11 @@ namespace NFSE.Business.Tabelas.NFe
 
                 codigo_cnae = composicao.Cnae,
 
-                item_lista_servico = ListaServico.ListaServico,
+                item_lista_servico = CnaeListaServicoParametroMunicipio.ListaServico,
 
-                valor_iss = composicao.FlagEnviarValorIss == 'S' ? string.Format("{0:N2}", ListaServico.AliquotaIss / 100).Replace(",", ".") : "0",
+                valor_iss = composicao.FlagEnviarValorIss == 'S' ? string.Format("{0:N2}", CnaeListaServicoParametroMunicipio.AliquotaIss / 100).Replace(",", ".") : "0",
 
-                // codigo_tributario_municipio = empresa.CodigoTributarioMunicipio > 0 ? empresa.CodigoTributarioMunicipio.Value.ToString("0000") : string.Empty,
-
-                codigo_tributario_municipio = ParametroMunicipio.CodigoTributarioMunicipio,
+                codigo_tributario_municipio = CnaeListaServicoParametroMunicipio.CodigoTributarioMunicipio,
 
                 valor_servicos = isDev ? "1" : Math.Round(composicao.TotalComDesconto, 2).ToString().Replace(",", ".")
             };

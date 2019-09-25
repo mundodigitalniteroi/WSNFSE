@@ -1,6 +1,8 @@
 ﻿using NFSE.Business.Tabelas.DP;
+using NFSE.Business.Tabelas.Global;
 using NFSE.Business.Util;
 using NFSE.Domain.Entities.DP;
+using NFSE.Domain.Entities.Global;
 using NFSE.Domain.Entities.NFe;
 using NFSE.Domain.Enum;
 using NFSE.Infra.Data;
@@ -23,17 +25,26 @@ namespace NFSE.Business.Tabelas.NFe
 
             var nfe = new NfeController().ConsultarNotaFiscal(model.GrvId, model.UsuarioId, model.IdentificadorNota, Acao.Retorno);
 
-            var grv = new GrvController().Selecionar(model.GrvId);
-
             model.NfeId = nfe.NfeId;
 
-            var prestadorAcesso = new PrestadorController().ConsultarPrestadorServico(model.GrvId, model.UsuarioId, model.CnpjPrestador, Acao.Retorno, nfe);
+            var grv = new GrvController().Selecionar(model.GrvId);
+
+            #region Empresa
+            EmpresaEntity Empresa;
+
+            if ((Empresa = new EmpresaController().Selecionar(new DepositoController().Selecionar(grv.DepositoId).EmpresaId)) == null)
+            {
+                new NfeWsErroController().CadastrarErroGenerico(model.GrvId, model.UsuarioId, null, OrigemErro.MobLink, Acao.Retorno, "Empresa associada não encontrada");
+
+                throw new Exception("Empresa associada não encontrada");
+            }
+            #endregion Empresa
 
             string nfse;
 
             try
             {
-                nfse = new Tools().GetNfse(prestadorAcesso.server + "/" + model.IdentificadorNota, prestadorAcesso.prestador_chave);
+                nfse = new Tools().GetNfse(new NfeConfiguracao().GetRemoteServer() + "/" + model.IdentificadorNota, Empresa.Token);
             }
             catch (Exception ex)
             {
@@ -162,15 +173,15 @@ namespace NFSE.Business.Tabelas.NFe
                 #region Início do trecho para testes
                 if (new[] { "BETODELL", "BETOLENOVO", "SUPREMELEADER" }.Contains(SystemInformation.ComputerName))
                 {
-                    //configuracaoImagem.ValueX = 270; // Vertical
-                    //configuracaoImagem.ValueY = 220; // Top
-                    //configuracaoImagem.Width = 1270; // Largura
-                    //configuracaoImagem.Height = 1525; // Comprimento
+                    //configuracaoImagem.ValueX = 450; // Margem Esquerda
+                    //configuracaoImagem.ValueY = 150; // Margem Superior
+                    //configuracaoImagem.Width = 594; // Margem Direita
+                    //configuracaoImagem.Height = 786; // Margem Inferior
 
                     //File.Delete(@"D:\Temp\RetornoOriginal.jpg");
                     //File.Delete(@"D:\Temp\RetornoRecortado");
 
-                    //File.WriteAllBytes(@"D:\Temp\RetornoOriginal.jpg", notaFiscal.ImagemNotaFiscal);
+                    // File.WriteAllBytes(@"D:\Temp\RetornoOriginal.jpg", notaFiscal.ImagemNotaFiscal);
 
                     //byte[] array = CropImage(notaFiscal.ImagemNotaFiscal, new Rectangle(configuracaoImagem.ValueX, configuracaoImagem.ValueY, configuracaoImagem.Width, configuracaoImagem.Height));
 
@@ -184,7 +195,7 @@ namespace NFSE.Business.Tabelas.NFe
                 }
                 catch (Exception)
                 {
-                    throw new Exception("Ocorreu um erro ao analisar a Imagem retornada");
+                    throw new Exception("Ocorreu um erro ao recortar a Imagem retornada");
                 }
 
                 retornoConsulta.ImagemNotaFiscal = notaFiscal.ImagemNotaFiscal;
@@ -233,27 +244,60 @@ namespace NFSE.Business.Tabelas.NFe
         }
 
 
-        public byte[] CropImage(byte[] byteImage, Rectangle rectangle)
-        {
-            Image image;
+        //public byte[] CropImage(byte[] byteImage, Rectangle rectangle)
+        //{
+        //    try
+        //    {
+        //        using (var memoryStream = new MemoryStream(byteImage))
+        //        {
+        //            Bitmap src = Image.FromStream(memoryStream) as Bitmap;
 
+        //            Bitmap target = new Bitmap(rectangle.Width, rectangle.Height);
+
+        //            using (Graphics graphics = Graphics.FromImage(target))
+        //            {
+        //                graphics.DrawImage(src, new Rectangle(0, 0, target.Width, target.Height),
+        //                                 rectangle,
+        //                                 GraphicsUnit.Pixel);
+        //            }
+
+
+
+
+        //            //using (var graphics = Graphics.FromImage(src))
+        //            //{
+        //            //    graphics.DrawImage(image, rectangle, rectangle, GraphicsUnit.Pixel);
+
+        //            //    graphics.DrawImage(image, new Rectangle(0, 0, src.Width, src.Height),
+        //            //cropRect,
+        //            //GraphicsUnit.Pixel);
+        //            //}
+
+        //            var converter = new ImageConverter();
+
+        //            return (byte[])converter.ConvertTo(src, typeof(byte[]));
+        //        }
+        //    }
+        //    catch (Exception)
+        //    {
+        //        throw;
+        //    }
+        //}
+
+        private byte[] CropImage(byte[] byteImage, Rectangle rectangle)
+        {
             try
             {
                 using (var memoryStream = new MemoryStream(byteImage))
                 {
-                    image = Image.FromStream(memoryStream);
+                    Image imageSource = Image.FromStream(memoryStream);
+
+                    Image imageTarget = CropImage(imageSource, rectangle);
+
+                    var converter = new ImageConverter();
+
+                    return (byte[])converter.ConvertTo(imageTarget, typeof(byte[]));
                 }
-
-                var croppedImage = new Bitmap(rectangle.Width, rectangle.Height);
-
-                using (var graphics = Graphics.FromImage(croppedImage))
-                {
-                    graphics.DrawImage(image, rectangle, rectangle, GraphicsUnit.Pixel);
-                }
-
-                var converter = new ImageConverter();
-
-                return (byte[])converter.ConvertTo(croppedImage, typeof(byte[]));
             }
             catch (Exception)
             {
@@ -261,6 +305,12 @@ namespace NFSE.Business.Tabelas.NFe
             }
         }
 
+        private Image CropImage(Image img, Rectangle cropArea)
+        {
+            Bitmap bmpImage = new Bitmap(img);
+
+            return bmpImage.Clone(cropArea, bmpImage.PixelFormat);
+        }
 
         private void AtualizarNotaFiscal(NfeEntity nfe)
         {

@@ -37,6 +37,7 @@
   <ItemGroup>
     <Compile Include="Entities\DP\ClienteEntity.cs" />
     <Compile Include="Entities\DP\UsuarioEntity.cs" />
+    <Compile Include="Entities\Global\CnaeListaServicoParametroMunicipioEntity.cs" />
     <Compile Include="Entities\NFe\Autorizacao.cs" />
     <Compile Include="Entities\NFe\NfeRetornoSolicitacaoEntity.cs" />
     <Compile Include="Entities\NFe\Cancelamento.cs" />

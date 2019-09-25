@@ -88,14 +88,13 @@ namespace NFSE.Business.Tabelas.NFe
             return list?.FirstOrDefault();
         }
 
-        public int Cadastrar(NfeEntity nfe, PrestadorServico prestadorAcesso, CapaAutorizacaoNfse capaAutorizacaoNfse, string resposta)
+        public int Cadastrar(NfeEntity nfe, CapaAutorizacaoNfse capaAutorizacaoNfse, string resposta)
         {
             var SQL = new StringBuilder();
 
             SQL.AppendLine("INSERT INTO dbo.tb_dep_nfe_retorno_solicitacao");
 
             SQL.AppendLine("      (NfeId");
-            SQL.AppendLine("      ,NfePrestadorId");
             SQL.AppendLine("      ,NaturezaOperacao");
             SQL.AppendLine("      ,OptanteSimplesNacional");
             SQL.AppendLine("      ,TomadorCpfCnpj");
@@ -124,8 +123,6 @@ namespace NFSE.Business.Tabelas.NFe
             SQL.AppendLine("VALUES");
 
             SQL.AppendLine("      (" + nfe.NfeId);
-            SQL.AppendLine("      ," + prestadorAcesso.id_nfse_prestador);
-
             SQL.AppendLine("      ," + DataBase.SetNullIfEmpty(capaAutorizacaoNfse.Autorizacao.natureza_operacao));
             SQL.AppendLine("      ," + DataBase.SetNullIfEmpty(Convert.ToInt32(bool.Parse(capaAutorizacaoNfse.Autorizacao.optante_simples_nacional)).ToString()));
             SQL.AppendLine("      ," + DataBase.SetNullIfEmpty(capaAutorizacaoNfse.Autorizacao.tomador.cpf));

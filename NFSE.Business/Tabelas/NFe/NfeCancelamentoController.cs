@@ -1,4 +1,7 @@
-﻿using NFSE.Business.Util;
+﻿using NFSE.Business.Tabelas.DP;
+using NFSE.Business.Tabelas.Global;
+using NFSE.Business.Util;
+using NFSE.Domain.Entities.Global;
 using NFSE.Domain.Entities.NFe;
 using NFSE.Domain.Enum;
 using NFSE.Infra.Data;
@@ -15,7 +18,18 @@ namespace NFSE.Business.Tabelas.NFe
 
             var nfe = new NfeController().ConsultarNotaFiscal(model.GrvId, model.UsuarioId, model.IdentificadorNota, Acao.Cancelamento);
 
-            var prestadorAcesso = new PrestadorController().ConsultarPrestadorServico(model.GrvId, model.UsuarioId, model.CnpjPrestador, Acao.Cancelamento, nfe);
+            var grv = new GrvController().Selecionar(model.GrvId);
+
+            #region Empresa
+            EmpresaEntity Empresa;
+
+            if ((Empresa = new EmpresaController().Selecionar(new DepositoController().Selecionar(grv.DepositoId).EmpresaId)) == null)
+            {
+                new NfeWsErroController().CadastrarErroGenerico(model.GrvId, model.UsuarioId, model.IdentificadorNota, OrigemErro.MobLink, Acao.Retorno, "Empresa associada não encontrada");
+
+                throw new Exception("Empresa associada não encontrada");
+            }
+            #endregion Empresa
 
             var tools = new Tools();
 
@@ -27,24 +41,11 @@ namespace NFSE.Business.Tabelas.NFe
                 }
             });
 
+            string result;
+
             try
             {
-                string result = tools.CancelarNfse(prestadorAcesso.server + "/" + model.IdentificadorNota, json, prestadorAcesso.prestador_chave);
-
-                // TODO: Cadastrar a mensagem de erro caso ocorra
-
-                try
-                {
-                    nfe.Status = 'N';
-
-                    new NfeController().Atualizar(nfe);
-                }
-                catch (Exception ex)
-                {
-
-                }
-
-                return result;
+                result = tools.CancelarNfse(new NfeConfiguracao().GetRemoteServer() + "/" + model.IdentificadorNota, json, Empresa.Token);
             }
             catch (Exception ex)
             {
@@ -52,6 +53,12 @@ namespace NFSE.Business.Tabelas.NFe
 
                 throw new Exception("Ocorreu um erro ao cancelar a Nota Fiscal (" + model.IdentificadorNota + "): " + ex.Message);
             }
+
+            nfe.Status = 'N';
+
+            new NfeController().Atualizar(nfe);
+
+            return result;
         }
     }
 }
