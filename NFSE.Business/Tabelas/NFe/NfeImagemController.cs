@@ -1,12 +1,42 @@
-﻿using NFSE.Infra.Data;
+﻿using NFSE.Domain.Entities.NFe;
+using NFSE.Infra.Data;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Text;
 
 namespace NFSE.Business.Tabelas.NFe
 {
     public class NfeImagemController
     {
+        public List<NfeImagemEntity> Listar(int nfeId)
+        {
+            var SQL = new StringBuilder();
+
+            SQL.AppendLine("SELECT tb_dep_nfe_imagens.NfeImagemID AS NfeImagemId");
+
+            SQL.AppendLine("      ,tb_dep_nfe_imagens.NfeID AS NfeId");
+
+            SQL.AppendLine("      ,tb_dep_nfe_imagens.Imagem AS Imagem");
+
+            SQL.AppendLine("  FROM dbo.tb_dep_nfe_imagens");
+
+            SQL.AppendLine(" WHERE tb_dep_nfe_imagens.NfeId = " + nfeId);
+
+            using (var dataTable = DataBase.Select(SQL))
+            {
+                return dataTable == null ? null : DataTableUtil.DataTableToList<NfeImagemEntity>(dataTable);
+            }
+        }
+
+        public NfeImagemEntity Selecionar(int nfeId)
+        {
+            var list = Listar(nfeId);
+
+            return list?.FirstOrDefault();
+        }
+
         #region Cadastrar
         public void Cadastrar(int nfeID, byte[] imagem)
         {

@@ -1,5 +1,4 @@
-﻿using NFSE.Domain.Entities;
-using System;
+﻿using System;
 
 namespace NFSE.TesteUsuario
 {
@@ -9,18 +8,15 @@ namespace NFSE.TesteUsuario
         {
             string result = string.Empty;
 
-            Console.WriteLine("TESTE DE SOLICITACAO DA NOTA FISCAL");
-
             #region Teste de Solicitação
+
+            //Console.WriteLine("SIMULAÇÃO DA NOTA FISCAL");
+
             //var capaAutorizacaoNfse = new nfse.CapaAutorizacaoNfse
             //{
-            //    Homologacao = true,
-            //    IdentificadorNota = 123456,
-            //    UsuarioId = 1,
-
             //    Autorizacao = new nfse.Autorizacao
             //    {
-            //        data_emissao = "2019-08-28T04:34:06",
+            //        data_emissao = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"),
             //        natureza_operacao = "1",
             //        optante_simples_nacional = "false",
 
@@ -67,7 +63,7 @@ namespace NFSE.TesteUsuario
             //{
             //    using (var ws = new nfse.WSnfseSoapClient())
             //    {
-            //        result = ws.SolicitarEmissaoNotaFiscal(capaAutorizacaoNfse);
+            //        result = ws.SimularEmissaoNotaFiscal(capaAutorizacaoNfse);
             //    }
 
             //    Console.WriteLine(result + Environment.NewLine);
@@ -78,30 +74,62 @@ namespace NFSE.TesteUsuario
             //}
             #endregion Teste de Solicitação
 
-            Console.WriteLine("TESTE DE RETORNO DA NOTA FISCAL");
+
+
+            #region Teste de Solicitação Simplificado
+
+            //Console.WriteLine("TESTE DE SOLICITACAO DA NOTA FISCAL SIMPLIFICADO");
+
+            //try
+            //{
+            //    using (var ws = new nfse.WSnfseSoapClient())
+            //    {
+            //        var results = ws.GerarNotaFiscal
+            //        (
+            //            grvId: 000000,
+            //            usuarioId: 1,
+            //            isDev: true
+            //        );
+
+            //        foreach (var item in results)
+            //        {
+            //            Console.WriteLine("JSON: " + item);
+            //        }
+            //    }
+
+            //    Console.WriteLine(result + Environment.NewLine);
+            //}
+            //catch (Exception ex)
+            //{
+            //    Console.WriteLine("ERRO: " + ex.Message);
+            //}
+            #endregion Teste de Solicitação Simplificado
+
+
+
+            #region Teste de retorno da Nota Fiscal (Download da NF)
+
+            Console.WriteLine("TESTE DE RETORNO DA NOTA FISCAL (DOWNLOAD DA NF)");
 
             try
             {
-                var retorno = new nfse.RetornoNotaFiscal();
-
-                using (var ws = new nfse.WSnfseSoapClient())
+                var aux = new nfse.WSnfseSoapClient().ReceberNotaFiscal(new nfse.Consulta
                 {
-                    retorno = ws.ReceberNotaFiscal(new nfse.Consulta
-                    {
+                    GrvId = 543697,
+                    IdentificadorNota = 700155,
+                    Homologacao = true,
+                    UsuarioId = 1
+                });
 
-                        IdentificadorNota = 700005,
-                        CnpjPrestador = "08397160003658",
-                        Homologacao = true,
-                        UsuarioId = 1
-                    });
-
-                    Console.WriteLine(retorno.Status + Environment.NewLine);
-                }
+                Console.WriteLine("MENSAGEM: " + aux.status);
             }
             catch (Exception ex)
             {
                 Console.WriteLine("ERRO: " + ex.Message);
             }
+            #endregion Teste de retorno da Nota Fiscal (Download da NF)
+
+            #region Teste de cancelamento da Nota Fiscal
 
             Console.WriteLine("TESTE DE CANCELAMENTO DA NOTA FISCAL");
 
@@ -111,8 +139,7 @@ namespace NFSE.TesteUsuario
                 {
                     result = ws.CancelarNotaFiscal(new nfse.Cancelamento
                     {
-                        IdentificadorNota = 123456,
-                        CnpjPrestador = "08397160003658",
+                        IdentificadorNota = 000000,
                         Justificativa = "TESTE DE CANCELAMENTO",
                         Homologacao = true,
                         UsuarioId = 1
@@ -125,6 +152,7 @@ namespace NFSE.TesteUsuario
             {
                 Console.WriteLine("ERRO: " + ex.Message);
             }
+            #endregion Teste de cancelamento da Nota Fiscal
 
             Console.ReadLine();
         }

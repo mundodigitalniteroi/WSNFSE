@@ -8,7 +8,7 @@ namespace NFSE.Business.Tabelas.DP
 {
     public class FaturamentoAssociadoCnaeController
     {
-        public List<FaturamentoAssociadoCnaeEntity> Listar(int grvId)
+        public List<FaturamentoAssociadoCnaeEntity> Listar(int grvId, int faturamentoServicoTipoVeiculoId = 0)
         {
             var SQL = new StringBuilder();
 
@@ -30,15 +30,22 @@ namespace NFSE.Business.Tabelas.DP
 
             SQL.AppendLine("      ,vw_faturamento_associado_cnae.DescricaoConfiguracaoNfe");
 
-            SQL.AppendLine("      ,vw_faturamento_associado_cnae.TotalComDesconto");
-
             SQL.AppendLine("      ,vw_faturamento_associado_cnae.FlagEnviarValorIss");
 
             SQL.AppendLine("      ,vw_faturamento_associado_cnae.FlagEnviarInscricaoEstadual");
 
+            SQL.AppendLine("      ,vw_faturamento_associado_cnae.FaturamentoServicoTipoVeiculoId");
+
+            SQL.AppendLine("      ,vw_faturamento_associado_cnae.TotalComDesconto");
+
             SQL.AppendLine("  FROM dbo.vw_faturamento_associado_cnae");
 
             SQL.AppendLine(" WHERE vw_faturamento_associado_cnae.GrvId = " + grvId);
+
+            if (faturamentoServicoTipoVeiculoId > 0)
+            {
+                SQL.AppendLine("   AND vw_faturamento_associado_cnae.FaturamentoServicoTipoVeiculoId = " + faturamentoServicoTipoVeiculoId);
+            }
 
             using (var dataTable = DataBase.Select(SQL))
             {

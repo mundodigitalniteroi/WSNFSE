@@ -38,7 +38,6 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
@@ -58,29 +57,31 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Connected Services\nfse\NFSE.TesteUsuario.nfse.ArrayOfString.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Connected Services\nfse\NFSE.TesteUsuario.nfse.CancelarNotaFiscalResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\nfse\NFSE.TesteUsuario.nfse.GerarNotaFiscalResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\nfse\NFSE.TesteUsuario.nfse.GerarNovaNotaFiscalResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Connected Services\nfse\NFSE.TesteUsuario.nfse.ReceberNotaFiscalResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Connected Services\nfse\NFSE.TesteUsuario.nfse.RetornoNotaFiscal.datasource">
+    <None Include="Connected Services\nfse\NFSE.TesteUsuario.nfse.RetornoNotaFiscalEntity.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\nfse\NFSE.TesteUsuario.nfse.SimularEmissaoNotaFiscalResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Connected Services\nfse\NFSE.TesteUsuario.nfse.SolicitarEmissaoNotaFiscalResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Connected Services\nfse\WSnfse.wsdl" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\NFSE.Business\NFSE.Business.csproj">
-      <Project>{56a6f667-9178-4018-8a09-16c7690756ad}</Project>
-      <Name>NFSE.Business</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\NFSE.Domain\NFSE.Domain.csproj">
-      <Project>{6d4463ef-7a19-4bf4-8333-d2a17552ed26}</Project>
-      <Name>NFSE.Domain</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />

@@ -39,6 +39,7 @@
     <Compile Include="Entities\DP\UsuarioEntity.cs" />
     <Compile Include="Entities\Global\CnaeListaServicoParametroMunicipioEntity.cs" />
     <Compile Include="Entities\NFe\Autorizacao.cs" />
+    <Compile Include="Entities\NFe\NfeImagemEntity.cs" />
     <Compile Include="Entities\NFe\NfeRetornoSolicitacaoEntity.cs" />
     <Compile Include="Entities\NFe\Cancelamento.cs" />
     <Compile Include="Entities\NFe\CapaAutorizacaoNfse.cs" />

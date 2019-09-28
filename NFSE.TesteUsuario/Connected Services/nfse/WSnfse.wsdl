@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:s1="http://microsoft.com/wsdl/types/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
     <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
-      <s:import namespace="http://microsoft.com/wsdl/types/" />
       <s:element name="SolicitarEmissaoNotaFiscal">
         <s:complexType>
           <s:sequence>
@@ -13,9 +12,10 @@
       <s:complexType name="CapaAutorizacaoNfse">
         <s:sequence>
           <s:element minOccurs="0" maxOccurs="1" name="Autorizacao" type="tns:Autorizacao" />
-          <s:element minOccurs="1" maxOccurs="1" name="Homologacao" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="GrvId" type="s:int" />
           <s:element minOccurs="1" maxOccurs="1" name="IdentificadorNota" type="s:int" />
           <s:element minOccurs="1" maxOccurs="1" name="UsuarioId" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="Homologacao" type="s:boolean" />
         </s:sequence>
       </s:complexType>
       <s:complexType name="Autorizacao">
@@ -36,6 +36,7 @@
       <s:complexType name="Prestador">
         <s:sequence>
           <s:element minOccurs="0" maxOccurs="1" name="cnpj" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="inscricao_estadual" type="s:string" />
           <s:element minOccurs="0" maxOccurs="1" name="inscricao_municipal" type="s:string" />
           <s:element minOccurs="0" maxOccurs="1" name="codigo_municipio" type="s:string" />
         </s:sequence>
@@ -96,6 +97,20 @@
           </s:sequence>
         </s:complexType>
       </s:element>
+      <s:element name="SimularEmissaoNotaFiscal">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="model" type="tns:CapaAutorizacaoNfse" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SimularEmissaoNotaFiscalResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="SimularEmissaoNotaFiscalResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
       <s:element name="ReceberNotaFiscal">
         <s:complexType>
           <s:sequence>
@@ -105,48 +120,46 @@
       </s:element>
       <s:complexType name="Consulta">
         <s:sequence>
-          <s:element minOccurs="1" maxOccurs="1" name="UsuarioId" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="GrvId" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="NfeId" type="s:int" />
           <s:element minOccurs="1" maxOccurs="1" name="IdentificadorNota" type="s:int" />
-          <s:element minOccurs="0" maxOccurs="1" name="CnpjPrestador" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="UsuarioId" type="s:int" />
           <s:element minOccurs="1" maxOccurs="1" name="Homologacao" type="s:boolean" />
         </s:sequence>
       </s:complexType>
       <s:element name="ReceberNotaFiscalResponse">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" name="ReceberNotaFiscalResult" type="tns:RetornoNotaFiscal" />
+            <s:element minOccurs="0" maxOccurs="1" name="ReceberNotaFiscalResult" type="tns:RetornoNotaFiscalEntity" />
           </s:sequence>
         </s:complexType>
       </s:element>
-      <s:complexType name="RetornoNotaFiscal">
-        <s:complexContent mixed="false">
-          <s:extension base="tns:NfeWsErroModel">
-            <s:sequence>
-              <s:element minOccurs="1" maxOccurs="1" name="NotaFiscalId" type="s:int" />
-              <s:element minOccurs="0" maxOccurs="1" name="cnpj_prestador" type="s:string" />
-              <s:element minOccurs="0" maxOccurs="1" name="ref" type="s:string" />
-              <s:element minOccurs="0" maxOccurs="1" name="numero" type="s:string" />
-              <s:element minOccurs="0" maxOccurs="1" name="codigo_verificacao" type="s:string" />
-              <s:element minOccurs="1" maxOccurs="1" name="data_emissao" type="s:dateTime" />
-              <s:element minOccurs="0" maxOccurs="1" name="url" type="s:string" />
-              <s:element minOccurs="0" maxOccurs="1" name="caminho_xml_nota_fiscal" type="s:string" />
-              <s:element minOccurs="0" maxOccurs="1" name="ImagemNotaFiscal" type="s:base64Binary" />
-            </s:sequence>
-          </s:extension>
-        </s:complexContent>
-      </s:complexType>
-      <s:complexType name="NfeWsErroModel">
+      <s:complexType name="RetornoNotaFiscalEntity">
         <s:sequence>
-          <s:element minOccurs="1" maxOccurs="1" name="ErroId" type="s:int" />
-          <s:element minOccurs="1" maxOccurs="1" name="IdentificadorNota" type="s:int" />
-          <s:element minOccurs="1" maxOccurs="1" name="UsuarioId" type="s:int" />
-          <s:element minOccurs="1" maxOccurs="1" name="Acao" type="s1:char" />
-          <s:element minOccurs="1" maxOccurs="1" name="OrigemErro" type="s1:char" />
-          <s:element minOccurs="0" maxOccurs="1" name="Status" type="s:string" />
-          <s:element minOccurs="0" maxOccurs="1" name="CodigoErro" type="s:string" />
-          <s:element minOccurs="0" maxOccurs="1" name="MensagemErro" type="s:string" />
-          <s:element minOccurs="0" maxOccurs="1" name="CorrecaoErro" type="s:string" />
-          <s:element minOccurs="1" maxOccurs="1" name="DataHoraCadastro" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="cnpj_prestador" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ref" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="numero_rps" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="serie_rps" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="status" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="codigo_verificacao" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="data_emissao" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="url" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="caminho_xml_nota_fiscal" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ImagemNotaFiscal" type="s:base64Binary" />
+          <s:element minOccurs="0" maxOccurs="1" name="retorno_nota" type="s:base64Binary" />
+          <s:element minOccurs="0" maxOccurs="1" name="erros" type="tns:ArrayOfErros" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfErros">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="Erros" nillable="true" type="tns:Erros" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Erros">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="codigo" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="mensagem" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="correcao" type="s:string" />
         </s:sequence>
       </s:complexType>
       <s:element name="CancelarNotaFiscal">
@@ -158,9 +171,9 @@
       </s:element>
       <s:complexType name="Cancelamento">
         <s:sequence>
-          <s:element minOccurs="1" maxOccurs="1" name="UsuarioId" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="GrvId" type="s:int" />
           <s:element minOccurs="1" maxOccurs="1" name="IdentificadorNota" type="s:int" />
-          <s:element minOccurs="0" maxOccurs="1" name="CnpjPrestador" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="UsuarioId" type="s:int" />
           <s:element minOccurs="0" maxOccurs="1" name="Justificativa" type="s:string" />
           <s:element minOccurs="1" maxOccurs="1" name="Homologacao" type="s:boolean" />
         </s:sequence>
@@ -172,11 +185,43 @@
           </s:sequence>
         </s:complexType>
       </s:element>
-    </s:schema>
-    <s:schema elementFormDefault="qualified" targetNamespace="http://microsoft.com/wsdl/types/">
-      <s:simpleType name="char">
-        <s:restriction base="s:unsignedShort" />
-      </s:simpleType>
+      <s:element name="GerarNotaFiscal">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="grvId" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="usuarioId" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="isDev" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GerarNotaFiscalResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GerarNotaFiscalResult" type="tns:ArrayOfString" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfString">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GerarNovaNotaFiscal">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="grvId" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="usuarioId" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="isDev" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GerarNovaNotaFiscalResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GerarNovaNotaFiscalResult" type="tns:ArrayOfString" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
     </s:schema>
   </wsdl:types>
   <wsdl:message name="SolicitarEmissaoNotaFiscalSoapIn">
@@ -184,6 +229,12 @@
   </wsdl:message>
   <wsdl:message name="SolicitarEmissaoNotaFiscalSoapOut">
     <wsdl:part name="parameters" element="tns:SolicitarEmissaoNotaFiscalResponse" />
+  </wsdl:message>
+  <wsdl:message name="SimularEmissaoNotaFiscalSoapIn">
+    <wsdl:part name="parameters" element="tns:SimularEmissaoNotaFiscal" />
+  </wsdl:message>
+  <wsdl:message name="SimularEmissaoNotaFiscalSoapOut">
+    <wsdl:part name="parameters" element="tns:SimularEmissaoNotaFiscalResponse" />
   </wsdl:message>
   <wsdl:message name="ReceberNotaFiscalSoapIn">
     <wsdl:part name="parameters" element="tns:ReceberNotaFiscal" />
@@ -197,10 +248,26 @@
   <wsdl:message name="CancelarNotaFiscalSoapOut">
     <wsdl:part name="parameters" element="tns:CancelarNotaFiscalResponse" />
   </wsdl:message>
+  <wsdl:message name="GerarNotaFiscalSoapIn">
+    <wsdl:part name="parameters" element="tns:GerarNotaFiscal" />
+  </wsdl:message>
+  <wsdl:message name="GerarNotaFiscalSoapOut">
+    <wsdl:part name="parameters" element="tns:GerarNotaFiscalResponse" />
+  </wsdl:message>
+  <wsdl:message name="GerarNovaNotaFiscalSoapIn">
+    <wsdl:part name="parameters" element="tns:GerarNovaNotaFiscal" />
+  </wsdl:message>
+  <wsdl:message name="GerarNovaNotaFiscalSoapOut">
+    <wsdl:part name="parameters" element="tns:GerarNovaNotaFiscalResponse" />
+  </wsdl:message>
   <wsdl:portType name="WSnfseSoap">
     <wsdl:operation name="SolicitarEmissaoNotaFiscal">
       <wsdl:input message="tns:SolicitarEmissaoNotaFiscalSoapIn" />
       <wsdl:output message="tns:SolicitarEmissaoNotaFiscalSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SimularEmissaoNotaFiscal">
+      <wsdl:input message="tns:SimularEmissaoNotaFiscalSoapIn" />
+      <wsdl:output message="tns:SimularEmissaoNotaFiscalSoapOut" />
     </wsdl:operation>
     <wsdl:operation name="ReceberNotaFiscal">
       <wsdl:input message="tns:ReceberNotaFiscalSoapIn" />
@@ -210,11 +277,28 @@
       <wsdl:input message="tns:CancelarNotaFiscalSoapIn" />
       <wsdl:output message="tns:CancelarNotaFiscalSoapOut" />
     </wsdl:operation>
+    <wsdl:operation name="GerarNotaFiscal">
+      <wsdl:input message="tns:GerarNotaFiscalSoapIn" />
+      <wsdl:output message="tns:GerarNotaFiscalSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GerarNovaNotaFiscal">
+      <wsdl:input message="tns:GerarNovaNotaFiscalSoapIn" />
+      <wsdl:output message="tns:GerarNovaNotaFiscalSoapOut" />
+    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="WSnfseSoap" type="tns:WSnfseSoap">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
     <wsdl:operation name="SolicitarEmissaoNotaFiscal">
       <soap:operation soapAction="http://tempuri.org/SolicitarEmissaoNotaFiscal" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SimularEmissaoNotaFiscal">
+      <soap:operation soapAction="http://tempuri.org/SimularEmissaoNotaFiscal" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -240,11 +324,38 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GerarNotaFiscal">
+      <soap:operation soapAction="http://tempuri.org/GerarNotaFiscal" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GerarNovaNotaFiscal">
+      <soap:operation soapAction="http://tempuri.org/GerarNovaNotaFiscal" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:binding name="WSnfseSoap12" type="tns:WSnfseSoap">
     <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
     <wsdl:operation name="SolicitarEmissaoNotaFiscal">
       <soap12:operation soapAction="http://tempuri.org/SolicitarEmissaoNotaFiscal" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SimularEmissaoNotaFiscal">
+      <soap12:operation soapAction="http://tempuri.org/SimularEmissaoNotaFiscal" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -263,6 +374,24 @@
     </wsdl:operation>
     <wsdl:operation name="CancelarNotaFiscal">
       <soap12:operation soapAction="http://tempuri.org/CancelarNotaFiscal" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GerarNotaFiscal">
+      <soap12:operation soapAction="http://tempuri.org/GerarNotaFiscal" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GerarNovaNotaFiscal">
+      <soap12:operation soapAction="http://tempuri.org/GerarNovaNotaFiscal" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

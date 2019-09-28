@@ -10,8 +10,6 @@
 
         public int UsuarioId { get; set; }
 
-        public string CnpjPrestador { get; set; }
-
         public bool Homologacao { get; set; }
     }
 }

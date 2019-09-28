@@ -23,7 +23,7 @@ namespace NFSE.Business.Tabelas.NFe
             #region Empresa
             EmpresaEntity Empresa;
 
-            if ((Empresa = new EmpresaController().Selecionar(new DepositoController().Selecionar(grv.DepositoId).EmpresaId)) == null)
+            if ((Empresa = new EmpresaController().Selecionar(new EmpresaEntity { EmpresaId = new DepositoController().Selecionar(grv.DepositoId).EmpresaId } )) == null)
             {
                 new NfeWsErroController().CadastrarErroGenerico(model.GrvId, model.UsuarioId, model.IdentificadorNota, OrigemErro.MobLink, Acao.Retorno, "Empresa associada não encontrada");
 
@@ -49,7 +49,7 @@ namespace NFSE.Business.Tabelas.NFe
             }
             catch (Exception ex)
             {
-                new NfeWsErroController().CadastrarErroGenerico(nfe.GrvId, model.UsuarioId, nfe.IdentificadorNota.Value, OrigemErro.WebService, Acao.Cancelamento, "Ocorreu um erro ao cancelar a Nota Fiscal: " + ex.Message);
+                new NfeWsErroController().CadastrarErroGenerico(nfe.GrvId, model.UsuarioId, nfe.IdentificadorNota, OrigemErro.WebService, Acao.Cancelamento, "Ocorreu um erro ao cancelar a Nota Fiscal: " + ex.Message);
 
                 throw new Exception("Ocorreu um erro ao cancelar a Nota Fiscal (" + model.IdentificadorNota + "): " + ex.Message);
             }

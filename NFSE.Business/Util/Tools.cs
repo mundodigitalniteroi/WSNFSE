@@ -145,7 +145,9 @@ namespace NFSE.Business.Util
             Bitmap Retorno = null;
 
             var thread = new Thread(() => Retorno = new Bitmap(CaptureWebPage(url)));
+
             thread.SetApartmentState(ApartmentState.STA);
+
             thread.Start();
 
             var stopwatch = new Stopwatch();
@@ -203,12 +205,19 @@ namespace NFSE.Business.Util
 
             httpWebRequest.PreAuthenticate = true;
 
-            using (HttpWebResponse response = (HttpWebResponse)httpWebRequest.GetResponse())
+            try
             {
-                using (StreamReader streamReader = new StreamReader(response.GetResponseStream()))
+                using (HttpWebResponse response = (HttpWebResponse)httpWebRequest.GetResponse())
                 {
-                    return streamReader.ReadToEnd().Trim();
+                    using (var streamReader = new StreamReader(response.GetResponseStream()))
+                    {
+                        return streamReader.ReadToEnd().Trim();
+                    }
                 }
+            }
+            catch (WebException ex)
+            {
+                throw new Exception(new StreamReader(ex.Response.GetResponseStream()).ReadToEnd());
             }
         }
 

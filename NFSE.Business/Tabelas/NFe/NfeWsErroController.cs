@@ -127,16 +127,29 @@ namespace NFSE.Business.Tabelas.NFe
                 }
             }
 
+            if (model.CodigoErro.Equals("---") || model.CodigoErro.Equals("..."))
+            {
+                model.CodigoErro = string.Empty;
+            }
+
             SqlParameter[] sqlParameters =
             {
                 new SqlParameter("@GrvId", SqlDbType.Int) { Value = model.GrvId },
+
                 new SqlParameter("@IdentificadorNota", SqlDbType.Int) { Value = model.IdentificadorNota },
+
                 new SqlParameter("@UsuarioId", SqlDbType.Int) { Value = model.UsuarioId },
+
                 new SqlParameter("@Acao", SqlDbType.Char) { Value = model.Acao },
+
                 new SqlParameter("@OrigemErro", SqlDbType.Char) { Value = model.OrigemErro },
+
                 new SqlParameter("@Status", SqlDbType.VarChar) { Value = model.Status },
+
                 new SqlParameter("@CodigoErro", SqlDbType.VarChar) { Value = model.CodigoErro },
+
                 new SqlParameter("@MensagemErro", SqlDbType.VarChar) { Value = model.MensagemErro },
+
                 new SqlParameter("@CorrecaoErro", SqlDbType.VarChar) { Value = model.CorrecaoErro }
             };
 

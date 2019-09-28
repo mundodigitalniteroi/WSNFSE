@@ -41,7 +41,7 @@ namespace NFSE.Business.Tabelas.NFe
             }
             catch (Exception ex)
             {
-                new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, nfe.IdentificadorNota.Value, OrigemErro.MobLink, acao, "Ocorreu um erro ao consultar os dados do Servidor: " + ex);
+                new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, nfe.IdentificadorNota, OrigemErro.MobLink, acao, "Ocorreu um erro ao consultar os dados do Servidor: " + ex);
 
                 throw new Exception("Ocorreu um erro ao consultar os dados do Servidor: " + ex);
             }
@@ -52,7 +52,7 @@ namespace NFSE.Business.Tabelas.NFe
                 {
                     if (dtPrestador == null)
                     {
-                        new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, nfe.IdentificadorNota.Value, OrigemErro.MobLink, acao, "Prestador de Serviços não configurado. CNPJ: " + cnpj);
+                        new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, nfe.IdentificadorNota, OrigemErro.MobLink, acao, "Prestador de Serviços não configurado. CNPJ: " + cnpj);
 
                         throw new Exception("Prestador de Serviços não configurado. CNPJ: " + cnpj);
                     }
@@ -70,14 +70,14 @@ namespace NFSE.Business.Tabelas.NFe
             }
             catch (Exception ex)
             {
-                new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, nfe.IdentificadorNota.Value, OrigemErro.MobLink, acao, "Ocorreu um erro ao consultar o Prestador de Serviços: " + ex.Message);
+                new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, nfe.IdentificadorNota, OrigemErro.MobLink, acao, "Ocorreu um erro ao consultar o Prestador de Serviços: " + ex.Message);
 
                 throw new Exception("Ocorreu um erro ao consultar o Prestador de Serviços: " + ex.Message);
             }
 
             if (string.IsNullOrEmpty(prestadorAcesso.prestador_chave))
             {
-                new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, nfe.IdentificadorNota.Value, OrigemErro.MobLink, acao, "Prestador de Serviços sem chave configurada (token). CNPJ: " + cnpj);
+                new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, nfe.IdentificadorNota, OrigemErro.MobLink, acao, "Prestador de Serviços sem chave configurada (token). CNPJ: " + cnpj);
 
                 throw new Exception("Prestador de Serviços sem chave configurada (token). CNPJ: " + cnpj);
             }

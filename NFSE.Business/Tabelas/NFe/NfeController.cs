@@ -16,19 +16,37 @@ namespace NFSE.Business.Tabelas.NFe
         {
             var SQL = new StringBuilder();
 
-            SQL.AppendLine("SELECT NfeID AS NfeId");
-            SQL.AppendLine("      ,GrvID AS GrvId");
-            SQL.AppendLine("      ,UsuarioCadastroID AS UsuarioCadastroId");
-            SQL.AppendLine("      ,Cnpj");
-            SQL.AppendLine("      ,CodigoRetorno");
-            SQL.AppendLine("      ,CodigoVerificacao");
-            SQL.AppendLine("      ,DataEmissao");
-            SQL.AppendLine("      ,StatusNfe");
-            SQL.AppendLine("      ,Url");
-            SQL.AppendLine("      ,Status");
-            SQL.AppendLine("      ,DataCadastro");
-            SQL.AppendLine("      ,DataAlteracao");
-            SQL.AppendLine("      ,IdentificadorNota");
+            SQL.AppendLine("SELECT tb_dep_nfe.NfeId");
+
+            SQL.AppendLine("      ,tb_dep_nfe.GrvId");
+
+            SQL.AppendLine("      ,tb_dep_nfe.FaturamentoServicoTipoVeiculoId");
+
+            SQL.AppendLine("      ,tb_dep_nfe.IdentificadorNota");
+
+            SQL.AppendLine("      ,tb_dep_nfe.NfeComplementarId");
+
+            SQL.AppendLine("      ,tb_dep_nfe.UsuarioCadastroId");
+
+            SQL.AppendLine("      ,tb_dep_nfe.Cnpj");
+
+            SQL.AppendLine("      ,tb_dep_nfe.Numero");
+
+            SQL.AppendLine("      ,tb_dep_nfe.CodigoVerificacao");
+
+            SQL.AppendLine("      ,tb_dep_nfe.CodigoRetorno");
+
+            SQL.AppendLine("      ,tb_dep_nfe.Url");
+
+            SQL.AppendLine("      ,tb_dep_nfe.Status");
+
+            SQL.AppendLine("      ,tb_dep_nfe.StatusNfe");
+
+            SQL.AppendLine("      ,tb_dep_nfe.DataEmissao");
+
+            SQL.AppendLine("      ,tb_dep_nfe.DataCadastro");
+
+            SQL.AppendLine("      ,tb_dep_nfe.DataAlteracao");
 
             SQL.AppendLine("  FROM dbo.tb_dep_nfe");
 
@@ -45,29 +63,51 @@ namespace NFSE.Business.Tabelas.NFe
             }
         }
 
-        public List<NfeEntity> Listar(int grvId, bool selecionarNotaFiscalCancelada = false)
+        public List<NfeEntity> Listar(int grvId, bool selecionarNotaFiscalCancelada = false, int faturamentoServicoTipoVeiculoId = 0)
         {
             var SQL = new StringBuilder();
 
-            SQL.AppendLine("SELECT NfeID AS NfeId");
-            SQL.AppendLine("      ,GrvID AS GrvId");
-            SQL.AppendLine("      ,UsuarioCadastroID AS UsuarioCadastroId");
-            SQL.AppendLine("      ,Cnpj");
-            SQL.AppendLine("      ,CodigoRetorno");
-            SQL.AppendLine("      ,CodigoVerificacao");
-            SQL.AppendLine("      ,DataEmissao");
-            SQL.AppendLine("      ,StatusNfe");
-            SQL.AppendLine("      ,Url");
-            SQL.AppendLine("      ,Status");
-            SQL.AppendLine("      ,DataCadastro");
-            SQL.AppendLine("      ,DataAlteracao");
-            SQL.AppendLine("      ,IdentificadorNota");
+            SQL.AppendLine("SELECT tb_dep_nfe.NfeId");
+
+            SQL.AppendLine("      ,tb_dep_nfe.GrvId");
+
+            SQL.AppendLine("      ,tb_dep_nfe.FaturamentoServicoTipoVeiculoId");
+
+            SQL.AppendLine("      ,tb_dep_nfe.IdentificadorNota");
+
+            SQL.AppendLine("      ,tb_dep_nfe.NfeComplementarId");
+
+            SQL.AppendLine("      ,tb_dep_nfe.UsuarioCadastroId");
+
+            SQL.AppendLine("      ,tb_dep_nfe.Cnpj");
+
+            SQL.AppendLine("      ,tb_dep_nfe.Numero");
+
+            SQL.AppendLine("      ,tb_dep_nfe.CodigoVerificacao");
+
+            SQL.AppendLine("      ,tb_dep_nfe.CodigoRetorno");
+
+            SQL.AppendLine("      ,tb_dep_nfe.Url");
+
+            SQL.AppendLine("      ,tb_dep_nfe.Status");
+
+            SQL.AppendLine("      ,tb_dep_nfe.StatusNfe");
+
+            SQL.AppendLine("      ,tb_dep_nfe.DataEmissao");
+
+            SQL.AppendLine("      ,tb_dep_nfe.DataCadastro");
+
+            SQL.AppendLine("      ,tb_dep_nfe.DataAlteracao");
 
             SQL.AppendLine("  FROM dbo.tb_dep_nfe");
 
             SQL.AppendLine(" WHERE GrvId = " + grvId);
 
-            if (!selecionarNotaFiscalCancelada)
+            if (faturamentoServicoTipoVeiculoId > 0)
+            {
+                SQL.AppendLine("   AND FaturamentoServicoTipoVeiculoId = " + faturamentoServicoTipoVeiculoId);
+            }
+            else if (!selecionarNotaFiscalCancelada)
             {
                 SQL.AppendLine("   AND Status NOT IN ('N','E','I')");
             }
@@ -78,9 +118,9 @@ namespace NFSE.Business.Tabelas.NFe
             }
         }
 
-        public NfeEntity Selecionar(int grvId, bool selecionarNotaFiscalCancelada = false)
+        public NfeEntity Selecionar(int grvId, bool selecionarNotaFiscalCancelada = false, int faturamentoServicoTipoVeiculoId = 0)
         {
-            var list = Listar(grvId, selecionarNotaFiscalCancelada);
+            var list = Listar(grvId, selecionarNotaFiscalCancelada, faturamentoServicoTipoVeiculoId);
 
             return list?.FirstOrDefault();
         }
@@ -94,14 +134,30 @@ namespace NFSE.Business.Tabelas.NFe
             SQL.AppendLine("      (GrvID");
             SQL.AppendLine("      ,UsuarioCadastroID");
             SQL.AppendLine("      ,Cnpj");
-            SQL.AppendLine("      ,IdentificadorNota)");
+            SQL.AppendLine("      ,IdentificadorNota");
+            SQL.AppendLine("      ,NfeComplementarId");
+            SQL.AppendLine("      ,Status");
+            SQL.AppendLine("      ,FaturamentoServicoTipoVeiculoId)");
 
             SQL.AppendLine("VALUES");
 
             SQL.AppendLine("      (" + model.GrvId);
             SQL.AppendLine("      ," + model.UsuarioCadastroId);
             SQL.AppendLine("      ,'" + model.Cnpj + "'");
-            SQL.AppendLine("      ," + model.IdentificadorNota + ")");
+            SQL.AppendLine("      ," + model.IdentificadorNota);
+
+            if (model.NfeComplementarId == null)
+            {
+                SQL.AppendLine("      ,NULL");
+                SQL.AppendLine("      ,'A'");
+            }
+            else
+            {
+                SQL.AppendLine("      ," + model.NfeComplementarId);
+                SQL.AppendLine("      ,'R'");
+            }
+
+            SQL.AppendLine("      ," + model.FaturamentoServicoTipoVeiculoId + ")");
 
             return DataBase.ExecuteScopeIdentity(SQL);
         }
@@ -126,13 +182,13 @@ namespace NFSE.Business.Tabelas.NFe
             return DataBase.Execute(SQL);
         }
 
-        public int AtualizarRetornoNotaFiscal(int nfeId, RetornoNotaFiscalEntity retornoNotaFiscal)
+        public int AtualizarRetornoNotaFiscal(NfeEntity nfe, RetornoNotaFiscalEntity retornoNotaFiscal)
         {
             var SQL = new StringBuilder();
 
             SQL.AppendLine("UPDATE dbo.tb_dep_nfe");
 
-            SQL.AppendLine("   SET Status = 'P'");
+            SQL.AppendLine("   SET Status = '" + nfe.Status + "'");
 
             SQL.AppendLine("      ,Numero = '" + retornoNotaFiscal.numero_rps + "'");
 
@@ -146,7 +202,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             SQL.AppendLine("      ,DataAlteracao = GETDATE()");
 
-            SQL.AppendLine(" WHERE NfeID = " + nfeId);
+            SQL.AppendLine(" WHERE NfeID = " + nfe.NfeId);
 
             return DataBase.Execute(SQL);
         }
@@ -157,7 +213,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             SQL.AppendLine("UPDATE dbo.tb_dep_nfe");
 
-            SQL.AppendLine("   SET Status = 'A'");
+            SQL.AppendLine("   SET Status = '" + model.Status + "'");
 
             if (model.CodigoRetorno != null && model.CodigoRetorno > 0)
             {
@@ -167,7 +223,6 @@ namespace NFSE.Business.Tabelas.NFe
             SQL.AppendLine("      ,DataAlteracao = GETDATE()");
 
             SQL.AppendLine(" WHERE NfeID = " + model.NfeId);
-            SQL.AppendLine("   AND Status = 'C'");
 
             return DataBase.Execute(SQL);
         }

@@ -8,7 +8,7 @@ namespace NFSE.Business.Tabelas.Global
 {
     public class EmpresaController
     {
-        public List<EmpresaEntity> Listar(int id)
+        public List<EmpresaEntity> Listar(EmpresaEntity model)
         {
             var SQL = new StringBuilder();
 
@@ -70,7 +70,17 @@ namespace NFSE.Business.Tabelas.Global
 
             SQL.AppendLine("  FROM db_global.dbo.tb_glo_emp_empresas");
 
-            SQL.AppendLine(" WHERE tb_glo_emp_empresas.id_empresa = " + id);
+            SQL.AppendLine(" WHERE 1 = 1");
+
+            if (model.EmpresaId > 0)
+            {
+                SQL.AppendLine("   AND tb_glo_emp_empresas.id_empresa = " + model.EmpresaId);
+            }
+
+            if (!string.IsNullOrWhiteSpace(model.Cnpj))
+            {
+                SQL.AppendLine("   AND tb_glo_emp_empresas.cnpj = '" + model.Cnpj + "'");
+            }
 
             using (var dataTable = DataBase.Select(SQL))
             {
@@ -78,9 +88,9 @@ namespace NFSE.Business.Tabelas.Global
             }
         }
 
-        public EmpresaEntity Selecionar(int id)
+        public EmpresaEntity Selecionar(EmpresaEntity empresa)
         {
-            var list = Listar(id);
+            var list = Listar(empresa);
 
             return list?.FirstOrDefault();
         }

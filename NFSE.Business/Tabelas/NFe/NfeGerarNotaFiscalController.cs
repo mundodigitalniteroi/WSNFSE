@@ -17,11 +17,23 @@ namespace NFSE.Business.Tabelas.NFe
     {
         public List<string> GerarNotaFiscal(int grvId, int usuarioId, bool isDev)
         {
+            return GerarNotaFiscal(grvId, 0, usuarioId, isDev);
+        }
+
+        public List<string> GerarNovaNotaFiscal(int grvId, int faturamentoServicoTipoVeiculoId, int usuarioId, bool isDev)
+        {
+            return GerarNotaFiscal(grvId, faturamentoServicoTipoVeiculoId, usuarioId, isDev);
+        }
+
+        private List<string> GerarNotaFiscal(int grvId, int faturamentoServicoTipoVeiculoId, int usuarioId, bool isDev)
+        {
             DataBase.SystemEnvironment = isDev ? SystemEnvironment.Development : SystemEnvironment.Production;
 
             DataBase.SetContextInfo(usuarioId);
 
             var acao = Acao.Solicitação;
+
+            var returnList = new List<string>();
 
             #region NFe
             var Nfe = new NfeEntity();
@@ -31,15 +43,41 @@ namespace NFSE.Business.Tabelas.NFe
             //   C: Cadastro;
             //   A: Aguardando Processamento (envio da solicitação com sucesso, para a Prefeitura);
             //   P: Processado (download da Nfe e atualização da Nfe no Sistema concluídos com sucesso);
-            //   E: Erro (quando a Prefeitura indicou algum problema);
             //   R: Reprocessar (marcação manual para o envio de uma nova solicitação de Nfe para o mesmo GRV, esta opção gera um novo registro de Nfe);
-            //   S: Reprocessado (conclusão do reprocessamento);
-            //   I: Inválido (quando ocorreu um erro Mob-Link);
+            //   S: Aguardando Reprocessamento;
+            //   T: Reprocessado (conclusão do reprocessamento);
             //   N: CaNcelado.
+            //   E: Erro (quando a Prefeitura indicou algum problema);
+            //   I: Inválido (quando ocorreu um erro Mob-Link);
 
-            if ((NfeList = new NfeController().Listar(grvId)) != null)
+            if (faturamentoServicoTipoVeiculoId > 0)
             {
-                if (NfeList.Where(w => w.Status == 'C' || w.Status == 'A' || w.Status == 'P' || w.Status == 'R' || w.Status == 'S').Count() > 0)
+                Nfe = new NfeController().Selecionar(grvId, true, faturamentoServicoTipoVeiculoId);
+
+                if (Nfe == null)
+                {
+                    new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, null, OrigemErro.MobLink, acao, "Nota Fiscal não encontrada");
+
+                    returnList.Add("AVISO: Nota Fiscal não encontrada");
+
+                    return returnList;
+                }
+
+                // Erro / Inválido / Cancelado
+                if (Nfe.Status != 'E' && Nfe.Status != 'I' && Nfe.Status != 'C')
+                {
+                    new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, null, OrigemErro.MobLink, acao, "Nota Fiscal não está apto para reprocessamento");
+
+                    returnList.Add("AVISO: Nota Fiscal não está apto para reprocessamento");
+
+                    return returnList;
+                }
+            }
+            else if ((NfeList = new NfeController().Listar(grvId)) != null)
+            {
+                var status = new char[] { 'C', 'A', 'P', 'R', 'S', 'T' };
+
+                if (NfeList.Where(w => status.Contains(w.Status)).Count() > 0)
                 {
                     if (NfeList.Count == 1)
                     {
@@ -56,7 +94,9 @@ namespace NFSE.Business.Tabelas.NFe
                     {
                         new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, null, OrigemErro.MobLink, acao, "GRV já possui Nota Fiscal cadastrada");
 
-                        throw new Exception("GRV já possui Nota Fiscal cadastrada");
+                        returnList.Add("AVISO: GRV já possui Nota Fiscal cadastrada");
+
+                        return returnList;
                     }
                 }
             }
@@ -79,18 +119,21 @@ namespace NFSE.Business.Tabelas.NFe
             {
                 new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, null, OrigemErro.MobLink, acao, "CLIDEP sem regra de NFE definido");
 
-                throw new Exception("CLIDEP sem regra de NFE definido");
+                returnList.Add("AVISO: CLIDEP sem regra de NFE definido");
+
+                return returnList;
             }
             #endregion Regras do Faturamento
 
             #region Empresa
             var Empresa = new EmpresaEntity();
-
-            if ((Empresa = new EmpresaController().Selecionar(Deposito.EmpresaId)) == null)
+            if ((Empresa = new EmpresaController().Selecionar(new EmpresaEntity { EmpresaId = Deposito.EmpresaId })) == null)
             {
                 new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, null, OrigemErro.MobLink, acao, "Empresa associada não encontrada");
 
-                throw new Exception("Empresa associada não encontrada");
+                returnList.Add("AVISO: Empresa associada não encontrada");
+
+                return returnList;
             }
             #endregion Empresa
 
@@ -101,7 +144,9 @@ namespace NFSE.Business.Tabelas.NFe
             {
                 new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, null, OrigemErro.MobLink, acao, "Atendimento não encontrado");
 
-                throw new Exception("Atendimento não encontrado");
+                returnList.Add("AVISO: Atendimento não encontrado");
+
+                return returnList;
             }
             #endregion Atendimento
 
@@ -112,85 +157,149 @@ namespace NFSE.Business.Tabelas.NFe
             {
                 new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, null, OrigemErro.MobLink, acao, "Faturamento não encontrado");
 
-                throw new Exception("Faturamento não encontrado");
+                returnList.Add("AVISO: Faturamento não encontrado");
+
+                return returnList;
             }
 
             if (Faturamentos.Sum(c => c.ValorPagamento).Equals(0))
             {
                 new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, null, OrigemErro.MobLink, acao, "Faturamento sem valor");
 
-                throw new Exception("Faturamento sem valor");
+                returnList.Add("AVISO: Faturamento sem valor");
+
+                return returnList;
             }
             #endregion Faturamento
 
             #region Valores somados da Composição do Faturamento
             var Composicoes = new List<FaturamentoAssociadoCnaeEntity>();
 
-            if ((Composicoes = new FaturamentoAssociadoCnaeController().Listar(grv.GrvId)) == null)
+            if ((Composicoes = new FaturamentoAssociadoCnaeController().Listar(grvId, faturamentoServicoTipoVeiculoId)) == null)
             {
                 new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, null, OrigemErro.MobLink, acao, "Composição do Faturamento não encontrado");
 
-                throw new Exception("Composição do Faturamento não encontrado");
+                returnList.Add("AVISO: Composição do Faturamento não encontrado");
+
+                return returnList;
             }
 
-            // TODO: Ver se devemos retirar as composições que não possuem CNAE nem ListaServico
             Composicoes = Composicoes.Where(w => w.CnaeId > 0 && w.ListaServicoId > 0).ToList();
 
             if (Composicoes.Count == 0)
             {
                 new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, null, OrigemErro.MobLink, acao, "Composição do Faturamento sem Cnae e Lista de Serviço cadastrado");
 
-                throw new Exception("Composição do Faturamento sem Cnae e Lista de Serviço cadastrado");
+                returnList.Add("AVISO: Composição do Faturamento sem Cnae e Lista de Serviço cadastrado");
+
+                return returnList;
             }
             #endregion Valores somados da Composição do Faturamento
 
             var CapaAutorizacaoNfse = new CapaAutorizacaoNfse();
 
-            var jsonList = new List<string>();
-
             string json;
 
             foreach (var composicao in Composicoes)
             {
-                #region Preenchimento do Entityo
-                CapaAutorizacaoNfse = new CapaAutorizacaoNfse
+                #region Preenchimento da Entidade
+                try
                 {
-                    GrvId = grvId,
+                    CapaAutorizacaoNfse = new CapaAutorizacaoNfse
+                    {
+                        GrvId = grvId,
 
-                    IdentificadorNota = new DetranController().GetDetranSequence("NFE"),
+                        IdentificadorNota = new DetranController().GetDetranSequence("NFE"),
 
-                    UsuarioId = usuarioId,
+                        UsuarioId = usuarioId,
 
-                    Homologacao = isDev,
+                        Homologacao = isDev,
 
-                    Autorizacao = Autorizar(grv, Deposito, Empresa, Atendimento, composicao, isDev)
-                };
-                #endregion Preenchimento do Entityo
+                        Autorizacao = Autorizar(grv, Deposito, Empresa, Atendimento, composicao, isDev)
+                    };
+                }
+                catch (Exception ex)
+                {
+                    returnList.Add(ex.Message);
 
-                // Cadastro do Envio
-                Nfe = CadastrarEnvio(grvId, Empresa.Cnpj, 'E', CapaAutorizacaoNfse.IdentificadorNota, usuarioId);
+                    continue;
+                }
+                #endregion Preenchimento da Entidade
+
+                if (faturamentoServicoTipoVeiculoId == 0)
+                {
+                    // Cadastro do Envio
+                    Nfe = CadastrarEnvio(grvId, Empresa.Cnpj, 'E', CapaAutorizacaoNfse.IdentificadorNota, usuarioId, composicao.FaturamentoServicoTipoVeiculoId);
+                }
+                else
+                {
+                    // Cadastro do Reenvio
+                    Nfe = CadastrarEnvio(grvId, Empresa.Cnpj, 'E', CapaAutorizacaoNfse.IdentificadorNota, usuarioId, composicao.FaturamentoServicoTipoVeiculoId, Nfe.NfeId);
+                }
+
 
                 Nfe.Cliente = Cliente.Nome;
 
                 Nfe.Deposito = Deposito.Descricao;
 
-                json = new NfeSolicitarEmissaoNotaFiscalController().SolicitarEmissaoNotaFiscal(CapaAutorizacaoNfse);
-
-                // Execução do Web Service
-                if (!ProcessarResultado(json, usuarioId, Nfe, 'E'))
+                try
                 {
-                    jsonList.Add(json);
+                    json = new NfeSolicitarEmissaoNotaFiscalController().SolicitarEmissaoNotaFiscal(CapaAutorizacaoNfse);
+                }
+                catch (Exception ex)
+                {
+                    returnList.Add(ex.Message);
 
-                    return jsonList;
+                    continue;
                 }
 
-                jsonList.Add(json);
+                returnList.Add(json);
+
+                // Execução do Web Service
+                try
+                {
+                    if (!ProcessarResultado(json, usuarioId, Nfe))
+                    {
+                        continue;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    returnList.Add(ex.Message);
+
+                    continue;
+                }
             }
 
-            return jsonList;
+            return returnList;
         }
 
-        private bool ProcessarResultado(string json, int usuarioId, NfeEntity nfe, char tipo)
+        private NfeEntity CadastrarEnvio(int grvId, string cnpj, char tipo, int identificadorNota, int usuarioId, int faturamentoServicoTipoVeiculoId, int nfeComplementarId = 0)
+        {
+            var Nfe = new NfeEntity
+            {
+                GrvId = grvId,
+
+                Cnpj = cnpj,
+
+                UsuarioCadastroId = usuarioId,
+
+                IdentificadorNota = identificadorNota,
+
+                FaturamentoServicoTipoVeiculoId = faturamentoServicoTipoVeiculoId
+            };
+
+            if (nfeComplementarId > 0)
+            {
+                Nfe.NfeComplementarId = nfeComplementarId;
+            }
+
+            Nfe.NfeId = new NfeController().Cadastrar(Nfe);
+
+            return new NfeController().ListarPorIdentificadorNota(identificadorNota).FirstOrDefault();
+        }
+
+        private bool ProcessarResultado(string json, int usuarioId, NfeEntity nfe)
         {
             try
             {
@@ -204,12 +313,19 @@ namespace NFSE.Business.Tabelas.NFe
                     {
                         NfeId = nfe.NfeId,
 
-                        Tipo = tipo,
+                        Tipo = nfe.NfeComplementarId == null ? 'E' : 'R',
 
                         Mensagem = (string)JObject.Parse(json)["status"]
                     });
 
-                    nfe.Status = 'A';
+                    if (nfe.NfeComplementarId == null)
+                    {
+                        nfe.Status = 'A';
+                    }
+                    else
+                    {
+                        nfe.Status = 'S';
+                    }                    
 
                     new NfeController().AguardandoProcessamento(nfe);
 
@@ -220,11 +336,17 @@ namespace NFSE.Business.Tabelas.NFe
                     var retornoErro = new NfeWsErroModel
                     {
                         GrvId = nfe.GrvId,
-                        IdentificadorNota = nfe.IdentificadorNota.Value,
+
+                        IdentificadorNota = nfe.IdentificadorNota,
+
                         UsuarioId = usuarioId,
+
                         Acao = (char)Acao.Retorno,
+
                         OrigemErro = (char)OrigemErro.WebService,
+
                         Status = results["codigo"],
+
                         MensagemErro = results["mensagem"]
                     };
 
@@ -241,46 +363,10 @@ namespace NFSE.Business.Tabelas.NFe
                     return false;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw new Exception(ex.Message);
             }
-        }
-
-        private NfeEntity CadastrarEnvio(int grvId, string cnpj, char tipo, int identificadorNota, int usuarioId)
-        {
-            var Nfe = new NfeEntity();
-
-            if (tipo.Equals('E'))
-            {
-                Nfe.NfeId = new NfeController().Cadastrar(new NfeEntity
-                {
-                    GrvId = grvId,
-
-                    Cnpj = cnpj,
-
-                    UsuarioCadastroId = usuarioId,
-
-                    IdentificadorNota = identificadorNota
-                });
-
-                Nfe = new NfeController().ListarPorIdentificadorNota(identificadorNota).FirstOrDefault();
-            }
-            else
-            {
-                var Nfes = new NfeController().Listar(grvId);
-
-                if (Nfes != null)
-                {
-                    Nfe = Nfes.OrderByDescending(m => m.DataCadastro).FirstOrDefault();
-                }
-                else
-                {
-                    throw new Exception("Cadastro da Nfe no status R não encontrado");
-                }
-            }
-
-            return Nfe;
         }
 
         private Autorizacao Autorizar(GrvEntity grv, DepositoEntity deposito, EmpresaEntity empresa, AtendimentoEntity atendimento, FaturamentoAssociadoCnaeEntity composicao, bool isDev)

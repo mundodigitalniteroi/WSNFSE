@@ -24,6 +24,8 @@
 
         public char FlagEnviarInscricaoEstadual { get; set; }
 
+        public int FaturamentoServicoTipoVeiculoId { get; set; }
+
         public decimal TotalComDesconto { get; set; }
     }
 }
