@@ -59,7 +59,6 @@
     <Compile Include="Tabelas\NFe\NfeRetornoSolicitacaoController.cs" />
     <Compile Include="Tabelas\NFe\NfeSolicitarEmissaoNotaFiscalController.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Tabelas\NFe\AutorizacaoNotaFiscalController.cs" />
     <Compile Include="Tabelas\NFe\DetranController.cs" />
     <Compile Include="Tabelas\DP\AtendimentoController.cs" />
     <Compile Include="Tabelas\DP\DepositoController.cs" />

@@ -157,8 +157,8 @@ namespace EnvioTeste
             {
                 var aux = new NfeReceberNotaFiscalController().ReceberNotaFiscal(new Consulta
                 {
-                    GrvId = 543713,
-                    IdentificadorNota = 700250,
+                    GrvId = 543712,
+                    IdentificadorNota = 700284,
                     Homologacao = true,
                     UsuarioId = 1,
                     BaixarImagemOriginal = true

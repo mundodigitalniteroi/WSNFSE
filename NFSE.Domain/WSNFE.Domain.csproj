@@ -66,7 +66,6 @@
     <Compile Include="Entities\NFe\NfeMensagemEntity.cs" />
     <Compile Include="Entities\Global\ParametroMunicipioEntity.cs" />
     <Compile Include="Entities\NFe\Prestador.cs" />
-    <Compile Include="Entities\NFe\PrestadorAcesso.cs" />
     <Compile Include="Entities\NFe\RetornoNotaFiscalEntity.cs" />
     <Compile Include="Entities\NFe\NfeWsErroModel.cs" />
     <Compile Include="Entities\NFe\Servico.cs" />
