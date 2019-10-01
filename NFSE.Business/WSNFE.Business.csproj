@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Tabelas\DP\ClienteController.cs" />
+    <Compile Include="Tabelas\DP\ClienteDepositoController.cs" />
     <Compile Include="Tabelas\DP\UsuarioController.cs" />
     <Compile Include="Tabelas\Global\CnaeListaServicoParametroMunicipioController.cs" />
     <Compile Include="Tabelas\NFe\NfeConfiguracaoImagemController.cs" />
@@ -82,19 +83,18 @@
     <Compile Include="Tabelas\NFe\NfeRetornoController.cs" />
     <Compile Include="Tabelas\NFe\NfeMensagemController.cs" />
     <Compile Include="Tabelas\Global\ParametroMunicipioController.cs" />
-    <Compile Include="Tabelas\NFe\PrestadorController.cs" />
     <Compile Include="Tabelas\NFe\NfeConfiguracao.cs" />
     <Compile Include="Util\EmailController.cs" />
     <Compile Include="Util\Tools.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NFSE.Domain\NFSE.Domain.csproj">
+    <ProjectReference Include="..\NFSE.Domain\WSNFE.Domain.csproj">
       <Project>{6d4463ef-7a19-4bf4-8333-d2a17552ed26}</Project>
-      <Name>NFSE.Domain</Name>
+      <Name>WSNFE.Domain</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NFSE.Infra\NFSE.Infra.csproj">
+    <ProjectReference Include="..\NFSE.Infra\WSNFE.Infra.csproj">
       <Project>{4ded3e67-6931-4148-a31b-82009a3e9743}</Project>
-      <Name>NFSE.Infra</Name>
+      <Name>WSNFE.Infra</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

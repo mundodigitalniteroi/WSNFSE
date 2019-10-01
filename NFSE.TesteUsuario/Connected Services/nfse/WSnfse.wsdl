@@ -125,6 +125,7 @@
           <s:element minOccurs="1" maxOccurs="1" name="IdentificadorNota" type="s:int" />
           <s:element minOccurs="1" maxOccurs="1" name="UsuarioId" type="s:int" />
           <s:element minOccurs="1" maxOccurs="1" name="Homologacao" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="BaixarImagemOriginal" type="s:boolean" />
         </s:sequence>
       </s:complexType>
       <s:element name="ReceberNotaFiscalResponse">
@@ -210,6 +211,8 @@
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="1" maxOccurs="1" name="grvId" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="identificadorNota" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="faturamentoServicoTipoVeiculoId" type="s:int" />
             <s:element minOccurs="1" maxOccurs="1" name="usuarioId" type="s:int" />
             <s:element minOccurs="1" maxOccurs="1" name="isDev" type="s:boolean" />
           </s:sequence>

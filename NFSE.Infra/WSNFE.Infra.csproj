@@ -48,9 +48,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NFSE.Domain\NFSE.Domain.csproj">
+    <ProjectReference Include="..\NFSE.Domain\WSNFE.Domain.csproj">
       <Project>{6d4463ef-7a19-4bf4-8333-d2a17552ed26}</Project>
-      <Name>NFSE.Domain</Name>
+      <Name>WSNFE.Domain</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

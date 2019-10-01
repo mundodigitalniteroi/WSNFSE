@@ -19,62 +19,62 @@ namespace NFSE.Business.Tabelas.NFe
 {
     public class NfeReceberNotaFiscalController
     {
-        public RetornoNotaFiscalEntity ReceberNotaFiscal(Consulta model)
+        public RetornoNotaFiscalEntity ReceberNotaFiscal(Consulta identificaoNotaFiscal)
         {
-            DataBase.SystemEnvironment = model.Homologacao ? SystemEnvironment.Development : SystemEnvironment.Production;
+            DataBase.SystemEnvironment = identificaoNotaFiscal.Homologacao ? SystemEnvironment.Development : SystemEnvironment.Production;
 
-            var nfe = new NfeController().ConsultarNotaFiscal(model.GrvId, model.UsuarioId, model.IdentificadorNota, Acao.Retorno);
+            var nfe = new NfeController().ConsultarNotaFiscal(identificaoNotaFiscal.GrvId, identificaoNotaFiscal.UsuarioId, identificaoNotaFiscal.IdentificadorNota, Acao.Retorno);
 
-            model.NfeId = nfe.NfeId;
+            identificaoNotaFiscal.NfeId = nfe.NfeId;
 
-            var grv = new GrvController().Selecionar(model.GrvId);
+            var grv = new GrvController().Selecionar(identificaoNotaFiscal.GrvId);
 
             #region Empresa
             EmpresaEntity Empresa;
 
             if ((Empresa = new EmpresaController().Selecionar(new EmpresaEntity { EmpresaId = new DepositoController().Selecionar(grv.DepositoId).EmpresaId })) == null)
             {
-                new NfeWsErroController().CadastrarErroGenerico(model.GrvId, model.UsuarioId, null, OrigemErro.MobLink, Acao.Retorno, "Empresa associada não encontrada");
+                new NfeWsErroController().CadastrarErroGenerico(identificaoNotaFiscal.GrvId, identificaoNotaFiscal.UsuarioId, null, OrigemErro.MobLink, Acao.Retorno, "Empresa associada não encontrada");
 
                 throw new Exception("Empresa associada não encontrada");
             }
             #endregion Empresa
 
-            string nfse;
+            string json;
 
             try
             {
-                nfse = new Tools().GetNfse(new NfeConfiguracao().GetRemoteServer() + "/" + model.IdentificadorNota, Empresa.Token);
+                json = new Tools().GetNfse(new NfeConfiguracao().GetRemoteServer() + "/" + identificaoNotaFiscal.IdentificadorNota, Empresa.Token);
             }
             catch (Exception ex)
             {
                 AtualizarNotaFiscal(nfe);
 
-                new NfeWsErroController().CadastrarErroGenerico(nfe.GrvId, model.UsuarioId, nfe.IdentificadorNota, OrigemErro.WebService, Acao.Retorno, "Ocorreu um erro ao receber a Nota Fiscal: " + ex.Message);
+                new NfeWsErroController().CadastrarErroGenerico(nfe.GrvId, identificaoNotaFiscal.UsuarioId, nfe.IdentificadorNota, OrigemErro.WebService, Acao.Retorno, "Ocorreu um erro ao receber a Nota Fiscal: " + ex.Message);
 
-                throw new Exception("Ocorreu um erro ao receber a Nota Fiscal (" + model.IdentificadorNota + "): " + ex.Message);
+                throw new Exception("Ocorreu um erro ao receber a Nota Fiscal (" + identificaoNotaFiscal.IdentificadorNota + "): " + ex.Message);
             }
 
             try
             {
-                return ProcessarRetorno(grv, nfe, model, nfse);
+                return ProcessarRetorno(grv, nfe, identificaoNotaFiscal, json);
             }
             catch (Exception ex)
             {
                 AtualizarNotaFiscal(nfe);
 
-                new NfeWsErroController().CadastrarErroGenerico(nfe.GrvId, model.UsuarioId, nfe.IdentificadorNota, OrigemErro.MobLink, Acao.Retorno, "Ocorreu um erro ao cadastrar a Nota Fiscal: " + ex.Message);
+                new NfeWsErroController().CadastrarErroGenerico(nfe.GrvId, identificaoNotaFiscal.UsuarioId, nfe.IdentificadorNota, OrigemErro.MobLink, Acao.Retorno, "Ocorreu um erro ao cadastrar a Nota Fiscal: " + ex.Message);
 
-                throw new Exception("Ocorreu um erro ao cadastrar a Nota Fiscal (" + model.IdentificadorNota + "): " + ex.Message);
+                throw new Exception("Ocorreu um erro ao cadastrar a Nota Fiscal (" + identificaoNotaFiscal.IdentificadorNota + "): " + ex.Message);
             }
         }
 
-        private RetornoNotaFiscalEntity ProcessarRetorno(GrvEntity grv, NfeEntity nfe, Consulta notaFiscalRecebida, string retorno)
+        private RetornoNotaFiscalEntity ProcessarRetorno(GrvEntity grv, NfeEntity nfe, Consulta identificaoNotaFiscal, string retornoJson)
         {
             var retornoConsulta = new JavaScriptSerializer()
             {
                 MaxJsonLength = int.MaxValue
-            }.Deserialize<RetornoNotaFiscalEntity>(retorno);
+            }.Deserialize<RetornoNotaFiscalEntity>(retornoJson);
 
             if (retornoConsulta.status.Trim().ToLower().Equals("processando_autorizacao"))
             {
@@ -87,9 +87,9 @@ namespace NFSE.Business.Tabelas.NFe
 
                 foreach (var erro in retornoConsulta.erros)
                 {
-                    retornoErro.GrvId = notaFiscalRecebida.GrvId;
-                    retornoErro.IdentificadorNota = notaFiscalRecebida.IdentificadorNota;
-                    retornoErro.UsuarioId = notaFiscalRecebida.UsuarioId;
+                    retornoErro.GrvId = identificaoNotaFiscal.GrvId;
+                    retornoErro.IdentificadorNota = identificaoNotaFiscal.IdentificadorNota;
+                    retornoErro.UsuarioId = identificaoNotaFiscal.UsuarioId;
                     retornoErro.Acao = (char)Acao.Retorno;
                     retornoErro.OrigemErro = (char)OrigemErro.WebService;
                     retornoErro.Status = retornoConsulta.status.Trim().ToUpper();
@@ -119,134 +119,110 @@ namespace NFSE.Business.Tabelas.NFe
                 return retornoConsulta;
             }
 
-            NfeConfiguracaoImagemEntity configuracaoImagem;
-
-            if ((configuracaoImagem = new NfeConfiguracaoImagemController().Selecionar(grv.ClienteId, grv.DepositoId)) == null)
-            {
-                new NfeWsErroController().CadastrarErroGenerico(nfe.GrvId, notaFiscalRecebida.UsuarioId, nfe.IdentificadorNota, OrigemErro.WebService, Acao.Retorno, "Configuração de imagem não cadastrado para o Depósito: " + grv.DepositoId);
-
-                throw new Exception("Configuração de imagem não cadastrado para o Depósito: " + grv.DepositoId);
-            }
-
-            if (configuracaoImagem.ValueX == 0 && configuracaoImagem.ValueY == 0 && configuracaoImagem.Width == 0 && configuracaoImagem.Height == 0)
-            {
-                new NfeWsErroController().CadastrarErroGenerico(nfe.GrvId, notaFiscalRecebida.UsuarioId, nfe.IdentificadorNota, OrigemErro.WebService, Acao.Retorno, "Configuração de imagem cadastrado mas não configurado para o Depósito: " + grv.DepositoId);
-
-                throw new Exception("Configuração de imagem cadastrado mas não configurado para o Depósito: " + grv.DepositoId);
-            }
-
-            var notaFiscal = new NfeRetornoModel
-            {
-                NfeId = notaFiscalRecebida.NfeId,
-                UsuarioId = notaFiscalRecebida.UsuarioId,
-                Status = retornoConsulta.status.ToUpper(),
-                NumeroNotaFiscal = retornoConsulta.numero_rps,
-                CodigoVerificacao = retornoConsulta.codigo_verificacao.Trim(),
-                UrlNotaFiscal = retornoConsulta.url,
-                CaminhoXmlNotaFiscal = retornoConsulta.caminho_xml_nota_fiscal,
-                DataEmissao = retornoConsulta.data_emissao
-            };
-
-            string directory = @"D:\Sistemas\GeradorNF\bin\NFE\" + DateTime.Now.Year + "\\" + DateTime.Now.ToString("MM") + "\\" + DateTime.Now.ToString("dd") + "\\";
-
-            Directory.CreateDirectory(directory);
-
             if (!string.IsNullOrWhiteSpace(retornoConsulta.url))
             {
-                using (var memoryStream = new MemoryStream())
+                retornoConsulta.url = retornoConsulta.url.Replace("nfse.aspx", "/NFSE/contribuinte/notaprintimg.aspx");
+
+                if (!string.IsNullOrWhiteSpace(retornoConsulta.url))
                 {
-                    notaFiscal.UrlNotaFiscal = retornoConsulta.url.Replace("nfse.aspx", "/NFSE/contribuinte/notaprintimg.aspx");
-
-                    new Tools().ObterImagemEndereco(notaFiscal.UrlNotaFiscal).Save(memoryStream, ImageFormat.Jpeg);
-
-                    notaFiscal.ImagemNotaFiscal = memoryStream.ToArray();
-
-                    File.WriteAllBytes(directory + nfe.NfeId + "Original.jpg", notaFiscal.ImagemNotaFiscal);
+                    retornoConsulta.ImagemNotaFiscal = BaixarImagem(grv.ClienteId, grv.DepositoId, nfe.GrvId, nfe.IdentificadorNota, identificaoNotaFiscal, retornoConsulta.url);
                 }
 
-                try
+                if (identificaoNotaFiscal.BaixarImagemOriginal)
                 {
-                    if (!IsImage(notaFiscal.ImagemNotaFiscal))
-                    {
-                        throw new Exception("A Imagem retornada nao é uma Imagem válida");
-                    }
-                }
-                catch (Exception)
-                {
-                    throw new Exception("Ocorreu um erro ao analisar a Imagem retornada");
+                    return retornoConsulta;
                 }
 
-                #region Início do trecho para testes
-                if (new[] { "BETODELL", "BETOLENOVO", "SUPREMELEADER" }.Contains(SystemInformation.ComputerName))
-                {
-                    //configuracaoImagem.ValueX = 270; // Margem Esquerda
-                    //configuracaoImagem.ValueY = 220; // Margem Superior
-                    //configuracaoImagem.Width = 1000; // Margem Direita
-                    //configuracaoImagem.Height = 1300; // Margem Inferior
-
-                    //File.Delete(@"D:\Temp\RetornoOriginal.jpg");
-                    //File.Delete(@"D:\Temp\RetornoRecortado");
-
-                    //File.WriteAllBytes(@"D:\Temp\RetornoOriginal.jpg", notaFiscal.ImagemNotaFiscal);
-
-                    //try
-                    //{
-                    //    byte[] array = CropImage(notaFiscal.ImagemNotaFiscal, new Rectangle(configuracaoImagem.ValueX, configuracaoImagem.ValueY, configuracaoImagem.Width, configuracaoImagem.Height));
-
-                    //    File.WriteAllBytes(@"D:\Temp\RetornoRecortado.jpg", array);
-                    //}
-                    //catch (Exception ex)
-                    //{
-                    //    if (true)
-                    //    {
-
-                    //    }
-                    //}
-                }
-                #endregion Fim do trecho para testes
-
-                try
-                {
-                    notaFiscal.ImagemNotaFiscal = CropImage(notaFiscal.ImagemNotaFiscal, new Rectangle(configuracaoImagem.ValueX, configuracaoImagem.ValueY, configuracaoImagem.Width, configuracaoImagem.Height));
-
-                    try
-                    {
-                        File.WriteAllBytes(directory + nfe.NfeId + ".jpg", notaFiscal.ImagemNotaFiscal);
-
-                        if (!IsImage(notaFiscal.ImagemNotaFiscal))
-                        {
-                            throw new Exception("A Imagem recortada nao é uma Imagem válida");
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-
-                    }
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception("Ocorreu um erro ao recortar a Imagem retornada: " + ex.Message);
-                }
-
-                retornoConsulta.ImagemNotaFiscal = notaFiscal.ImagemNotaFiscal;
-
-                if (nfe.Status == 'A')
-                {
-                    nfe.Status = 'P';
-                }
-                else if (nfe.Status == 'S')
-                {
-                    nfe.Status = 'T';
-                }
+                nfe.Status = nfe.Status == 'A' || nfe.Status == 'E' || nfe.Status == 'I' ? 'P' : 'T';
 
                 new NfeImagemController().Excluir(nfe.NfeId);
 
-                new NfeImagemController().Cadastrar(nfe.NfeId, notaFiscal.ImagemNotaFiscal);
+                new NfeImagemController().Cadastrar(nfe.NfeId, retornoConsulta.ImagemNotaFiscal);
 
                 new NfeController().AtualizarRetornoNotaFiscal(nfe, retornoConsulta);
             }
 
             return retornoConsulta;
+        }
+
+        private byte[] BaixarImagem(int clienteId, int depositoId, int grvId, int identificadorNota, Consulta identificaoNotaFiscal, string url)
+        {
+            byte[] ImagemNotaFiscal;
+
+            NfeConfiguracaoImagemEntity ConfiguracaoImagem;
+
+            NfeConfiguracaoImagemController NfeConfiguracaoImagemController = new NfeConfiguracaoImagemController();
+
+            if ((ConfiguracaoImagem = NfeConfiguracaoImagemController.Selecionar(new NfeConfiguracaoImagemEntity { ClienteId = clienteId, DepositoId = depositoId } )) == null)
+            {
+                ConfiguracaoImagem.ClienteDepositoId = new ClienteDepositoController().Selecionar(new ClienteDepositoEntity { ClienteId = clienteId, DepositoId = depositoId }).ClienteDepositoId;
+
+                ConfiguracaoImagem.ValueX = 100;
+
+                ConfiguracaoImagem.ValueX = 100;
+
+                ConfiguracaoImagem.ValueX = 100;
+
+                ConfiguracaoImagem.ValueX = 100;
+
+                ConfiguracaoImagem.ConfiguracaoImagemId = NfeConfiguracaoImagemController.Cadastrar(ConfiguracaoImagem);
+            }
+
+            string directory = @"D:\Sistemas\GeradorNF\NFE\" + DataBase.SystemEnvironment.ToString() + "\\" + DateTime.Now.Year + "\\" + DateTime.Now.ToString("MM") + "\\" + DateTime.Now.ToString("dd") + "\\";
+
+            Directory.CreateDirectory(directory);
+
+            using (var memoryStream = new MemoryStream())
+            {
+                new Tools().ObterImagemEndereco(url).Save(memoryStream, ImageFormat.Jpeg);
+
+                ImagemNotaFiscal = memoryStream.ToArray();
+
+                File.WriteAllBytes(directory + identificadorNota + "Original.jpg", ImagemNotaFiscal);
+            }
+
+            try
+            {
+                if (!IsImage(ImagemNotaFiscal))
+                {
+                    throw new Exception("A Imagem retornada nao é uma Imagem válida");
+                }
+            }
+            catch (Exception)
+            {
+                throw new Exception("Ocorreu um erro ao analisar a Imagem retornada");
+            }
+
+            #region Início do trecho para testes
+            if (new[] { "BETODELL", "BETOLENOVO", "SUPREMELEADER" }.Contains(SystemInformation.ComputerName))
+            {
+                //configuracaoImagem.ValueX = 0; // Margem Esquerda
+                //configuracaoImagem.ValueY = 0; // Margem Superior
+                //configuracaoImagem.Width = 1035; // Margem Direita
+                //configuracaoImagem.Height = 1315; // Margem Inferior
+            }
+            #endregion Fim do trecho para testes
+
+            try
+            {
+                if (!identificaoNotaFiscal.BaixarImagemOriginal)
+                {
+                    ImagemNotaFiscal = CropImage(ImagemNotaFiscal, new Rectangle(ConfiguracaoImagem.ValueX, ConfiguracaoImagem.ValueY, ConfiguracaoImagem.Width, ConfiguracaoImagem.Height));
+
+                    File.WriteAllBytes(directory + identificadorNota + "Recortado.jpg", ImagemNotaFiscal);
+
+                    if (!IsImage(ImagemNotaFiscal))
+                    {
+                        throw new Exception("A Imagem recortada nao é uma Imagem válida");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Ocorreu um erro ao recortar a Imagem retornada: " + ex.Message);
+            }
+
+            return ImagemNotaFiscal;
         }
 
         private bool IsImage(byte[] bytes)

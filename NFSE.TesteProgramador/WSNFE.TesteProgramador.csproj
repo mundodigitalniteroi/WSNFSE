@@ -86,13 +86,13 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NFSE.Business\NFSE.Business.csproj">
+    <ProjectReference Include="..\NFSE.Business\WSNFE.Business.csproj">
       <Project>{56a6f667-9178-4018-8a09-16c7690756ad}</Project>
-      <Name>NFSE.Business</Name>
+      <Name>WSNFE.Business</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NFSE.Domain\NFSE.Domain.csproj">
+    <ProjectReference Include="..\NFSE.Domain\WSNFE.Domain.csproj">
       <Project>{6D4463EF-7A19-4BF4-8333-D2A17552ED26}</Project>
-      <Name>NFSE.Domain</Name>
+      <Name>WSNFE.Domain</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

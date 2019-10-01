@@ -11,5 +11,7 @@
         public int UsuarioId { get; set; }
 
         public bool Homologacao { get; set; }
+
+        public bool BaixarImagemOriginal { get; set; } = false;
     }
 }

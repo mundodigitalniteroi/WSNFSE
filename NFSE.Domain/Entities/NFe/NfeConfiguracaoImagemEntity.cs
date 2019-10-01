@@ -23,5 +23,11 @@ namespace NFSE.Domain.Entities.NFe
         public DateTime DataCadastro { get; set; }
 
         public DateTime? DataAlteracao { get; set; }
+
+        // Para consultas:
+        public int ClienteId { get; set; }
+
+        public int DepositoId { get; set; }
+
     }
 }

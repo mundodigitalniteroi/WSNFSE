@@ -1,8 +1,6 @@
-﻿using NFSE.Business.Tabelas.DP;
-using NFSE.Business.Tabelas.NFe;
+﻿using NFSE.Business.Tabelas.NFe;
 using NFSE.Domain.Entities.NFe;
 using System;
-using System.IO;
 
 namespace EnvioTeste
 {
@@ -92,81 +90,66 @@ namespace EnvioTeste
             }
             #endregion Emissão da Nota Fiscal Eletrônica
 
-            int grvId = 0;
-
-            int[] lista =
-            {
-                543713
-            };
 
             #region Emissão da Nota Fiscal Eletrônica
-            foreach (var item in lista)
-            {
-                //Console.WriteLine("GRV ID: " + item);
+            //foreach (var item in lista)
+            //{
+            //    Console.WriteLine("GRV ID: " + item);
 
-                try
-                {
-                    //var result = new NfeGerarNotaFiscalController().GerarNotaFiscal
-                    //(
-                    //    grvId: 637990,
-                    //    usuarioId: 1,
-                    //    isDev: false
-                    //);
+            //    try
+            //    {
+            //        var result = new NfeGerarNotaFiscalController().GerarNotaFiscal
+            //        (
+            //            grvId: 637990,
+            //            usuarioId: 1,
+            //            isDev: false
+            //        );
 
-                    //foreach (var res in result)
-                    //{
-                    //    Console.WriteLine("JSON: " + res);
-                    //}
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("ERRO: " + ex.Message);
-                }
-            }
-
-            try
-            {
-                //var result = new NfeGerarNotaFiscalController().GerarNovaNotaFiscal
-                //(
-                //    grvId: 21255,
-                //    faturamentoServicoTipoVeiculoId: 937,
-                //    usuarioId: 1,
-                //    isDev: true
-                //);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("ERRO: " + ex.Message);
-            }
-
-            try
-            {
-                //var grv = new GrvController().Selecionar("14059599");
-
-                //grvId = grv.GrvId;
-
-                //grvId = 584327;
-
-                //var result = new NfeGerarNotaFiscalController().GerarNotaFiscal
-                //(
-                //    grvId: grvId,
-                //    usuarioId: 1,
-                //    isDev: true
-                //);
-
-                //foreach (var item in result)
-                //{
-                //    Console.WriteLine("JSON: " + item);
-                //}
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("ERRO: " + ex.Message);
-            }
+            //        foreach (var res in result)
+            //        {
+            //            Console.WriteLine("JSON: " + res);
+            //        }
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Console.WriteLine("ERRO: " + ex.Message);
+            //    }
+            //}
             #endregion Emissão da Nota Fiscal Eletrônica
 
 
-            
+            #region NOVA NF
+
+            //try
+            //{
+            var novaNfe = new NfeGerarNotaFiscalController().GerarNovaNotaFiscal
+            (
+                grvId: 543713,
+                identificadorNota: 700249,
+                faturamentoServicoTipoVeiculoId: 40242,
+                usuarioId: 1,
+                isDev: true
+            );
+
+            //    Console.WriteLine("MENSAGEM: " + novaNfe[0]);
+
+            //    novaNfe = new NfeGerarNotaFiscalController().GerarNovaNotaFiscal
+            //    (
+            //        grvId: 543715,
+            //        faturamentoServicoTipoVeiculoId: 40245,
+            //        usuarioId: 1,
+            //        isDev: true
+            //    );
+
+            //    Console.WriteLine("MENSAGEM: " + novaNfe[0]);
+            //}
+            //catch (Exception ex)
+            //{
+            //    Console.WriteLine("ERRO: " + ex.Message);
+            //}
+
+            #endregion NOVA NF
+
 
 
             // Recebimento
@@ -174,30 +157,20 @@ namespace EnvioTeste
             {
                 var aux = new NfeReceberNotaFiscalController().ReceberNotaFiscal(new Consulta
                 {
-                    GrvId = 824331,
-                    IdentificadorNota = 709297,
-                    Homologacao = false,
-                    UsuarioId = 1
+                    GrvId = 543713,
+                    IdentificadorNota = 700250,
+                    Homologacao = true,
+                    UsuarioId = 1,
+                    BaixarImagemOriginal = true
                 });
 
                 Console.WriteLine("MENSAGEM: " + aux.status);
 
-                try
-                {
-                    var imagem = new NfeImagemController().Selecionar(27114);
-
-                    File.WriteAllBytes(@"D:\Temp\RetornoRecortado.jpg", imagem.Imagem);
-                }
-                catch (Exception ex)
-                {
-
-                }
-
                 aux = new NfeReceberNotaFiscalController().ReceberNotaFiscal(new Consulta
                 {
-                    GrvId = 823740,
-                    IdentificadorNota = 709296,
-                    Homologacao = false,
+                    GrvId = 543715,
+                    IdentificadorNota = 700264,
+                    Homologacao = true,
                     UsuarioId = 1
                 });
 
@@ -208,37 +181,16 @@ namespace EnvioTeste
 
                 }
 
-                //aux = new NfeReceberNotaFiscalController().ReceberNotaFiscal(new Consulta
+                //try
                 //{
-                //    GrvId = 543707,
-                //    IdentificadorNota = 700218,
-                //    Homologacao = true,
-                //    UsuarioId = 1
-                //});
+                //    var imagem = new NfeImagemController().Selecionar(27114);
 
-                //aux = new NfeReceberNotaFiscalController().ReceberNotaFiscal(new Consulta
+                //    File.WriteAllBytes(@"D:\Temp\RetornoRecortado.jpg", imagem.Imagem);
+                //}
+                //catch (Exception ex)
                 //{
-                //    GrvId = 543702,
-                //    IdentificadorNota = 700193,
-                //    Homologacao = true,
-                //    UsuarioId = 1
-                //});
 
-                //aux = new NfeReceberNotaFiscalController().ReceberNotaFiscal(new Consulta
-                //{
-                //    GrvId = 543702,
-                //    IdentificadorNota = 700193,
-                //    Homologacao = true,
-                //    UsuarioId = 1
-                //});
-
-                //aux = new NfeReceberNotaFiscalController().ReceberNotaFiscal(new Consulta
-                //{
-                //    GrvId = 543702,
-                //    IdentificadorNota = 700193,
-                //    Homologacao = true,
-                //    UsuarioId = 1
-                //});
+                //}
             }
             catch (Exception ex)
             {
@@ -248,14 +200,23 @@ namespace EnvioTeste
             // Cancelamento
             try
             {
-                //var aux = new NfeCancelamentoController().CancelarNotaFiscal(new Cancelamento
-                //{
-                //    GrvId = 824360,
-                //    IdentificadorNota = 700143,
-                //    Justificativa = "TESTES",
-                //    Homologacao = true,
-                //    UsuarioId = 1
-                //});
+                var aux = new NfeCancelamentoController().CancelarNotaFiscal(new Cancelamento
+                {
+                    GrvId = 543715,
+                    IdentificadorNota = 700261,
+                    Justificativa = "TESTES",
+                    Homologacao = true,
+                    UsuarioId = 1
+                });
+
+                aux = new NfeCancelamentoController().CancelarNotaFiscal(new Cancelamento
+                {
+                    GrvId = 543715,
+                    IdentificadorNota = 700262,
+                    Justificativa = "TESTES",
+                    Homologacao = true,
+                    UsuarioId = 1
+                });
             }
             catch (Exception ex)
             {

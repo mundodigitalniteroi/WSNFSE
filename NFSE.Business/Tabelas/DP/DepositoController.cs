@@ -1,8 +1,6 @@
 ﻿using NFSE.Domain.Entities.DP;
 using NFSE.Infra.Data;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 
@@ -10,7 +8,7 @@ namespace NFSE.Business.Tabelas.DP
 {
     public class DepositoController
     {
-        public List<DepositoEntity> Listar(int id)
+        public List<DepositoEntity> Listar(int depositoId)
         {
             var SQL = new StringBuilder();
 
@@ -64,7 +62,7 @@ namespace NFSE.Business.Tabelas.DP
 
             SQL.AppendLine("  FROM dbo.tb_dep_depositos");
 
-            SQL.AppendLine(" WHERE tb_dep_depositos.id_deposito = " + id);
+            SQL.AppendLine(" WHERE tb_dep_depositos.id_deposito = " + depositoId);
 
             using (var dataTable = DataBase.Select(SQL))
             {
@@ -72,9 +70,9 @@ namespace NFSE.Business.Tabelas.DP
             }
         }
 
-        public DepositoEntity Selecionar(int id)
+        public DepositoEntity Selecionar(int depositoId)
         {
-            var list = Listar(id);
+            var list = Listar(depositoId);
 
             return list?.FirstOrDefault();
         }

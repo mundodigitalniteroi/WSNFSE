@@ -1114,6 +1114,8 @@ namespace NFSE.TesteUsuario.nfse {
         
         private bool HomologacaoField;
         
+        private bool BaixarImagemOriginalField;
+        
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -1185,6 +1187,19 @@ namespace NFSE.TesteUsuario.nfse {
                 if ((this.HomologacaoField.Equals(value) != true)) {
                     this.HomologacaoField = value;
                     this.RaisePropertyChanged("Homologacao");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=5)]
+        public bool BaixarImagemOriginal {
+            get {
+                return this.BaixarImagemOriginalField;
+            }
+            set {
+                if ((this.BaixarImagemOriginalField.Equals(value) != true)) {
+                    this.BaixarImagemOriginalField = value;
+                    this.RaisePropertyChanged("BaixarImagemOriginal");
                 }
             }
         }
@@ -2030,16 +2045,24 @@ namespace NFSE.TesteUsuario.nfse {
         public int grvId;
         
         [System.Runtime.Serialization.DataMemberAttribute(Order=1)]
-        public int usuarioId;
+        public int identificadorNota;
         
         [System.Runtime.Serialization.DataMemberAttribute(Order=2)]
+        public int faturamentoServicoTipoVeiculoId;
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=3)]
+        public int usuarioId;
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=4)]
         public bool isDev;
         
         public GerarNovaNotaFiscalRequestBody() {
         }
         
-        public GerarNovaNotaFiscalRequestBody(int grvId, int usuarioId, bool isDev) {
+        public GerarNovaNotaFiscalRequestBody(int grvId, int identificadorNota, int faturamentoServicoTipoVeiculoId, int usuarioId, bool isDev) {
             this.grvId = grvId;
+            this.identificadorNota = identificadorNota;
+            this.faturamentoServicoTipoVeiculoId = faturamentoServicoTipoVeiculoId;
             this.usuarioId = usuarioId;
             this.isDev = isDev;
         }
@@ -2240,10 +2263,12 @@ namespace NFSE.TesteUsuario.nfse {
             return base.Channel.GerarNovaNotaFiscal(request);
         }
         
-        public NFSE.TesteUsuario.nfse.ArrayOfString GerarNovaNotaFiscal(int grvId, int usuarioId, bool isDev) {
+        public NFSE.TesteUsuario.nfse.ArrayOfString GerarNovaNotaFiscal(int grvId, int identificadorNota, int faturamentoServicoTipoVeiculoId, int usuarioId, bool isDev) {
             NFSE.TesteUsuario.nfse.GerarNovaNotaFiscalRequest inValue = new NFSE.TesteUsuario.nfse.GerarNovaNotaFiscalRequest();
             inValue.Body = new NFSE.TesteUsuario.nfse.GerarNovaNotaFiscalRequestBody();
             inValue.Body.grvId = grvId;
+            inValue.Body.identificadorNota = identificadorNota;
+            inValue.Body.faturamentoServicoTipoVeiculoId = faturamentoServicoTipoVeiculoId;
             inValue.Body.usuarioId = usuarioId;
             inValue.Body.isDev = isDev;
             NFSE.TesteUsuario.nfse.GerarNovaNotaFiscalResponse retVal = ((NFSE.TesteUsuario.nfse.WSnfseSoap)(this)).GerarNovaNotaFiscal(inValue);
@@ -2255,10 +2280,12 @@ namespace NFSE.TesteUsuario.nfse {
             return base.Channel.GerarNovaNotaFiscalAsync(request);
         }
         
-        public System.Threading.Tasks.Task<NFSE.TesteUsuario.nfse.GerarNovaNotaFiscalResponse> GerarNovaNotaFiscalAsync(int grvId, int usuarioId, bool isDev) {
+        public System.Threading.Tasks.Task<NFSE.TesteUsuario.nfse.GerarNovaNotaFiscalResponse> GerarNovaNotaFiscalAsync(int grvId, int identificadorNota, int faturamentoServicoTipoVeiculoId, int usuarioId, bool isDev) {
             NFSE.TesteUsuario.nfse.GerarNovaNotaFiscalRequest inValue = new NFSE.TesteUsuario.nfse.GerarNovaNotaFiscalRequest();
             inValue.Body = new NFSE.TesteUsuario.nfse.GerarNovaNotaFiscalRequestBody();
             inValue.Body.grvId = grvId;
+            inValue.Body.identificadorNota = identificadorNota;
+            inValue.Body.faturamentoServicoTipoVeiculoId = faturamentoServicoTipoVeiculoId;
             inValue.Body.usuarioId = usuarioId;
             inValue.Body.isDev = isDev;
             return ((NFSE.TesteUsuario.nfse.WSnfseSoap)(this)).GerarNovaNotaFiscalAsync(inValue);

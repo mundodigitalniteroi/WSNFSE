@@ -8,7 +8,7 @@ namespace NFSE.Domain.Entities.NFe
 
         public int GrvId { get; set; }
 
-        public int? FaturamentoServicoTipoVeiculoId { get; set; }
+        public int FaturamentoServicoTipoVeiculoId { get; set; }
 
         public int IdentificadorNota { get; set; }
 

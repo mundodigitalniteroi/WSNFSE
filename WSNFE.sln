@@ -5,16 +5,16 @@ VisualStudioVersion = 16.0.29215.179
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NFSE", "NFSE.csproj", "{F588A493-3634-4779-9C02-EBD5B3DC20DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NFSE.TesteProgramador", "NFSE.TesteProgramador\NFSE.TesteProgramador.csproj", "{0AB176B2-0245-426D-A037-4BA815090DE6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WSNFE.TesteProgramador", "NFSE.TesteProgramador\WSNFE.TesteProgramador.csproj", "{0AB176B2-0245-426D-A037-4BA815090DE6}"
 	ProjectSection(ProjectDependencies) = postProject
 		{F588A493-3634-4779-9C02-EBD5B3DC20DD} = {F588A493-3634-4779-9C02-EBD5B3DC20DD}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NFSE.Business", "NFSE.Business\NFSE.Business.csproj", "{56A6F667-9178-4018-8A09-16C7690756AD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WSNFE.Business", "NFSE.Business\WSNFE.Business.csproj", "{56A6F667-9178-4018-8A09-16C7690756AD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NFSE.Infra", "NFSE.Infra\NFSE.Infra.csproj", "{4DED3E67-6931-4148-A31B-82009A3E9743}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WSNFE.Infra", "NFSE.Infra\WSNFE.Infra.csproj", "{4DED3E67-6931-4148-A31B-82009A3E9743}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NFSE.Domain", "NFSE.Domain\NFSE.Domain.csproj", "{6D4463EF-7A19-4BF4-8333-D2A17552ED26}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WSNFE.Domain", "NFSE.Domain\WSNFE.Domain.csproj", "{6D4463EF-7A19-4BF4-8333-D2A17552ED26}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0 - TestApplication", "0 - TestApplication", "{F6674634-07CC-4732-B30C-490ECD5F6CE2}"
 EndProject
@@ -26,7 +26,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3 - Business", "3 - Busines
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4 - WebService", "4 - WebService", "{FB3BD8C7-272D-4786-8F07-23ABD9AFFE0D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NFSE.TesteUsuario", "NFSE.TesteUsuario\NFSE.TesteUsuario.csproj", "{680DC854-5DB8-4BC5-B12B-66A9910A0C95}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WSNFE.TesteUsuario", "NFSE.TesteUsuario\WSNFE.TesteUsuario.csproj", "{680DC854-5DB8-4BC5-B12B-66A9910A0C95}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

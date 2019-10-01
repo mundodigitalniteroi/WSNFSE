@@ -63,7 +63,7 @@ namespace NFSE.Business.Tabelas.NFe
             }
         }
 
-        public List<NfeEntity> Listar(int grvId, bool selecionarNotaFiscalCancelada = false, int faturamentoServicoTipoVeiculoId = 0)
+        public List<NfeEntity> Listar(NfeEntity model, bool selecionarNotaFiscalCancelada = false)
         {
             var SQL = new StringBuilder();
 
@@ -101,11 +101,16 @@ namespace NFSE.Business.Tabelas.NFe
 
             SQL.AppendLine("  FROM dbo.tb_dep_nfe");
 
-            SQL.AppendLine(" WHERE GrvId = " + grvId);
+            SQL.AppendLine(" WHERE GrvId = " + model.GrvId);
 
-            if (faturamentoServicoTipoVeiculoId > 0)
+            if (model.IdentificadorNota > 0)
             {
-                SQL.AppendLine("   AND FaturamentoServicoTipoVeiculoId = " + faturamentoServicoTipoVeiculoId);
+                SQL.AppendLine("   AND IdentificadorNota = " + model.IdentificadorNota);
+            }
+
+            if (model.FaturamentoServicoTipoVeiculoId > 0)
+            {
+                SQL.AppendLine("   AND FaturamentoServicoTipoVeiculoId = " + model.FaturamentoServicoTipoVeiculoId);
             }
             else if (!selecionarNotaFiscalCancelada)
             {
@@ -118,9 +123,9 @@ namespace NFSE.Business.Tabelas.NFe
             }
         }
 
-        public NfeEntity Selecionar(int grvId, bool selecionarNotaFiscalCancelada = false, int faturamentoServicoTipoVeiculoId = 0)
+        public NfeEntity Selecionar(NfeEntity model, bool selecionarNotaFiscalCancelada = false)
         {
-            var list = Listar(grvId, selecionarNotaFiscalCancelada, faturamentoServicoTipoVeiculoId);
+            var list = Listar(model, selecionarNotaFiscalCancelada);
 
             return list?.FirstOrDefault();
         }

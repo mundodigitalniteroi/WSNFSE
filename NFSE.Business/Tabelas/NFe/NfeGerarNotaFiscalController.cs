@@ -17,15 +17,15 @@ namespace NFSE.Business.Tabelas.NFe
     {
         public List<string> GerarNotaFiscal(int grvId, int usuarioId, bool isDev)
         {
-            return GerarNotaFiscal(grvId, 0, usuarioId, isDev);
+            return GerarNotaFiscal(grvId, 0, 0, usuarioId, isDev);
         }
 
-        public List<string> GerarNovaNotaFiscal(int grvId, int faturamentoServicoTipoVeiculoId, int usuarioId, bool isDev)
+        public List<string> GerarNovaNotaFiscal(int grvId, int identificadorNota, int faturamentoServicoTipoVeiculoId, int usuarioId, bool isDev)
         {
-            return GerarNotaFiscal(grvId, faturamentoServicoTipoVeiculoId, usuarioId, isDev);
+            return GerarNotaFiscal(grvId, identificadorNota, faturamentoServicoTipoVeiculoId, usuarioId, isDev);
         }
 
-        private List<string> GerarNotaFiscal(int grvId, int faturamentoServicoTipoVeiculoId, int usuarioId, bool isDev)
+        private List<string> GerarNotaFiscal(int grvId, int identificadorNota, int faturamentoServicoTipoVeiculoId, int usuarioId, bool isDev)
         {
             DataBase.SystemEnvironment = isDev ? SystemEnvironment.Development : SystemEnvironment.Production;
 
@@ -36,7 +36,6 @@ namespace NFSE.Business.Tabelas.NFe
             var returnList = new List<string>();
 
             #region NFe
-            var Nfe = new NfeEntity();
             var NfeList = new List<NfeEntity>();
 
             // STATUS:
@@ -50,13 +49,22 @@ namespace NFSE.Business.Tabelas.NFe
             //   E: Erro (quando a Prefeitura indicou algum problema);
             //   I: Inválido (quando ocorreu um erro Mob-Link);
 
-            if (faturamentoServicoTipoVeiculoId > 0)
+            var Nfe = new NfeEntity
             {
-                Nfe = new NfeController().Selecionar(grvId, true, faturamentoServicoTipoVeiculoId);
+                GrvId = grvId,
+
+                IdentificadorNota = identificadorNota,
+
+                FaturamentoServicoTipoVeiculoId = faturamentoServicoTipoVeiculoId
+            };
+
+            if (Nfe.IdentificadorNota > 0)
+            {
+                Nfe = new NfeController().Selecionar(Nfe, true);
 
                 if (Nfe == null)
                 {
-                    new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, null, OrigemErro.MobLink, acao, "Nota Fiscal não encontrada");
+                    new NfeWsErroController().CadastrarErroGenerico(Nfe.GrvId, usuarioId, Nfe.IdentificadorNota, OrigemErro.MobLink, acao, "Nota Fiscal não encontrada");
 
                     returnList.Add("AVISO: Nota Fiscal não encontrada");
 
@@ -64,16 +72,16 @@ namespace NFSE.Business.Tabelas.NFe
                 }
 
                 // Erro / Inválido / Cancelado
-                if (Nfe.Status != 'E' && Nfe.Status != 'I' && Nfe.Status != 'C')
+                if (Nfe.Status != 'E' && Nfe.Status != 'I' && Nfe.Status != 'N')
                 {
-                    new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, null, OrigemErro.MobLink, acao, "Nota Fiscal não está apto para reprocessamento");
+                    new NfeWsErroController().CadastrarErroGenerico(Nfe.GrvId, usuarioId, Nfe.IdentificadorNota, OrigemErro.MobLink, acao, "Nota Fiscal não está apto para reprocessamento");
 
                     returnList.Add("AVISO: Nota Fiscal não está apto para reprocessamento");
 
                     return returnList;
                 }
             }
-            else if ((NfeList = new NfeController().Listar(grvId)) != null)
+            else if ((NfeList = new NfeController().Listar(Nfe)) != null)
             {
                 var status = new char[] { 'C', 'A', 'P', 'R', 'S', 'T' };
 
@@ -92,7 +100,7 @@ namespace NFSE.Business.Tabelas.NFe
                     }
                     else
                     {
-                        new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, null, OrigemErro.MobLink, acao, "GRV já possui Nota Fiscal cadastrada");
+                        new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, "GRV já possui Nota Fiscal cadastrada");
 
                         returnList.Add("AVISO: GRV já possui Nota Fiscal cadastrada");
 
@@ -117,7 +125,7 @@ namespace NFSE.Business.Tabelas.NFe
             #region Regras do Faturamento
             if (new RegraFaturamentoController().Selecionar(grv.ClienteId, grv.DepositoId, new TipoRegraFaturamentoController().Selecionar("NFE").FaturamentoRegraTipoId) == null)
             {
-                new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, null, OrigemErro.MobLink, acao, "CLIDEP sem regra de NFE definido");
+                new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, "CLIDEP sem regra de NFE definido");
 
                 returnList.Add("AVISO: CLIDEP sem regra de NFE definido");
 
@@ -129,7 +137,7 @@ namespace NFSE.Business.Tabelas.NFe
             var Empresa = new EmpresaEntity();
             if ((Empresa = new EmpresaController().Selecionar(new EmpresaEntity { EmpresaId = Deposito.EmpresaId })) == null)
             {
-                new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, null, OrigemErro.MobLink, acao, "Empresa associada não encontrada");
+                new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, "Empresa associada não encontrada");
 
                 returnList.Add("AVISO: Empresa associada não encontrada");
 
@@ -142,7 +150,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             if ((Atendimento = new AtendimentoController().Selecionar(grvId)) == null)
             {
-                new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, null, OrigemErro.MobLink, acao, "Atendimento não encontrado");
+                new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, "Atendimento não encontrado");
 
                 returnList.Add("AVISO: Atendimento não encontrado");
 
@@ -155,7 +163,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             if ((Faturamentos = new FaturamentoController().Listar(Atendimento.AtendimentoId, 'P')) == null)
             {
-                new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, null, OrigemErro.MobLink, acao, "Faturamento não encontrado");
+                new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, "Faturamento não encontrado");
 
                 returnList.Add("AVISO: Faturamento não encontrado");
 
@@ -164,7 +172,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             if (Faturamentos.Sum(c => c.ValorPagamento).Equals(0))
             {
-                new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, null, OrigemErro.MobLink, acao, "Faturamento sem valor");
+                new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, "Faturamento sem valor");
 
                 returnList.Add("AVISO: Faturamento sem valor");
 
@@ -175,9 +183,9 @@ namespace NFSE.Business.Tabelas.NFe
             #region Valores somados da Composição do Faturamento
             var Composicoes = new List<FaturamentoAssociadoCnaeEntity>();
 
-            if ((Composicoes = new FaturamentoAssociadoCnaeController().Listar(grvId, faturamentoServicoTipoVeiculoId)) == null)
+            if ((Composicoes = new FaturamentoAssociadoCnaeController().Listar(grvId, Nfe.FaturamentoServicoTipoVeiculoId)) == null)
             {
-                new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, null, OrigemErro.MobLink, acao, "Composição do Faturamento não encontrado");
+                new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, "Composição do Faturamento não encontrado");
 
                 returnList.Add("AVISO: Composição do Faturamento não encontrado");
 
@@ -188,7 +196,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             if (Composicoes.Count == 0)
             {
-                new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, null, OrigemErro.MobLink, acao, "Composição do Faturamento sem Cnae e Lista de Serviço cadastrado");
+                new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, "Composição do Faturamento sem Cnae e Lista de Serviço cadastrado");
 
                 returnList.Add("AVISO: Composição do Faturamento sem Cnae e Lista de Serviço cadastrado");
 
@@ -226,7 +234,7 @@ namespace NFSE.Business.Tabelas.NFe
                 }
                 #endregion Preenchimento da Entidade
 
-                if (faturamentoServicoTipoVeiculoId == 0)
+                if (Nfe.FaturamentoServicoTipoVeiculoId == 0)
                 {
                     // Cadastro do Envio
                     Nfe = CadastrarEnvio(grvId, Empresa.Cnpj, 'E', CapaAutorizacaoNfse.IdentificadorNota, usuarioId, composicao.FaturamentoServicoTipoVeiculoId);
