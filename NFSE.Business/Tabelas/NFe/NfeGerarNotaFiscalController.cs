@@ -210,6 +210,15 @@ namespace NFSE.Business.Tabelas.NFe
 
             foreach (var composicao in Composicoes)
             {
+                Nfe = new NfeEntity
+                {
+                    GrvId = grvId,
+
+                    IdentificadorNota = identificadorNota,
+
+                    FaturamentoServicoTipoVeiculoId = faturamentoServicoTipoVeiculoId
+                };
+
                 #region Preenchimento da Entidade
                 try
                 {
@@ -276,6 +285,11 @@ namespace NFSE.Business.Tabelas.NFe
                     returnList.Add(ex.Message);
 
                     continue;
+                }
+
+                if (true)
+                {
+
                 }
             }
 

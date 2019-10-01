@@ -92,29 +92,24 @@ namespace EnvioTeste
 
 
             #region Emissão da Nota Fiscal Eletrônica
-            //foreach (var item in lista)
-            //{
-            //    Console.WriteLine("GRV ID: " + item);
+            try
+            {
+                var result = new NfeGerarNotaFiscalController().GerarNotaFiscal
+                (
+                    grvId: 830128,
+                    usuarioId: 1,
+                    isDev: false
+                );
 
-            //    try
-            //    {
-            //        var result = new NfeGerarNotaFiscalController().GerarNotaFiscal
-            //        (
-            //            grvId: 637990,
-            //            usuarioId: 1,
-            //            isDev: false
-            //        );
-
-            //        foreach (var res in result)
-            //        {
-            //            Console.WriteLine("JSON: " + res);
-            //        }
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        Console.WriteLine("ERRO: " + ex.Message);
-            //    }
-            //}
+                foreach (var res in result)
+                {
+                    Console.WriteLine("JSON: " + res);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERRO: " + ex.Message);
+            }
             #endregion Emissão da Nota Fiscal Eletrônica
 
 
