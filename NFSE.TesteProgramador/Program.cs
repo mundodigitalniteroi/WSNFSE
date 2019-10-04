@@ -94,17 +94,17 @@ namespace EnvioTeste
             #region Emissão da Nota Fiscal Eletrônica
             try
             {
-                var result = new NfeGerarNotaFiscalController().GerarNotaFiscal
-                (
-                    grvId: 830128,
-                    usuarioId: 1,
-                    isDev: false
-                );
+                //var result = new NfeGerarNotaFiscalController().GerarNotaFiscal
+                //(
+                //    grvId: 830128,
+                //    usuarioId: 1,
+                //    isDev: false
+                //);
 
-                foreach (var res in result)
-                {
-                    Console.WriteLine("JSON: " + res);
-                }
+                //foreach (var res in result)
+                //{
+                //    Console.WriteLine("JSON: " + res);
+                //}
             }
             catch (Exception ex)
             {
@@ -115,33 +115,34 @@ namespace EnvioTeste
 
             #region NOVA NF
 
-            //try
-            //{
-            var novaNfe = new NfeGerarNotaFiscalController().GerarNovaNotaFiscal
-            (
-                grvId: 543713,
-                identificadorNota: 700249,
-                faturamentoServicoTipoVeiculoId: 40242,
-                usuarioId: 1,
-                isDev: true
-            );
+            try
+            {
+                var novaNfe = new NfeGerarNotaFiscalController().GerarNovaNotaFiscal
+                (
+                    grvId: 543725,
+                    identificadorNota: 700301,
+                    faturamentoServicoTipoVeiculoId: 16349,
+                    usuarioId: 1,
+                    isDev: true
+                );
 
-            //    Console.WriteLine("MENSAGEM: " + novaNfe[0]);
+                Console.WriteLine("MENSAGEM: " + novaNfe[0]);
 
-            //    novaNfe = new NfeGerarNotaFiscalController().GerarNovaNotaFiscal
-            //    (
-            //        grvId: 543715,
-            //        faturamentoServicoTipoVeiculoId: 40245,
-            //        usuarioId: 1,
-            //        isDev: true
-            //    );
+                novaNfe = new NfeGerarNotaFiscalController().GerarNovaNotaFiscal
+                (
+                    grvId: 543725,
+                    identificadorNota: 700302,
+                    faturamentoServicoTipoVeiculoId: 281,
+                    usuarioId: 1,
+                    isDev: true
+                );
 
-            //    Console.WriteLine("MENSAGEM: " + novaNfe[0]);
-            //}
-            //catch (Exception ex)
-            //{
-            //    Console.WriteLine("ERRO: " + ex.Message);
-            //}
+                Console.WriteLine("MENSAGEM: " + novaNfe[0]);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERRO: " + ex.Message);
+            }
 
             #endregion NOVA NF
 
@@ -152,19 +153,19 @@ namespace EnvioTeste
             {
                 var aux = new NfeReceberNotaFiscalController().ReceberNotaFiscal(new Consulta
                 {
-                    GrvId = 543712,
-                    IdentificadorNota = 700284,
+                    GrvId = 543725,
+                    IdentificadorNota = 700301,
                     Homologacao = true,
                     UsuarioId = 1,
-                    BaixarImagemOriginal = true
+                    BaixarImagemOriginal = false
                 });
 
                 Console.WriteLine("MENSAGEM: " + aux.status);
 
                 aux = new NfeReceberNotaFiscalController().ReceberNotaFiscal(new Consulta
                 {
-                    GrvId = 543715,
-                    IdentificadorNota = 700264,
+                    GrvId = 543725,
+                    IdentificadorNota = 700302,
                     Homologacao = true,
                     UsuarioId = 1
                 });

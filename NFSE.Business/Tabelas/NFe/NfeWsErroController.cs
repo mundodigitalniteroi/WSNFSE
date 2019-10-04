@@ -101,10 +101,17 @@ namespace NFSE.Business.Tabelas.NFe
             {
                 model.CodigoErro = model.CodigoErro.ToUpper().Trim();
 
-                if (model.CodigoErro.Length > 30)
+                model.CodigoErro = model.CodigoErro.Trim();
+
+                if (model.CodigoErro.Equals("---") || model.CodigoErro.Equals("..."))
                 {
-                    model.CodigoErro = model.CodigoErro.Substring(0, 30);
+                    model.CodigoErro = string.Empty;
                 }
+                else if (model.CodigoErro.Length > 30)
+                {
+                    model.CodigoErro = model.CodigoErro.Substring(0, 30).Trim();
+                }
+
             }
 
             if (model.MensagemErro != null)
@@ -113,7 +120,7 @@ namespace NFSE.Business.Tabelas.NFe
 
                 if (model.MensagemErro.Length > 1000)
                 {
-                    model.MensagemErro = model.MensagemErro.Substring(0, 1000);
+                    model.MensagemErro = model.MensagemErro.Substring(0, 1000).Trim();
                 }
             }
 
@@ -121,15 +128,14 @@ namespace NFSE.Business.Tabelas.NFe
             {
                 model.CorrecaoErro = model.CorrecaoErro.Trim();
 
-                if (model.CorrecaoErro.Length > 1000)
+                if (model.CorrecaoErro.Equals("---") || model.CorrecaoErro.Equals("..."))
                 {
-                    model.CorrecaoErro = model.CorrecaoErro.Substring(0, 1000);
+                    model.CorrecaoErro = string.Empty;
                 }
-            }
-
-            if (model.CodigoErro.Equals("---") || model.CodigoErro.Equals("..."))
-            {
-                model.CodigoErro = string.Empty;
+                else if (model.CorrecaoErro.Length > 1000)
+                {
+                    model.CorrecaoErro = model.CorrecaoErro.Substring(0, 1000).Trim();
+                }
             }
 
             SqlParameter[] sqlParameters =
@@ -172,7 +178,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             try
             {
-                new NfeWsErroController().Cadastrar(erro);
+                int id = new NfeWsErroController().Cadastrar(erro);
             }
             catch { }
         }
