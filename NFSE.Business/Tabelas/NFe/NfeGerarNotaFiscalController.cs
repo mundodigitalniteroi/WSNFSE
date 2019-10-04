@@ -122,6 +122,10 @@ namespace NFSE.Business.Tabelas.NFe
             var Deposito = new DepositoController().Selecionar(grv.DepositoId);
             #endregion Depósito
 
+            #region Cliente Depósito
+            var ClienteDeposito = new ClienteDepositoController().Selecionar(new ClienteDepositoEntity { ClienteId = grv.ClienteId, DepositoId = grv.DepositoId } );
+            #endregion Cliente Depósito
+
             #region Regras do Faturamento
             if (new RegraFaturamentoController().Selecionar(grv.ClienteId, grv.DepositoId, new TipoRegraFaturamentoController().Selecionar("NFE").FaturamentoRegraTipoId) == null)
             {
@@ -135,7 +139,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             #region Empresa
             var Empresa = new EmpresaEntity();
-            if ((Empresa = new EmpresaController().Selecionar(new EmpresaEntity { EmpresaId = Deposito.EmpresaId })) == null)
+            if ((Empresa = new EmpresaController().Selecionar(new EmpresaEntity { EmpresaId = ClienteDeposito.EmpresaId })) == null)
             {
                 new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, "Empresa associada não encontrada");
 

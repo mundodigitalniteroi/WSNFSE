@@ -9,5 +9,7 @@ namespace NFSE.Domain.Entities.DP
         public int ClienteId { get; set; }
 
         public int DepositoId { get; set; }
+
+        public int EmpresaId { get; set; }
     }
 }
