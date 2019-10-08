@@ -18,6 +18,10 @@ namespace NFSE.Business.Tabelas.DP
 
             SQL.AppendLine("      ,tb_dep_clientes_depositos.id_deposito AS DepositoId");
 
+            SQL.AppendLine("      ,tb_dep_clientes_depositos.id_empresa AS EmpresaId");
+
+            SQL.AppendLine("  FROM dbo.tb_dep_clientes_depositos");
+
             SQL.AppendLine(" WHERE 1 = 1");
 
             if (model.ClienteDepositoId > 0)
@@ -33,6 +37,11 @@ namespace NFSE.Business.Tabelas.DP
             if (model.DepositoId > 0)
             {
                 SQL.AppendLine("   AND tb_dep_clientes_depositos.id_deposito = " + model.DepositoId);
+            }
+
+            if (model.EmpresaId > 0)
+            {
+                SQL.AppendLine("   AND tb_dep_clientes_depositos.id_empresa = " + model.EmpresaId);
             }
 
             using (var dataTable = DataBase.Select(SQL))

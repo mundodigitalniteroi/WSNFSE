@@ -88,7 +88,7 @@ namespace NFSE.Business.Tabelas.NFe
             return list?.FirstOrDefault();
         }
 
-        public int Cadastrar(NfeEntity nfe, CapaAutorizacaoNfse capaAutorizacaoNfse, string resposta)
+        public int Cadastrar(NfeEntity nfe, CapaAutorizacaoNfse capaAutorizacaoNfse, string resposta, string json)
         {
             var SQL = new StringBuilder();
 
@@ -118,6 +118,7 @@ namespace NFSE.Business.Tabelas.NFe
             SQL.AppendLine("      ,ServicoValorServicos");
             SQL.AppendLine("      ,ServicoCodigoTributarioMunicipio");
             SQL.AppendLine("      ,RespostaEnvio");
+            SQL.AppendLine("      ,Json");
             SQL.AppendLine("      ,DataEmissao)");
 
             SQL.AppendLine("VALUES");
@@ -146,13 +147,19 @@ namespace NFSE.Business.Tabelas.NFe
             SQL.AppendLine("      ," + DataBase.SetNullIfEmpty(capaAutorizacaoNfse.Autorizacao.servico.valor_servicos));
             SQL.AppendLine("      ," + DataBase.SetNullIfEmpty(capaAutorizacaoNfse.Autorizacao.servico.codigo_tributario_municipio));
             SQL.AppendLine("      ,@RespostaEnvio");
+            SQL.AppendLine("      ,@Json");
             SQL.AppendLine("      ," + DataBase.SetNullIfEmpty(capaAutorizacaoNfse.Autorizacao.data_emissao) + ")");
 
-            var sqlParameters = new SqlParameter[1];
+            var sqlParameters = new SqlParameter[2];
 
             sqlParameters[0] = new SqlParameter("@RespostaEnvio", SqlDbType.VarChar)
             {
                 Value = resposta
+            };
+
+            sqlParameters[1] = new SqlParameter("@Json", SqlDbType.VarChar)
+            {
+                Value = json
             };
 
             return DataBase.ExecuteScopeIdentity(SQL, sqlParameters);

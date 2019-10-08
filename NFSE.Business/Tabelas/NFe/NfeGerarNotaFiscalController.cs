@@ -100,7 +100,7 @@ namespace NFSE.Business.Tabelas.NFe
                     }
                     else
                     {
-                        new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, "GRV já possui Nota Fiscal cadastrada");
+                        // new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, "GRV já possui Nota Fiscal cadastrada");
 
                         returnList.Add("AVISO: GRV já possui Nota Fiscal cadastrada");
 
@@ -250,7 +250,19 @@ namespace NFSE.Business.Tabelas.NFe
                 if (Nfe.FaturamentoServicoTipoVeiculoId == 0)
                 {
                     // Cadastro do Envio
-                    Nfe = CadastrarEnvio(grvId, Empresa.Cnpj, 'E', CapaAutorizacaoNfse.IdentificadorNota, usuarioId, composicao.FaturamentoServicoTipoVeiculoId);
+                    // Nfe = CadastrarEnvio(grvId, Empresa.Cnpj, 'E', CapaAutorizacaoNfse.IdentificadorNota, usuarioId, composicao.FaturamentoServicoTipoVeiculoId);
+
+                    try
+                    {
+                        Nfe = CadastrarEnvio(grvId, Empresa.Cnpj, 'E', CapaAutorizacaoNfse.IdentificadorNota, usuarioId, composicao.FaturamentoServicoTipoVeiculoId);
+                    }
+                    catch (Exception ex)
+                    {
+                        if (true)
+                        {
+
+                        }
+                    }
                 }
                 else
                 {
@@ -409,7 +421,7 @@ namespace NFSE.Business.Tabelas.NFe
 
                 prestador = Prestador(empresa, composicao.FlagEnviarInscricaoEstadual),
 
-                tomador = Tomador(grv, deposito, atendimento)
+                tomador = Tomador(deposito, atendimento)
             };
 
             Autorizacao.servico = Servico(grv, composicao, Autorizacao.prestador, isDev);
@@ -431,7 +443,7 @@ namespace NFSE.Business.Tabelas.NFe
             };
         }
 
-        private Tomador Tomador(GrvEntity grv, DepositoEntity deposito, AtendimentoEntity atendimento)
+        private Tomador Tomador(DepositoEntity deposito, AtendimentoEntity atendimento)
         {
             return new Tomador
             {
@@ -445,23 +457,23 @@ namespace NFSE.Business.Tabelas.NFe
 
                 email = !string.IsNullOrWhiteSpace(atendimento.NotaFiscalEmail) ? atendimento.NotaFiscalEmail : deposito.EmailNfe,
 
-                endereco = Endereco(grv, atendimento)
+                endereco = Endereco(atendimento)
             };
         }
 
-        private Endereco Endereco(GrvEntity grv, AtendimentoEntity atendimento)
+        private Endereco Endereco(AtendimentoEntity atendimento)
         {
             var CEP = new EnderecoCompletoController().Selecionar(atendimento.NotaFiscalCep);
 
-            string codigo_municipio_ibge = string.Empty;
+            string CodigoMunicipioIbge;
 
             if (CEP != null && !string.IsNullOrWhiteSpace(CEP.CodigoMunicipioIbge))
             {
-                codigo_municipio_ibge = CEP.CodigoMunicipioIbge;
+                CodigoMunicipioIbge = CEP.CodigoMunicipioIbge;
             }
             else
             {
-                codigo_municipio_ibge = new MunicipioController().SelecionarPrimeiroCodigoIbge(atendimento.NotaFiscalUf);
+                CodigoMunicipioIbge = new MunicipioController().SelecionarPrimeiroCodigoIbge(atendimento.NotaFiscalUf);
             }
 
             return new Endereco
@@ -478,7 +490,7 @@ namespace NFSE.Business.Tabelas.NFe
 
                 cep = atendimento.NotaFiscalCep,
 
-                codigo_municipio = codigo_municipio_ibge
+                codigo_municipio = CodigoMunicipioIbge
             };
         }
 

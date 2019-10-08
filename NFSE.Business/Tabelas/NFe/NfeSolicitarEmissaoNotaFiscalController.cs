@@ -32,12 +32,25 @@ namespace NFSE.Business.Tabelas.NFe
 
             string resposta;
 
+            string json;
+
+            try
+            {
+                json = CreateJson(model);
+            }
+            catch (Exception ex)
+            {
+                new NfeWsErroController().CadastrarErroGenerico(model.GrvId, model.UsuarioId, nfe.IdentificadorNota, OrigemErro.WebService, Acao.Solicitação, "Ocorreu um erro ao criar o JSON da Nota Fiscal: " + ex.Message);
+
+                throw new Exception("Ocorreu um erro ao criar o JSON da Nota Fiscal (" + model.IdentificadorNota + "): " + ex.Message);
+            }
+
             try
             {
                 resposta = new Tools().PostNfse
                 (
                     uri: new NfeConfiguracao().GetRemoteServer() + "?ref=" + model.IdentificadorNota,
-                    json: CreateJson(model),
+                    json: json,
                     token: Empresa.Token
                 );
             }
@@ -50,7 +63,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             try
             {
-                new NfeRetornoSolicitacaoController().Cadastrar(nfe, model, resposta);
+                new NfeRetornoSolicitacaoController().Cadastrar(nfe, model, resposta, json);
             }
             catch (Exception ex)
             {
