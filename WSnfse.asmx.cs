@@ -91,11 +91,11 @@ namespace NFSE
         }
 
         [WebMethod]
-        public List<string> GerarNovaNotaFiscal(int grvId, int identificadorNota, int faturamentoServicoTipoVeiculoId, int usuarioId, bool isDev)
+        public List<string> GerarNovaNotaFiscal(int grvId, int identificadorNota, int usuarioId, bool isDev)
         {
             try
             {
-                return new NfeGerarNotaFiscalController().GerarNovaNotaFiscal(grvId, identificadorNota, faturamentoServicoTipoVeiculoId, usuarioId, isDev);
+                return new NfeGerarNotaFiscalController().GerarNovaNotaFiscal(grvId, identificadorNota, usuarioId, isDev);
             }
             catch (Exception ex)
             {

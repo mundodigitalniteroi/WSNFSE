@@ -20,8 +20,6 @@ namespace NFSE.Business.Tabelas.NFe
 
             SQL.AppendLine("      ,tb_dep_nfe.GrvId");
 
-            SQL.AppendLine("      ,tb_dep_nfe.FaturamentoServicoTipoVeiculoId");
-
             SQL.AppendLine("      ,tb_dep_nfe.IdentificadorNota");
 
             SQL.AppendLine("      ,tb_dep_nfe.NfeComplementarId");
@@ -71,8 +69,6 @@ namespace NFSE.Business.Tabelas.NFe
 
             SQL.AppendLine("      ,tb_dep_nfe.GrvId");
 
-            SQL.AppendLine("      ,tb_dep_nfe.FaturamentoServicoTipoVeiculoId");
-
             SQL.AppendLine("      ,tb_dep_nfe.IdentificadorNota");
 
             SQL.AppendLine("      ,tb_dep_nfe.NfeComplementarId");
@@ -108,11 +104,7 @@ namespace NFSE.Business.Tabelas.NFe
                 SQL.AppendLine("   AND IdentificadorNota = " + model.IdentificadorNota);
             }
 
-            if (model.FaturamentoServicoTipoVeiculoId > 0)
-            {
-                SQL.AppendLine("   AND FaturamentoServicoTipoVeiculoId = " + model.FaturamentoServicoTipoVeiculoId);
-            }
-            else if (!selecionarNotaFiscalCancelada)
+            if (!selecionarNotaFiscalCancelada)
             {
                 SQL.AppendLine("   AND Status NOT IN ('N','E','I')");
             }
@@ -141,8 +133,7 @@ namespace NFSE.Business.Tabelas.NFe
             SQL.AppendLine("      ,Cnpj");
             SQL.AppendLine("      ,IdentificadorNota");
             SQL.AppendLine("      ,NfeComplementarId");
-            SQL.AppendLine("      ,Status");
-            SQL.AppendLine("      ,FaturamentoServicoTipoVeiculoId)");
+            SQL.AppendLine("      ,Status)");
 
             SQL.AppendLine("VALUES");
 
@@ -154,15 +145,13 @@ namespace NFSE.Business.Tabelas.NFe
             if (model.NfeComplementarId == null)
             {
                 SQL.AppendLine("      ,NULL");
-                SQL.AppendLine("      ,'A'");
+                SQL.AppendLine("      ,'A')");
             }
             else
             {
                 SQL.AppendLine("      ," + model.NfeComplementarId);
-                SQL.AppendLine("      ,'R'");
+                SQL.AppendLine("      ,'R')");
             }
-
-            SQL.AppendLine("      ," + model.FaturamentoServicoTipoVeiculoId + ")");
 
             return DataBase.ExecuteScopeIdentity(SQL);
         }

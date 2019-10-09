@@ -74,6 +74,8 @@ namespace NFSE.Business.Tabelas.DP
 
             SQL.AppendLine("   AND tb_dep_faturamento.status = '" + status + "'");
 
+            SQL.AppendLine("   AND tb_dep_faturamento.valor_pagamento > 0");
+
             using (var dataTable = DataBase.Select(SQL))
             {
                 return dataTable == null ? null : DataTableUtil.DataTableToList<FaturamentoEntity>(dataTable);

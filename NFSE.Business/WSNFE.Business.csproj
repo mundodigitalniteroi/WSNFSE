@@ -52,6 +52,9 @@
   <ItemGroup>
     <Compile Include="Tabelas\DP\ClienteController.cs" />
     <Compile Include="Tabelas\DP\ClienteDepositoController.cs" />
+    <Compile Include="Tabelas\NFe\NfeFaturamentoComposicaoController.cs" />
+    <Compile Include="Tabelas\NFe\NfeViewFaturamentoComposicaoAgrupadoDescricaoController.cs" />
+    <Compile Include="Tabelas\NFe\NfeViewFaturamentoComposicaoController.cs" />
     <Compile Include="Tabelas\DP\UsuarioController.cs" />
     <Compile Include="Tabelas\Global\CnaeListaServicoParametroMunicipioController.cs" />
     <Compile Include="Tabelas\NFe\NfeConfiguracaoImagemController.cs" />
@@ -66,7 +69,7 @@
     <Compile Include="Tabelas\Global\CnaeListaServicoController.cs" />
     <Compile Include="Tabelas\Global\EmpresaController.cs" />
     <Compile Include="Tabelas\Global\EnderecoCompletoController.cs" />
-    <Compile Include="Tabelas\DP\FaturamentoAssociadoCnaeController.cs" />
+    <Compile Include="Tabelas\NFe\NfeViewFaturamentoComposicaoAgrupadoController.cs" />
     <Compile Include="Tabelas\DP\FaturamentoController.cs" />
     <Compile Include="Tabelas\DP\GrvController.cs" />
     <Compile Include="Tabelas\DP\RegraFaturamentoController.cs" />

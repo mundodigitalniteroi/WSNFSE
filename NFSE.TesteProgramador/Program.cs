@@ -1,5 +1,6 @@
 ﻿using NFSE.Business.Tabelas.NFe;
 using NFSE.Domain.Entities.NFe;
+using NFSE.Domain.Enum;
 using System;
 using System.Collections.Generic;
 
@@ -76,7 +77,13 @@ namespace EnvioTeste
 
                 //if (nfe == null)
                 //{
-                //    new WsNfeController().EmitirNotaFiscal(543687, false);
+                var nfe = new NfeGerarNotaFiscalController().GerarNotaFiscal(543740, 1, TestSystemEnvironment.Development);
+
+                for (int i = 0; i < nfe.Count; i++)
+                {
+                    Console.WriteLine("MENSAGEM: " + nfe[i]);
+                }
+                
                 //}
 
                 //GlobalDataBaseController.ConnectDataBase();
@@ -151,11 +158,10 @@ namespace EnvioTeste
             {
                 var novaNfe = new NfeGerarNotaFiscalController().GerarNovaNotaFiscal
                 (
-                    grvId: 832349,
-                    identificadorNota: 710438,
-                    faturamentoServicoTipoVeiculoId: 50357,
+                    grvId: 543703,
+                    identificadorNota: 700311,
                     usuarioId: 1,
-                    isDev: false
+                    isDev: TestSystemEnvironment.Development
                 );
 
                 Console.WriteLine("MENSAGEM: " + novaNfe[0]);
@@ -164,9 +170,8 @@ namespace EnvioTeste
                 (
                     grvId: 832349,
                     identificadorNota: 710439,
-                    faturamentoServicoTipoVeiculoId: 50448,
                     usuarioId: 1,
-                    isDev: false
+                    isDev: TestSystemEnvironment.Development
                 );
 
                 Console.WriteLine("MENSAGEM: " + novaNfe[0]);
@@ -175,9 +180,8 @@ namespace EnvioTeste
                 (
                     grvId: 832349,
                     identificadorNota: 710440,
-                    faturamentoServicoTipoVeiculoId: 50187,
                     usuarioId: 1,
-                    isDev: false
+                    isDev: TestSystemEnvironment.Development
                 );
 
                 Console.WriteLine("MENSAGEM: " + novaNfe[0]);
@@ -196,9 +200,9 @@ namespace EnvioTeste
             {
                 var aux = new NfeReceberNotaFiscalController().ReceberNotaFiscal(new Consulta
                 {
-                    GrvId = 826282,
-                    IdentificadorNota = 710412,
-                    Homologacao = false,
+                    GrvId = 543703,
+                    IdentificadorNota = 700312,
+                    Homologacao = TestSystemEnvironment.Development,
                     UsuarioId = 1
                 });
 
@@ -206,9 +210,9 @@ namespace EnvioTeste
 
                 aux = new NfeReceberNotaFiscalController().ReceberNotaFiscal(new Consulta
                 {
-                    GrvId = 826282,
-                    IdentificadorNota = 710413,
-                    Homologacao = false,
+                    GrvId = 543703,
+                    IdentificadorNota = 700311,
+                    Homologacao = TestSystemEnvironment.Development,
                     UsuarioId = 1
                 });
 
@@ -218,7 +222,7 @@ namespace EnvioTeste
                 {
                     GrvId = 826282,
                     IdentificadorNota = 710414,
-                    Homologacao = false,
+                    Homologacao = TestSystemEnvironment.Development,
                     UsuarioId = 1
                 });
 
@@ -250,10 +254,10 @@ namespace EnvioTeste
             {
                 var aux = new NfeCancelamentoController().CancelarNotaFiscal(new Cancelamento
                 {
-                    GrvId = 543715,
-                    IdentificadorNota = 700261,
+                    GrvId = 543740,
+                    IdentificadorNota = 700315,
                     Justificativa = "TESTES",
-                    Homologacao = true,
+                    Homologacao = TestSystemEnvironment.Development,
                     UsuarioId = 1
                 });
 
@@ -262,7 +266,7 @@ namespace EnvioTeste
                     GrvId = 543715,
                     IdentificadorNota = 700262,
                     Justificativa = "TESTES",
-                    Homologacao = true,
+                    Homologacao = TestSystemEnvironment.Development,
                     UsuarioId = 1
                 });
             }

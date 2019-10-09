@@ -7,6 +7,7 @@ using NFSE.Domain.Enum;
 using NFSE.Infra.Data;
 using System;
 using System.Collections.Generic;
+using System.Web.Script.Serialization;
 
 namespace NFSE.Business.Tabelas.NFe
 {
@@ -33,7 +34,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             var tools = new Tools();
 
-            string json = tools.ObjToJSON(new Dictionary<string, string>()
+            string jsonEnvio = tools.ObjToJSON(new Dictionary<string, string>()
             {
                 {
                     "justificativa",
@@ -41,11 +42,11 @@ namespace NFSE.Business.Tabelas.NFe
                 }
             });
 
-            string result;
+            string jsonRetorno;
 
             try
             {
-                result = tools.CancelarNfse(new NfeConfiguracao().GetRemoteServer() + "/" + model.IdentificadorNota, json, Empresa.Token);
+                jsonRetorno = tools.CancelarNfse(new NfeConfiguracao().GetRemoteServer() + "/" + model.IdentificadorNota, jsonEnvio, Empresa.Token);
             }
             catch (Exception ex)
             {
@@ -54,11 +55,62 @@ namespace NFSE.Business.Tabelas.NFe
                 throw new Exception("Ocorreu um erro ao cancelar a Nota Fiscal (" + model.IdentificadorNota + "): " + ex.Message);
             }
 
+            try
+            {
+                var retornoConsulta = new JavaScriptSerializer()
+                {
+                    MaxJsonLength = int.MaxValue
+                }.Deserialize<RetornoCancelamentoEntity>(jsonRetorno);
+
+                if (retornoConsulta.erros != null)
+                {
+                    var retornoErro = new NfeWsErroModel();
+
+                    foreach (var erro in retornoConsulta.erros)
+                    {
+                        retornoErro.GrvId = model.GrvId;
+                        retornoErro.IdentificadorNota = model.IdentificadorNota;
+                        retornoErro.UsuarioId = model.UsuarioId;
+                        retornoErro.Acao = (char)Acao.Retorno;
+                        retornoErro.OrigemErro = (char)OrigemErro.WebService;
+                        retornoErro.Status = retornoConsulta.status.Trim().ToUpper();
+
+                        if (erro.codigo != null)
+                        {
+                            retornoErro.CodigoErro = erro.codigo.Replace("  ", " ").Trim().ToUpper();
+                        }
+
+                        if (erro.mensagem != null)
+                        {
+                            retornoErro.MensagemErro = erro.mensagem.Replace("  ", " ").Trim();
+                        }
+
+                        if (erro.correcao != null)
+                        {
+                            retornoErro.CorrecaoErro = erro.correcao.Replace("  ", " ").Trim();
+                        }
+
+                        retornoErro.ErroId = new NfeWsErroController().Cadastrar(retornoErro);
+                    }
+
+                    return jsonRetorno;
+                }
+            }
+            catch (Exception ex)
+            {
+                if (true)
+                {
+
+                }
+            }
+
+            
+
             nfe.Status = 'N';
 
             new NfeController().Atualizar(nfe);
 
-            return result;
+            return jsonRetorno;
         }
     }
 }
