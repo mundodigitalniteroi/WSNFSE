@@ -77,7 +77,7 @@ namespace EnvioTeste
 
                 //if (nfe == null)
                 //{
-                var nfe = new NfeGerarNotaFiscalController().GerarNotaFiscal(543740, 1, TestSystemEnvironment.Development);
+                var nfe = new NfeGerarNotaFiscalController().GerarNotaFiscal(543691, 1, TestSystemEnvironment.Development);
 
                 for (int i = 0; i < nfe.Count; i++)
                 {
@@ -158,8 +158,8 @@ namespace EnvioTeste
             {
                 var novaNfe = new NfeGerarNotaFiscalController().GerarNovaNotaFiscal
                 (
-                    grvId: 543703,
-                    identificadorNota: 700311,
+                    grvId: 543691,
+                    identificadorNota: 700325,
                     usuarioId: 1,
                     isDev: TestSystemEnvironment.Development
                 );

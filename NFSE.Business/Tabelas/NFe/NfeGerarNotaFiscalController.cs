@@ -95,10 +95,18 @@ namespace NFSE.Business.Tabelas.NFe
 
                             new NfeController().Atualizar(Nfe);
                         }
+                        else
+                        {
+                            new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, "GRV já possui Nota Fiscal cadastrada");
+
+                            returnList.Add("AVISO: GRV já possui Nota Fiscal cadastrada");
+
+                            return returnList;
+                        }
                     }
                     else
                     {
-                        // new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, "GRV já possui Nota Fiscal cadastrada");
+                        new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, "GRV já possui Nota Fiscal cadastrada");
 
                         returnList.Add("AVISO: GRV já possui Nota Fiscal cadastrada");
 
@@ -216,6 +224,14 @@ namespace NFSE.Business.Tabelas.NFe
             }
             #endregion Composições
 
+            if (Nfe.NfeId > 0)
+            {
+                var Composicao = Composicoes.FirstOrDefault();
+
+                ComposicoesAgrupadas = ComposicoesAgrupadas.Where(w => w.CnaeId == Composicao.CnaeId && w.ListaServicoId == Composicao.ListaServicoId).ToList();
+
+                ComposicoesAgrupadasDescricao = ComposicoesAgrupadasDescricao.Where(w => w.CnaeId == Composicao.CnaeId && w.ListaServicoId == Composicao.ListaServicoId).ToList();
+            }
 
             var CapaAutorizacaoNfse = new CapaAutorizacaoNfse();
 
@@ -264,13 +280,6 @@ namespace NFSE.Business.Tabelas.NFe
 
 
                 #region Cadastro do Envio/Reenvio
-                Nfe = new NfeEntity
-                {
-                    GrvId = grvId,
-
-                    IdentificadorNota = identificadorNota
-                };
-
                 try
                 {
                     if (Nfe.NfeId == 0)
@@ -346,6 +355,8 @@ namespace NFSE.Business.Tabelas.NFe
                     continue;
                 }
                 #endregion Processamento do resultado
+
+                Nfe = new NfeEntity();
             }
 
             return returnList;

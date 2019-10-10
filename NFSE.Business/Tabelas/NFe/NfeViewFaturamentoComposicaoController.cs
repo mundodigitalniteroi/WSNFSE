@@ -51,7 +51,6 @@ namespace NFSE.Business.Tabelas.NFe
                 return DataTableUtil.DataTableToList<NfeViewFaturamentoComposicaoEntity>(dataTable);
             }
         }
-
         public NfeViewFaturamentoComposicaoEntity Selecionar(int grvId)
         {
             var list = Listar(grvId);

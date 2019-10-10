@@ -97,11 +97,15 @@ namespace NFSE.Business.Tabelas.NFe
 
             SQL.AppendLine("  FROM dbo.tb_dep_nfe");
 
-            SQL.AppendLine(" WHERE GrvId = " + model.GrvId);
+            SQL.AppendLine(" WHERE 1 = 1");
 
             if (model.IdentificadorNota > 0)
             {
                 SQL.AppendLine("   AND IdentificadorNota = " + model.IdentificadorNota);
+            }
+            else
+            {
+                SQL.AppendLine("   AND GrvId = " + model.GrvId);
             }
 
             if (!selecionarNotaFiscalCancelada)
