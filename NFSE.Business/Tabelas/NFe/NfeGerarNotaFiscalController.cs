@@ -267,7 +267,7 @@ namespace NFSE.Business.Tabelas.NFe
 
                         Homologacao = isDev,
 
-                        Autorizacao = Autorizar(grv, Deposito, Empresa, Atendimento, agrupamento, descricaoConfiguracaoNfe, isDev)
+                        Autorizacao = Autorizar(grv, Deposito, ClienteDeposito, Empresa, Atendimento, agrupamento, descricaoConfiguracaoNfe, isDev)
                     };
                 }
                 catch (Exception ex)
@@ -455,7 +455,7 @@ namespace NFSE.Business.Tabelas.NFe
             }
         }
 
-        private Autorizacao Autorizar(GrvEntity grv, DepositoEntity deposito, EmpresaEntity empresa, AtendimentoEntity atendimento, NfeViewFaturamentoComposicaoAgrupadoEntity composicao, string descricaoConfiguracaoNfe, bool isDev)
+        private Autorizacao Autorizar(GrvEntity grv, DepositoEntity deposito, ClienteDepositoEntity clienteDeposito, EmpresaEntity empresa, AtendimentoEntity atendimento, NfeViewFaturamentoComposicaoAgrupadoEntity composicao, string descricaoConfiguracaoNfe, bool isDev)
         {
             var Now = DateTime.Now;
 
@@ -472,7 +472,7 @@ namespace NFSE.Business.Tabelas.NFe
                 tomador = Tomador(deposito, atendimento)
             };
 
-            Autorizacao.servico = Servico(grv, composicao, Autorizacao.prestador, descricaoConfiguracaoNfe, isDev);
+            Autorizacao.servico = Servico(grv, composicao, Autorizacao.prestador, clienteDeposito, descricaoConfiguracaoNfe, isDev);
 
             return Autorizacao;
         }
@@ -542,7 +542,7 @@ namespace NFSE.Business.Tabelas.NFe
             };
         }
 
-        private Servico Servico(GrvEntity grv, NfeViewFaturamentoComposicaoAgrupadoEntity composicao, Prestador prestador, string descricaoConfiguracaoNfe, bool isDev)
+        private Servico Servico(GrvEntity grv, NfeViewFaturamentoComposicaoAgrupadoEntity composicao, Prestador prestador, ClienteDepositoEntity clienteDeposito, string descricaoConfiguracaoNfe, bool isDev)
         {
             CnaeListaServicoParametroMunicipioEntity CnaeListaServicoParametroMunicipio = new CnaeListaServicoParametroMunicipioEntity
             {
@@ -558,6 +558,20 @@ namespace NFSE.Business.Tabelas.NFe
                 throw new Exception("Associação entre CNAE, Lista de Serviço e Município inexistente");
             }
 
+            decimal valor_iss = 0;
+
+            if (composicao.FlagEnviarValorIss == 'S')
+            {
+                if (clienteDeposito.FlagValorIssIgualProdutoBaseCalculoAliquota == 'S')
+                {
+                    valor_iss = (Math.Round(composicao.TotalComDesconto, 2) * CnaeListaServicoParametroMunicipio.AliquotaIss.Value) / 100;
+                }
+                else
+                {
+                    valor_iss = CnaeListaServicoParametroMunicipio.AliquotaIss.Value / 100;
+                }
+            }
+
             return new Servico
             {
                 aliquota = string.Format("{0:N2}", CnaeListaServicoParametroMunicipio.AliquotaIss).Replace(",", "."),
@@ -570,7 +584,7 @@ namespace NFSE.Business.Tabelas.NFe
 
                 item_lista_servico = CnaeListaServicoParametroMunicipio.ListaServico,
 
-                valor_iss = composicao.FlagEnviarValorIss == 'S' ? string.Format("{0:N2}", CnaeListaServicoParametroMunicipio.AliquotaIss / 100).Replace(",", ".") : "0",
+                valor_iss = string.Format("{0:N2}", valor_iss).Replace(",", "."),
 
                 codigo_tributario_municipio = CnaeListaServicoParametroMunicipio.CodigoTributarioMunicipio,
 

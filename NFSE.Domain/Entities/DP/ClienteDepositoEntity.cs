@@ -11,5 +11,7 @@ namespace NFSE.Domain.Entities.DP
         public int DepositoId { get; set; }
 
         public int EmpresaId { get; set; }
+
+        public char FlagValorIssIgualProdutoBaseCalculoAliquota { get; set; }
     }
 }

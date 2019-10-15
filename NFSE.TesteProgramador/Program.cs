@@ -77,7 +77,7 @@ namespace EnvioTeste
 
                 //if (nfe == null)
                 //{
-                var nfe = new NfeGerarNotaFiscalController().GerarNotaFiscal(543691, 1, TestSystemEnvironment.Development);
+                var nfe = new NfeGerarNotaFiscalController().GerarNotaFiscal(543742, 1, TestSystemEnvironment.Development);
 
                 for (int i = 0; i < nfe.Count; i++)
                 {
@@ -158,20 +158,20 @@ namespace EnvioTeste
             {
                 var novaNfe = new NfeGerarNotaFiscalController().GerarNovaNotaFiscal
                 (
-                    grvId: 543691,
-                    identificadorNota: 700325,
+                    grvId: 831129,
+                    identificadorNota: 711870,
                     usuarioId: 1,
-                    isDev: TestSystemEnvironment.Development
+                    isDev: TestSystemEnvironment.Production
                 );
 
                 Console.WriteLine("MENSAGEM: " + novaNfe[0]);
 
                 novaNfe = new NfeGerarNotaFiscalController().GerarNovaNotaFiscal
                 (
-                    grvId: 832349,
-                    identificadorNota: 710439,
+                    grvId: 831129,
+                    identificadorNota: 711871,
                     usuarioId: 1,
-                    isDev: TestSystemEnvironment.Development
+                    isDev: TestSystemEnvironment.Production
                 );
 
                 Console.WriteLine("MENSAGEM: " + novaNfe[0]);
