@@ -48,6 +48,7 @@ namespace NFSE.Business.Tabelas.NFe
             //   N: CaNcelado.
             //   E: Erro (quando a Prefeitura indicou algum problema);
             //   I: Inválido (quando ocorreu um erro Mob-Link);
+            //   M: Cadastro Manual
 
             var Nfe = new NfeEntity
             {
@@ -81,7 +82,7 @@ namespace NFSE.Business.Tabelas.NFe
             }
             else if ((NfeList = new NfeController().Listar(Nfe)) != null)
             {
-                var status = new char[] { 'C', 'A', 'P', 'R', 'S', 'T' };
+                var status = new char[] { 'C', 'A', 'P', 'R', 'S', 'T', 'M' };
 
                 if (NfeList.Where(w => status.Contains(w.Status)).Count() > 0)
                 {
@@ -560,21 +561,32 @@ namespace NFSE.Business.Tabelas.NFe
 
             decimal valor_iss = 0;
 
+            decimal AliquotaIss = 0;
+
+            if (clienteDeposito.AliquotaIss > 0)
+            {
+                AliquotaIss = clienteDeposito.AliquotaIss;
+            }
+            else
+            {
+                AliquotaIss = CnaeListaServicoParametroMunicipio.AliquotaIss.Value;
+            }
+
             if (composicao.FlagEnviarValorIss == 'S')
             {
                 if (clienteDeposito.FlagValorIssIgualProdutoBaseCalculoAliquota == 'S')
                 {
-                    valor_iss = (Math.Round(composicao.TotalComDesconto, 2) * CnaeListaServicoParametroMunicipio.AliquotaIss.Value) / 100;
+                    valor_iss = (Math.Round(composicao.TotalComDesconto, 2) * AliquotaIss) / 100;
                 }
                 else
                 {
-                    valor_iss = CnaeListaServicoParametroMunicipio.AliquotaIss.Value / 100;
+                    valor_iss = AliquotaIss / 100;
                 }
             }
 
             return new Servico
             {
-                aliquota = string.Format("{0:N2}", CnaeListaServicoParametroMunicipio.AliquotaIss).Replace(",", "."),
+                aliquota = string.Format("{0:N2}", AliquotaIss).Replace(",", "."),
 
                 discriminacao = descricaoConfiguracaoNfe + " CONFORME PROCESSO " + grv.NumeroFormularioGrv,
 

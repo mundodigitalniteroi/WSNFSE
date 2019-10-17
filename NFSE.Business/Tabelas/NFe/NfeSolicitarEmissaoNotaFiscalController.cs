@@ -1,6 +1,7 @@
 ﻿using NFSE.Business.Tabelas.DP;
 using NFSE.Business.Tabelas.Global;
 using NFSE.Business.Util;
+using NFSE.Domain.Entities.DP;
 using NFSE.Domain.Entities.Global;
 using NFSE.Domain.Entities.NFe;
 using NFSE.Domain.Enum;
@@ -19,10 +20,14 @@ namespace NFSE.Business.Tabelas.NFe
 
             var grv = new GrvController().Selecionar(model.GrvId);
 
+            #region Cliente Depósito
+            var ClienteDeposito = new ClienteDepositoController().Selecionar(new ClienteDepositoEntity { ClienteId = grv.ClienteId, DepositoId = grv.DepositoId });
+            #endregion Cliente Depósito
+
             #region Empresa
             EmpresaEntity Empresa;
 
-            if ((Empresa = new EmpresaController().Selecionar(new EmpresaEntity { EmpresaId = new DepositoController().Selecionar(grv.DepositoId).EmpresaId })) == null)
+            if ((Empresa = new EmpresaController().Selecionar(new EmpresaEntity { EmpresaId = ClienteDeposito.EmpresaId })) == null)
             {
                 new NfeWsErroController().CadastrarErroGenerico(model.GrvId, model.UsuarioId, null, OrigemErro.MobLink, Acao.Retorno, "Empresa associada não encontrada");
 

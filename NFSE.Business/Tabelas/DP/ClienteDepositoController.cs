@@ -20,6 +20,8 @@ namespace NFSE.Business.Tabelas.DP
 
             SQL.AppendLine("      ,tb_dep_clientes_depositos.id_empresa AS EmpresaId");
 
+            SQL.AppendLine("      ,tb_dep_clientes_depositos.AliquotaIss");
+
             SQL.AppendLine("      ,tb_dep_clientes_depositos.FlagValorIssIgualProdutoBaseCalculoAliquota");
 
             SQL.AppendLine("  FROM dbo.tb_dep_clientes_depositos");

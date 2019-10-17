@@ -29,15 +29,27 @@ namespace NFSE.Business.Tabelas.NFe
 
             var grv = new GrvController().Selecionar(identificaoNotaFiscal.GrvId);
 
+            #region Cliente Depósito
+            var ClienteDeposito = new ClienteDepositoController().Selecionar(new ClienteDepositoEntity { ClienteId = grv.ClienteId, DepositoId = grv.DepositoId });
+            #endregion Cliente Depósito
+
             #region Empresa
             EmpresaEntity Empresa;
 
-            if ((Empresa = new EmpresaController().Selecionar(new EmpresaEntity { EmpresaId = new DepositoController().Selecionar(grv.DepositoId).EmpresaId })) == null)
+            if ((Empresa = new EmpresaController().Selecionar(new EmpresaEntity { EmpresaId = ClienteDeposito.EmpresaId })) == null)
             {
                 new NfeWsErroController().CadastrarErroGenerico(identificaoNotaFiscal.GrvId, identificaoNotaFiscal.UsuarioId, null, OrigemErro.MobLink, Acao.Retorno, "Empresa associada não encontrada");
 
                 throw new Exception("Empresa associada não encontrada");
             }
+
+            if (Empresa.Token == null)
+            {
+                new NfeWsErroController().CadastrarErroGenerico(identificaoNotaFiscal.GrvId, identificaoNotaFiscal.UsuarioId, null, OrigemErro.MobLink, Acao.Retorno, "O Token não foi configurado");
+
+                throw new Exception("O Token não foi configurado");
+            }
+
             #endregion Empresa
 
             string json;

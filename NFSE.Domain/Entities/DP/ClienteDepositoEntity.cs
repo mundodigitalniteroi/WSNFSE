@@ -12,6 +12,8 @@ namespace NFSE.Domain.Entities.DP
 
         public int EmpresaId { get; set; }
 
+        public decimal AliquotaIss { get; set; }
+
         public char FlagValorIssIgualProdutoBaseCalculoAliquota { get; set; }
     }
 }
