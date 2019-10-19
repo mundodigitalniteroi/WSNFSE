@@ -77,7 +77,7 @@ namespace EnvioTeste
 
                 //if (nfe == null)
                 //{
-                var nfe = new NfeGerarNotaFiscalController().GerarNotaFiscal(833723, 1, TestSystemEnvironment.Production);
+                var nfe = new NfeGerarNotaFiscalController().GerarNotaFiscal(831686, 1, TestSystemEnvironment.Production);
 
                 for (int i = 0; i < nfe.Count; i++)
                 {
@@ -201,7 +201,7 @@ namespace EnvioTeste
                 var aux = new NfeReceberNotaFiscalController().ReceberNotaFiscal(new Consulta
                 {
                     GrvId = 831686,
-                    IdentificadorNota = 712069,
+                    IdentificadorNota = 712935,
                     Homologacao = TestSystemEnvironment.Production,
                     UsuarioId = 1
                 });

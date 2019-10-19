@@ -93,10 +93,12 @@ namespace NFSE.Business.Tabelas.NFe
                 return retornoConsulta;
             }
 
+            var retornoErro = new NfeWsErroModel();
+
+            var NfeWsErroController = new NfeWsErroController();
+
             if (retornoConsulta.erros != null)
             {
-                var retornoErro = new NfeWsErroModel();
-
                 foreach (var erro in retornoConsulta.erros)
                 {
                     retornoErro.GrvId = identificaoNotaFiscal.GrvId;
@@ -121,7 +123,7 @@ namespace NFSE.Business.Tabelas.NFe
                         retornoErro.CorrecaoErro = erro.correcao.Replace("  ", " ").Trim();
                     }
 
-                    retornoErro.ErroId = new NfeWsErroController().Cadastrar(retornoErro);
+                    retornoErro.ErroId = NfeWsErroController.Cadastrar(retornoErro);
                 }
 
                 nfe.Status = 'E';
@@ -129,6 +131,17 @@ namespace NFSE.Business.Tabelas.NFe
                 new NfeController().Atualizar(nfe);
 
                 return retornoConsulta;
+            }
+            else
+            {
+                retornoErro.GrvId = identificaoNotaFiscal.GrvId;
+                retornoErro.IdentificadorNota = identificaoNotaFiscal.IdentificadorNota;
+                retornoErro.UsuarioId = identificaoNotaFiscal.UsuarioId;
+                retornoErro.Acao = (char)Acao.Retorno;
+                retornoErro.OrigemErro = (char)OrigemErro.WebService;
+                retornoErro.Status = retornoConsulta.status.Trim().ToUpper();
+
+                NfeWsErroController.Cadastrar(retornoErro);
             }
 
             if (!string.IsNullOrWhiteSpace(retornoConsulta.url))
