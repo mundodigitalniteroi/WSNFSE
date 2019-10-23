@@ -45,11 +45,18 @@
     <Reference Include="System.Data" />
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Connected Services\AlterDataWebService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Tabelas\DP\ClienteController.cs" />
     <Compile Include="Tabelas\DP\ClienteDepositoController.cs" />
     <Compile Include="Tabelas\NFe\NfeExcluirController.cs" />
@@ -101,7 +108,60 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Connected Services\AlterDataWebService\NFSE.Business.AlterDataWebService.CriarClienteResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\AlterDataWebService\NFSE.Business.AlterDataWebService.CriarClienteStringResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\AlterDataWebService\NFSE.Business.AlterDataWebService.CriarClienteTesteResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\AlterDataWebService\NFSE.Business.AlterDataWebService.CriarDocumentoResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\AlterDataWebService\NFSE.Business.AlterDataWebService.PesquisarBairroResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\AlterDataWebService\NFSE.Business.AlterDataWebService.PesquisarCidadeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\AlterDataWebService\NFSE.Business.AlterDataWebService.PesquisarTipoLogradouroResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\AlterDataWebService\NFSE.Business.AlterDataWebService.RealizarLoginResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\AlterDataWebService\NFSE.Business.AlterDataWebService.ResponseClienteAlter.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\AlterDataWebService\NFSE.Business.AlterDataWebService.ResponseDocumento.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\AlterDataWebService\servico.wsdl" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Connected Services\AlterDataWebService\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\AlterDataWebService\servico.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\AlterDataWebService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\AlterDataWebService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\AlterDataWebService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

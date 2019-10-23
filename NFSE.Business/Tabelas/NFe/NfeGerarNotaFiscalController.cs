@@ -355,9 +355,11 @@ namespace NFSE.Business.Tabelas.NFe
 
                     continue;
                 }
+                finally
+                {
+                    Nfe = new NfeEntity();
+                }
                 #endregion Processamento do resultado
-
-                Nfe = new NfeEntity();
             }
 
             return returnList;
