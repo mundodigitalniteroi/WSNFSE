@@ -157,6 +157,7 @@ namespace NFSE.Business.Tabelas.NFe
             }
             #endregion Empresa
 
+
             #region Atendimento
             var Atendimento = new AtendimentoEntity();
 
@@ -169,6 +170,7 @@ namespace NFSE.Business.Tabelas.NFe
                 return returnList;
             }
             #endregion Atendimento
+
 
             #region Faturamento
             var Faturamentos = new List<FaturamentoEntity>();
