@@ -565,7 +565,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             decimal valor_iss = 0;
 
-            decimal AliquotaIss = 0;
+            decimal AliquotaIss;
 
             if (clienteDeposito.AliquotaIss > 0)
             {

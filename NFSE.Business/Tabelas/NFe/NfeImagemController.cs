@@ -38,7 +38,7 @@ namespace NFSE.Business.Tabelas.NFe
         }
 
         #region Cadastrar
-        public void Cadastrar(int nfeID, byte[] imagem)
+        public void Cadastrar(int nfeId, byte[] imagem)
         {
             var SQL = new StringBuilder();
 
@@ -49,7 +49,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             SQL.AppendLine("VALUES");
 
-            SQL.AppendLine("      (" + nfeID);
+            SQL.AppendLine("      (" + nfeId);
             SQL.AppendLine("      ,@Imagem)");
 
             var sqlParameter = new SqlParameter[1];

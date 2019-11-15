@@ -88,7 +88,7 @@ namespace NFSE.Business.Tabelas.NFe
                 MaxJsonLength = int.MaxValue
             }.Deserialize<RetornoNotaFiscalEntity>(retornoJson);
 
-            if (retornoConsulta.status.Trim().ToLower().Equals("processando_autorizacao"))
+            if (retornoConsulta.status.Trim().Equals("processando_autorizacao", StringComparison.CurrentCultureIgnoreCase))
             {
                 return retornoConsulta;
             }
