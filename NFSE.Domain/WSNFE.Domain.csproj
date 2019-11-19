@@ -41,6 +41,7 @@
     <Compile Include="Entities\Global\CnaeListaServicoParametroMunicipioEntity.cs" />
     <Compile Include="Entities\NFe\Autorizacao.cs" />
     <Compile Include="Entities\NFe\NfeFaturamentoComposicaoEntity.cs" />
+    <Compile Include="Entities\NFe\NfeRegraEntity.cs" />
     <Compile Include="Entities\NFe\NfeViewFaturamentoComposicaoAgrupadoDescricaoEntity.cs" />
     <Compile Include="Entities\NFe\NfeViewFaturamentoComposicaoEntity.cs" />
     <Compile Include="Entities\NFe\NfeImagemEntity.cs" />

@@ -178,7 +178,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             NfeConfiguracaoImagemController NfeConfiguracaoImagemController = new NfeConfiguracaoImagemController();
 
-            if ((ConfiguracaoImagem = NfeConfiguracaoImagemController.Selecionar(new NfeConfiguracaoImagemEntity { ClienteId = clienteId, DepositoId = depositoId } )) == null)
+            if ((ConfiguracaoImagem = NfeConfiguracaoImagemController.Selecionar(new NfeConfiguracaoImagemEntity { ClienteId = clienteId, DepositoId = depositoId })) == null)
             {
                 ConfiguracaoImagem.ClienteDepositoId = new ClienteDepositoController().Selecionar(new ClienteDepositoEntity { ClienteId = clienteId, DepositoId = depositoId }).ClienteDepositoId;
 

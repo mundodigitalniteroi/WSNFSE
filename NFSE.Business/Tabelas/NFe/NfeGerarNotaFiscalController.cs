@@ -117,21 +117,21 @@ namespace NFSE.Business.Tabelas.NFe
             }
             #endregion NFe
 
-            #region GRV
+            // GRV
             var grv = new GrvController().Selecionar(grvId);
-            #endregion GRV
 
-            #region Cliente
+            // Cliente
             var Cliente = new ClienteController().Selecionar(grv.ClienteId);
-            #endregion Cliente
 
-            #region Depósito
+            // Depósito
             var Deposito = new DepositoController().Selecionar(grv.DepositoId);
-            #endregion Depósito
 
-            #region Cliente Depósito
+            // Cliente Depósito
             var ClienteDeposito = new ClienteDepositoController().Selecionar(new ClienteDepositoEntity { ClienteId = grv.ClienteId, DepositoId = grv.DepositoId });
-            #endregion Cliente Depósito
+
+            #region Regras da Nfe
+            var NfeRegras = new NfeRegraController().Listar(new NfeRegraEntity { ClienteDepositoId = ClienteDeposito.ClienteDepositoId });
+            #endregion Regras da Nfe
 
             #region Regras do Faturamento
             if (new RegraFaturamentoController().Selecionar(grv.ClienteId, grv.DepositoId, new TipoRegraFaturamentoController().Selecionar("NFE").FaturamentoRegraTipoId) == null)
@@ -157,7 +157,6 @@ namespace NFSE.Business.Tabelas.NFe
             }
             #endregion Empresa
 
-
             #region Atendimento
             var Atendimento = new AtendimentoEntity();
 
@@ -170,7 +169,6 @@ namespace NFSE.Business.Tabelas.NFe
                 return returnList;
             }
             #endregion Atendimento
-
 
             #region Faturamento
             var Faturamentos = new List<FaturamentoEntity>();
@@ -185,7 +183,6 @@ namespace NFSE.Business.Tabelas.NFe
             }
             #endregion Faturamento
 
-
             #region Valores somados da Composição do Faturamento
             var ComposicoesAgrupadas = new List<NfeViewFaturamentoComposicaoAgrupadoEntity>();
 
@@ -199,7 +196,6 @@ namespace NFSE.Business.Tabelas.NFe
             }
             #endregion Valores somados da Composição do Faturamento
 
-
             #region Valores somados da Composição do Faturamento
             var ComposicoesAgrupadasDescricao = new List<NfeViewFaturamentoComposicaoAgrupadoDescricaoEntity>();
 
@@ -212,7 +208,6 @@ namespace NFSE.Business.Tabelas.NFe
                 return returnList;
             }
             #endregion Valores somados da Composição do Faturamento
-
 
             #region Composições
             var Composicoes = new List<NfeViewFaturamentoComposicaoEntity>();
@@ -270,7 +265,7 @@ namespace NFSE.Business.Tabelas.NFe
 
                         Homologacao = isDev,
 
-                        Autorizacao = Autorizar(grv, Deposito, ClienteDeposito, Empresa, Atendimento, agrupamento, descricaoConfiguracaoNfe, isDev)
+                        Autorizacao = Autorizar(grv, Deposito, ClienteDeposito, NfeRegras, Empresa, Atendimento, agrupamento, descricaoConfiguracaoNfe, isDev)
                     };
                 }
                 catch (Exception ex)
@@ -460,7 +455,7 @@ namespace NFSE.Business.Tabelas.NFe
             }
         }
 
-        private Autorizacao Autorizar(GrvEntity grv, DepositoEntity deposito, ClienteDepositoEntity clienteDeposito, EmpresaEntity empresa, AtendimentoEntity atendimento, NfeViewFaturamentoComposicaoAgrupadoEntity composicao, string descricaoConfiguracaoNfe, bool isDev)
+        private Autorizacao Autorizar(GrvEntity grv, DepositoEntity deposito, ClienteDepositoEntity clienteDeposito, List<NfeRegraEntity> nfeRegras, EmpresaEntity empresa, AtendimentoEntity atendimento, NfeViewFaturamentoComposicaoAgrupadoEntity composicao, string descricaoConfiguracaoNfe, bool isDev)
         {
             var Now = DateTime.Now;
 
@@ -477,7 +472,7 @@ namespace NFSE.Business.Tabelas.NFe
                 tomador = Tomador(deposito, atendimento)
             };
 
-            Autorizacao.servico = Servico(grv, composicao, Autorizacao.prestador, clienteDeposito, descricaoConfiguracaoNfe, isDev);
+            Autorizacao.servico = Servico(grv, composicao, Autorizacao.prestador, clienteDeposito, nfeRegras, descricaoConfiguracaoNfe, isDev);
 
             return Autorizacao;
         }
@@ -547,7 +542,7 @@ namespace NFSE.Business.Tabelas.NFe
             };
         }
 
-        private Servico Servico(GrvEntity grv, NfeViewFaturamentoComposicaoAgrupadoEntity composicao, Prestador prestador, ClienteDepositoEntity clienteDeposito, string descricaoConfiguracaoNfe, bool isDev)
+        private Servico Servico(GrvEntity grv, NfeViewFaturamentoComposicaoAgrupadoEntity composicao, Prestador prestador, ClienteDepositoEntity clienteDeposito, List<NfeRegraEntity> nfeRegras, string descricaoConfiguracaoNfe, bool isDev)
         {
             CnaeListaServicoParametroMunicipioEntity CnaeListaServicoParametroMunicipio = new CnaeListaServicoParametroMunicipioEntity
             {
@@ -563,7 +558,7 @@ namespace NFSE.Business.Tabelas.NFe
                 throw new Exception("Associação entre CNAE, Lista de Serviço e Município inexistente");
             }
 
-            decimal valor_iss = 0;
+            decimal valorIss = 0;
 
             decimal AliquotaIss;
 
@@ -580,11 +575,31 @@ namespace NFSE.Business.Tabelas.NFe
             {
                 if (clienteDeposito.FlagValorIssIgualProdutoBaseCalculoAliquota == 'S')
                 {
-                    valor_iss = (Math.Round(composicao.TotalComDesconto, 2) * AliquotaIss) / 100;
+                    valorIss = (Math.Round(composicao.TotalComDesconto, 2) * AliquotaIss) / 100;
                 }
                 else
                 {
-                    valor_iss = AliquotaIss / 100;
+                    valorIss = AliquotaIss / 100;
+                }
+            }
+
+            string valorServicos;
+            
+            if (isDev)
+            {
+                valorServicos = "1";
+            }
+            else
+            {
+                var regra = nfeRegras.Where(w => w.ClienteDepositoId == clienteDeposito.ClienteDepositoId && w.RegraCodigo.Equals("VLSERVICO=TOTAL+IMP")).FirstOrDefault();
+
+                if (regra != null)
+                {
+                    valorServicos = Math.Round(composicao.TotalComDesconto + valorIss, 2).ToString().Replace(",", ".");
+                }
+                else
+                {
+                    valorServicos = Math.Round(composicao.TotalComDesconto, 2).ToString().Replace(",", ".");
                 }
             }
 
@@ -600,11 +615,11 @@ namespace NFSE.Business.Tabelas.NFe
 
                 item_lista_servico = CnaeListaServicoParametroMunicipio.ListaServico,
 
-                valor_iss = string.Format("{0:N2}", valor_iss).Replace(",", "."),
+                valor_iss = string.Format("{0:N2}", valorIss).Replace(",", "."),
 
                 codigo_tributario_municipio = CnaeListaServicoParametroMunicipio.CodigoTributarioMunicipio,
 
-                valor_servicos = isDev ? "1" : Math.Round(composicao.TotalComDesconto, 2).ToString().Replace(",", ".")
+                valor_servicos = valorServicos
             };
         }
     }
