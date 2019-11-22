@@ -77,7 +77,8 @@ namespace EnvioTeste
 
                 //if (nfe == null)
                 //{
-                var nfe = new NfeGerarNotaFiscalController().GerarNotaFiscal(594289, 1, TestSystemEnvironment.Production);
+                // var nfe = new NfeGerarNotaFiscalController().GerarNotaFiscal(594289, 1, TestSystemEnvironment.Production);
+                var nfe = new NfeGerarNotaFiscalController().GerarNotaFiscal(543747, 1, TestSystemEnvironment.Development);
 
                 for (int i = 0; i < nfe.Count; i++)
                 {

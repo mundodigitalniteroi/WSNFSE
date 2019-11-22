@@ -130,7 +130,14 @@ namespace NFSE.Business.Tabelas.NFe
             var ClienteDeposito = new ClienteDepositoController().Selecionar(new ClienteDepositoEntity { ClienteId = grv.ClienteId, DepositoId = grv.DepositoId });
 
             #region Regras da Nfe
-            var NfeRegras = new NfeRegraController().Listar(new NfeRegraEntity { ClienteDepositoId = ClienteDeposito.ClienteDepositoId });
+            var NfeRegras = new NfeRegraController().Listar(new NfeRegraEntity 
+            {
+                ClienteDepositoId = ClienteDeposito.ClienteDepositoId, 
+                
+                Ativo = 1,
+                
+                RegraAtivo = 1 
+            });
             #endregion Regras da Nfe
 
             #region Regras do Faturamento
@@ -562,7 +569,11 @@ namespace NFSE.Business.Tabelas.NFe
 
             decimal AliquotaIss;
 
-            if (clienteDeposito.AliquotaIss > 0)
+            if (nfeRegras != null && nfeRegras.Where(w => w.RegraCodigo.Equals("SEMALIQUOTA")).Count() > 0)
+            {
+                AliquotaIss = 0;
+            }
+            else if (clienteDeposito.AliquotaIss > 0)
             {
                 AliquotaIss = clienteDeposito.AliquotaIss;
             }
@@ -591,17 +602,24 @@ namespace NFSE.Business.Tabelas.NFe
             }
             else
             {
-                var regra = nfeRegras.Where(w => w.ClienteDepositoId == clienteDeposito.ClienteDepositoId && w.RegraCodigo.Equals("VLSERVICO=TOTAL+IMP")).FirstOrDefault();
-
-                if (regra != null)
-                {
-                    valorServicos = Math.Round(composicao.TotalComDesconto + valorIss, 2).ToString().Replace(",", ".");
-                }
-                else
-                {
-                    valorServicos = Math.Round(composicao.TotalComDesconto, 2).ToString().Replace(",", ".");
-                }
+                valorServicos = Math.Round(composicao.TotalComDesconto, 2)
+                    .ToString()
+                    .Replace(",", ".");
             }
+            //else
+            //{
+            //    var regra = nfeRegras.Where(w => w.RegraCodigo.Equals("VLSERVICO=TOTAL+IMP") && w.Ativo == 1)
+            //        .FirstOrDefault();
+
+            //    if (regra != null)
+            //    {
+            //        valorServicos = Math.Round(composicao.TotalComDesconto + valorIss, 2).ToString().Replace(",", ".");
+            //    }
+            //    else
+            //    {
+            //        valorServicos = Math.Round(composicao.TotalComDesconto, 2).ToString().Replace(",", ".");
+            //    }
+            //}
 
             return new Servico
             {
