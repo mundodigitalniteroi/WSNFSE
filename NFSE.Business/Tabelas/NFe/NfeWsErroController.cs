@@ -162,8 +162,6 @@ namespace NFSE.Business.Tabelas.NFe
             return DataBase.ExecuteScopeIdentity(SQL, sqlParameters);
         }
 
-
-
         public void CadastrarErroGenerico(int grvId, int usuarioId, int? identificadorNota, OrigemErro origemErro, Acao acao, string mensagemErro)
         {
             var erro = new NfeWsErroModel

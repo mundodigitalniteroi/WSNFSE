@@ -32,6 +32,18 @@ namespace NFSE.Business.Tabelas.NFe
 
             SQL.AppendLine("      ,vw_dep_nfe_faturamento_composicao_agrupado_descricao.FlagEnviarInscricaoEstadual");
 
+            SQL.AppendLine("      ,vw_dep_nfe_faturamento_composicao_agrupado_descricao.QuantidadeComposicao");
+            
+            SQL.AppendLine("      ,vw_dep_nfe_faturamento_composicao_agrupado_descricao.ValorTipoComposicao");
+            
+            SQL.AppendLine("      ,vw_dep_nfe_faturamento_composicao_agrupado_descricao.ValorCalculadoSemDesconto");
+            
+            SQL.AppendLine("      ,vw_dep_nfe_faturamento_composicao_agrupado_descricao.TipoDesconto");
+            
+            SQL.AppendLine("      ,vw_dep_nfe_faturamento_composicao_agrupado_descricao.QuantidadeDesconto");
+            
+            SQL.AppendLine("      ,vw_dep_nfe_faturamento_composicao_agrupado_descricao.ValorDesconto");
+
             SQL.AppendLine("      ,vw_dep_nfe_faturamento_composicao_agrupado_descricao.TotalComDesconto");
 
             SQL.AppendLine("  FROM dbo.vw_dep_nfe_faturamento_composicao_agrupado_descricao");

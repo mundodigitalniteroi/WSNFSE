@@ -22,6 +22,18 @@
 
         public char FlagEnviarInscricaoEstadual { get; set; }
 
+        public decimal QuantidadeComposicao { get; set; }
+        
+        public decimal ValorTipoComposicao { get; set; }
+        
+        public decimal ValorCalculadoSemDesconto { get; set; }
+
+        public char TipoDesconto { get; set; }
+        
+        public decimal QuantidadeDesconto { get; set; }
+        
+        public decimal ValorDesconto { get; set; }
+
         public decimal TotalComDesconto { get; set; }
     }
 }

@@ -10,6 +10,7 @@ using NFSE.Infra.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace NFSE.Business.Tabelas.NFe
 {
@@ -244,20 +245,25 @@ namespace NFSE.Business.Tabelas.NFe
 
             List<NfeFaturamentoComposicaoEntity> NfeFaturamentoComposicaoList;
 
-            string descricaoConfiguracaoNfe = "";
+            StringBuilder descricaoConfiguracaoNfe = new StringBuilder();
 
             foreach (var agrupamento in ComposicoesAgrupadas)
             {
-                descricaoConfiguracaoNfe = "";
+                descricaoConfiguracaoNfe = new StringBuilder();
 
                 var aux = ComposicoesAgrupadasDescricao.Where(w => w.CnaeId == agrupamento.CnaeId && w.ListaServicoId == agrupamento.ListaServicoId).ToList();
 
                 foreach (var item in aux)
                 {
-                    descricaoConfiguracaoNfe += item.DescricaoConfiguracaoNfe + Environment.NewLine;
+                    if (item.TipoDesconto != '\0')
+                    {
+                        descricaoConfiguracaoNfe.AppendLine($"{item.DescricaoConfiguracaoNfe}. QTD: {string.Format("{0:N2}", item.QuantidadeComposicao)}. VALOR: R$ {string.Format("{0:N2}", item.ValorTipoComposicao)}. DSCT: R$ {string.Format("{0:N2}", item.ValorDesconto)}. TOT: R$ {string.Format("{0:N2}", item.TotalComDesconto)}");
+                    }
+                    else
+                    {
+                        descricaoConfiguracaoNfe.AppendLine($"{item.DescricaoConfiguracaoNfe}. QTD: {string.Format("{0:N2}", item.QuantidadeComposicao)}. VALOR: R$ {string.Format("{0:N2}", item.ValorTipoComposicao)}. TOT: R$ {string.Format("{0:N2}", item.TotalComDesconto)}");
+                    }
                 }
-
-                descricaoConfiguracaoNfe = descricaoConfiguracaoNfe.Trim();
 
                 #region Preenchimento da Entidade
                 try
@@ -272,11 +278,13 @@ namespace NFSE.Business.Tabelas.NFe
 
                         Homologacao = isDev,
 
-                        Autorizacao = Autorizar(grv, Deposito, ClienteDeposito, NfeRegras, Empresa, Atendimento, agrupamento, descricaoConfiguracaoNfe, isDev)
+                        Autorizacao = Autorizar(grv, Deposito, ClienteDeposito, NfeRegras, Empresa, Atendimento, agrupamento, descricaoConfiguracaoNfe.ToString().Trim(), isDev)
                     };
                 }
                 catch (Exception ex)
                 {
+                    new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, ex.Message);
+
                     returnList.Add(ex.Message);
 
                     continue;
@@ -300,6 +308,8 @@ namespace NFSE.Business.Tabelas.NFe
                 }
                 catch (Exception ex)
                 {
+                    new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, ex.Message);
+
                     returnList.Add("Erro ao cadastrar a NF: " + ex.Message);
 
                     continue;
@@ -322,6 +332,8 @@ namespace NFSE.Business.Tabelas.NFe
                 }
                 catch (Exception ex)
                 {
+                    new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, ex.Message);
+
                     returnList.Add("Erro ao cadastrar a composição da NF: " + ex.Message);
 
                     continue;
@@ -336,6 +348,8 @@ namespace NFSE.Business.Tabelas.NFe
                 }
                 catch (Exception ex)
                 {
+                    new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, ex.Message);
+
                     returnList.Add("Erro na Execução do Web Service: " + ex.Message);
 
                     continue;
@@ -355,6 +369,8 @@ namespace NFSE.Business.Tabelas.NFe
                 }
                 catch (Exception ex)
                 {
+                    new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, ex.Message);
+
                     returnList.Add("Erro no processamento do resultado do Web Service: " + ex.Message);
 
                     continue;
