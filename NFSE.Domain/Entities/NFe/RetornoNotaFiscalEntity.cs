@@ -15,17 +15,19 @@ namespace NFSE.Domain.Entities.NFe
 
         public string status { get; set; }
 
+        public string numero { get; set; }
+
         public string codigo_verificacao { get; set; }
-         
+
         public DateTime data_emissao { get; set; }
-         
+
         public string url { get; set; }
-         
+
         public string caminho_xml_nota_fiscal { get; set; }
-         
-        public byte[] ImagemNotaFiscal { get; set; }
-         
+
         public byte[] retorno_nota { get; set; }
+
+        public byte[] ImagemNotaFiscal { get; set; }
 
         public List<Erros> erros { get; set; }
     }

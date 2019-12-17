@@ -16,7 +16,9 @@ namespace NFSE.Domain.Entities.NFe
 
         public string Cnpj { get; set; }
 
-        public string Numero { get; set; }
+        public string NumeroRps { get; set; }
+
+        public string SerieRps { get; set; }
 
         public string CodigoVerificacao { get; set; }
 
@@ -43,6 +45,8 @@ namespace NFSE.Domain.Entities.NFe
         public DateTime DataCadastro { get; set; }
 
         public DateTime? DataAlteracao { get; set; }
+
+        public string NumeroNotaFiscal { get; set; }
 
         // Informações para consulta:
         public string Cliente { get; set; }

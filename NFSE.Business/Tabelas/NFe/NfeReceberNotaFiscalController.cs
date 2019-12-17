@@ -54,12 +54,19 @@ namespace NFSE.Business.Tabelas.NFe
 
             string json;
 
+        Outer:
+
             try
             {
                 json = new Tools().GetNfse(new NfeConfiguracao().GetRemoteServer() + "/" + identificaoNotaFiscal.IdentificadorNota, Empresa.Token);
             }
             catch (Exception ex)
             {
+                if (ex.Message.Contains("por minuto"))
+                {
+                    goto Outer;
+                }
+
                 AtualizarNotaFiscal(nfe);
 
                 new NfeWsErroController().CadastrarErroGenerico(nfe.GrvId, identificaoNotaFiscal.UsuarioId, nfe.IdentificadorNota, OrigemErro.WebService, Acao.Retorno, "Ocorreu um erro ao receber a Nota Fiscal: " + ex.Message);

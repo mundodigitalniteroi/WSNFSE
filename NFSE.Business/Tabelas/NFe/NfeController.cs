@@ -186,19 +186,31 @@ namespace NFSE.Business.Tabelas.NFe
 
             SQL.AppendLine("UPDATE dbo.tb_dep_nfe");
 
-            SQL.AppendLine("   SET Status = '" + nfe.Status + "'");
+            SQL.AppendLine("   SET Referencia = '" + retornoNotaFiscal.@ref.Trim() + "'");
 
-            SQL.AppendLine("      ,Numero = '" + retornoNotaFiscal.numero_rps + "'");
+            if (retornoNotaFiscal.numero_rps != null)
+            {
+                SQL.AppendLine("      ,Numero = '" + retornoNotaFiscal.numero_rps.Trim() + "'");
+
+                SQL.AppendLine("      ,NumeroRps = '" + retornoNotaFiscal.numero_rps.Trim() + "'");
+            }
+
+            if (retornoNotaFiscal.serie_rps != null)
+            {
+                SQL.AppendLine("      ,SerieRps = '" + retornoNotaFiscal.serie_rps.Trim() + "'");
+            }
+
+            SQL.AppendLine("      ,StatusNfe = '" + retornoNotaFiscal.status.Trim() + "'");
+
+            SQL.AppendLine("      ,NumeroNotaFiscal = '" + retornoNotaFiscal.numero.Trim() + "'");
 
             SQL.AppendLine("      ,CodigoVerificacao = '" + retornoNotaFiscal.codigo_verificacao.Trim() + "'");
 
             SQL.AppendLine("      ,DataEmissao = '" + retornoNotaFiscal.data_emissao.ToString("yyyyMMdd HH:mm:ss") + "'");
 
-            SQL.AppendLine("      ,StatusNfe = '" + retornoNotaFiscal.status + "'");
+            SQL.AppendLine("      ,Url = '" + retornoNotaFiscal.url.Trim() + "'");
 
-            SQL.AppendLine("      ,Url = '" + retornoNotaFiscal.url + "'");
-
-            SQL.AppendLine("      ,DataAlteracao = GETDATE()");
+            SQL.AppendLine("      ,CaminhoXmlNotaFiscal = '" + retornoNotaFiscal.caminho_xml_nota_fiscal.Trim() + "'");
 
             SQL.AppendLine(" WHERE NfeID = " + nfe.NfeId);
 
