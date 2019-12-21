@@ -637,6 +637,17 @@ namespace NFSE.Business.Tabelas.NFe
             //    }
             //}
 
+            string baseCalculo = string.Empty;
+
+            var regraBaseCalculo = nfeRegras
+                .Where(w => w.RegraCodigo.Equals("BASE_CALCULO") && w.Ativo == 1)
+                .ToList();
+
+            if (regraBaseCalculo != null && regraBaseCalculo.Count > 0)
+            {
+                baseCalculo = valorServicos;
+            }
+
             return new Servico
             {
                 aliquota = string.Format("{0:N2}", AliquotaIss).Replace(",", "."),
@@ -653,7 +664,9 @@ namespace NFSE.Business.Tabelas.NFe
 
                 codigo_tributario_municipio = CnaeListaServicoParametroMunicipio.CodigoTributarioMunicipio,
 
-                valor_servicos = valorServicos
+                valor_servicos = valorServicos,
+
+                base_calculo = !string.IsNullOrWhiteSpace(baseCalculo) ? baseCalculo : null
             };
         }
     }

@@ -212,6 +212,8 @@ namespace NFSE.Business.Tabelas.NFe
 
             SQL.AppendLine("      ,CaminhoXmlNotaFiscal = '" + retornoNotaFiscal.caminho_xml_nota_fiscal.Trim() + "'");
 
+            SQL.AppendLine("      ,Status = '" + nfe.Status + "'");
+
             SQL.AppendLine(" WHERE NfeID = " + nfe.NfeId);
 
             return DataBase.Execute(SQL);

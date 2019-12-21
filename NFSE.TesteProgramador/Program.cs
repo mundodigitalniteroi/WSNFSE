@@ -4,6 +4,7 @@ using NFSE.Domain.Entities.NFe;
 using NFSE.Domain.Enum;
 using NFSE.Infra.Data;
 using System;
+using System.Diagnostics;
 
 namespace EnvioTeste
 {
@@ -15,17 +16,21 @@ namespace EnvioTeste
 
             DataBase.ConnectDataBase();
 
-            var grv = new GrvController().Selecionar("14059625");
+            var grv = new GrvController().Selecionar("910150067");
 
-            Console.WriteLine($"GRV ID: {grv.GrvId}");
+            if (grv != null)
+            {
+                Debug.WriteLine($"GRV ID: {grv.GrvId}");
 
-
+                Console.WriteLine($"GRV ID: {grv.GrvId}");
+            }
+            
             #region Teste de Solicitação Simplificado
             try
             {
                 var nfe = new NfeGerarNotaFiscalController().GerarNotaFiscal
                 (
-                    grvId: 868480, 
+                    grvId: 276949, 
                     
                     usuarioId: 1, 
                     
@@ -49,13 +54,13 @@ namespace EnvioTeste
             {
                 var novaNfe = new NfeGerarNotaFiscalController().GerarNovaNotaFiscal
                 (
-                    grvId: 543772,
+                    grvId: 873405,
 
-                    identificadorNota: 700445,
+                    identificadorNota: 727399,
 
                     usuarioId: 1,
 
-                    isDev: TestSystemEnvironment.Development
+                    isDev: TestSystemEnvironment.Production
                 );
 
                 Console.WriteLine("MENSAGEM: " + novaNfe[0]);
@@ -72,11 +77,11 @@ namespace EnvioTeste
             {
                 var aux = new NfeReceberNotaFiscalController().ReceberNotaFiscal(new Consulta
                 {
-                    GrvId = 594289,
+                    GrvId = 873405,
 
-                    IdentificadorNota = 718711,
+                    IdentificadorNota = 727400,
 
-                    Homologacao = TestSystemEnvironment.Development,
+                    Homologacao = TestSystemEnvironment.Production,
 
                     UsuarioId = 1
                 });

@@ -49,7 +49,6 @@ namespace NFSE.Business.Tabelas.NFe
 
                 throw new Exception("O Token não foi configurado");
             }
-
             #endregion Empresa
 
             string json;
@@ -165,7 +164,7 @@ namespace NFSE.Business.Tabelas.NFe
                     return retornoConsulta;
                 }
 
-                nfe.Status = nfe.Status == 'A' || nfe.Status == 'E' || nfe.Status == 'I' ? 'P' : 'T';
+                nfe.Status = nfe.Status == 'A' ? 'P' : 'T';
 
                 new NfeImagemController().Excluir(nfe.NfeId);
 
@@ -187,15 +186,18 @@ namespace NFSE.Business.Tabelas.NFe
 
             if ((ConfiguracaoImagem = NfeConfiguracaoImagemController.Selecionar(new NfeConfiguracaoImagemEntity { ClienteId = clienteId, DepositoId = depositoId })) == null)
             {
-                ConfiguracaoImagem.ClienteDepositoId = new ClienteDepositoController().Selecionar(new ClienteDepositoEntity { ClienteId = clienteId, DepositoId = depositoId }).ClienteDepositoId;
+                ConfiguracaoImagem = new NfeConfiguracaoImagemEntity
+                {
+                    ClienteDepositoId = new ClienteDepositoController().Selecionar(new ClienteDepositoEntity { ClienteId = clienteId, DepositoId = depositoId }).ClienteDepositoId,
 
-                ConfiguracaoImagem.ValueX = 100;
+                    ValueX = 10,
 
-                ConfiguracaoImagem.ValueX = 100;
+                    ValueY = 10,
 
-                ConfiguracaoImagem.ValueX = 100;
+                    Height = 500,
 
-                ConfiguracaoImagem.ValueX = 100;
+                    Width = 500
+                };
 
                 ConfiguracaoImagem.ConfiguracaoImagemId = NfeConfiguracaoImagemController.Cadastrar(ConfiguracaoImagem);
             }
