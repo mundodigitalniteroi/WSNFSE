@@ -43,6 +43,10 @@ namespace NFSE.Business.Tabelas.NFe
             }
             catch (Exception ex)
             {
+                nfe.Status = 'E';
+
+                new NfeController().Atualizar(nfe);
+
                 new NfeWsErroController().CadastrarErroGenerico(model.GrvId, model.UsuarioId, nfe.IdentificadorNota, OrigemErro.WebService, Acao.Solicitação, "Ocorreu um erro ao criar o JSON da Nota Fiscal: " + ex.Message);
 
                 throw new Exception("Ocorreu um erro ao criar o JSON da Nota Fiscal (" + model.IdentificadorNota + "): " + ex.Message);
@@ -59,6 +63,10 @@ namespace NFSE.Business.Tabelas.NFe
             }
             catch (Exception ex)
             {
+                nfe.Status = 'E';
+
+                new NfeController().Atualizar(nfe);
+
                 new NfeWsErroController().CadastrarErroGenerico(model.GrvId, model.UsuarioId, nfe.IdentificadorNota, OrigemErro.WebService, Acao.Solicitação, "Ocorreu um erro ao solicitar a Nota Fiscal: " + ex.Message);
 
                 throw new Exception("Ocorreu um erro ao solicitar a Nota Fiscal (" + model.IdentificadorNota + "): " + ex.Message);
@@ -70,6 +78,10 @@ namespace NFSE.Business.Tabelas.NFe
             }
             catch (Exception ex)
             {
+                nfe.Status = 'E';
+
+                new NfeController().Atualizar(nfe);
+
                 new NfeWsErroController().CadastrarErroGenerico(model.GrvId, model.UsuarioId, nfe.IdentificadorNota, OrigemErro.MobLink, Acao.Solicitação, "Ocorreu um erro ao cadastrar a solicitação da Nota Fiscal: " + ex.Message);
 
                 throw new Exception("Ocorreu um erro ao cadastrar a solicitação da Nota Fiscal (" + model.IdentificadorNota + "): " + ex.Message);
