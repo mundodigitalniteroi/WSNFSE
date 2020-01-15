@@ -79,9 +79,7 @@
     <Compile Include="Enum\Acao.cs" />
     <Compile Include="Enum\OrigemErro.cs" />
     <Compile Include="Enum\SystemEnvironment.cs" />
-    <Compile Include="Enum\TestSystemEnvironment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

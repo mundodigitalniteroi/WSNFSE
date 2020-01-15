@@ -12,11 +12,13 @@ namespace EnvioTeste
     {
         static void Main(string[] args)
         {
-            DataBase.SystemEnvironment = SystemEnvironment.Development;
+            DataBase.SystemEnvironment = SystemEnvironment.Production;
+
+            bool IsTestEnvironment = DataBase.SystemEnvironment.Equals('D') ? true : false;
 
             DataBase.ConnectDataBase();
 
-            var grv = new GrvController().Selecionar("910150067");
+            var grv = new GrvController().Selecionar("906010300");
 
             if (grv != null)
             {
@@ -24,28 +26,28 @@ namespace EnvioTeste
 
                 Console.WriteLine($"GRV ID: {grv.GrvId}");
             }
-            
-            #region Teste de Solicitação Simplificado
-            try
-            {
-                var nfe = new NfeGerarNotaFiscalController().GerarNotaFiscal
-                (
-                    grvId: 276949, 
-                    
-                    usuarioId: 1, 
-                    
-                    isDev: TestSystemEnvironment.Development
-                );
 
-                for (int i = 0; i < nfe.Count; i++)
-                {
-                    Console.WriteLine("MENSAGEM: " + nfe[i]);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("ERRO: " + ex.Message);
-            }
+            #region Teste de Solicitação Simplificado
+            //try
+            //{
+            //    var nfe = new NfeGerarNotaFiscalController().GerarNotaFiscal
+            //    (
+            //        grvId: grv.GrvId, 
+
+            //        usuarioId: 1, 
+
+            //        isDev: IsTestEnvironment
+            //    );
+
+            //    for (int i = 0; i < nfe.Count; i++)
+            //    {
+            //        Console.WriteLine("MENSAGEM: " + nfe[i]);
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    Console.WriteLine("ERRO: " + ex.Message);
+            //}
             #endregion Teste de Solicitação Simplificado
 
 
@@ -54,13 +56,13 @@ namespace EnvioTeste
             {
                 var novaNfe = new NfeGerarNotaFiscalController().GerarNovaNotaFiscal
                 (
-                    grvId: 873405,
+                    grvId: grv.GrvId,
 
-                    identificadorNota: 727399,
+                    identificadorNota: 733774,
 
                     usuarioId: 1,
 
-                    isDev: TestSystemEnvironment.Production
+                    isDev: IsTestEnvironment
                 );
 
                 Console.WriteLine("MENSAGEM: " + novaNfe[0]);
@@ -73,50 +75,50 @@ namespace EnvioTeste
 
 
             #region Teste de retorno da Nota Fiscal (Download da NF)
-            try
-            {
-                var aux = new NfeReceberNotaFiscalController().ReceberNotaFiscal(new Consulta
-                {
-                    GrvId = 873405,
+            //try
+            //{
+            //    var aux = new NfeReceberNotaFiscalController().ReceberNotaFiscal(new Consulta
+            //    {
+            //        GrvId = grv.GrvId,
 
-                    IdentificadorNota = 727400,
+            //        IdentificadorNota = 732155,
 
-                    Homologacao = TestSystemEnvironment.Production,
+            //        Homologacao = IsTestEnvironment,
 
-                    UsuarioId = 1
-                });
+            //        UsuarioId = 1
+            //    });
 
-                Console.WriteLine("MENSAGEM: " + aux);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("ERRO: " + ex.Message);
-            }
+            //    Console.WriteLine("MENSAGEM: " + aux);
+            //}
+            //catch (Exception ex)
+            //{
+            //    Console.WriteLine("ERRO: " + ex.Message);
+            //}
             #endregion Teste de retorno da Nota Fiscal (Download da NF)
 
 
             #region Teste de cancelamento da Nota Fiscal
-            try
-            {
-                var aux = new NfeCancelamentoController().CancelarNotaFiscal(new Cancelamento
-                {
-                    GrvId = 836989,
+            //try
+            //{
+            //    var aux = new NfeCancelamentoController().CancelarNotaFiscal(new Cancelamento
+            //    {
+            //        GrvId = grv.GrvId,
 
-                    IdentificadorNota = 715109,
+            //        IdentificadorNota = 0,
 
-                    Justificativa = "TESTE",
+            //        Justificativa = "TESTE",
 
-                    Homologacao = TestSystemEnvironment.Development,
+            //        Homologacao = IsTestEnvironment,
 
-                    UsuarioId = 1
-                });
+            //        UsuarioId = 1
+            //    });
 
-                Console.WriteLine("MENSAGEM: " + aux);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("ERRO: " + ex.Message);
-            }
+            //    Console.WriteLine("MENSAGEM: " + aux);
+            //}
+            //catch (Exception ex)
+            //{
+            //    Console.WriteLine("ERRO: " + ex.Message);
+            //}
             #endregion Teste de cancelamento da Nota Fiscal
 
             Console.ReadLine();

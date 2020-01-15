@@ -20,9 +20,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             var grv = new GrvController().Selecionar(model.GrvId);
 
-            #region Cliente Depósito
             var ClienteDeposito = new ClienteDepositoController().Selecionar(new ClienteDepositoEntity { ClienteId = grv.ClienteId, DepositoId = grv.DepositoId });
-            #endregion Cliente Depósito
 
             #region Empresa
             EmpresaEntity Empresa;
@@ -126,17 +124,7 @@ namespace NFSE.Business.Tabelas.NFe
                 json = jsonUtil.RemoveElement(json, "tomador", "cpf");
             }
 
-            //if (string.IsNullOrWhiteSpace(model.Autorizacao.servico.codigo_tributario_municipio))
-            //{
-            //    json = jsonUtil.RemoveElement(json, "servico", "codigo_tributario_municipio");
-            //}
-
             return json;
         }
-
-        //public string ReceberNotaFiscal(Consultar model)
-        //{
-        //    return new JavaScriptSerializer().Serialize(Consultar_obj(model));
-        //}
     }
 }

@@ -7,10 +7,12 @@ using NFSE.Domain.Entities.NFe;
 using NFSE.Domain.Enum;
 using NFSE.Infra.Data;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Web.Script.Serialization;
 using System.Windows.Forms;
@@ -204,56 +206,89 @@ namespace NFSE.Business.Tabelas.NFe
 
             string directory = @"D:\Sistemas\GeradorNF\NFE\" + DataBase.SystemEnvironment.ToString() + "\\" + DateTime.Now.Year + "\\" + DateTime.Now.ToString("MM") + "\\" + DateTime.Now.ToString("dd") + "\\";
 
-            Directory.CreateDirectory(directory);
-
-            using (var memoryStream = new MemoryStream())
+            if (!Directory.Exists(directory))
             {
-                new Tools().ObterImagemEndereco(url).Save(memoryStream, ImageFormat.Jpeg);
-
-                ImagemNotaFiscal = memoryStream.ToArray();
-
-                File.WriteAllBytes(directory + identificadorNota + "Original.jpg", ImagemNotaFiscal);
+                Directory.CreateDirectory(directory);
             }
 
-            try
+            List<NfeRegraEntity> regrasNfe = new NfeRegraController().Listar(new NfeRegraEntity()
             {
-                if (!IsImage(ImagemNotaFiscal))
+                ClienteId = clienteId,
+                DepositoId = depositoId
+            });
+
+            if (regrasNfe != null && regrasNfe.Where(w => w.RegraCodigo.Equals("NFPDF")).Count() > 0)
+            {
+                using (WebClient webClient = new WebClient())
                 {
-                    throw new Exception("A Imagem retornada nao é uma Imagem válida");
-                }
-            }
-            catch (Exception)
-            {
-                throw new Exception("Ocorreu um erro ao analisar a Imagem retornada");
-            }
-
-            #region Início do trecho para testes
-            if (new[] { "BETODELL", "BETOLENOVO", "SUPREMELEADER" }.Contains(SystemInformation.ComputerName))
-            {
-                //configuracaoImagem.ValueX = 0; // Margem Esquerda
-                //configuracaoImagem.ValueY = 0; // Margem Superior
-                //configuracaoImagem.Width = 1035; // Margem Direita
-                //configuracaoImagem.Height = 1315; // Margem Inferior
-            }
-            #endregion Fim do trecho para testes
-
-            try
-            {
-                if (!identificaoNotaFiscal.BaixarImagemOriginal)
-                {
-                    ImagemNotaFiscal = CropImage(ImagemNotaFiscal, new Rectangle(ConfiguracaoImagem.ValueX, ConfiguracaoImagem.ValueY, ConfiguracaoImagem.Width, ConfiguracaoImagem.Height));
-
-                    File.WriteAllBytes(directory + identificadorNota + "Recortado.jpg", ImagemNotaFiscal);
-
-                    if (!IsImage(ImagemNotaFiscal))
+                    string str1 = directory + identificadorNota.ToString() + "Original.pdf";
+                    string str2 = directory + identificadorNota.ToString() + ".jpg";
+                    
+                    webClient.Headers.Add("user-agent", "Mob-Link");
+                    
+                    webClient.DownloadFile(url, str1);
+                    
+                    new PdfToJpg().Process(str1, str2);
+                    
+                    using (MemoryStream memoryStream = new MemoryStream())
                     {
-                        throw new Exception("A Imagem recortada nao é uma Imagem válida");
+                        Image.FromFile(str2).Save((Stream)memoryStream, ImageFormat.Jpeg);
+
+                        ImagemNotaFiscal = memoryStream.ToArray();
                     }
                 }
             }
-            catch (Exception ex)
+            else
             {
-                throw new Exception("Ocorreu um erro ao recortar a Imagem retornada: " + ex.Message);
+                using (var memoryStream = new MemoryStream())
+                {
+                    new Tools().ObterImagemEndereco(url).Save(memoryStream, ImageFormat.Jpeg);
+
+                    ImagemNotaFiscal = memoryStream.ToArray();
+
+                    // File.WriteAllBytes(directory + identificadorNota + "Original.jpg", ImagemNotaFiscal);
+                }
+
+                try
+                {
+                    if (!IsImage(ImagemNotaFiscal))
+                    {
+                        throw new Exception("A Imagem retornada nao é uma Imagem válida");
+                    }
+                }
+                catch (Exception)
+                {
+                    throw new Exception("Ocorreu um erro ao analisar a Imagem retornada");
+                }
+
+                #region Início do trecho para testes
+                //if (new[] { "BETODELL", "BETOLENOVO", "SUPREMELEADER" }.Contains(SystemInformation.ComputerName))
+                //{
+                //    configuracaoImagem.ValueX = 0; // Margem Esquerda
+                //    configuracaoImagem.ValueY = 0; // Margem Superior
+                //    configuracaoImagem.Width = 1035; // Margem Direita
+                //    configuracaoImagem.Height = 1315; // Margem Inferior
+                //}
+                #endregion Fim do trecho para testes
+
+                try
+                {
+                    if (!identificaoNotaFiscal.BaixarImagemOriginal)
+                    {
+                        ImagemNotaFiscal = CropImage(ImagemNotaFiscal, new Rectangle(ConfiguracaoImagem.ValueX, ConfiguracaoImagem.ValueY, ConfiguracaoImagem.Width, ConfiguracaoImagem.Height));
+
+                        // File.WriteAllBytes(directory + identificadorNota + "Recortado.jpg", ImagemNotaFiscal);
+
+                        if (!IsImage(ImagemNotaFiscal))
+                        {
+                            throw new Exception("A Imagem recortada nao é uma Imagem válida");
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Ocorreu um erro ao recortar a Imagem retornada: " + ex.Message);
+                }
             }
 
             return ImagemNotaFiscal;

@@ -3,6 +3,7 @@
     public enum SystemEnvironment
     {
         Development = 'D',
+
         Production = 'P'
     }
 }

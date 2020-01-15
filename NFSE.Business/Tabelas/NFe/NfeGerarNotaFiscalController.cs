@@ -9,8 +9,11 @@ using NFSE.Domain.Enum;
 using NFSE.Infra.Data;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace NFSE.Business.Tabelas.NFe
 {
@@ -28,6 +31,8 @@ namespace NFSE.Business.Tabelas.NFe
 
         private List<string> GerarNotaFiscal(int grvId, int identificadorNota, int usuarioId, bool isDev)
         {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("pt-BR");
+
             DataBase.SystemEnvironment = isDev ? SystemEnvironment.Development : SystemEnvironment.Production;
 
             DataBase.SetContextInfo(usuarioId);
@@ -585,43 +590,62 @@ namespace NFSE.Business.Tabelas.NFe
 
             decimal AliquotaIss;
 
-            if (nfeRegras != null && nfeRegras.Where(w => w.RegraCodigo.Equals("SEMALIQUOTA")).Count() > 0)
+            GravarLog($"");
+            GravarLog($"GRV {grv.NumeroFormularioGrv} ({(isDev ? "DEV" : "PROD")})");
+            GravarLog($"");
+
+            composicao.TotalComDesconto = Math.Round(composicao.TotalComDesconto, 2);
+
+            if (PossuiRegraNfe(nfeRegras, "SEMALIQUOTA"))
             {
+                GravarLog($"R1: POSSUI REGRA 'SEMALIQUOTA'");
+
                 AliquotaIss = 0;
             }
             else if (clienteDeposito.AliquotaIss > 0)
             {
+                GravarLog($"R1: CLIDEP POSSUI ALIQUOTA ISS > 0: {clienteDeposito.AliquotaIss}");
+
                 AliquotaIss = clienteDeposito.AliquotaIss;
             }
             else
             {
+                GravarLog($"R1: CNAE LISTA SERVICO PARAMETRO MUNICIPIO ALIQUOTA ISS: {CnaeListaServicoParametroMunicipio.AliquotaIss.Value}");
+
                 AliquotaIss = CnaeListaServicoParametroMunicipio.AliquotaIss.Value;
             }
 
             if (composicao.FlagEnviarValorIss == 'S')
             {
+                GravarLog($"R2: POSSUI FLAG ENVIAR VALOR ISS");
+
                 if (clienteDeposito.FlagValorIssIgualProdutoBaseCalculoAliquota == 'S')
                 {
-                    valorIss = (Math.Round(composicao.TotalComDesconto, 2) * AliquotaIss) / 100;
+                    GravarLog($"R2.1: POSSUI FLAG VALOR ISS IGUAL PRODUTO BASE CALCULO ALIQUOTA:");
+                    GravarLog($"    ValorIss: (Composição * AliquotaIss) / 100");
+                    GravarLog($"    ValorIss: {(composicao.TotalComDesconto * AliquotaIss) / 100}");
+
+                    valorIss = (composicao.TotalComDesconto * AliquotaIss) / 100;
                 }
                 else
                 {
+                    GravarLog($"R2.2: AliquotaIss / 100 = {AliquotaIss / 100}");
+                    GravarLog($"    ValorIss = AliquotaIss / 100:");
+                    GravarLog($"    ValorIss = {AliquotaIss / 100}");
+
                     valorIss = AliquotaIss / 100;
                 }
             }
-
-            string valorServicos;
             
-            if (isDev)
+            if (PossuiRegraNfe(nfeRegras, "VALOR_ISS_TRUNCAR"))
             {
-                valorServicos = "1";
+                GravarLog($"R3: POSSUI REGRA 'VALOR_ISS_TRUNCAR'");
+
+                GravarLog($"    ValorIss = {Math.Truncate(100 * valorIss) / 100}");
+
+                valorIss = Math.Truncate(100 * valorIss) / 100;
             }
-            else
-            {
-                valorServicos = Math.Round(composicao.TotalComDesconto, 2)
-                    .ToString()
-                    .Replace(",", ".");
-            }
+
             //else
             //{
             //    var regra = nfeRegras.Where(w => w.RegraCodigo.Equals("VLSERVICO=TOTAL+IMP") && w.Ativo == 1)
@@ -637,16 +661,46 @@ namespace NFSE.Business.Tabelas.NFe
             //    }
             //}
 
+            string valorServicos;
+
+            if (isDev)
+            {
+                valorServicos = "1";
+            }
+            else
+            {
+                valorServicos = composicao.TotalComDesconto.ToString().Replace(",", ".");
+            }
+
             string baseCalculo = string.Empty;
 
-            var regraBaseCalculo = nfeRegras
-                .Where(w => w.RegraCodigo.Equals("BASE_CALCULO") && w.Ativo == 1)
-                .ToList();
-
-            if (regraBaseCalculo != null && regraBaseCalculo.Count > 0)
+            if (PossuiRegraNfe(nfeRegras, "BASE_CALCULO"))
             {
+                GravarLog($"R4: POSSUI REGRA 'BASE_CALCULO'");
+
+                GravarLog($"R4.1: baseCalculo = valorServicos");
+                GravarLog($"      baseCalculo = {valorServicos}");
+
                 baseCalculo = valorServicos;
             }
+
+            GravarLog($"F1: COMPOSIÇÃO DO FATURAMENTO (ARREDONDAMENTO EM DUAS CASAS DECIMAIS): {composicao.TotalComDesconto} >>> {Math.Round(composicao.TotalComDesconto, 2)}");
+
+            GravarLog($"F2: ALÍQUOTA ISS (ARREDONDAMENTO EM DUAS CASAS DECIMAIS): {string.Format("{0:N2}", AliquotaIss).Replace(",", ".")}");
+
+            GravarLog($"F3: DISCRIMINAÇÃO: {descricaoConfiguracaoNfe + " CONFORME PROCESSO " + grv.NumeroFormularioGrv}");
+
+            GravarLog($"F4: CÓDIGO CNAE: {composicao.Cnae}");
+
+            GravarLog($"F5: ITEM DA LISTA SERVIÇO: {CnaeListaServicoParametroMunicipio.ListaServico}");
+
+            GravarLog($"F6: VALOR ISS (ARREDONDAMENTO EM DUAS CASAS DECIMAIS): {string.Format("{0:N2}", valorIss).Replace(",", ".")}");
+
+            GravarLog($"F7: CÓDIGO TRIBUTÁRIO MUNICÍPIO: {(!string.IsNullOrWhiteSpace(CnaeListaServicoParametroMunicipio.CodigoTributarioMunicipio) ? CnaeListaServicoParametroMunicipio.CodigoTributarioMunicipio : "CNAE + LISTASERVICO NÃO ASSOCIADO AO MUNICÍPIO")}");
+
+            GravarLog($"F8: VALOR DOS SERVIÇOS: {valorServicos}. 1 SE FOR AMBIENTE DE DESENVOLVIMENTO");
+
+            GravarLog($"F9: BASE DE CÁLCULO: {(!string.IsNullOrWhiteSpace(baseCalculo) ? baseCalculo : "CLIDEP NÃO POSSUI A REGRA 'BASE_CALCULO'")}");
 
             return new Servico
             {
@@ -668,6 +722,29 @@ namespace NFSE.Business.Tabelas.NFe
 
                 base_calculo = !string.IsNullOrWhiteSpace(baseCalculo) ? baseCalculo : null
             };
+        }
+
+        private void GravarLog(string message)
+        {
+            using (StreamWriter sw = new StreamWriter(@"D:\Sistemas\GeradorNF\NFE\NfeGerarNotaFiscalController.log", true, Encoding.UTF8))
+            {
+                sw.WriteLine(message);
+            }
+        }
+
+        private bool PossuiRegraNfe(List<NfeRegraEntity> nfeRegras, string codigoRegra)
+        {
+            if (nfeRegras == null || nfeRegras.Count == 0)
+            {
+                return false;
+            }
+
+            if (nfeRegras.Where(w => w.RegraCodigo.Equals(codigoRegra) && w.Ativo == 1).Count() > 0)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

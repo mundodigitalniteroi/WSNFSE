@@ -17,7 +17,7 @@ namespace NFSE.Business.Util
     {
         public string PostNfse(string uri, string json, string token)
         {
-            // Thread.CurrentThread.CurrentCulture = new CultureInfo("pt-BR");
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("pt-BR");
 
             string base64String = Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes(token + ":" + ""));
 
