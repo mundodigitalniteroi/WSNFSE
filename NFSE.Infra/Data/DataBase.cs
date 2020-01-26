@@ -13,19 +13,6 @@ namespace NFSE.Infra.Data
     {
         public static SystemEnvironment SystemEnvironment { get; set; } = SystemEnvironment.Development;
 
-        public static string GetNfeDatabase()
-        {
-            if (SystemEnvironment == SystemEnvironment.Development)
-            {
-                return "db_NfseDev";
-            }
-            else
-            {
-                return "db_Nfse";
-            }
-        }
-
-        #region Set Connection String
         private static void SetConnectionString()
         {
             if (SystemEnvironment == SystemEnvironment.Development)
@@ -37,7 +24,6 @@ namespace NFSE.Infra.Data
                 ConnectionFactory.connectionString = ConfigurationManager.ConnectionStrings["ConnectionStringProd"].ConnectionString;
             }
         }
-        #endregion Set Connection String
 
         public static void ConnectDataBase()
         {
