@@ -556,7 +556,7 @@ namespace NFSE.Business.Tabelas.NFe
             {
                 logradouro = atendimento.NotaFiscalEndereco,
 
-                numero = atendimento.NotaFiscalNumero,
+                numero = !string.IsNullOrWhiteSpace(atendimento.NotaFiscalNumero) && atendimento.NotaFiscalNumero.Length > 10 ? atendimento.NotaFiscalNumero.Substring(0, 10) : atendimento.NotaFiscalNumero,
 
                 complemento = !string.IsNullOrWhiteSpace(atendimento.NotaFiscalComplemento) ? atendimento.NotaFiscalComplemento : "...",
 
