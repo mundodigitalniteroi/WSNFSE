@@ -485,11 +485,11 @@ namespace NFSE.Business.Tabelas.NFe
 
         private Autorizacao Autorizar(GrvEntity grv, DepositoEntity deposito, ClienteDepositoEntity clienteDeposito, List<NfeRegraEntity> nfeRegras, EmpresaEntity empresa, AtendimentoEntity atendimento, NfeViewFaturamentoComposicaoAgrupadoEntity composicao, string descricaoConfiguracaoNfe, bool isDev)
         {
-            var Now = DateTime.Now;
+            var now = DateTime.Now.AddHours(-1);
 
             var Autorizacao = new Autorizacao
             {
-                data_emissao = Now.ToString("yyyy-MM-dd") + "T" + Now.ToString("HH:mm:ss"),
+                data_emissao = now.ToString("yyyy-MM-dd") + "T" + now.ToString("HH:mm:ss"),
 
                 natureza_operacao = "1",
 
@@ -726,6 +726,11 @@ namespace NFSE.Business.Tabelas.NFe
 
         private void GravarLog(string message)
         {
+            if (!Directory.Exists(@"D:\Sistemas\GeradorNF\NFE"))
+            {
+                Directory.CreateDirectory(@"D:\Sistemas\GeradorNF\NFE");
+            }
+
             using (StreamWriter sw = new StreamWriter(@"D:\Sistemas\GeradorNF\NFE\NfeGerarNotaFiscalController.log", true, Encoding.UTF8))
             {
                 sw.WriteLine(message);
