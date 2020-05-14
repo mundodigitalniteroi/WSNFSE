@@ -1,5 +1,6 @@
 ﻿using NFSE.Business.Tabelas.DP;
 using NFSE.Business.Tabelas.NFe;
+using NFSE.Domain.Entities.DP;
 using NFSE.Domain.Entities.NFe;
 using NFSE.Domain.Enum;
 using NFSE.Infra.Data;
@@ -15,11 +16,24 @@ namespace EnvioTeste
         {
             DataBase.SystemEnvironment = SystemEnvironment.Production;
 
-            bool IsTestEnvironment = DataBase.SystemEnvironment.Equals('D') ? true : false;
+            DataBase.SystemEnvironment = SystemEnvironment.Development;
+
+            bool IsTestEnvironment = DataBase.SystemEnvironment.Equals(SystemEnvironment.Development) ? true : false;
+
+            //DataBase.DisconnectDataBase();
+
+            //if (DataBase.SystemEnvironment == SystemEnvironment.Development)
+            //{
+            //    DataBase.ConnectDataBase("Data Source=187.84.228.60;Initial Catalog=dbMobLinkDepositoPublicoDesenvolvimento;Persist Security Info=True;User ID=dp_user_dev;Password=5y3d#%&&!x");
+            //}
+            //else
+            //{
+            //    DataBase.ConnectDataBase("Data Source=187.84.228.60;Initial Catalog=dbMobLinkDepositoPublicoProducao;Persist Security Info=True;User ID=dp_user_prd;Password=4y3d#%&&!x");
+            //}
 
             DataBase.ConnectDataBase();
 
-            var grvs = new GrvController().Listar(new NFSE.Domain.Entities.DP.GrvEntity { NumeroFormularioGrv = "911420914" });
+            var grvs = new GrvController().Listar(new GrvEntity { NumeroFormularioGrv = "71104832" });
 
             if (grvs != null)
             {
@@ -33,6 +47,16 @@ namespace EnvioTeste
 
                     Environment.Exit(-1);
                 }
+            }
+            else
+            {
+                Debug.WriteLine($"NÚMERO DE GRV NÃO ENCONTRADO");
+
+                Console.WriteLine($"NÚMERO DE GRV NÃO ENCONTRADO");
+
+                Console.ReadLine();
+
+                Environment.Exit(-1);
             }
 
             var grvId = grvs.First().GrvId;
@@ -68,25 +92,38 @@ namespace EnvioTeste
 
 
             #region Teste de Solicitação de uma nova NF
-            //try
-            //{
-            //    var novaNfe = new NfeGerarNotaFiscalController().GerarNovaNotaFiscal
-            //    (
-            //        grvId: grvId,
+            try
+            {
+                var novaNfe = new NfeGerarNotaFiscalController().GerarNovaNotaFiscal
+                (
+                    grvId: grvId,
 
-            //        identificadorNota: 748934,
+                    identificadorNota: 753804,
 
-            //        usuarioId: 1,
+                    usuarioId: 1,
 
-            //        isDev: IsTestEnvironment
-            //    );
+                    isDev: IsTestEnvironment
+                );
 
-            //    Console.WriteLine("MENSAGEM: " + novaNfe[0]);
-            //}
-            //catch (Exception ex)
-            //{
-            //    Console.WriteLine("ERRO: " + ex.Message);
-            //}
+                Console.WriteLine("MENSAGEM: " + novaNfe[0]);
+
+                novaNfe = new NfeGerarNotaFiscalController().GerarNovaNotaFiscal
+                (
+                    grvId: grvId,
+
+                    identificadorNota: 753803,
+
+                    usuarioId: 1,
+
+                    isDev: IsTestEnvironment
+                );
+
+                Console.WriteLine("MENSAGEM: " + novaNfe[0]);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERRO: " + ex.Message);
+            }
             #endregion Teste de Solicitação de uma nova NF
 
 
@@ -97,7 +134,18 @@ namespace EnvioTeste
                 {
                     GrvId = grvId,
 
-                    IdentificadorNota = 734936,
+                    IdentificadorNota = 751629,
+
+                    Homologacao = IsTestEnvironment,
+
+                    UsuarioId = 1
+                });
+
+                aux = new NfeReceberNotaFiscalController().ReceberNotaFiscal(new Consulta
+                {
+                    GrvId = grvId,
+
+                    IdentificadorNota = 751627,
 
                     Homologacao = IsTestEnvironment,
 

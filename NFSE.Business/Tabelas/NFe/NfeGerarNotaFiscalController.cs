@@ -588,7 +588,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             decimal valorIss = 0;
 
-            decimal AliquotaIss;
+            decimal AliquotaIss = 0;
 
             GravarLog($"");
             GravarLog($"GRV {grv.NumeroFormularioGrv} ({(isDev ? "DEV" : "PROD")})");
@@ -602,26 +602,32 @@ namespace NFSE.Business.Tabelas.NFe
 
                 AliquotaIss = 0;
             }
+            else if(PossuiRegraNfe(nfeRegras, "CODTRIBMUN_0000"))
+            {
+                GravarLog($"R2: POSSUI REGRA 'CODTRIBMUN_0000'");
+
+                CnaeListaServicoParametroMunicipio.CodigoTributarioMunicipio = "0000";
+            }
             else if (clienteDeposito.AliquotaIss > 0)
             {
-                GravarLog($"R1: CLIDEP POSSUI ALIQUOTA ISS > 0: {clienteDeposito.AliquotaIss}");
+                GravarLog($"R3: CLIDEP POSSUI ALIQUOTA ISS > 0: {clienteDeposito.AliquotaIss}");
 
                 AliquotaIss = clienteDeposito.AliquotaIss;
             }
             else
             {
-                GravarLog($"R1: CNAE LISTA SERVICO PARAMETRO MUNICIPIO ALIQUOTA ISS: {CnaeListaServicoParametroMunicipio.AliquotaIss.Value}");
+                GravarLog($"R4: CNAE LISTA SERVICO PARAMETRO MUNICIPIO ALIQUOTA ISS: {CnaeListaServicoParametroMunicipio.AliquotaIss.Value}");
 
                 AliquotaIss = CnaeListaServicoParametroMunicipio.AliquotaIss.Value;
             }
 
             if (composicao.FlagEnviarValorIss == 'S')
             {
-                GravarLog($"R2: POSSUI FLAG ENVIAR VALOR ISS");
+                GravarLog($"R5: POSSUI FLAG ENVIAR VALOR ISS");
 
                 if (clienteDeposito.FlagValorIssIgualProdutoBaseCalculoAliquota == 'S')
                 {
-                    GravarLog($"R2.1: POSSUI FLAG VALOR ISS IGUAL PRODUTO BASE CALCULO ALIQUOTA:");
+                    GravarLog($"R5.1: POSSUI FLAG VALOR ISS IGUAL PRODUTO BASE CALCULO ALIQUOTA:");
                     GravarLog($"    ValorIss: (Composição * AliquotaIss) / 100");
                     GravarLog($"    ValorIss: {(composicao.TotalComDesconto * AliquotaIss) / 100}");
 
@@ -629,7 +635,7 @@ namespace NFSE.Business.Tabelas.NFe
                 }
                 else
                 {
-                    GravarLog($"R2.2: AliquotaIss / 100 = {AliquotaIss / 100}");
+                    GravarLog($"R5.2: AliquotaIss / 100 = {AliquotaIss / 100}");
                     GravarLog($"    ValorIss = AliquotaIss / 100:");
                     GravarLog($"    ValorIss = {AliquotaIss / 100}");
 
@@ -639,7 +645,7 @@ namespace NFSE.Business.Tabelas.NFe
             
             if (PossuiRegraNfe(nfeRegras, "VALOR_ISS_TRUNCAR"))
             {
-                GravarLog($"R3: POSSUI REGRA 'VALOR_ISS_TRUNCAR'");
+                GravarLog($"R6: POSSUI REGRA 'VALOR_ISS_TRUNCAR'");
 
                 GravarLog($"    ValorIss = {Math.Truncate(100 * valorIss) / 100}");
 
@@ -676,9 +682,9 @@ namespace NFSE.Business.Tabelas.NFe
 
             if (PossuiRegraNfe(nfeRegras, "BASE_CALCULO"))
             {
-                GravarLog($"R4: POSSUI REGRA 'BASE_CALCULO'");
+                GravarLog($"R7: POSSUI REGRA 'BASE_CALCULO'");
 
-                GravarLog($"R4.1: baseCalculo = valorServicos");
+                GravarLog($"R7.1: baseCalculo = valorServicos");
                 GravarLog($"      baseCalculo = {valorServicos}");
 
                 baseCalculo = valorServicos;

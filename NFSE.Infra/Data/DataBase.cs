@@ -24,10 +24,21 @@ namespace NFSE.Infra.Data
                 ConnectionFactory.connectionString = ConfigurationManager.ConnectionStrings["ConnectionStringProd"].ConnectionString;
             }
         }
+        private static void SetConnectionString(string connectionString)
+        {
+            ConnectionFactory.connectionString = connectionString;
+        }
 
         public static void ConnectDataBase()
         {
             SetConnectionString();
+
+            ConnectionFactory.ConnectDataBase();
+        }
+
+        public static void ConnectDataBase(string connectionString)
+        {
+            SetConnectionString(connectionString);
 
             ConnectionFactory.ConnectDataBase();
         }
