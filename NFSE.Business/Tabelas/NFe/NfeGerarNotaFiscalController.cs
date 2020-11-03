@@ -136,13 +136,13 @@ namespace NFSE.Business.Tabelas.NFe
             var ClienteDeposito = new ClienteDepositoController().Selecionar(new ClienteDepositoEntity { ClienteId = grv.ClienteId, DepositoId = grv.DepositoId });
 
             #region Regras da Nfe
-            var NfeRegras = new NfeRegraController().Listar(new NfeRegraEntity 
+            var NfeRegras = new NfeRegraController().Listar(new NfeRegraEntity
             {
-                ClienteDepositoId = ClienteDeposito.ClienteDepositoId, 
-                
+                ClienteDepositoId = ClienteDeposito.ClienteDepositoId,
+
                 Ativo = 1,
-                
-                RegraAtivo = 1 
+
+                RegraAtivo = 1
             });
             #endregion Regras da Nfe
 
@@ -385,6 +385,8 @@ namespace NFSE.Business.Tabelas.NFe
                     Nfe = new NfeEntity();
                 }
                 #endregion Processamento do resultado
+
+                Nfe = new NfeEntity();
             }
 
             return returnList;
@@ -590,21 +592,21 @@ namespace NFSE.Business.Tabelas.NFe
 
             decimal AliquotaIss = 0;
 
-            GravarLog($"");
+            GravarLog("");
             GravarLog($"GRV {grv.NumeroFormularioGrv} ({(isDev ? "DEV" : "PROD")})");
-            GravarLog($"");
+            GravarLog("");
 
             composicao.TotalComDesconto = Math.Round(composicao.TotalComDesconto, 2);
 
             if (PossuiRegraNfe(nfeRegras, "SEMALIQUOTA"))
             {
-                GravarLog($"R1: POSSUI REGRA 'SEMALIQUOTA'");
+                GravarLog("R1: POSSUI REGRA 'SEMALIQUOTA'");
 
                 AliquotaIss = 0;
             }
-            else if(PossuiRegraNfe(nfeRegras, "CODTRIBMUN_0000"))
+            else if (PossuiRegraNfe(nfeRegras, "CODTRIBMUN_0000"))
             {
-                GravarLog($"R2: POSSUI REGRA 'CODTRIBMUN_0000'");
+                GravarLog("R2: POSSUI REGRA 'CODTRIBMUN_0000'");
 
                 CnaeListaServicoParametroMunicipio.CodigoTributarioMunicipio = "0000";
             }
@@ -623,12 +625,12 @@ namespace NFSE.Business.Tabelas.NFe
 
             if (composicao.FlagEnviarValorIss == 'S')
             {
-                GravarLog($"R5: POSSUI FLAG ENVIAR VALOR ISS");
+                GravarLog("R5: POSSUI FLAG ENVIAR VALOR ISS");
 
                 if (clienteDeposito.FlagValorIssIgualProdutoBaseCalculoAliquota == 'S')
                 {
-                    GravarLog($"R5.1: POSSUI FLAG VALOR ISS IGUAL PRODUTO BASE CALCULO ALIQUOTA:");
-                    GravarLog($"    ValorIss: (Composição * AliquotaIss) / 100");
+                    GravarLog("R5.1: POSSUI FLAG VALOR ISS IGUAL PRODUTO BASE CALCULO ALIQUOTA:");
+                    GravarLog("    ValorIss: (Composição * AliquotaIss) / 100");
                     GravarLog($"    ValorIss: {(composicao.TotalComDesconto * AliquotaIss) / 100}");
 
                     valorIss = (composicao.TotalComDesconto * AliquotaIss) / 100;
@@ -636,16 +638,16 @@ namespace NFSE.Business.Tabelas.NFe
                 else
                 {
                     GravarLog($"R5.2: AliquotaIss / 100 = {AliquotaIss / 100}");
-                    GravarLog($"    ValorIss = AliquotaIss / 100:");
+                    GravarLog("    ValorIss = AliquotaIss / 100:");
                     GravarLog($"    ValorIss = {AliquotaIss / 100}");
 
                     valorIss = AliquotaIss / 100;
                 }
             }
-            
+
             if (PossuiRegraNfe(nfeRegras, "VALOR_ISS_TRUNCAR"))
             {
-                GravarLog($"R6: POSSUI REGRA 'VALOR_ISS_TRUNCAR'");
+                GravarLog("R6: POSSUI REGRA 'VALOR_ISS_TRUNCAR'");
 
                 GravarLog($"    ValorIss = {Math.Truncate(100 * valorIss) / 100}");
 
@@ -682,9 +684,9 @@ namespace NFSE.Business.Tabelas.NFe
 
             if (PossuiRegraNfe(nfeRegras, "BASE_CALCULO"))
             {
-                GravarLog($"R7: POSSUI REGRA 'BASE_CALCULO'");
+                GravarLog("R7: POSSUI REGRA 'BASE_CALCULO'");
 
-                GravarLog($"R7.1: baseCalculo = valorServicos");
+                GravarLog("R7.1: baseCalculo = valorServicos");
                 GravarLog($"      baseCalculo = {valorServicos}");
 
                 baseCalculo = valorServicos;

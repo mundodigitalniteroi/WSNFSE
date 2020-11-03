@@ -31,16 +31,14 @@ namespace NFSE
         }
 
         [WebMethod]
-        public string SimularEmissaoNotaFiscal(CapaAutorizacaoNfse model)
+        public string SolicitarEmissaoNotaFiscalAvulso(CapaAutorizacaoNfse model)
         {
             try
             {
-                return new NfeSolicitarEmissaoNotaFiscalController().SimularEmissaoNotaFiscal(model);
+                return new NfeSolicitarEmissaoNotaFiscalController().SolicitarEmissaoNotaFiscalAvulso(model);
             }
             catch (Exception ex)
             {
-                new EmailController().Enviar(ex.Message, model.Homologacao);
-
                 throw new Exception(ex.Message);
             }
         }
@@ -61,6 +59,19 @@ namespace NFSE
         }
 
         [WebMethod]
+        public RetornoNotaFiscalEntity ReceberNotaFiscalAvulso(Consulta model)
+        {
+            try
+            {
+                return new NfeReceberNotaFiscalController().ReceberNotaFiscalAvulso(model);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        [WebMethod]
         public string CancelarNotaFiscal(Cancelamento model)
         {
             try
@@ -71,6 +82,19 @@ namespace NFSE
             {
                 new EmailController().Enviar(ex.Message, model.Homologacao);
 
+                throw new Exception(ex.Message);
+            }
+        }
+
+        [WebMethod]
+        public string CancelarNotaFiscalAvulso(Cancelamento model)
+        {
+            try
+            {
+                return new NfeCancelamentoController().CancelarNotaFiscalAvulso(model);
+            }
+            catch (Exception ex)
+            {
                 throw new Exception(ex.Message);
             }
         }

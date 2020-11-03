@@ -261,5 +261,24 @@ namespace NFSE.Business.Tabelas.NFe
 
             return nfe.FirstOrDefault();
         }
+
+        public NfeEntity ConsultarNotaFiscal(int identificadorNota)
+        {
+            List<NfeEntity> nfe;
+
+            try
+            {
+                if ((nfe = new NfeController().ListarPorIdentificadorNota(identificadorNota)) == null)
+                {
+                    throw new Exception("Nota Fiscal não encontrada no cadastro do Depósito Público (" + identificadorNota + ")");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Ocorreu um erro ao consultar a Nota Fiscal (" + identificadorNota + "): " + ex.Message);
+            }
+
+            return nfe.FirstOrDefault();
+        }
     }
 }

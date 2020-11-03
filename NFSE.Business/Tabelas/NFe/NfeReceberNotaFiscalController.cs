@@ -15,7 +15,6 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Web.Script.Serialization;
-using System.Windows.Forms;
 
 namespace NFSE.Business.Tabelas.NFe
 {
@@ -25,14 +24,14 @@ namespace NFSE.Business.Tabelas.NFe
         {
             DataBase.SystemEnvironment = identificaoNotaFiscal.Homologacao ? SystemEnvironment.Development : SystemEnvironment.Production;
 
-            var nfe = new NfeController().ConsultarNotaFiscal(identificaoNotaFiscal.GrvId, identificaoNotaFiscal.UsuarioId, identificaoNotaFiscal.IdentificadorNota, Acao.Retorno);
+            NfeEntity nfe = new NfeController().ConsultarNotaFiscal(identificaoNotaFiscal.GrvId, identificaoNotaFiscal.UsuarioId, identificaoNotaFiscal.IdentificadorNota, Acao.Retorno);
 
             identificaoNotaFiscal.NfeId = nfe.NfeId;
 
-            var grv = new GrvController().Selecionar(identificaoNotaFiscal.GrvId);
+            GrvEntity grv = new GrvController().Selecionar(identificaoNotaFiscal.GrvId);
 
             #region Cliente Depósito
-            var ClienteDeposito = new ClienteDepositoController().Selecionar(new ClienteDepositoEntity { ClienteId = grv.ClienteId, DepositoId = grv.DepositoId });
+            ClienteDepositoEntity ClienteDeposito = new ClienteDepositoController().Selecionar(new ClienteDepositoEntity { ClienteId = grv.ClienteId, DepositoId = grv.DepositoId });
             #endregion Cliente Depósito
 
             #region Empresa
@@ -91,7 +90,7 @@ namespace NFSE.Business.Tabelas.NFe
 
         private RetornoNotaFiscalEntity ProcessarRetorno(GrvEntity grv, NfeEntity nfe, Consulta identificaoNotaFiscal, string retornoJson)
         {
-            var retornoConsulta = new JavaScriptSerializer()
+            RetornoNotaFiscalEntity retornoConsulta = new JavaScriptSerializer()
             {
                 MaxJsonLength = int.MaxValue
             }.Deserialize<RetornoNotaFiscalEntity>(retornoJson);
@@ -101,13 +100,13 @@ namespace NFSE.Business.Tabelas.NFe
                 return retornoConsulta;
             }
 
-            var retornoErro = new NfeWsErroModel();
+            NfeWsErroModel retornoErro = new NfeWsErroModel();
 
-            var NfeWsErroController = new NfeWsErroController();
+            NfeWsErroController NfeWsErroController = new NfeWsErroController();
 
             if (retornoConsulta.erros != null)
             {
-                foreach (var erro in retornoConsulta.erros)
+                foreach (Erros erro in retornoConsulta.erros)
                 {
                     retornoErro.GrvId = identificaoNotaFiscal.GrvId;
                     retornoErro.IdentificadorNota = identificaoNotaFiscal.IdentificadorNota;
@@ -223,16 +222,16 @@ namespace NFSE.Business.Tabelas.NFe
                 {
                     string str1 = directory + identificadorNota.ToString() + "Original.pdf";
                     string str2 = directory + identificadorNota.ToString() + ".jpg";
-                    
+
                     webClient.Headers.Add("user-agent", "Mob-Link");
-                    
+
                     webClient.DownloadFile(url, str1);
-                    
+
                     new PdfToJpg().Process(str1, str2);
-                    
+
                     using (MemoryStream memoryStream = new MemoryStream())
                     {
-                        Image.FromFile(str2).Save((Stream)memoryStream, ImageFormat.Jpeg);
+                        Image.FromFile(str2).Save(memoryStream, ImageFormat.Jpeg);
 
                         ImagemNotaFiscal = memoryStream.ToArray();
                     }
@@ -240,7 +239,7 @@ namespace NFSE.Business.Tabelas.NFe
             }
             else
             {
-                using (var memoryStream = new MemoryStream())
+                using (MemoryStream memoryStream = new MemoryStream())
                 {
                     new Tools().ObterImagemEndereco(url).Save(memoryStream, ImageFormat.Jpeg);
 
@@ -296,13 +295,13 @@ namespace NFSE.Business.Tabelas.NFe
 
         private bool IsImage(byte[] bytes)
         {
-            var bmp = Encoding.ASCII.GetBytes("BM"); // BMP
-            var gif = Encoding.ASCII.GetBytes("GIF"); // GIF
-            var jpeg = new byte[] { 255, 216, 255, 224 }; // JPEG
-            var jpeg2 = new byte[] { 255, 216, 255, 225 }; // JPEG Canon
-            var png = new byte[] { 137, 80, 78, 71 }; // PNG
-            var tiff = new byte[] { 73, 73, 42 }; // TIFF
-            var tiff2 = new byte[] { 77, 77, 42 }; // TIFF
+            byte[] bmp = Encoding.ASCII.GetBytes("BM"); // BMP
+            byte[] gif = Encoding.ASCII.GetBytes("GIF"); // GIF
+            byte[] jpeg = new byte[] { 255, 216, 255, 224 }; // JPEG
+            byte[] jpeg2 = new byte[] { 255, 216, 255, 225 }; // JPEG Canon
+            byte[] png = new byte[] { 137, 80, 78, 71 }; // PNG
+            byte[] tiff = new byte[] { 73, 73, 42 }; // TIFF
+            byte[] tiff2 = new byte[] { 77, 77, 42 }; // TIFF
 
             if (bmp.SequenceEqual(bytes.Take(bmp.Length)) ||
                 gif.SequenceEqual(bytes.Take(gif.Length)) ||
@@ -322,13 +321,13 @@ namespace NFSE.Business.Tabelas.NFe
         {
             try
             {
-                using (var memoryStream = new MemoryStream(byteImage))
+                using (MemoryStream memoryStream = new MemoryStream(byteImage))
                 {
                     Image imageSource = Image.FromStream(memoryStream);
 
                     Image imageTarget = CropImage(imageSource, rectangle);
 
-                    var converter = new ImageConverter();
+                    ImageConverter converter = new ImageConverter();
 
                     return (byte[])converter.ConvertTo(imageTarget, typeof(byte[]));
                 }
@@ -351,6 +350,129 @@ namespace NFSE.Business.Tabelas.NFe
             nfe.Status = 'E';
 
             new NfeController().Atualizar(nfe);
+        }
+
+        public RetornoNotaFiscalEntity ReceberNotaFiscalAvulso(Consulta model)
+        {
+            DataBase.SystemEnvironment = model.Homologacao ? SystemEnvironment.Development : SystemEnvironment.Production;
+
+            NfeEntity nfe = new NfeController().ConsultarNotaFiscal(model.IdentificadorNota);
+
+            model.NfeId = nfe.NfeId;
+
+            #region Empresa
+            EmpresaEntity Empresa;
+
+            if ((Empresa = new EmpresaController().Selecionar(new EmpresaEntity { Cnpj = model.Cnpj })) == null)
+            {
+                throw new Exception("Empresa associada não encontrada");
+            }
+
+            if (Empresa.Token == null)
+            {
+                throw new Exception("O Token não foi configurado");
+            }
+            #endregion Empresa
+
+            string json;
+
+        Outer:
+
+            try
+            {
+                json = new Tools().GetNfse(new NfeConfiguracao().GetRemoteServer() + "/" + model.IdentificadorNota, Empresa.Token);
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message.Contains("por minuto"))
+                {
+                    goto Outer;
+                }
+
+                AtualizarNotaFiscal(nfe);
+
+                throw new Exception("Ocorreu um erro ao receber a Nota Fiscal (" + model.IdentificadorNota + "): " + ex.Message);
+            }
+
+            try
+            {
+                return ProcessarRetornoAvulso(nfe, model, json);
+            }
+            catch (Exception ex)
+            {
+                AtualizarNotaFiscal(nfe);
+
+                throw new Exception("Ocorreu um erro ao cadastrar a Nota Fiscal (" + model.IdentificadorNota + "): " + ex.Message);
+            }
+        }
+
+        private RetornoNotaFiscalEntity ProcessarRetornoAvulso(NfeEntity nfe, Consulta identificaoNotaFiscal, string retornoJson)
+        {
+            RetornoNotaFiscalEntity retornoConsulta = new JavaScriptSerializer()
+            {
+                MaxJsonLength = int.MaxValue
+            }.Deserialize<RetornoNotaFiscalEntity>(retornoJson);
+
+            if (retornoConsulta.status.Trim().Equals("processando_autorizacao", StringComparison.CurrentCultureIgnoreCase))
+            {
+                return retornoConsulta;
+            }
+
+            if (retornoConsulta.erros != null)
+            {
+                nfe.Status = 'E';
+
+                new NfeController().Atualizar(nfe);
+
+                return retornoConsulta;
+            }
+
+            if (!string.IsNullOrWhiteSpace(retornoConsulta.url))
+            {
+                retornoConsulta.url = retornoConsulta.url.Replace("nfse.aspx", "/NFSE/contribuinte/notaprintimg.aspx");
+
+                if (!string.IsNullOrWhiteSpace(retornoConsulta.url))
+                {
+                    retornoConsulta.Html = BaixarImagemAvulsa(nfe.IdentificadorNota, retornoConsulta.url);
+                }
+
+                if (identificaoNotaFiscal.BaixarImagemOriginal)
+                {
+                    return retornoConsulta;
+                }
+
+                nfe.Status = nfe.Status == 'A' ? 'P' : 'T';
+
+                new NfeController().AtualizarRetornoNotaFiscal(nfe, retornoConsulta);
+            }
+
+            return retornoConsulta;
+        }
+
+        private string BaixarImagemAvulsa(int identificadorNota, string url)
+        {
+            string directory = @"D:\Sistemas\GeradorNF\NFE\" + DataBase.SystemEnvironment.ToString() + "\\" + DateTime.Now.Year + "\\" + DateTime.Now.ToString("MM") + "\\" + DateTime.Now.ToString("dd") + "\\";
+
+            if (!Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+
+            string str1 = directory + identificadorNota.ToString() + "Original.html";
+
+            if (File.Exists(str1))
+            {
+                File.Delete(str1);
+            }
+
+            using (WebClient webClient = new WebClient())
+            {
+                webClient.Headers.Add("user-agent", "Mob-Link");
+
+                webClient.DownloadFile(url, str1);
+            };
+
+            return str1;
         }
     }
 }

@@ -1116,6 +1116,9 @@ namespace NFSE.TesteUsuario.nfse {
         
         private bool BaixarImagemOriginalField;
         
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string CnpjField;
+        
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -1204,6 +1207,19 @@ namespace NFSE.TesteUsuario.nfse {
             }
         }
         
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=6)]
+        public string Cnpj {
+            get {
+                return this.CnpjField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.CnpjField, value) != true)) {
+                    this.CnpjField = value;
+                    this.RaisePropertyChanged("Cnpj");
+                }
+            }
+        }
+        
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
         
         protected void RaisePropertyChanged(string propertyName) {
@@ -1239,6 +1255,9 @@ namespace NFSE.TesteUsuario.nfse {
         private string statusField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string numeroField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string codigo_verificacaoField;
         
         private System.DateTime data_emissaoField;
@@ -1250,13 +1269,16 @@ namespace NFSE.TesteUsuario.nfse {
         private string caminho_xml_nota_fiscalField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private byte[] ImagemNotaFiscalField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private byte[] retorno_notaField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private byte[] ImagemNotaFiscalField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private NFSE.TesteUsuario.nfse.Erros[] errosField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string HtmlField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
@@ -1334,6 +1356,19 @@ namespace NFSE.TesteUsuario.nfse {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=5)]
+        public string numero {
+            get {
+                return this.numeroField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.numeroField, value) != true)) {
+                    this.numeroField = value;
+                    this.RaisePropertyChanged("numero");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=6)]
         public string codigo_verificacao {
             get {
                 return this.codigo_verificacaoField;
@@ -1346,7 +1381,7 @@ namespace NFSE.TesteUsuario.nfse {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=6)]
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=7)]
         public System.DateTime data_emissao {
             get {
                 return this.data_emissaoField;
@@ -1359,7 +1394,7 @@ namespace NFSE.TesteUsuario.nfse {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=7)]
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=8)]
         public string url {
             get {
                 return this.urlField;
@@ -1372,7 +1407,7 @@ namespace NFSE.TesteUsuario.nfse {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=8)]
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=9)]
         public string caminho_xml_nota_fiscal {
             get {
                 return this.caminho_xml_nota_fiscalField;
@@ -1381,19 +1416,6 @@ namespace NFSE.TesteUsuario.nfse {
                 if ((object.ReferenceEquals(this.caminho_xml_nota_fiscalField, value) != true)) {
                     this.caminho_xml_nota_fiscalField = value;
                     this.RaisePropertyChanged("caminho_xml_nota_fiscal");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=9)]
-        public byte[] ImagemNotaFiscal {
-            get {
-                return this.ImagemNotaFiscalField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.ImagemNotaFiscalField, value) != true)) {
-                    this.ImagemNotaFiscalField = value;
-                    this.RaisePropertyChanged("ImagemNotaFiscal");
                 }
             }
         }
@@ -1412,6 +1434,19 @@ namespace NFSE.TesteUsuario.nfse {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=11)]
+        public byte[] ImagemNotaFiscal {
+            get {
+                return this.ImagemNotaFiscalField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ImagemNotaFiscalField, value) != true)) {
+                    this.ImagemNotaFiscalField = value;
+                    this.RaisePropertyChanged("ImagemNotaFiscal");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=12)]
         public NFSE.TesteUsuario.nfse.Erros[] erros {
             get {
                 return this.errosField;
@@ -1420,6 +1455,19 @@ namespace NFSE.TesteUsuario.nfse {
                 if ((object.ReferenceEquals(this.errosField, value) != true)) {
                     this.errosField = value;
                     this.RaisePropertyChanged("erros");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=13)]
+        public string Html {
+            get {
+                return this.HtmlField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.HtmlField, value) != true)) {
+                    this.HtmlField = value;
+                    this.RaisePropertyChanged("Html");
                 }
             }
         }
@@ -1531,6 +1579,9 @@ namespace NFSE.TesteUsuario.nfse {
         
         private bool HomologacaoField;
         
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string CnpjField;
+        
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
             get {
@@ -1606,6 +1657,19 @@ namespace NFSE.TesteUsuario.nfse {
             }
         }
         
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=5)]
+        public string Cnpj {
+            get {
+                return this.CnpjField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.CnpjField, value) != true)) {
+                    this.CnpjField = value;
+                    this.RaisePropertyChanged("Cnpj");
+                }
+            }
+        }
+        
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
         
         protected void RaisePropertyChanged(string propertyName) {
@@ -1635,11 +1699,11 @@ namespace NFSE.TesteUsuario.nfse {
         System.Threading.Tasks.Task<NFSE.TesteUsuario.nfse.SolicitarEmissaoNotaFiscalResponse> SolicitarEmissaoNotaFiscalAsync(NFSE.TesteUsuario.nfse.SolicitarEmissaoNotaFiscalRequest request);
         
         // CODEGEN: Generating message contract since element name model from namespace http://tempuri.org/ is not marked nillable
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/SimularEmissaoNotaFiscal", ReplyAction="*")]
-        NFSE.TesteUsuario.nfse.SimularEmissaoNotaFiscalResponse SimularEmissaoNotaFiscal(NFSE.TesteUsuario.nfse.SimularEmissaoNotaFiscalRequest request);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/SolicitarEmissaoNotaFiscalAvulso", ReplyAction="*")]
+        NFSE.TesteUsuario.nfse.SolicitarEmissaoNotaFiscalAvulsoResponse SolicitarEmissaoNotaFiscalAvulso(NFSE.TesteUsuario.nfse.SolicitarEmissaoNotaFiscalAvulsoRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/SimularEmissaoNotaFiscal", ReplyAction="*")]
-        System.Threading.Tasks.Task<NFSE.TesteUsuario.nfse.SimularEmissaoNotaFiscalResponse> SimularEmissaoNotaFiscalAsync(NFSE.TesteUsuario.nfse.SimularEmissaoNotaFiscalRequest request);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/SolicitarEmissaoNotaFiscalAvulso", ReplyAction="*")]
+        System.Threading.Tasks.Task<NFSE.TesteUsuario.nfse.SolicitarEmissaoNotaFiscalAvulsoResponse> SolicitarEmissaoNotaFiscalAvulsoAsync(NFSE.TesteUsuario.nfse.SolicitarEmissaoNotaFiscalAvulsoRequest request);
         
         // CODEGEN: Generating message contract since element name model from namespace http://tempuri.org/ is not marked nillable
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ReceberNotaFiscal", ReplyAction="*")]
@@ -1649,11 +1713,25 @@ namespace NFSE.TesteUsuario.nfse {
         System.Threading.Tasks.Task<NFSE.TesteUsuario.nfse.ReceberNotaFiscalResponse> ReceberNotaFiscalAsync(NFSE.TesteUsuario.nfse.ReceberNotaFiscalRequest request);
         
         // CODEGEN: Generating message contract since element name model from namespace http://tempuri.org/ is not marked nillable
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ReceberNotaFiscalAvulso", ReplyAction="*")]
+        NFSE.TesteUsuario.nfse.ReceberNotaFiscalAvulsoResponse ReceberNotaFiscalAvulso(NFSE.TesteUsuario.nfse.ReceberNotaFiscalAvulsoRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ReceberNotaFiscalAvulso", ReplyAction="*")]
+        System.Threading.Tasks.Task<NFSE.TesteUsuario.nfse.ReceberNotaFiscalAvulsoResponse> ReceberNotaFiscalAvulsoAsync(NFSE.TesteUsuario.nfse.ReceberNotaFiscalAvulsoRequest request);
+        
+        // CODEGEN: Generating message contract since element name model from namespace http://tempuri.org/ is not marked nillable
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/CancelarNotaFiscal", ReplyAction="*")]
         NFSE.TesteUsuario.nfse.CancelarNotaFiscalResponse CancelarNotaFiscal(NFSE.TesteUsuario.nfse.CancelarNotaFiscalRequest request);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/CancelarNotaFiscal", ReplyAction="*")]
         System.Threading.Tasks.Task<NFSE.TesteUsuario.nfse.CancelarNotaFiscalResponse> CancelarNotaFiscalAsync(NFSE.TesteUsuario.nfse.CancelarNotaFiscalRequest request);
+        
+        // CODEGEN: Generating message contract since element name model from namespace http://tempuri.org/ is not marked nillable
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/CancelarNotaFiscalAvulso", ReplyAction="*")]
+        NFSE.TesteUsuario.nfse.CancelarNotaFiscalAvulsoResponse CancelarNotaFiscalAvulso(NFSE.TesteUsuario.nfse.CancelarNotaFiscalAvulsoRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/CancelarNotaFiscalAvulso", ReplyAction="*")]
+        System.Threading.Tasks.Task<NFSE.TesteUsuario.nfse.CancelarNotaFiscalAvulsoResponse> CancelarNotaFiscalAvulsoAsync(NFSE.TesteUsuario.nfse.CancelarNotaFiscalAvulsoRequest request);
         
         // CODEGEN: Generating message contract since element name GerarNotaFiscalResult from namespace http://tempuri.org/ is not marked nillable
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GerarNotaFiscal", ReplyAction="*")]
@@ -1668,6 +1746,13 @@ namespace NFSE.TesteUsuario.nfse {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GerarNovaNotaFiscal", ReplyAction="*")]
         System.Threading.Tasks.Task<NFSE.TesteUsuario.nfse.GerarNovaNotaFiscalResponse> GerarNovaNotaFiscalAsync(NFSE.TesteUsuario.nfse.GerarNovaNotaFiscalRequest request);
+        
+        // CODEGEN: Generating message contract since element name GerarNovaNotaFiscalAvulsoResult from namespace http://tempuri.org/ is not marked nillable
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GerarNovaNotaFiscalAvulso", ReplyAction="*")]
+        NFSE.TesteUsuario.nfse.GerarNovaNotaFiscalAvulsoResponse GerarNovaNotaFiscalAvulso(NFSE.TesteUsuario.nfse.GerarNovaNotaFiscalAvulsoRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GerarNovaNotaFiscalAvulso", ReplyAction="*")]
+        System.Threading.Tasks.Task<NFSE.TesteUsuario.nfse.GerarNovaNotaFiscalAvulsoResponse> GerarNovaNotaFiscalAvulsoAsync(NFSE.TesteUsuario.nfse.GerarNovaNotaFiscalAvulsoRequest request);
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -1742,15 +1827,15 @@ namespace NFSE.TesteUsuario.nfse {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
-    public partial class SimularEmissaoNotaFiscalRequest {
+    public partial class SolicitarEmissaoNotaFiscalAvulsoRequest {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Name="SimularEmissaoNotaFiscal", Namespace="http://tempuri.org/", Order=0)]
-        public NFSE.TesteUsuario.nfse.SimularEmissaoNotaFiscalRequestBody Body;
+        [System.ServiceModel.MessageBodyMemberAttribute(Name="SolicitarEmissaoNotaFiscalAvulso", Namespace="http://tempuri.org/", Order=0)]
+        public NFSE.TesteUsuario.nfse.SolicitarEmissaoNotaFiscalAvulsoRequestBody Body;
         
-        public SimularEmissaoNotaFiscalRequest() {
+        public SolicitarEmissaoNotaFiscalAvulsoRequest() {
         }
         
-        public SimularEmissaoNotaFiscalRequest(NFSE.TesteUsuario.nfse.SimularEmissaoNotaFiscalRequestBody Body) {
+        public SolicitarEmissaoNotaFiscalAvulsoRequest(NFSE.TesteUsuario.nfse.SolicitarEmissaoNotaFiscalAvulsoRequestBody Body) {
             this.Body = Body;
         }
     }
@@ -1759,15 +1844,15 @@ namespace NFSE.TesteUsuario.nfse {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute(Namespace="http://tempuri.org/")]
-    public partial class SimularEmissaoNotaFiscalRequestBody {
+    public partial class SolicitarEmissaoNotaFiscalAvulsoRequestBody {
         
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
         public NFSE.TesteUsuario.nfse.CapaAutorizacaoNfse model;
         
-        public SimularEmissaoNotaFiscalRequestBody() {
+        public SolicitarEmissaoNotaFiscalAvulsoRequestBody() {
         }
         
-        public SimularEmissaoNotaFiscalRequestBody(NFSE.TesteUsuario.nfse.CapaAutorizacaoNfse model) {
+        public SolicitarEmissaoNotaFiscalAvulsoRequestBody(NFSE.TesteUsuario.nfse.CapaAutorizacaoNfse model) {
             this.model = model;
         }
     }
@@ -1776,15 +1861,15 @@ namespace NFSE.TesteUsuario.nfse {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
-    public partial class SimularEmissaoNotaFiscalResponse {
+    public partial class SolicitarEmissaoNotaFiscalAvulsoResponse {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Name="SimularEmissaoNotaFiscalResponse", Namespace="http://tempuri.org/", Order=0)]
-        public NFSE.TesteUsuario.nfse.SimularEmissaoNotaFiscalResponseBody Body;
+        [System.ServiceModel.MessageBodyMemberAttribute(Name="SolicitarEmissaoNotaFiscalAvulsoResponse", Namespace="http://tempuri.org/", Order=0)]
+        public NFSE.TesteUsuario.nfse.SolicitarEmissaoNotaFiscalAvulsoResponseBody Body;
         
-        public SimularEmissaoNotaFiscalResponse() {
+        public SolicitarEmissaoNotaFiscalAvulsoResponse() {
         }
         
-        public SimularEmissaoNotaFiscalResponse(NFSE.TesteUsuario.nfse.SimularEmissaoNotaFiscalResponseBody Body) {
+        public SolicitarEmissaoNotaFiscalAvulsoResponse(NFSE.TesteUsuario.nfse.SolicitarEmissaoNotaFiscalAvulsoResponseBody Body) {
             this.Body = Body;
         }
     }
@@ -1793,16 +1878,16 @@ namespace NFSE.TesteUsuario.nfse {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute(Namespace="http://tempuri.org/")]
-    public partial class SimularEmissaoNotaFiscalResponseBody {
+    public partial class SolicitarEmissaoNotaFiscalAvulsoResponseBody {
         
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
-        public string SimularEmissaoNotaFiscalResult;
+        public string SolicitarEmissaoNotaFiscalAvulsoResult;
         
-        public SimularEmissaoNotaFiscalResponseBody() {
+        public SolicitarEmissaoNotaFiscalAvulsoResponseBody() {
         }
         
-        public SimularEmissaoNotaFiscalResponseBody(string SimularEmissaoNotaFiscalResult) {
-            this.SimularEmissaoNotaFiscalResult = SimularEmissaoNotaFiscalResult;
+        public SolicitarEmissaoNotaFiscalAvulsoResponseBody(string SolicitarEmissaoNotaFiscalAvulsoResult) {
+            this.SolicitarEmissaoNotaFiscalAvulsoResult = SolicitarEmissaoNotaFiscalAvulsoResult;
         }
     }
     
@@ -1878,6 +1963,74 @@ namespace NFSE.TesteUsuario.nfse {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class ReceberNotaFiscalAvulsoRequest {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Name="ReceberNotaFiscalAvulso", Namespace="http://tempuri.org/", Order=0)]
+        public NFSE.TesteUsuario.nfse.ReceberNotaFiscalAvulsoRequestBody Body;
+        
+        public ReceberNotaFiscalAvulsoRequest() {
+        }
+        
+        public ReceberNotaFiscalAvulsoRequest(NFSE.TesteUsuario.nfse.ReceberNotaFiscalAvulsoRequestBody Body) {
+            this.Body = Body;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.Runtime.Serialization.DataContractAttribute(Namespace="http://tempuri.org/")]
+    public partial class ReceberNotaFiscalAvulsoRequestBody {
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
+        public NFSE.TesteUsuario.nfse.Consulta model;
+        
+        public ReceberNotaFiscalAvulsoRequestBody() {
+        }
+        
+        public ReceberNotaFiscalAvulsoRequestBody(NFSE.TesteUsuario.nfse.Consulta model) {
+            this.model = model;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class ReceberNotaFiscalAvulsoResponse {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Name="ReceberNotaFiscalAvulsoResponse", Namespace="http://tempuri.org/", Order=0)]
+        public NFSE.TesteUsuario.nfse.ReceberNotaFiscalAvulsoResponseBody Body;
+        
+        public ReceberNotaFiscalAvulsoResponse() {
+        }
+        
+        public ReceberNotaFiscalAvulsoResponse(NFSE.TesteUsuario.nfse.ReceberNotaFiscalAvulsoResponseBody Body) {
+            this.Body = Body;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.Runtime.Serialization.DataContractAttribute(Namespace="http://tempuri.org/")]
+    public partial class ReceberNotaFiscalAvulsoResponseBody {
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
+        public NFSE.TesteUsuario.nfse.RetornoNotaFiscalEntity ReceberNotaFiscalAvulsoResult;
+        
+        public ReceberNotaFiscalAvulsoResponseBody() {
+        }
+        
+        public ReceberNotaFiscalAvulsoResponseBody(NFSE.TesteUsuario.nfse.RetornoNotaFiscalEntity ReceberNotaFiscalAvulsoResult) {
+            this.ReceberNotaFiscalAvulsoResult = ReceberNotaFiscalAvulsoResult;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     public partial class CancelarNotaFiscalRequest {
         
         [System.ServiceModel.MessageBodyMemberAttribute(Name="CancelarNotaFiscal", Namespace="http://tempuri.org/", Order=0)]
@@ -1939,6 +2092,74 @@ namespace NFSE.TesteUsuario.nfse {
         
         public CancelarNotaFiscalResponseBody(string CancelarNotaFiscalResult) {
             this.CancelarNotaFiscalResult = CancelarNotaFiscalResult;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class CancelarNotaFiscalAvulsoRequest {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Name="CancelarNotaFiscalAvulso", Namespace="http://tempuri.org/", Order=0)]
+        public NFSE.TesteUsuario.nfse.CancelarNotaFiscalAvulsoRequestBody Body;
+        
+        public CancelarNotaFiscalAvulsoRequest() {
+        }
+        
+        public CancelarNotaFiscalAvulsoRequest(NFSE.TesteUsuario.nfse.CancelarNotaFiscalAvulsoRequestBody Body) {
+            this.Body = Body;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.Runtime.Serialization.DataContractAttribute(Namespace="http://tempuri.org/")]
+    public partial class CancelarNotaFiscalAvulsoRequestBody {
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
+        public NFSE.TesteUsuario.nfse.Cancelamento model;
+        
+        public CancelarNotaFiscalAvulsoRequestBody() {
+        }
+        
+        public CancelarNotaFiscalAvulsoRequestBody(NFSE.TesteUsuario.nfse.Cancelamento model) {
+            this.model = model;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class CancelarNotaFiscalAvulsoResponse {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Name="CancelarNotaFiscalAvulsoResponse", Namespace="http://tempuri.org/", Order=0)]
+        public NFSE.TesteUsuario.nfse.CancelarNotaFiscalAvulsoResponseBody Body;
+        
+        public CancelarNotaFiscalAvulsoResponse() {
+        }
+        
+        public CancelarNotaFiscalAvulsoResponse(NFSE.TesteUsuario.nfse.CancelarNotaFiscalAvulsoResponseBody Body) {
+            this.Body = Body;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.Runtime.Serialization.DataContractAttribute(Namespace="http://tempuri.org/")]
+    public partial class CancelarNotaFiscalAvulsoResponseBody {
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
+        public string CancelarNotaFiscalAvulsoResult;
+        
+        public CancelarNotaFiscalAvulsoResponseBody() {
+        }
+        
+        public CancelarNotaFiscalAvulsoResponseBody(string CancelarNotaFiscalAvulsoResult) {
+            this.CancelarNotaFiscalAvulsoResult = CancelarNotaFiscalAvulsoResult;
         }
     }
     
@@ -2048,21 +2269,17 @@ namespace NFSE.TesteUsuario.nfse {
         public int identificadorNota;
         
         [System.Runtime.Serialization.DataMemberAttribute(Order=2)]
-        public int faturamentoServicoTipoVeiculoId;
-        
-        [System.Runtime.Serialization.DataMemberAttribute(Order=3)]
         public int usuarioId;
         
-        [System.Runtime.Serialization.DataMemberAttribute(Order=4)]
+        [System.Runtime.Serialization.DataMemberAttribute(Order=3)]
         public bool isDev;
         
         public GerarNovaNotaFiscalRequestBody() {
         }
         
-        public GerarNovaNotaFiscalRequestBody(int grvId, int identificadorNota, int faturamentoServicoTipoVeiculoId, int usuarioId, bool isDev) {
+        public GerarNovaNotaFiscalRequestBody(int grvId, int identificadorNota, int usuarioId, bool isDev) {
             this.grvId = grvId;
             this.identificadorNota = identificadorNota;
-            this.faturamentoServicoTipoVeiculoId = faturamentoServicoTipoVeiculoId;
             this.usuarioId = usuarioId;
             this.isDev = isDev;
         }
@@ -2099,6 +2316,78 @@ namespace NFSE.TesteUsuario.nfse {
         
         public GerarNovaNotaFiscalResponseBody(NFSE.TesteUsuario.nfse.ArrayOfString GerarNovaNotaFiscalResult) {
             this.GerarNovaNotaFiscalResult = GerarNovaNotaFiscalResult;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class GerarNovaNotaFiscalAvulsoRequest {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Name="GerarNovaNotaFiscalAvulso", Namespace="http://tempuri.org/", Order=0)]
+        public NFSE.TesteUsuario.nfse.GerarNovaNotaFiscalAvulsoRequestBody Body;
+        
+        public GerarNovaNotaFiscalAvulsoRequest() {
+        }
+        
+        public GerarNovaNotaFiscalAvulsoRequest(NFSE.TesteUsuario.nfse.GerarNovaNotaFiscalAvulsoRequestBody Body) {
+            this.Body = Body;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.Runtime.Serialization.DataContractAttribute(Namespace="http://tempuri.org/")]
+    public partial class GerarNovaNotaFiscalAvulsoRequestBody {
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=0)]
+        public int identificadorNota;
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=1)]
+        public bool isDev;
+        
+        public GerarNovaNotaFiscalAvulsoRequestBody() {
+        }
+        
+        public GerarNovaNotaFiscalAvulsoRequestBody(int identificadorNota, bool isDev) {
+            this.identificadorNota = identificadorNota;
+            this.isDev = isDev;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
+    public partial class GerarNovaNotaFiscalAvulsoResponse {
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Name="GerarNovaNotaFiscalAvulsoResponse", Namespace="http://tempuri.org/", Order=0)]
+        public NFSE.TesteUsuario.nfse.GerarNovaNotaFiscalAvulsoResponseBody Body;
+        
+        public GerarNovaNotaFiscalAvulsoResponse() {
+        }
+        
+        public GerarNovaNotaFiscalAvulsoResponse(NFSE.TesteUsuario.nfse.GerarNovaNotaFiscalAvulsoResponseBody Body) {
+            this.Body = Body;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.Runtime.Serialization.DataContractAttribute(Namespace="http://tempuri.org/")]
+    public partial class GerarNovaNotaFiscalAvulsoResponseBody {
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
+        public NFSE.TesteUsuario.nfse.ArrayOfString GerarNovaNotaFiscalAvulsoResult;
+        
+        public GerarNovaNotaFiscalAvulsoResponseBody() {
+        }
+        
+        public GerarNovaNotaFiscalAvulsoResponseBody(NFSE.TesteUsuario.nfse.ArrayOfString GerarNovaNotaFiscalAvulsoResult) {
+            this.GerarNovaNotaFiscalAvulsoResult = GerarNovaNotaFiscalAvulsoResult;
         }
     }
     
@@ -2155,28 +2444,28 @@ namespace NFSE.TesteUsuario.nfse {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        NFSE.TesteUsuario.nfse.SimularEmissaoNotaFiscalResponse NFSE.TesteUsuario.nfse.WSnfseSoap.SimularEmissaoNotaFiscal(NFSE.TesteUsuario.nfse.SimularEmissaoNotaFiscalRequest request) {
-            return base.Channel.SimularEmissaoNotaFiscal(request);
+        NFSE.TesteUsuario.nfse.SolicitarEmissaoNotaFiscalAvulsoResponse NFSE.TesteUsuario.nfse.WSnfseSoap.SolicitarEmissaoNotaFiscalAvulso(NFSE.TesteUsuario.nfse.SolicitarEmissaoNotaFiscalAvulsoRequest request) {
+            return base.Channel.SolicitarEmissaoNotaFiscalAvulso(request);
         }
         
-        public string SimularEmissaoNotaFiscal(NFSE.TesteUsuario.nfse.CapaAutorizacaoNfse model) {
-            NFSE.TesteUsuario.nfse.SimularEmissaoNotaFiscalRequest inValue = new NFSE.TesteUsuario.nfse.SimularEmissaoNotaFiscalRequest();
-            inValue.Body = new NFSE.TesteUsuario.nfse.SimularEmissaoNotaFiscalRequestBody();
+        public string SolicitarEmissaoNotaFiscalAvulso(NFSE.TesteUsuario.nfse.CapaAutorizacaoNfse model) {
+            NFSE.TesteUsuario.nfse.SolicitarEmissaoNotaFiscalAvulsoRequest inValue = new NFSE.TesteUsuario.nfse.SolicitarEmissaoNotaFiscalAvulsoRequest();
+            inValue.Body = new NFSE.TesteUsuario.nfse.SolicitarEmissaoNotaFiscalAvulsoRequestBody();
             inValue.Body.model = model;
-            NFSE.TesteUsuario.nfse.SimularEmissaoNotaFiscalResponse retVal = ((NFSE.TesteUsuario.nfse.WSnfseSoap)(this)).SimularEmissaoNotaFiscal(inValue);
-            return retVal.Body.SimularEmissaoNotaFiscalResult;
+            NFSE.TesteUsuario.nfse.SolicitarEmissaoNotaFiscalAvulsoResponse retVal = ((NFSE.TesteUsuario.nfse.WSnfseSoap)(this)).SolicitarEmissaoNotaFiscalAvulso(inValue);
+            return retVal.Body.SolicitarEmissaoNotaFiscalAvulsoResult;
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<NFSE.TesteUsuario.nfse.SimularEmissaoNotaFiscalResponse> NFSE.TesteUsuario.nfse.WSnfseSoap.SimularEmissaoNotaFiscalAsync(NFSE.TesteUsuario.nfse.SimularEmissaoNotaFiscalRequest request) {
-            return base.Channel.SimularEmissaoNotaFiscalAsync(request);
+        System.Threading.Tasks.Task<NFSE.TesteUsuario.nfse.SolicitarEmissaoNotaFiscalAvulsoResponse> NFSE.TesteUsuario.nfse.WSnfseSoap.SolicitarEmissaoNotaFiscalAvulsoAsync(NFSE.TesteUsuario.nfse.SolicitarEmissaoNotaFiscalAvulsoRequest request) {
+            return base.Channel.SolicitarEmissaoNotaFiscalAvulsoAsync(request);
         }
         
-        public System.Threading.Tasks.Task<NFSE.TesteUsuario.nfse.SimularEmissaoNotaFiscalResponse> SimularEmissaoNotaFiscalAsync(NFSE.TesteUsuario.nfse.CapaAutorizacaoNfse model) {
-            NFSE.TesteUsuario.nfse.SimularEmissaoNotaFiscalRequest inValue = new NFSE.TesteUsuario.nfse.SimularEmissaoNotaFiscalRequest();
-            inValue.Body = new NFSE.TesteUsuario.nfse.SimularEmissaoNotaFiscalRequestBody();
+        public System.Threading.Tasks.Task<NFSE.TesteUsuario.nfse.SolicitarEmissaoNotaFiscalAvulsoResponse> SolicitarEmissaoNotaFiscalAvulsoAsync(NFSE.TesteUsuario.nfse.CapaAutorizacaoNfse model) {
+            NFSE.TesteUsuario.nfse.SolicitarEmissaoNotaFiscalAvulsoRequest inValue = new NFSE.TesteUsuario.nfse.SolicitarEmissaoNotaFiscalAvulsoRequest();
+            inValue.Body = new NFSE.TesteUsuario.nfse.SolicitarEmissaoNotaFiscalAvulsoRequestBody();
             inValue.Body.model = model;
-            return ((NFSE.TesteUsuario.nfse.WSnfseSoap)(this)).SimularEmissaoNotaFiscalAsync(inValue);
+            return ((NFSE.TesteUsuario.nfse.WSnfseSoap)(this)).SolicitarEmissaoNotaFiscalAvulsoAsync(inValue);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -2205,6 +2494,31 @@ namespace NFSE.TesteUsuario.nfse {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        NFSE.TesteUsuario.nfse.ReceberNotaFiscalAvulsoResponse NFSE.TesteUsuario.nfse.WSnfseSoap.ReceberNotaFiscalAvulso(NFSE.TesteUsuario.nfse.ReceberNotaFiscalAvulsoRequest request) {
+            return base.Channel.ReceberNotaFiscalAvulso(request);
+        }
+        
+        public NFSE.TesteUsuario.nfse.RetornoNotaFiscalEntity ReceberNotaFiscalAvulso(NFSE.TesteUsuario.nfse.Consulta model) {
+            NFSE.TesteUsuario.nfse.ReceberNotaFiscalAvulsoRequest inValue = new NFSE.TesteUsuario.nfse.ReceberNotaFiscalAvulsoRequest();
+            inValue.Body = new NFSE.TesteUsuario.nfse.ReceberNotaFiscalAvulsoRequestBody();
+            inValue.Body.model = model;
+            NFSE.TesteUsuario.nfse.ReceberNotaFiscalAvulsoResponse retVal = ((NFSE.TesteUsuario.nfse.WSnfseSoap)(this)).ReceberNotaFiscalAvulso(inValue);
+            return retVal.Body.ReceberNotaFiscalAvulsoResult;
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.Threading.Tasks.Task<NFSE.TesteUsuario.nfse.ReceberNotaFiscalAvulsoResponse> NFSE.TesteUsuario.nfse.WSnfseSoap.ReceberNotaFiscalAvulsoAsync(NFSE.TesteUsuario.nfse.ReceberNotaFiscalAvulsoRequest request) {
+            return base.Channel.ReceberNotaFiscalAvulsoAsync(request);
+        }
+        
+        public System.Threading.Tasks.Task<NFSE.TesteUsuario.nfse.ReceberNotaFiscalAvulsoResponse> ReceberNotaFiscalAvulsoAsync(NFSE.TesteUsuario.nfse.Consulta model) {
+            NFSE.TesteUsuario.nfse.ReceberNotaFiscalAvulsoRequest inValue = new NFSE.TesteUsuario.nfse.ReceberNotaFiscalAvulsoRequest();
+            inValue.Body = new NFSE.TesteUsuario.nfse.ReceberNotaFiscalAvulsoRequestBody();
+            inValue.Body.model = model;
+            return ((NFSE.TesteUsuario.nfse.WSnfseSoap)(this)).ReceberNotaFiscalAvulsoAsync(inValue);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         NFSE.TesteUsuario.nfse.CancelarNotaFiscalResponse NFSE.TesteUsuario.nfse.WSnfseSoap.CancelarNotaFiscal(NFSE.TesteUsuario.nfse.CancelarNotaFiscalRequest request) {
             return base.Channel.CancelarNotaFiscal(request);
         }
@@ -2227,6 +2541,31 @@ namespace NFSE.TesteUsuario.nfse {
             inValue.Body = new NFSE.TesteUsuario.nfse.CancelarNotaFiscalRequestBody();
             inValue.Body.model = model;
             return ((NFSE.TesteUsuario.nfse.WSnfseSoap)(this)).CancelarNotaFiscalAsync(inValue);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        NFSE.TesteUsuario.nfse.CancelarNotaFiscalAvulsoResponse NFSE.TesteUsuario.nfse.WSnfseSoap.CancelarNotaFiscalAvulso(NFSE.TesteUsuario.nfse.CancelarNotaFiscalAvulsoRequest request) {
+            return base.Channel.CancelarNotaFiscalAvulso(request);
+        }
+        
+        public string CancelarNotaFiscalAvulso(NFSE.TesteUsuario.nfse.Cancelamento model) {
+            NFSE.TesteUsuario.nfse.CancelarNotaFiscalAvulsoRequest inValue = new NFSE.TesteUsuario.nfse.CancelarNotaFiscalAvulsoRequest();
+            inValue.Body = new NFSE.TesteUsuario.nfse.CancelarNotaFiscalAvulsoRequestBody();
+            inValue.Body.model = model;
+            NFSE.TesteUsuario.nfse.CancelarNotaFiscalAvulsoResponse retVal = ((NFSE.TesteUsuario.nfse.WSnfseSoap)(this)).CancelarNotaFiscalAvulso(inValue);
+            return retVal.Body.CancelarNotaFiscalAvulsoResult;
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.Threading.Tasks.Task<NFSE.TesteUsuario.nfse.CancelarNotaFiscalAvulsoResponse> NFSE.TesteUsuario.nfse.WSnfseSoap.CancelarNotaFiscalAvulsoAsync(NFSE.TesteUsuario.nfse.CancelarNotaFiscalAvulsoRequest request) {
+            return base.Channel.CancelarNotaFiscalAvulsoAsync(request);
+        }
+        
+        public System.Threading.Tasks.Task<NFSE.TesteUsuario.nfse.CancelarNotaFiscalAvulsoResponse> CancelarNotaFiscalAvulsoAsync(NFSE.TesteUsuario.nfse.Cancelamento model) {
+            NFSE.TesteUsuario.nfse.CancelarNotaFiscalAvulsoRequest inValue = new NFSE.TesteUsuario.nfse.CancelarNotaFiscalAvulsoRequest();
+            inValue.Body = new NFSE.TesteUsuario.nfse.CancelarNotaFiscalAvulsoRequestBody();
+            inValue.Body.model = model;
+            return ((NFSE.TesteUsuario.nfse.WSnfseSoap)(this)).CancelarNotaFiscalAvulsoAsync(inValue);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
@@ -2263,12 +2602,11 @@ namespace NFSE.TesteUsuario.nfse {
             return base.Channel.GerarNovaNotaFiscal(request);
         }
         
-        public NFSE.TesteUsuario.nfse.ArrayOfString GerarNovaNotaFiscal(int grvId, int identificadorNota, int faturamentoServicoTipoVeiculoId, int usuarioId, bool isDev) {
+        public NFSE.TesteUsuario.nfse.ArrayOfString GerarNovaNotaFiscal(int grvId, int identificadorNota, int usuarioId, bool isDev) {
             NFSE.TesteUsuario.nfse.GerarNovaNotaFiscalRequest inValue = new NFSE.TesteUsuario.nfse.GerarNovaNotaFiscalRequest();
             inValue.Body = new NFSE.TesteUsuario.nfse.GerarNovaNotaFiscalRequestBody();
             inValue.Body.grvId = grvId;
             inValue.Body.identificadorNota = identificadorNota;
-            inValue.Body.faturamentoServicoTipoVeiculoId = faturamentoServicoTipoVeiculoId;
             inValue.Body.usuarioId = usuarioId;
             inValue.Body.isDev = isDev;
             NFSE.TesteUsuario.nfse.GerarNovaNotaFiscalResponse retVal = ((NFSE.TesteUsuario.nfse.WSnfseSoap)(this)).GerarNovaNotaFiscal(inValue);
@@ -2280,15 +2618,41 @@ namespace NFSE.TesteUsuario.nfse {
             return base.Channel.GerarNovaNotaFiscalAsync(request);
         }
         
-        public System.Threading.Tasks.Task<NFSE.TesteUsuario.nfse.GerarNovaNotaFiscalResponse> GerarNovaNotaFiscalAsync(int grvId, int identificadorNota, int faturamentoServicoTipoVeiculoId, int usuarioId, bool isDev) {
+        public System.Threading.Tasks.Task<NFSE.TesteUsuario.nfse.GerarNovaNotaFiscalResponse> GerarNovaNotaFiscalAsync(int grvId, int identificadorNota, int usuarioId, bool isDev) {
             NFSE.TesteUsuario.nfse.GerarNovaNotaFiscalRequest inValue = new NFSE.TesteUsuario.nfse.GerarNovaNotaFiscalRequest();
             inValue.Body = new NFSE.TesteUsuario.nfse.GerarNovaNotaFiscalRequestBody();
             inValue.Body.grvId = grvId;
             inValue.Body.identificadorNota = identificadorNota;
-            inValue.Body.faturamentoServicoTipoVeiculoId = faturamentoServicoTipoVeiculoId;
             inValue.Body.usuarioId = usuarioId;
             inValue.Body.isDev = isDev;
             return ((NFSE.TesteUsuario.nfse.WSnfseSoap)(this)).GerarNovaNotaFiscalAsync(inValue);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        NFSE.TesteUsuario.nfse.GerarNovaNotaFiscalAvulsoResponse NFSE.TesteUsuario.nfse.WSnfseSoap.GerarNovaNotaFiscalAvulso(NFSE.TesteUsuario.nfse.GerarNovaNotaFiscalAvulsoRequest request) {
+            return base.Channel.GerarNovaNotaFiscalAvulso(request);
+        }
+        
+        public NFSE.TesteUsuario.nfse.ArrayOfString GerarNovaNotaFiscalAvulso(int identificadorNota, bool isDev) {
+            NFSE.TesteUsuario.nfse.GerarNovaNotaFiscalAvulsoRequest inValue = new NFSE.TesteUsuario.nfse.GerarNovaNotaFiscalAvulsoRequest();
+            inValue.Body = new NFSE.TesteUsuario.nfse.GerarNovaNotaFiscalAvulsoRequestBody();
+            inValue.Body.identificadorNota = identificadorNota;
+            inValue.Body.isDev = isDev;
+            NFSE.TesteUsuario.nfse.GerarNovaNotaFiscalAvulsoResponse retVal = ((NFSE.TesteUsuario.nfse.WSnfseSoap)(this)).GerarNovaNotaFiscalAvulso(inValue);
+            return retVal.Body.GerarNovaNotaFiscalAvulsoResult;
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.Threading.Tasks.Task<NFSE.TesteUsuario.nfse.GerarNovaNotaFiscalAvulsoResponse> NFSE.TesteUsuario.nfse.WSnfseSoap.GerarNovaNotaFiscalAvulsoAsync(NFSE.TesteUsuario.nfse.GerarNovaNotaFiscalAvulsoRequest request) {
+            return base.Channel.GerarNovaNotaFiscalAvulsoAsync(request);
+        }
+        
+        public System.Threading.Tasks.Task<NFSE.TesteUsuario.nfse.GerarNovaNotaFiscalAvulsoResponse> GerarNovaNotaFiscalAvulsoAsync(int identificadorNota, bool isDev) {
+            NFSE.TesteUsuario.nfse.GerarNovaNotaFiscalAvulsoRequest inValue = new NFSE.TesteUsuario.nfse.GerarNovaNotaFiscalAvulsoRequest();
+            inValue.Body = new NFSE.TesteUsuario.nfse.GerarNovaNotaFiscalAvulsoRequestBody();
+            inValue.Body.identificadorNota = identificadorNota;
+            inValue.Body.isDev = isDev;
+            return ((NFSE.TesteUsuario.nfse.WSnfseSoap)(this)).GerarNovaNotaFiscalAvulsoAsync(inValue);
         }
     }
 }

@@ -90,9 +90,9 @@ namespace NFSE.Business.Tabelas.NFe
             return resposta;
         }
 
-        public string SimularEmissaoNotaFiscal(CapaAutorizacaoNfse model)
+        public string SolicitarEmissaoNotaFiscalAvulso(CapaAutorizacaoNfse model)
         {
-            DataBase.SystemEnvironment = SystemEnvironment.Development;
+            DataBase.SystemEnvironment = model.Homologacao ? SystemEnvironment.Development : SystemEnvironment.Production;
 
             EmpresaEntity Empresa;
 
@@ -102,6 +102,7 @@ namespace NFSE.Business.Tabelas.NFe
             }
 
             model.IdentificadorNota = new DetranController().GetDetranSequence("NFE");
+
             model.UsuarioId = 1;
 
             try
@@ -115,7 +116,7 @@ namespace NFSE.Business.Tabelas.NFe
             }
             catch (Exception ex)
             {
-                throw new Exception("Ocorreu um erro ao simular a Nota Fiscal (" + model.IdentificadorNota + "): " + ex.Message);
+                throw new Exception("Ocorreu um erro ao solicitar a Nota Fiscal (" + model.IdentificadorNota + "): " + ex.Message);
             }
         }
 

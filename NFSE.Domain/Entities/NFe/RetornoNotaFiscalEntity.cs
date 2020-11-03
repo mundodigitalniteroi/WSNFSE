@@ -30,5 +30,7 @@ namespace NFSE.Domain.Entities.NFe
         public byte[] ImagemNotaFiscal { get; set; }
 
         public List<Erros> erros { get; set; }
+
+        public string Html { get; set; }
     }
 }

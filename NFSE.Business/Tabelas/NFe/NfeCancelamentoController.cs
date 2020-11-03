@@ -19,6 +19,13 @@ namespace NFSE.Business.Tabelas.NFe
 
             var nfe = new NfeController().ConsultarNotaFiscal(model.GrvId, model.UsuarioId, model.IdentificadorNota, Acao.Cancelamento);
 
+            if (nfe == null)
+            {
+                new NfeWsErroController().CadastrarErroGenerico(model.GrvId, model.UsuarioId, model.IdentificadorNota, OrigemErro.MobLink, Acao.Retorno, "Nota Fiscal não encontrada");
+
+                throw new Exception("Nota Fiscal não encontrada");
+            }
+
             var grv = new GrvController().Selecionar(model.GrvId);
 
             #region Empresa
@@ -105,6 +112,56 @@ namespace NFSE.Business.Tabelas.NFe
             }
 
             
+
+            nfe.Status = 'N';
+
+            new NfeController().Atualizar(nfe);
+
+            return jsonRetorno;
+        }
+
+        public string CancelarNotaFiscalAvulso(Cancelamento model)
+        {
+            DataBase.SystemEnvironment = model.Homologacao ? SystemEnvironment.Development : SystemEnvironment.Production;
+
+            var nfe = new NfeController().ConsultarNotaFiscal(model.IdentificadorNota);
+
+            if (nfe == null)
+            {
+                new NfeWsErroController().CadastrarErroGenerico(model.GrvId, model.UsuarioId, model.IdentificadorNota, OrigemErro.MobLink, Acao.Retorno, "Nota Fiscal não encontrada");
+
+                throw new Exception("Nota Fiscal não encontrada");
+            }
+
+            #region Empresa
+            EmpresaEntity Empresa;
+
+            if ((Empresa = new EmpresaController().Selecionar(new EmpresaEntity { Cnpj = model.Cnpj })) == null)
+            {
+                throw new Exception("Empresa associada não encontrada");
+            }
+            #endregion Empresa
+
+            var tools = new Tools();
+
+            string jsonEnvio = tools.ObjToJSON(new Dictionary<string, string>()
+            {
+                {
+                    "justificativa",
+                    model.Justificativa
+                }
+            });
+
+            string jsonRetorno;
+
+            try
+            {
+                jsonRetorno = tools.CancelarNfse(new NfeConfiguracao().GetRemoteServer() + "/" + model.IdentificadorNota, jsonEnvio, Empresa.Token);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Ocorreu um erro ao cancelar a Nota Fiscal (" + model.IdentificadorNota + "): " + ex.Message);
+            }
 
             nfe.Status = 'N';
 

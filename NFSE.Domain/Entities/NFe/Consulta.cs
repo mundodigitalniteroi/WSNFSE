@@ -13,5 +13,7 @@
         public bool Homologacao { get; set; }
 
         public bool BaixarImagemOriginal { get; set; } = false;
+
+        public string Cnpj { get; set; }
     }
 }

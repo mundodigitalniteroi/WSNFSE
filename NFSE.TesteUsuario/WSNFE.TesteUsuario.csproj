@@ -38,6 +38,7 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Connected Services\nfse\Reference.cs">
@@ -55,13 +56,22 @@
     <None Include="Connected Services\nfse\NFSE.TesteUsuario.nfse.ArrayOfString.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Connected Services\nfse\NFSE.TesteUsuario.nfse.CancelarNotaFiscalAvulsoResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Connected Services\nfse\NFSE.TesteUsuario.nfse.CancelarNotaFiscalResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Connected Services\nfse\NFSE.TesteUsuario.nfse.GerarNotaFiscalResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Connected Services\nfse\NFSE.TesteUsuario.nfse.GerarNovaNotaFiscalAvulsoResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Connected Services\nfse\NFSE.TesteUsuario.nfse.GerarNovaNotaFiscalResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\nfse\NFSE.TesteUsuario.nfse.ReceberNotaFiscalAvulsoResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Connected Services\nfse\NFSE.TesteUsuario.nfse.ReceberNotaFiscalResponse.datasource">
@@ -70,7 +80,7 @@
     <None Include="Connected Services\nfse\NFSE.TesteUsuario.nfse.RetornoNotaFiscalEntity.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Connected Services\nfse\NFSE.TesteUsuario.nfse.SimularEmissaoNotaFiscalResponse.datasource">
+    <None Include="Connected Services\nfse\NFSE.TesteUsuario.nfse.SolicitarEmissaoNotaFiscalAvulsoResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Connected Services\nfse\NFSE.TesteUsuario.nfse.SolicitarEmissaoNotaFiscalResponse.datasource">

@@ -10,15 +10,15 @@ using System.Linq;
 
 namespace EnvioTeste
 {
-    class Program
+    internal static class Program
     {
-        static void Main(string[] args)
+        private static void Main()
         {
             DataBase.SystemEnvironment = SystemEnvironment.Production;
 
-            DataBase.SystemEnvironment = SystemEnvironment.Development;
+            // DataBase.SystemEnvironment = SystemEnvironment.Development;
 
-            bool IsTestEnvironment = DataBase.SystemEnvironment.Equals(SystemEnvironment.Development) ? true : false;
+            bool IsTestEnvironment = DataBase.SystemEnvironment.Equals(SystemEnvironment.Development);
 
             //DataBase.DisconnectDataBase();
 
@@ -33,10 +33,14 @@ namespace EnvioTeste
 
             DataBase.ConnectDataBase();
 
-            var grvs = new GrvController().Listar(new GrvEntity { NumeroFormularioGrv = "71104832" });
+            var grvs = new GrvController().Listar(new GrvEntity { NumeroFormularioGrv = "10151" });
+
+            int grvId = 0;
 
             if (grvs != null)
             {
+                grvId = grvs[0].GrvId;
+
                 if (grvs.Count > 1)
                 {
                     Debug.WriteLine($"FORAM ENCONTRADOS MAIS DE UM GRV");
@@ -58,8 +62,6 @@ namespace EnvioTeste
 
                 Environment.Exit(-1);
             }
-
-            var grvId = grvs.First().GrvId;
 
             Debug.WriteLine($"GRV ID: {grvId}");
 
@@ -98,7 +100,7 @@ namespace EnvioTeste
                 (
                     grvId: grvId,
 
-                    identificadorNota: 753804,
+                    identificadorNota: 754023,
 
                     usuarioId: 1,
 
@@ -134,18 +136,7 @@ namespace EnvioTeste
                 {
                     GrvId = grvId,
 
-                    IdentificadorNota = 751629,
-
-                    Homologacao = IsTestEnvironment,
-
-                    UsuarioId = 1
-                });
-
-                aux = new NfeReceberNotaFiscalController().ReceberNotaFiscal(new Consulta
-                {
-                    GrvId = grvId,
-
-                    IdentificadorNota = 751627,
+                    IdentificadorNota = 754053,
 
                     Homologacao = IsTestEnvironment,
 
@@ -153,6 +144,19 @@ namespace EnvioTeste
                 });
 
                 Console.WriteLine("MENSAGEM: " + aux);
+
+                //aux = new NfeReceberNotaFiscalController().ReceberNotaFiscal(new Consulta
+                //{
+                //    GrvId = grvId,
+
+                //    IdentificadorNota = 751627,
+
+                //    Homologacao = IsTestEnvironment,
+
+                //    UsuarioId = 1
+                //});
+
+                //Console.WriteLine("MENSAGEM: " + aux);
             }
             catch (Exception ex)
             {
@@ -184,6 +188,28 @@ namespace EnvioTeste
             //    Console.WriteLine("ERRO: " + ex.Message);
             //}
             #endregion Teste de cancelamento da Nota Fiscal
+
+            try
+            {
+                var aux = new NfeReceberNotaFiscalController().ReceberNotaFiscalAvulso(new Consulta
+                {
+                    IdentificadorNota = 778583,
+
+                    Cnpj = "08397160003658",
+
+                    Homologacao = false,
+
+                    UsuarioId = 1
+                });
+
+                Console.WriteLine("MENSAGEM: " + aux);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERRO: " + ex.Message);
+            }
+
+            
 
             Console.ReadLine();
         }

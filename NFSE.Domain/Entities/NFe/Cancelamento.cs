@@ -11,5 +11,7 @@
         public string Justificativa { get; set; }
 
         public bool Homologacao { get; set; }
+
+        public string Cnpj { get; set; }
     }
 }
