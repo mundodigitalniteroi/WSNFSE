@@ -14,6 +14,8 @@ namespace NFSE.TesteUsuario
 
             var capaAutorizacaoNfse = new nfse.CapaAutorizacaoNfse
             {
+                IdentificadorNota = 0,
+
                 Autorizacao = new nfse.Autorizacao
                 {
                     data_emissao = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"),

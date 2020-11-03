@@ -188,28 +188,66 @@ namespace EnvioTeste
             //    Console.WriteLine("ERRO: " + ex.Message);
             //}
             #endregion Teste de cancelamento da Nota Fiscal
+            // using NFSE.Domain.Entities.NFe;
+            var capaAutorizacaoNfse = new CapaAutorizacaoNfse
+            {
+                IdentificadorNota = 0,
+
+                Autorizacao = new Autorizacao
+                {
+                    data_emissao = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"),
+                    natureza_operacao = "1",
+                    optante_simples_nacional = "false",
+
+                    prestador = new Prestador
+                    {
+                        cnpj = "08397160003658",
+                        codigo_municipio = "5103403",
+                        inscricao_municipal = "172692"
+                    },
+
+                    servico = new Servico
+                    {
+                        aliquota = "5.00",
+                        codigo_cnae = "5223100",
+                        codigo_tributario_municipio = "",
+                        discriminacao = "ISS Tributado de acordo com a Lei Complementar Nº 460 de 22/10/2008 Processo Nº 9094604500 - Carga Tributária 18,45% fonte IBPT Serviços de Transporte/Remoção de Veículos",
+                        item_lista_servico = "1101",
+                        iss_retido = "false",
+                        valor_iss = "0.05",
+                        valor_servicos = "1.0"
+                    },
+
+                    tomador = new Tomador()
+                    {
+                        cpf = "07172853750",
+                        email = "cristineysoares@gmail.com",
+                        razao_social = "CRISTINEY SOARES",
+                        telefone = "2199999999",
+
+                        endereco = new Endereco
+                        {
+                            bairro = "Maria Paula",
+                            cep = "24756660",
+                            complemento = "Bloco 12 Apto 403",
+                            logradouro = "estrada da paciencia",
+                            numero = "2939",
+                            uf = "RJ"
+                        }
+                    }
+                }
+            };
 
             try
             {
-                var aux = new NfeReceberNotaFiscalController().ReceberNotaFiscalAvulso(new Consulta
-                {
-                    IdentificadorNota = 778583,
+                var nfe = new NfeSolicitarEmissaoNotaFiscalController().SolicitarEmissaoNotaFiscalAvulso(capaAutorizacaoNfse);
 
-                    Cnpj = "08397160003658",
-
-                    Homologacao = false,
-
-                    UsuarioId = 1
-                });
-
-                Console.WriteLine("MENSAGEM: " + aux);
+                // Console.WriteLine(result + Environment.NewLine);
             }
             catch (Exception ex)
             {
                 Console.WriteLine("ERRO: " + ex.Message);
             }
-
-            
 
             Console.ReadLine();
         }

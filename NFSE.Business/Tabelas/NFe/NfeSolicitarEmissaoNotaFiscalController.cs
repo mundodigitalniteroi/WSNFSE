@@ -94,16 +94,16 @@ namespace NFSE.Business.Tabelas.NFe
         {
             DataBase.SystemEnvironment = model.Homologacao ? SystemEnvironment.Development : SystemEnvironment.Production;
 
-            EmpresaEntity Empresa;
+            NfePrestadorAvulsoEntity PrestadorAvulso;
 
-            if ((Empresa = new EmpresaController().Selecionar(new EmpresaEntity { Cnpj = model.Autorizacao.prestador.cnpj } )) == null)
+            if ((PrestadorAvulso = NfePrestadorAvulsoPersistence.Selecionar(new NfePrestadorAvulsoEntity { Cnpj = model.Autorizacao.prestador.cnpj })) == null)
             {
-                throw new Exception("Empresa associada não encontrada");
+                throw new Exception("Prestador não encontrado");
             }
-
-            model.IdentificadorNota = new DetranController().GetDetranSequence("NFE");
-
-            model.UsuarioId = 1;
+            else if (PrestadorAvulso.Token == null)
+            {
+                throw new Exception("Prestador não possui Token configurado");
+            }
 
             try
             {
@@ -111,7 +111,7 @@ namespace NFSE.Business.Tabelas.NFe
                 (
                     uri: new NfeConfiguracao().GetRemoteServer() + "?ref=" + model.IdentificadorNota,
                     json: CreateJson(model),
-                    token: Empresa.Token
+                    token: PrestadorAvulso.Token
                 );
             }
             catch (Exception ex)
