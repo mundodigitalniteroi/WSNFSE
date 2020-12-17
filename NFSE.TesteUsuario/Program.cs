@@ -14,7 +14,7 @@ namespace NFSE.TesteUsuario
 
             var capaAutorizacaoNfse = new nfse.CapaAutorizacaoNfse
             {
-                IdentificadorNota = 0,
+                IdentificadorNota = 2,
 
                 Autorizacao = new nfse.Autorizacao
                 {
@@ -24,15 +24,15 @@ namespace NFSE.TesteUsuario
 
                     prestador = new nfse.Prestador
                     {
-                        cnpj = "08397160003658",
-                        codigo_municipio = "5103403",
-                        inscricao_municipal = "172692"
+                        cnpj = "36924003000169",
+                        codigo_municipio = "2930709",
+                        inscricao_municipal = "18712"
                     },
 
                     servico = new nfse.Servico
                     {
-                        aliquota = "5.00",
-                        codigo_cnae = "5223100",
+                        aliquota = "2.00",
+                        codigo_cnae = "5222902",
                         codigo_tributario_municipio = "",
                         discriminacao = "ISS Tributado de acordo com a Lei Complementar Nº 460 de 22/10/2008 Processo Nº 9094604500 - Carga Tributária 18,45% fonte IBPT Serviços de Transporte/Remoção de Veículos",
                         item_lista_servico = "1101",
@@ -78,55 +78,55 @@ namespace NFSE.TesteUsuario
 
 
 
-            #region Teste de retorno da Nota Fiscal (Download da NF)
+            //#region Teste de retorno da Nota Fiscal (Download da NF)
 
-            Console.WriteLine("TESTE DE RETORNO DA NOTA FISCAL (DOWNLOAD DA NF)");
+            //Console.WriteLine("TESTE DE RETORNO DA NOTA FISCAL (DOWNLOAD DA NF)");
 
-            try
-            {
-                var aux = new nfse.WSnfseSoapClient().ReceberNotaFiscalAvulso(new nfse.Consulta
-                {
-                    IdentificadorNota = 700155,
-                    Homologacao = true,
-                    UsuarioId = 1,
-                    Cnpj = "08397160003658"
-                });
+            //try
+            //{
+            //    var aux = new nfse.WSnfseSoapClient().ReceberNotaFiscalAvulso(new nfse.Consulta
+            //    {
+            //        IdentificadorNota = 700155,
+            //        Homologacao = true,
+            //        UsuarioId = 1,
+            //        Cnpj = "08397160003658"
+            //    });
 
-                Console.WriteLine("MENSAGEM: " + aux.Html);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("ERRO: " + ex.Message);
-            }
-            #endregion Teste de retorno da Nota Fiscal (Download da NF)
+            //    Console.WriteLine("MENSAGEM: " + aux.Html);
+            //}
+            //catch (Exception ex)
+            //{
+            //    Console.WriteLine("ERRO: " + ex.Message);
+            //}
+            //#endregion Teste de retorno da Nota Fiscal (Download da NF)
 
 
 
-            #region Teste de cancelamento da Nota Fiscal
+            //#region Teste de cancelamento da Nota Fiscal
 
-            Console.WriteLine("TESTE DE CANCELAMENTO DA NOTA FISCAL");
+            //Console.WriteLine("TESTE DE CANCELAMENTO DA NOTA FISCAL");
 
-            try
-            {
-                using (var ws = new nfse.WSnfseSoapClient())
-                {
-                    result = ws.CancelarNotaFiscalAvulso(new nfse.Cancelamento
-                    {
-                        IdentificadorNota = 000000,
-                        Justificativa = "TESTE DE CANCELAMENTO",
-                        Homologacao = true,
-                        UsuarioId = 1,
-                        Cnpj = "08397160003658"
-                    });
+            //try
+            //{
+            //    using (var ws = new nfse.WSnfseSoapClient())
+            //    {
+            //        result = ws.CancelarNotaFiscalAvulso(new nfse.Cancelamento
+            //        {
+            //            IdentificadorNota = 000000,
+            //            Justificativa = "TESTE DE CANCELAMENTO",
+            //            Homologacao = true,
+            //            UsuarioId = 1,
+            //            Cnpj = "08397160003658"
+            //        });
 
-                    Console.WriteLine(result + Environment.NewLine);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("ERRO: " + ex.Message);
-            }
-            #endregion Teste de cancelamento da Nota Fiscal
+            //        Console.WriteLine(result + Environment.NewLine);
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    Console.WriteLine("ERRO: " + ex.Message);
+            //}
+            //#endregion Teste de cancelamento da Nota Fiscal
 
             Console.ReadLine();
         }

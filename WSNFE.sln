@@ -27,6 +27,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4 - WebService", "4 - WebService", "{FB3BD8C7-272D-4786-8F07-23ABD9AFFE0D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WSNFE.TesteUsuario", "NFSE.TesteUsuario\WSNFE.TesteUsuario.csproj", "{680DC854-5DB8-4BC5-B12B-66A9910A0C95}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F588A493-3634-4779-9C02-EBD5B3DC20DD} = {F588A493-3634-4779-9C02-EBD5B3DC20DD}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

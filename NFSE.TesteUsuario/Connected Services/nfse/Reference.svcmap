@@ -19,11 +19,11 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://179.107.47.91:81/WSnfse.asmx" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://localhost:8655/WSnfse.asmx" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="WSnfse.disco" MetadataType="Disco" ID="0fa9c337-562e-4966-8c34-8494ae6884ff" SourceId="1" SourceUrl="http://179.107.47.91:81/WSnfse.asmx?disco" />
-    <MetadataFile FileName="WSnfse.wsdl" MetadataType="Wsdl" ID="308b7167-884a-478d-bd39-ebb14d84e4b6" SourceId="1" SourceUrl="http://179.107.47.91:81/WSnfse.asmx?wsdl" />
+    <MetadataFile FileName="WSnfse11.wsdl" MetadataType="Wsdl" ID="9387a10f-e61e-4e2f-82a8-2ec21b725141" SourceId="1" SourceUrl="http://localhost:8655/WSnfse.asmx?wsdl" />
+    <MetadataFile FileName="WSnfse11.disco" MetadataType="Disco" ID="da162cc5-04cd-4647-8cb5-9931efd8048f" SourceId="1" SourceUrl="http://localhost:8655/WSnfse.asmx?disco" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
