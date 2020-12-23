@@ -75,6 +75,7 @@
     <Compile Include="Entities\NFe\RetornoNotaFiscalEntity.cs" />
     <Compile Include="Entities\NFe\NfeWsErroModel.cs" />
     <Compile Include="Entities\NFe\Servico.cs" />
+    <Compile Include="Entities\NFe\NfseDados.cs" />
     <Compile Include="Entities\NFe\Tomador.cs" />
     <Compile Include="Entities\Util\EmailConfiguration.cs" />
     <Compile Include="Enum\Acao.cs" />

@@ -65,6 +65,8 @@
     </Compile>
     <Compile Include="Tabelas\DP\ClienteController.cs" />
     <Compile Include="Tabelas\DP\ClienteDepositoController.cs" />
+    <Compile Include="Tabelas\NFe\NfseMassivoReceberNotaFiscalController.cs" />
+    <Compile Include="Tabelas\NFe\NfseMassivoController.cs" />
     <Compile Include="Tabelas\NFe\NfeExcluirController.cs" />
     <Compile Include="Tabelas\NFe\NfeFaturamentoComposicaoController.cs" />
     <Compile Include="Tabelas\NFe\NfePrestadorAvulsoPersistence.cs" />

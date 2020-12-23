@@ -7,6 +7,7 @@ using NFSE.Domain.Entities.NFe;
 using NFSE.Domain.Enum;
 using NFSE.Infra.Data;
 using System;
+using System.Web.Script.Serialization;
 
 namespace NFSE.Business.Tabelas.NFe
 {
@@ -107,12 +108,14 @@ namespace NFSE.Business.Tabelas.NFe
 
             try
             {
-                return new Tools().PostNfse
+                var json = new Tools().PostNfse
                 (
                     uri: new NfeConfiguracao().GetRemoteServer() + "?ref=" + model.IdentificadorNota,
                     json: CreateJson(model),
                     token: PrestadorAvulso.Token
                 );
+
+                return json;
             }
             catch (Exception ex)
             {
