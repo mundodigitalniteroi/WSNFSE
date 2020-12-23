@@ -22,7 +22,7 @@ namespace NFSE.Infra.Data
             else if (SystemEnvironment == SystemEnvironment.Production)
             {
                 ConnectionFactory.connectionString = ConfigurationManager.ConnectionStrings["ConnectionStringProd"].ConnectionString;
-            }
+            }          
         }
         private static void SetConnectionString(string connectionString)
         {

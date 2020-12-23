@@ -10,7 +10,7 @@ namespace NFSE.Business.Tabelas.NFe
             var SQL = new StringBuilder();
 
             SQL.AppendLine("SELECT Server");
-            SQL.AppendLine("  FROM dbo.tb_dep_nfe_configuracoes");
+            SQL.AppendLine("  FROM dbo.tb_nfse_configuracoes");
 
             using (var dtConfiguracoes = DataBase.Select(SQL))
             {
