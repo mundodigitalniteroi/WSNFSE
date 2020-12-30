@@ -203,7 +203,16 @@ namespace NFSE.Business.Tabelas.NFe
                 ConfiguracaoImagem.ConfiguracaoImagemId = NfeConfiguracaoImagemController.Cadastrar(ConfiguracaoImagem);
             }
 
-            string directory = @"D:\Sistemas\GeradorNF\NFE\" + DataBase.SystemEnvironment.ToString() + "\\" + DateTime.Now.Year + "\\" + DateTime.Now.ToString("MM") + "\\" + DateTime.Now.ToString("dd") + "\\";
+            string directory;
+
+            if (Directory.Exists(@"D:\"))
+            {
+                directory = @"D:\Sistemas\GeradorNF\NFE\" + DataBase.SystemEnvironment.ToString() + "\\" + DateTime.Now.Year + "\\" + DateTime.Now.ToString("MM") + "\\" + DateTime.Now.ToString("dd") + "\\";
+            }
+            else
+            {
+                directory = @"C:\Sistemas\GeradorNF\NFE\" + DataBase.SystemEnvironment.ToString() + "\\" + DateTime.Now.Year + "\\" + DateTime.Now.ToString("MM") + "\\" + DateTime.Now.ToString("dd") + "\\";
+            }
 
             if (!Directory.Exists(directory))
             {
@@ -216,7 +225,7 @@ namespace NFSE.Business.Tabelas.NFe
                 DepositoId = depositoId
             });
 
-            if (regrasNfe != null && regrasNfe.Where(w => w.RegraCodigo.Equals("NFPDF")).Count() > 0)
+            if (regrasNfe?.Where(w => w.RegraCodigo.Equals("NFPDF")).Count() > 0)
             {
                 using (WebClient webClient = new WebClient())
                 {

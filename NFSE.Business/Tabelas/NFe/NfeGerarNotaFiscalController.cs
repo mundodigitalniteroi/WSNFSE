@@ -529,11 +529,11 @@ namespace NFSE.Business.Tabelas.NFe
 
                 cnpj = atendimento.NotaFiscalCpf.Length.Equals(14) ? atendimento.NotaFiscalCpf : string.Empty,
 
-                razao_social = atendimento.NotaFiscalNome,
+                razao_social = atendimento.NotaFiscalNome.Trim(),
 
                 telefone = (atendimento.NotaFiscalDdd + atendimento.NotaFiscalTelefone).Length.Equals(0) ? "2199999999" : atendimento.NotaFiscalDdd + atendimento.NotaFiscalTelefone,
 
-                email = !string.IsNullOrWhiteSpace(atendimento.NotaFiscalEmail) ? atendimento.NotaFiscalEmail : deposito.EmailNfe,
+                email = !string.IsNullOrWhiteSpace(atendimento.NotaFiscalEmail) ? atendimento.NotaFiscalEmail.Trim() : deposito.EmailNfe,
 
                 endereco = Endereco(atendimento)
             };
@@ -556,13 +556,13 @@ namespace NFSE.Business.Tabelas.NFe
 
             return new Endereco
             {
-                logradouro = atendimento.NotaFiscalEndereco,
+                logradouro = atendimento.NotaFiscalEndereco.Trim(),
 
                 numero = !string.IsNullOrWhiteSpace(atendimento.NotaFiscalNumero) && atendimento.NotaFiscalNumero.Length > 10 ? atendimento.NotaFiscalNumero.Substring(0, 10) : atendimento.NotaFiscalNumero,
 
-                complemento = !string.IsNullOrWhiteSpace(atendimento.NotaFiscalComplemento) ? atendimento.NotaFiscalComplemento : "...",
+                complemento = !string.IsNullOrWhiteSpace(atendimento.NotaFiscalComplemento) ? atendimento.NotaFiscalComplemento.Trim() : "...",
 
-                bairro = atendimento.NotaFiscalBairro,
+                bairro = atendimento.NotaFiscalBairro.Trim(),
 
                 uf = atendimento.NotaFiscalUf,
 
