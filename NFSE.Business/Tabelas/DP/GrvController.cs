@@ -148,11 +148,30 @@ namespace NFSE.Business.Tabelas.DP
 
             if (model.GrvId > 0)
             {
-                SQL.AppendLine(" WHERE tb_dep_grv.id_grv = " + model.GrvId);
+                SQL.Append(" WHERE tb_dep_grv.id_grv = ").Append(model.GrvId).AppendLine();
             }
             else
             {
-                SQL.AppendLine(" WHERE tb_dep_grv.numero_formulario_grv = '" + model.NumeroFormularioGrv + "'");
+                SQL.AppendLine(" WHERE 1 = 1");
+
+                if (model.NumeroFormularioGrv != null)
+                {
+                    SQL.Append("   AND tb_dep_grv.numero_formulario_grv = '").Append(model.NumeroFormularioGrv).AppendLine("'");
+                }
+
+                if (model.StatusOperacaoId != '\0')
+                {
+                    SQL.Append("   AND tb_dep_grv.id_status_operacao = '").Append(model.StatusOperacaoId).AppendLine("'");
+                }
+
+                if (model.ClienteId > 0)
+                {
+                    SQL.Append("   AND tb_dep_grv.id_cliente = ").Append(model.ClienteId).AppendLine();
+                }
+
+                //SQL.AppendLine("   AND NOT EXISTS");
+
+                //SQL.Append("(SELECT NULL FROM tb_dep_nfe WHERE tb_dep_nfe.GrvId = tb_dep_grv.id_grv)");
             }
 
             using (var dataTable = DataBase.Select(SQL))

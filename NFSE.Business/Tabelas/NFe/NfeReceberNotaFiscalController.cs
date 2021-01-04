@@ -460,7 +460,16 @@ namespace NFSE.Business.Tabelas.NFe
 
         private string BaixarImagemAvulsa(int identificadorNota, string url)
         {
-            string directory = @"D:\Sistemas\GeradorNF\NFE\" + DataBase.SystemEnvironment.ToString() + "\\" + DateTime.Now.Year + "\\" + DateTime.Now.ToString("MM") + "\\" + DateTime.Now.ToString("dd") + "\\";
+            string directory;
+
+            if (Directory.Exists(@"D:\"))
+            {
+                directory = @"D:\Sistemas\GeradorNF\NFE\" + DataBase.SystemEnvironment.ToString() + "\\" + DateTime.Now.Year + "\\" + DateTime.Now.ToString("MM") + "\\" + DateTime.Now.ToString("dd") + "\\";
+            }
+            else
+            {
+                directory = @"C:\Sistemas\GeradorNF\NFE\" + DataBase.SystemEnvironment.ToString() + "\\" + DateTime.Now.Year + "\\" + DateTime.Now.ToString("MM") + "\\" + DateTime.Now.ToString("dd") + "\\";
+            }
 
             if (!Directory.Exists(directory))
             {
