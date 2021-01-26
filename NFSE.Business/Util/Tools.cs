@@ -242,5 +242,28 @@ namespace NFSE.Business.Util
                 MaxJsonLength = int.MaxValue
             }.Serialize((object)dictionaryList);
         }
+
+        public string DriveToSave()
+        {
+            string drive;
+
+            try
+            {
+                if (Directory.Exists(@"D:\"))
+                {
+                    drive = @"D:\";
+                }
+                else
+                {
+                    drive = @"C:\";
+                }
+            }
+            catch (Exception)
+            {
+                drive = @"C:\";
+            }
+
+            return drive;
+        }
     }
 }

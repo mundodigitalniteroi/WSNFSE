@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using NFSE.Business.Tabelas.DP;
 using NFSE.Business.Tabelas.Global;
+using NFSE.Business.Util;
 using NFSE.Domain.Entities.DP;
 using NFSE.Domain.Entities.Global;
 using NFSE.Domain.Entities.NFe;
@@ -734,12 +735,14 @@ namespace NFSE.Business.Tabelas.NFe
 
         private void GravarLog(string message)
         {
-            if (!Directory.Exists(@"D:\Sistemas\GeradorNF\NFE"))
+            string drive = new Tools().DriveToSave();
+
+            if (!Directory.Exists($@"{drive}Sistemas\GeradorNF\NFE"))
             {
-                Directory.CreateDirectory(@"D:\Sistemas\GeradorNF\NFE");
+                Directory.CreateDirectory($@"{drive}Sistemas\GeradorNF\NFE");
             }
 
-            using (StreamWriter sw = new StreamWriter(@"D:\Sistemas\GeradorNF\NFE\NfeGerarNotaFiscalController.log", true, Encoding.UTF8))
+            using (StreamWriter sw = new StreamWriter($@"{drive}Sistemas\GeradorNF\NFE\NfeGerarNotaFiscalController.log", true, Encoding.UTF8))
             {
                 sw.WriteLine(message);
             }

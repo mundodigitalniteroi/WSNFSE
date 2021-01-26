@@ -205,14 +205,9 @@ namespace NFSE.Business.Tabelas.NFe
 
             string directory;
 
-            if (Directory.Exists(@"D:\"))
-            {
-                directory = @"D:\Sistemas\GeradorNF\NFE\" + DataBase.SystemEnvironment.ToString() + "\\" + DateTime.Now.Year + "\\" + DateTime.Now.ToString("MM") + "\\" + DateTime.Now.ToString("dd") + "\\";
-            }
-            else
-            {
-                directory = @"C:\Sistemas\GeradorNF\NFE\" + DataBase.SystemEnvironment.ToString() + "\\" + DateTime.Now.Year + "\\" + DateTime.Now.ToString("MM") + "\\" + DateTime.Now.ToString("dd") + "\\";
-            }
+            string drive = new Tools().DriveToSave();
+
+            directory = $@"{drive}Sistemas\GeradorNF\NFE\" + DataBase.SystemEnvironment.ToString() + "\\" + DateTime.Now.Year + "\\" + DateTime.Now.ToString("MM") + "\\" + DateTime.Now.ToString("dd") + "\\";
 
             if (!Directory.Exists(directory))
             {
@@ -462,14 +457,9 @@ namespace NFSE.Business.Tabelas.NFe
         {
             string directory;
 
-            if (Directory.Exists(@"D:\"))
-            {
-                directory = @"D:\Sistemas\GeradorNF\NFE\" + DataBase.SystemEnvironment.ToString() + "\\" + DateTime.Now.Year + "\\" + DateTime.Now.ToString("MM") + "\\" + DateTime.Now.ToString("dd") + "\\";
-            }
-            else
-            {
-                directory = @"C:\Sistemas\GeradorNF\NFE\" + DataBase.SystemEnvironment.ToString() + "\\" + DateTime.Now.Year + "\\" + DateTime.Now.ToString("MM") + "\\" + DateTime.Now.ToString("dd") + "\\";
-            }
+            string drive = new Tools().DriveToSave();
+
+            directory = $@"{drive}Sistemas\GeradorNF\NFE\" + DataBase.SystemEnvironment.ToString() + "\\" + DateTime.Now.Year + "\\" + DateTime.Now.ToString("MM") + "\\" + DateTime.Now.ToString("dd") + "\\";
 
             if (!Directory.Exists(directory))
             {
