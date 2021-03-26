@@ -216,7 +216,7 @@ namespace NFSE.Business.Tabelas.NFe
                 DepositoId = depositoId
             });
 
-            if (regrasNfe != null && regrasNfe.Where(w => w.RegraCodigo.Equals("NFPDF")).Count() > 0)
+            if (regrasNfe != null && regrasNfe.Where(w => w.RegraCodigo.Equals("NFPDF") && w.Ativo.Equals(1)).Count() > 0)
             {
                 using (WebClient webClient = new WebClient())
                 {
