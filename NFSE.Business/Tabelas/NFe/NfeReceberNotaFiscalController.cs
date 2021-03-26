@@ -203,7 +203,11 @@ namespace NFSE.Business.Tabelas.NFe
                 ConfiguracaoImagem.ConfiguracaoImagemId = NfeConfiguracaoImagemController.Cadastrar(ConfiguracaoImagem);
             }
 
-            string directory = @"D:\Sistemas\GeradorNF\NFE\" + DataBase.SystemEnvironment.ToString() + "\\" + DateTime.Now.Year + "\\" + DateTime.Now.ToString("MM") + "\\" + DateTime.Now.ToString("dd") + "\\";
+            string directory;
+
+            string drive = new Tools().DriveToSave();
+
+            directory = $@"{drive}Sistemas\GeradorNF\NFE\" + DataBase.SystemEnvironment.ToString() + "\\" + DateTime.Now.Year + "\\" + DateTime.Now.ToString("MM") + "\\" + DateTime.Now.ToString("dd") + "\\";
 
             if (!Directory.Exists(directory))
             {
@@ -451,7 +455,11 @@ namespace NFSE.Business.Tabelas.NFe
 
         private string BaixarImagemAvulsa(int identificadorNota, string url)
         {
-            string directory = @"D:\Sistemas\GeradorNF\NFE\" + DataBase.SystemEnvironment.ToString() + "\\" + DateTime.Now.Year + "\\" + DateTime.Now.ToString("MM") + "\\" + DateTime.Now.ToString("dd") + "\\";
+            string directory;
+
+            string drive = new Tools().DriveToSave();
+
+            directory = $@"{drive}Sistemas\GeradorNF\NFE\" + DataBase.SystemEnvironment.ToString() + "\\" + DateTime.Now.Year + "\\" + DateTime.Now.ToString("MM") + "\\" + DateTime.Now.ToString("dd") + "\\";
 
             if (!Directory.Exists(directory))
             {
