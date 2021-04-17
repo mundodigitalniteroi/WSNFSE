@@ -7,7 +7,7 @@ namespace NFSE.Business.Tabelas.NFe
 {
     public abstract class NfeExcluirController
     {
-        public static bool Excluir(int identificadorNota)
+        public static bool Excluir(string identificadorNota)
         {
             List<NfeEntity> nfes = new NfeController().ListarPorIdentificadorNota(identificadorNota);
 
@@ -28,7 +28,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             DataBase.Execute("DELETE FROM tb_dep_nfe_retorno_solicitacao WHERE NfeID = " + nfe.NfeId);
 
-            DataBase.Execute($"DELETE FROM tb_dep_nfe_ws_erros WHERE GrvId = {nfe.GrvId} AND IdentificadorNota = {nfe.IdentificadorNota}");
+            DataBase.Execute($"DELETE FROM tb_dep_nfe_ws_erros WHERE GrvId = {nfe.GrvId} AND IdentificadorNota = '{nfe.IdentificadorNota}'");
 
             DataBase.Execute("DELETE FROM tb_dep_nfe WHERE NfeID = " + nfe.NfeId);
 

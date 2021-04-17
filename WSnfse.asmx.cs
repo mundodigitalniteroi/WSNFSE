@@ -115,7 +115,7 @@ namespace NFSE
         }
 
         [WebMethod]
-        public List<string> GerarNovaNotaFiscal(int grvId, int identificadorNota, int usuarioId, bool isDev)
+        public List<string> GerarNovaNotaFiscal(int grvId, string identificadorNota, int usuarioId, bool isDev)
         {
             try
             {

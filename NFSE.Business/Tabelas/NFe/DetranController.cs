@@ -6,16 +6,16 @@ namespace NFSE.Business.Tabelas.NFe
 {
     public class DetranController
     {
-        public int GetDetranSequence(string sequence_name)
+        public string GetDetranSequence(string sequenceName)
         {
             var sqlParameters = new SqlParameter[1];
 
             sqlParameters[0] = new SqlParameter("@sequence_name", SqlDbType.Char)
             {
-                Value = sequence_name
+                Value = sequenceName
             };
 
-            return DataBase.ExecuteStoredProcedureThanReturnValue(sqlParameters);
+            return DataBase.ExecuteStoredProcedureThanReturnValue(sqlParameters).ToString();
         }
     }
 }

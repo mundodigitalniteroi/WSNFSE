@@ -110,6 +110,8 @@ namespace NFSE.Business.Tabelas.DP
 
             SQL.AppendLine("      ,tb_dep_atendimento.nota_fiscal_email AS NotaFiscalEmail");
 
+            SQL.AppendLine("      ,tb_dep_atendimento.nota_fiscal_inscricao_municipal AS NotaFiscalEmailInscricaoMunicipalTomadorServico");
+
             SQL.AppendLine("      ,tb_dep_atendimento.total_impressoes AS TotalImpressoes");
 
             SQL.AppendLine("      ,tb_dep_atendimento.status_cadastro_sap AS StatusCadastroSap");

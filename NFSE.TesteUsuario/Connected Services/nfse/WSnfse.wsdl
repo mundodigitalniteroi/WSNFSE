@@ -13,7 +13,7 @@
         <s:sequence>
           <s:element minOccurs="0" maxOccurs="1" name="Autorizacao" type="tns:Autorizacao" />
           <s:element minOccurs="1" maxOccurs="1" name="GrvId" type="s:int" />
-          <s:element minOccurs="1" maxOccurs="1" name="IdentificadorNota" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="IdentificadorNota" type="s:string" />
           <s:element minOccurs="1" maxOccurs="1" name="UsuarioId" type="s:int" />
           <s:element minOccurs="1" maxOccurs="1" name="Homologacao" type="s:boolean" />
         </s:sequence>
@@ -122,7 +122,7 @@
         <s:sequence>
           <s:element minOccurs="1" maxOccurs="1" name="GrvId" type="s:int" />
           <s:element minOccurs="1" maxOccurs="1" name="NfeId" type="s:int" />
-          <s:element minOccurs="1" maxOccurs="1" name="IdentificadorNota" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="IdentificadorNota" type="s:string" />
           <s:element minOccurs="1" maxOccurs="1" name="UsuarioId" type="s:int" />
           <s:element minOccurs="1" maxOccurs="1" name="Homologacao" type="s:boolean" />
           <s:element minOccurs="1" maxOccurs="1" name="BaixarImagemOriginal" type="s:boolean" />
@@ -190,7 +190,7 @@
       <s:complexType name="Cancelamento">
         <s:sequence>
           <s:element minOccurs="1" maxOccurs="1" name="GrvId" type="s:int" />
-          <s:element minOccurs="1" maxOccurs="1" name="IdentificadorNota" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="IdentificadorNota" type="s:string" />
           <s:element minOccurs="1" maxOccurs="1" name="UsuarioId" type="s:int" />
           <s:element minOccurs="0" maxOccurs="1" name="Justificativa" type="s:string" />
           <s:element minOccurs="1" maxOccurs="1" name="Homologacao" type="s:boolean" />
@@ -243,7 +243,7 @@
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="1" maxOccurs="1" name="grvId" type="s:int" />
-            <s:element minOccurs="1" maxOccurs="1" name="identificadorNota" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="identificadorNota" type="s:string" />
             <s:element minOccurs="1" maxOccurs="1" name="usuarioId" type="s:int" />
             <s:element minOccurs="1" maxOccurs="1" name="isDev" type="s:boolean" />
           </s:sequence>
@@ -253,21 +253,6 @@
         <s:complexType>
           <s:sequence>
             <s:element minOccurs="0" maxOccurs="1" name="GerarNovaNotaFiscalResult" type="tns:ArrayOfString" />
-          </s:sequence>
-        </s:complexType>
-      </s:element>
-      <s:element name="GerarNovaNotaFiscalAvulso">
-        <s:complexType>
-          <s:sequence>
-            <s:element minOccurs="1" maxOccurs="1" name="identificadorNota" type="s:int" />
-            <s:element minOccurs="1" maxOccurs="1" name="isDev" type="s:boolean" />
-          </s:sequence>
-        </s:complexType>
-      </s:element>
-      <s:element name="GerarNovaNotaFiscalAvulsoResponse">
-        <s:complexType>
-          <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" name="GerarNovaNotaFiscalAvulsoResult" type="tns:ArrayOfString" />
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -321,12 +306,6 @@
   <wsdl:message name="GerarNovaNotaFiscalSoapOut">
     <wsdl:part name="parameters" element="tns:GerarNovaNotaFiscalResponse" />
   </wsdl:message>
-  <wsdl:message name="GerarNovaNotaFiscalAvulsoSoapIn">
-    <wsdl:part name="parameters" element="tns:GerarNovaNotaFiscalAvulso" />
-  </wsdl:message>
-  <wsdl:message name="GerarNovaNotaFiscalAvulsoSoapOut">
-    <wsdl:part name="parameters" element="tns:GerarNovaNotaFiscalAvulsoResponse" />
-  </wsdl:message>
   <wsdl:portType name="WSnfseSoap">
     <wsdl:operation name="SolicitarEmissaoNotaFiscal">
       <wsdl:input message="tns:SolicitarEmissaoNotaFiscalSoapIn" />
@@ -359,10 +338,6 @@
     <wsdl:operation name="GerarNovaNotaFiscal">
       <wsdl:input message="tns:GerarNovaNotaFiscalSoapIn" />
       <wsdl:output message="tns:GerarNovaNotaFiscalSoapOut" />
-    </wsdl:operation>
-    <wsdl:operation name="GerarNovaNotaFiscalAvulso">
-      <wsdl:input message="tns:GerarNovaNotaFiscalAvulsoSoapIn" />
-      <wsdl:output message="tns:GerarNovaNotaFiscalAvulsoSoapOut" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="WSnfseSoap" type="tns:WSnfseSoap">
@@ -439,15 +414,6 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="GerarNovaNotaFiscalAvulso">
-      <soap:operation soapAction="http://tempuri.org/GerarNovaNotaFiscalAvulso" style="document" />
-      <wsdl:input>
-        <soap:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
   </wsdl:binding>
   <wsdl:binding name="WSnfseSoap12" type="tns:WSnfseSoap">
     <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
@@ -516,15 +482,6 @@
     </wsdl:operation>
     <wsdl:operation name="GerarNovaNotaFiscal">
       <soap12:operation soapAction="http://tempuri.org/GerarNovaNotaFiscal" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GerarNovaNotaFiscalAvulso">
-      <soap12:operation soapAction="http://tempuri.org/GerarNovaNotaFiscalAvulso" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

@@ -31,11 +31,40 @@ namespace EnvioTeste
             //    DataBase.ConnectDataBase("Data Source=187.84.228.60;Initial Catalog=dbMobLinkDepositoPublicoProducao;Persist Security Info=True;User ID=dp_user_prd;Password=4y3d#%&&!x");
             //}
 
-            DataBase.ConnectDataBase();
+            // DataBase.ConnectDataBase();
 
-            var grvs = new GrvController().Listar(new GrvEntity { NumeroFormularioGrv = "10151" });
+            int grvId = 888329;
 
-            int grvId = 0;
+            // var grvs = new GrvController().Listar(new GrvEntity { StatusOperacaoId = 'E', ClienteId = 49 });
+
+            // 943312
+            // 877968
+
+            var grvs = new GrvController().Listar(new GrvEntity { NumeroFormularioGrv = "900691870" });
+
+            foreach (var grv in grvs)
+            {
+                try
+                {
+                    var nfe = new NfeGerarNotaFiscalController().GerarNotaFiscal
+                    (
+                        grvId: grv.GrvId,
+
+                        usuarioId: 1,
+
+                        isDev: IsTestEnvironment
+                    );
+
+                    for (int i = 0; i < nfe.Count; i++)
+                    {
+                        Console.WriteLine("MENSAGEM: " + nfe[i]);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("ERRO: " + ex.Message);
+                }
+            }
 
             if (grvs != null)
             {
@@ -69,6 +98,8 @@ namespace EnvioTeste
 
             // NfeExcluirController.Excluir(749458);
 
+            grvId = 934771;
+
             #region Teste de Solicitação Simplificado
             try
             {
@@ -100,7 +131,7 @@ namespace EnvioTeste
                 (
                     grvId: grvId,
 
-                    identificadorNota: 754023,
+                    identificadorNota: "796512",
 
                     usuarioId: 1,
 
@@ -109,18 +140,18 @@ namespace EnvioTeste
 
                 Console.WriteLine("MENSAGEM: " + novaNfe[0]);
 
-                novaNfe = new NfeGerarNotaFiscalController().GerarNovaNotaFiscal
-                (
-                    grvId: grvId,
+                //novaNfe = new NfeGerarNotaFiscalController().GerarNovaNotaFiscal
+                //(
+                //    grvId: grvId,
 
-                    identificadorNota: 753803,
+                //    identificadorNota: 753803,
 
-                    usuarioId: 1,
+                //    usuarioId: 1,
 
-                    isDev: IsTestEnvironment
-                );
+                //    isDev: IsTestEnvironment
+                //);
 
-                Console.WriteLine("MENSAGEM: " + novaNfe[0]);
+                //Console.WriteLine("MENSAGEM: " + novaNfe[0]);
             }
             catch (Exception ex)
             {
@@ -136,7 +167,7 @@ namespace EnvioTeste
                 {
                     GrvId = grvId,
 
-                    IdentificadorNota = 754053,
+                    IdentificadorNota = "737863",
 
                     Homologacao = IsTestEnvironment,
 
@@ -149,7 +180,7 @@ namespace EnvioTeste
                 //{
                 //    GrvId = grvId,
 
-                //    IdentificadorNota = 751627,
+                //    IdentificadorNota = "751627",
 
                 //    Homologacao = IsTestEnvironment,
 
@@ -172,7 +203,7 @@ namespace EnvioTeste
             //    {
             //        GrvId = grvId,
 
-            //        IdentificadorNota = 0,
+            //        IdentificadorNota = "",
 
             //        Justificativa = "TESTE",
 
@@ -191,7 +222,7 @@ namespace EnvioTeste
             // using NFSE.Domain.Entities.NFe;
             var capaAutorizacaoNfse = new CapaAutorizacaoNfse
             {
-                IdentificadorNota = 0,
+                IdentificadorNota = "",
 
                 Autorizacao = new Autorizacao
                 {
@@ -221,7 +252,7 @@ namespace EnvioTeste
                     tomador = new Tomador()
                     {
                         cpf = "07172853750",
-                        email = "cristineysoares@gmail.com",
+                        email = "cristiney@gmail.com",
                         razao_social = "CRISTINEY SOARES",
                         telefone = "2199999999",
 

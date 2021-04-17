@@ -6,7 +6,7 @@
 
         public int NfeId { get; set; }
 
-        public int IdentificadorNota { get; set; }
+        public string IdentificadorNota { get; set; }
 
         public int UsuarioId { get; set; }
 

@@ -22,15 +22,15 @@ namespace NFSE.Business.Tabelas.NFe
     {
         public List<string> GerarNotaFiscal(int grvId, int usuarioId, bool isDev)
         {
-            return GerarNotaFiscal(grvId, 0, usuarioId, isDev);
+            return GerarNotaFiscal(grvId, "", usuarioId, isDev);
         }
 
-        public List<string> GerarNovaNotaFiscal(int grvId, int identificadorNota, int usuarioId, bool isDev)
+        public List<string> GerarNovaNotaFiscal(int grvId, string identificadorNota, int usuarioId, bool isDev)
         {
             return GerarNotaFiscal(grvId, identificadorNota, usuarioId, isDev);
         }
 
-        private List<string> GerarNotaFiscal(int grvId, int identificadorNota, int usuarioId, bool isDev)
+        private List<string> GerarNotaFiscal(int grvId, string identificadorNota, int usuarioId, bool isDev)
         {
             Thread.CurrentThread.CurrentCulture = new CultureInfo("pt-BR");
 
@@ -64,7 +64,7 @@ namespace NFSE.Business.Tabelas.NFe
                 IdentificadorNota = identificadorNota
             };
 
-            if (Nfe.IdentificadorNota > 0)
+            if (!string.IsNullOrWhiteSpace(Nfe.IdentificadorNota))
             {
                 Nfe = new NfeController().Selecionar(Nfe, true);
 
@@ -393,7 +393,7 @@ namespace NFSE.Business.Tabelas.NFe
             return returnList;
         }
 
-        private NfeEntity CadastrarNfe(int grvId, string cnpj, int identificadorNota, int usuarioId, int nfeComplementarId = 0)
+        private NfeEntity CadastrarNfe(int grvId, string cnpj, string identificadorNota, int usuarioId, int nfeComplementarId = 0)
         {
             var Nfe = new NfeEntity
             {
@@ -536,7 +536,9 @@ namespace NFSE.Business.Tabelas.NFe
 
                 email = !string.IsNullOrWhiteSpace(atendimento.NotaFiscalEmail) ? atendimento.NotaFiscalEmail.Trim() : deposito.EmailNfe,
 
-                endereco = Endereco(atendimento)
+                endereco = Endereco(atendimento),
+
+                inscricao_municipal = atendimento.NotaFiscalEmailInscricaoMunicipalTomadorServico
             };
         }
 
@@ -729,7 +731,7 @@ namespace NFSE.Business.Tabelas.NFe
 
                 valor_servicos = valorServicos,
 
-                base_calculo = !string.IsNullOrWhiteSpace(baseCalculo) ? baseCalculo : null
+                base_calculo = !string.IsNullOrWhiteSpace(baseCalculo) ? baseCalculo : null,
             };
         }
 

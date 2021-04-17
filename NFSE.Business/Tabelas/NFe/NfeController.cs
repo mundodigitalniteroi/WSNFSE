@@ -12,7 +12,7 @@ namespace NFSE.Business.Tabelas.NFe
 {
     public class NfeController
     {
-        public List<NfeEntity> ListarPorIdentificadorNota(int identificadorNota)
+        public List<NfeEntity> ListarPorIdentificadorNota(string identificadorNota)
         {
             var SQL = new StringBuilder();
 
@@ -52,7 +52,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             SqlParameter[] sqlParameters =
             {
-                new SqlParameter("@IdentificadorNota",SqlDbType.Int) { Value = identificadorNota }
+                new SqlParameter("@IdentificadorNota",SqlDbType.VarChar) { Value = identificadorNota }
             };
 
             using (var dataTable = DataBase.Select(SQL, sqlParameters))
@@ -99,13 +99,13 @@ namespace NFSE.Business.Tabelas.NFe
 
             SQL.AppendLine(" WHERE 1 = 1");
 
-            if (model.IdentificadorNota > 0)
+            if (!string.IsNullOrWhiteSpace(model.IdentificadorNota))
             {
-                SQL.AppendLine("   AND IdentificadorNota = " + model.IdentificadorNota);
+                SQL.Append("   AND IdentificadorNota = '").Append(model.IdentificadorNota).AppendLine("'");
             }
             else
             {
-                SQL.AppendLine("   AND GrvId = " + model.GrvId);
+                SQL.Append("   AND GrvId = ").Append(model.GrvId).AppendLine();
             }
 
             if (!selecionarNotaFiscalCancelada)
@@ -141,10 +141,10 @@ namespace NFSE.Business.Tabelas.NFe
 
             SQL.AppendLine("VALUES");
 
-            SQL.AppendLine("      (" + model.GrvId);
-            SQL.AppendLine("      ," + model.UsuarioCadastroId);
-            SQL.AppendLine("      ,'" + model.Cnpj + "'");
-            SQL.AppendLine("      ," + model.IdentificadorNota);
+            SQL.Append("      (").Append(model.GrvId).AppendLine();
+            SQL.Append("      ,").Append(model.UsuarioCadastroId).AppendLine();
+            SQL.Append("      ,'").Append(model.Cnpj).AppendLine("'");
+            SQL.Append("      ,'").Append(model.IdentificadorNota).AppendLine("'");
 
             if (model.NfeComplementarId == null)
             {
@@ -153,7 +153,7 @@ namespace NFSE.Business.Tabelas.NFe
             }
             else
             {
-                SQL.AppendLine("      ," + model.NfeComplementarId);
+                SQL.Append("      ,").Append(model.NfeComplementarId).AppendLine();
                 SQL.AppendLine("      ,'R')");
             }
 
@@ -166,16 +166,16 @@ namespace NFSE.Business.Tabelas.NFe
 
             SQL.AppendLine("UPDATE dbo.tb_dep_nfe");
 
-            SQL.AppendLine("   SET Status = '" + model.Status + "'");
+            SQL.Append("   SET Status = '").Append(model.Status).AppendLine("'");
 
             if (model.CodigoRetorno != null && model.CodigoRetorno > 0)
             {
-                SQL.AppendLine("       ,CodigoRetorno = " + model.CodigoRetorno);
+                SQL.Append("       ,CodigoRetorno = ").Append(model.CodigoRetorno).AppendLine();
             }
 
             SQL.AppendLine("      ,DataAlteracao = GETDATE()");
 
-            SQL.AppendLine(" WHERE NfeID = " + model.NfeId);
+            SQL.Append(" WHERE NfeID = ").Append(model.NfeId).AppendLine();
 
             return DataBase.Execute(SQL);
         }
@@ -186,35 +186,35 @@ namespace NFSE.Business.Tabelas.NFe
 
             SQL.AppendLine("UPDATE dbo.tb_dep_nfe");
 
-            SQL.AppendLine("   SET Referencia = '" + retornoNotaFiscal.@ref.Trim() + "'");
+            SQL.Append("   SET Referencia = '").Append(retornoNotaFiscal.@ref.Trim()).AppendLine("'");
 
             if (retornoNotaFiscal.numero_rps != null)
             {
-                SQL.AppendLine("      ,Numero = '" + retornoNotaFiscal.numero_rps.Trim() + "'");
+                SQL.Append("      ,Numero = '").Append(retornoNotaFiscal.numero_rps.Trim()).AppendLine("'");
 
-                SQL.AppendLine("      ,NumeroRps = '" + retornoNotaFiscal.numero_rps.Trim() + "'");
+                SQL.Append("      ,NumeroRps = '").Append(retornoNotaFiscal.numero_rps.Trim()).AppendLine("'");
             }
 
             if (retornoNotaFiscal.serie_rps != null)
             {
-                SQL.AppendLine("      ,SerieRps = '" + retornoNotaFiscal.serie_rps.Trim() + "'");
+                SQL.Append("      ,SerieRps = '").Append(retornoNotaFiscal.serie_rps.Trim()).AppendLine("'");
             }
 
-            SQL.AppendLine("      ,StatusNfe = '" + retornoNotaFiscal.status.Trim() + "'");
+            SQL.Append("      ,StatusNfe = '").Append(retornoNotaFiscal.status.Trim()).AppendLine("'");
 
-            SQL.AppendLine("      ,NumeroNotaFiscal = '" + retornoNotaFiscal.numero.Trim() + "'");
+            SQL.Append("      ,NumeroNotaFiscal = '").Append(retornoNotaFiscal.numero.Trim()).AppendLine("'");
 
-            SQL.AppendLine("      ,CodigoVerificacao = '" + retornoNotaFiscal.codigo_verificacao.Trim() + "'");
+            SQL.Append("      ,CodigoVerificacao = '").Append(retornoNotaFiscal.codigo_verificacao.Trim()).AppendLine("'");
 
-            SQL.AppendLine("      ,DataEmissao = '" + retornoNotaFiscal.data_emissao.ToString("yyyyMMdd HH:mm:ss") + "'");
+            SQL.Append("      ,DataEmissao = '").Append(retornoNotaFiscal.data_emissao.ToString("yyyyMMdd HH:mm:ss")).AppendLine("'");
 
-            SQL.AppendLine("      ,Url = '" + retornoNotaFiscal.url.Trim() + "'");
+            SQL.Append("      ,Url = '").Append(retornoNotaFiscal.url.Trim()).AppendLine("'");
 
-            SQL.AppendLine("      ,CaminhoXmlNotaFiscal = '" + retornoNotaFiscal.caminho_xml_nota_fiscal.Trim() + "'");
+            SQL.Append("      ,CaminhoXmlNotaFiscal = '").Append(retornoNotaFiscal.caminho_xml_nota_fiscal.Trim()).AppendLine("'");
 
-            SQL.AppendLine("      ,Status = '" + nfe.Status + "'");
+            SQL.Append("      ,Status = '").Append(nfe.Status).AppendLine("'");
 
-            SQL.AppendLine(" WHERE NfeID = " + nfe.NfeId);
+            SQL.Append(" WHERE NfeID = ").Append(nfe.NfeId).AppendLine();
 
             return DataBase.Execute(SQL);
         }
@@ -225,21 +225,21 @@ namespace NFSE.Business.Tabelas.NFe
 
             SQL.AppendLine("UPDATE dbo.tb_dep_nfe");
 
-            SQL.AppendLine("   SET Status = '" + model.Status + "'");
+            SQL.Append("   SET Status = '").Append(model.Status).AppendLine("'");
 
             if (model.CodigoRetorno != null && model.CodigoRetorno > 0)
             {
-                SQL.AppendLine("      ,CodigoRetorno = " + model.CodigoRetorno);
+                SQL.Append("      ,CodigoRetorno = ").Append(model.CodigoRetorno).AppendLine();
             }
 
             SQL.AppendLine("      ,DataAlteracao = GETDATE()");
 
-            SQL.AppendLine(" WHERE NfeID = " + model.NfeId);
+            SQL.Append(" WHERE NfeID = ").Append(model.NfeId).AppendLine();
 
             return DataBase.Execute(SQL);
         }
 
-        public NfeEntity ConsultarNotaFiscal(int grvId, int usuarioId, int identificadorNota, Acao acao)
+        public NfeEntity ConsultarNotaFiscal(int grvId, int usuarioId, string identificadorNota, Acao acao)
         {
             List<NfeEntity> nfe;
 
@@ -262,7 +262,7 @@ namespace NFSE.Business.Tabelas.NFe
             return nfe.FirstOrDefault();
         }
 
-        public NfeEntity ConsultarNotaFiscal(int identificadorNota)
+        public NfeEntity ConsultarNotaFiscal(string identificadorNota)
         {
             List<NfeEntity> nfe;
 

@@ -102,6 +102,8 @@ namespace NFSE.Domain.Entities.DP
 
         public string NotaFiscalEmail { get; set; }
 
+        public string NotaFiscalEmailInscricaoMunicipalTomadorServico { get; set; }
+
         public int TotalImpressoes { get; set; }
 
         public char StatusCadastroSap { get; set; }

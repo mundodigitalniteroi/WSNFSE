@@ -177,7 +177,7 @@ namespace NFSE.Business.Tabelas.NFe
             return retornoConsulta;
         }
 
-        private byte[] BaixarImagem(int clienteId, int depositoId, int grvId, int identificadorNota, Consulta identificaoNotaFiscal, string url)
+        private byte[] BaixarImagem(int clienteId, int depositoId, int grvId, string identificadorNota, Consulta identificaoNotaFiscal, string url)
         {
             byte[] ImagemNotaFiscal;
 
@@ -224,8 +224,8 @@ namespace NFSE.Business.Tabelas.NFe
             {
                 using (WebClient webClient = new WebClient())
                 {
-                    string str1 = directory + identificadorNota.ToString() + "Original.pdf";
-                    string str2 = directory + identificadorNota.ToString() + ".jpg";
+                    string str1 = directory + identificadorNota + "Original.pdf";
+                    string str2 = directory + identificadorNota + ".jpg";
 
                     webClient.Headers.Add("user-agent", "Mob-Link");
 
@@ -453,7 +453,7 @@ namespace NFSE.Business.Tabelas.NFe
             return retornoConsulta;
         }
 
-        private string BaixarImagemAvulsa(int identificadorNota, string url)
+        private string BaixarImagemAvulsa(string identificadorNota, string url)
         {
             string directory;
 
@@ -466,7 +466,7 @@ namespace NFSE.Business.Tabelas.NFe
                 Directory.CreateDirectory(directory);
             }
 
-            string str1 = directory + identificadorNota.ToString() + "Original.html";
+            string str1 = directory + identificadorNota + "Original.html";
 
             if (File.Exists(str1))
             {

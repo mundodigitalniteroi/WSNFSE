@@ -33,17 +33,17 @@ namespace NFSE.Business.Tabelas.NFe
 
             if (model.ErroId > 0)
             {
-                SQL.AppendLine("   AND ErroId = " + model.ErroId);
+                SQL.Append("   AND ErroId = ").Append(model.ErroId).AppendLine();
             }
 
             if (model.GrvId > 0)
             {
-                SQL.AppendLine("   AND GrvId = " + model.GrvId);
+                SQL.Append("   AND GrvId = ").Append(model.GrvId).AppendLine();
             }
 
-            if (model.IdentificadorNota > 0)
+            if (!string.IsNullOrWhiteSpace(model.IdentificadorNota))
             {
-                SQL.AppendLine("   AND IdentificadorNota = " + model.IdentificadorNota);
+                SQL.Append("   AND IdentificadorNota = '").Append(model.IdentificadorNota).AppendLine("'");
             }
 
             using (var dataTable = DataBase.Select(SQL))
@@ -142,7 +142,7 @@ namespace NFSE.Business.Tabelas.NFe
             {
                 new SqlParameter("@GrvId", SqlDbType.Int) { Value = model.GrvId },
 
-                new SqlParameter("@IdentificadorNota", SqlDbType.Int) { Value = model.IdentificadorNota },
+                new SqlParameter("@IdentificadorNota", SqlDbType.VarChar) { Value = model.IdentificadorNota },
 
                 new SqlParameter("@UsuarioId", SqlDbType.Int) { Value = model.UsuarioId },
 
@@ -162,7 +162,7 @@ namespace NFSE.Business.Tabelas.NFe
             return DataBase.ExecuteScopeIdentity(SQL, sqlParameters);
         }
 
-        public void CadastrarErroGenerico(int grvId, int usuarioId, int? identificadorNota, OrigemErro origemErro, Acao acao, string mensagemErro)
+        public void CadastrarErroGenerico(int grvId, int usuarioId, string identificadorNota, OrigemErro origemErro, Acao acao, string mensagemErro)
         {
             var erro = new NfeWsErroModel
             {

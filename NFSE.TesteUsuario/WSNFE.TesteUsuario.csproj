@@ -65,9 +65,6 @@
     <None Include="Connected Services\nfse\NFSE.TesteUsuario.nfse.GerarNotaFiscalResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Connected Services\nfse\NFSE.TesteUsuario.nfse.GerarNovaNotaFiscalAvulsoResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
     <None Include="Connected Services\nfse\NFSE.TesteUsuario.nfse.GerarNovaNotaFiscalResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>

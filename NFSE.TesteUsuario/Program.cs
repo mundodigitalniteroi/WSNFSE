@@ -14,7 +14,7 @@ namespace NFSE.TesteUsuario
 
             var capaAutorizacaoNfse = new nfse.CapaAutorizacaoNfse
             {
-                IdentificadorNota = 0,
+                IdentificadorNota = "",
 
                 Autorizacao = new nfse.Autorizacao
                 {
@@ -86,7 +86,7 @@ namespace NFSE.TesteUsuario
             {
                 var aux = new nfse.WSnfseSoapClient().ReceberNotaFiscalAvulso(new nfse.Consulta
                 {
-                    IdentificadorNota = 700155,
+                    IdentificadorNota = "700155",
                     Homologacao = true,
                     UsuarioId = 1,
                     Cnpj = "08397160003658"
@@ -112,7 +112,7 @@ namespace NFSE.TesteUsuario
                 {
                     result = ws.CancelarNotaFiscalAvulso(new nfse.Cancelamento
                     {
-                        IdentificadorNota = 000000,
+                        IdentificadorNota = "",
                         Justificativa = "TESTE DE CANCELAMENTO",
                         Homologacao = true,
                         UsuarioId = 1,
