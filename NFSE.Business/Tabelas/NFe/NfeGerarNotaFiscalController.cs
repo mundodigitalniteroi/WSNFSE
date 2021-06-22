@@ -202,7 +202,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             if ((ComposicoesAgrupadas = new NfeViewFaturamentoComposicaoAgrupadoController().Listar(grvId)) == null)
             {
-                new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, "Composição do Faturamento não encontrado");
+                new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, "Composição do Faturamento não encontrada");
 
                 returnList.Add("AVISO: Composição do Faturamento não encontrado");
 
@@ -215,7 +215,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             if ((ComposicoesAgrupadasDescricao = new NfeViewFaturamentoComposicaoAgrupadoDescricaoController().Listar(grvId)) == null)
             {
-                new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, "Composição do Faturamento não encontrado");
+                new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, "Composição do Faturamento não encontrada");
 
                 returnList.Add("AVISO: Composição do Faturamento não encontrado");
 
@@ -228,7 +228,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             if ((Composicoes = new NfeViewFaturamentoComposicaoController().Listar(grvId, Nfe.NfeId)) == null)
             {
-                new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, "Composição do Faturamento não encontrado");
+                new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, "Composição do Faturamento da Nota Fiscal não encontrada");
 
                 returnList.Add("AVISO: Composição do Faturamento não encontrado");
 
@@ -757,12 +757,7 @@ namespace NFSE.Business.Tabelas.NFe
                 return false;
             }
 
-            if (nfeRegras.Where(w => w.RegraCodigo.Equals(codigoRegra) && w.Ativo == 1).Count() > 0)
-            {
-                return true;
-            }
-
-            return false;
+            return nfeRegras.Any(w => w.RegraCodigo.Equals(codigoRegra) && w.Ativo == 1);
         }
     }
 }
