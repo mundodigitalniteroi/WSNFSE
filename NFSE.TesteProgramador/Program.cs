@@ -18,8 +18,49 @@ namespace EnvioTeste
 
             // DataBase.SystemEnvironment = SystemEnvironment.Development;
 
-            bool IsTestEnvironment = DataBase.SystemEnvironment.Equals(SystemEnvironment.Development);
+            bool isDevelopment = DataBase.SystemEnvironment.Equals(SystemEnvironment.Development);
 
+            int grvId = 940299;
+
+            string identificadorNota = "762298";
+
+            ReceberNotaFiscal(isDevelopment, grvId, identificadorNota);
+
+            Console.ReadLine();
+        }
+
+        // 
+        // v
+
+        #region Teste de retorno da Nota Fiscal (Download da NF)
+        private static void ReceberNotaFiscal(bool isDevelopment, int grvId, string identificadorNota)
+        {
+            try
+            {
+                var aux = new NfeReceberNotaFiscalController().ReceberNotaFiscal(new Consulta
+                {
+                    GrvId = grvId,
+
+                    IdentificadorNota = identificadorNota,
+
+                    Homologacao = isDevelopment,
+
+                    UsuarioId = 1,
+
+                    BaixarImagemOriginal = false
+                });
+
+                Console.WriteLine("MENSAGEM: " + aux);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERRO: " + ex.Message);
+            }
+        }
+        #endregion Teste de retorno da Nota Fiscal (Download da NF)
+
+        private static void Processamentos(bool isDevelopment, int grvId, int identificadorNota = 0)
+        {
             //DataBase.DisconnectDataBase();
 
             //if (DataBase.SystemEnvironment == SystemEnvironment.Development)
@@ -32,8 +73,6 @@ namespace EnvioTeste
             //}
 
             // DataBase.ConnectDataBase();
-
-            int grvId = 888329;
 
             // var grvs = new GrvController().Listar(new GrvEntity { StatusOperacaoId = 'E', ClienteId = 49 });
 
@@ -52,7 +91,7 @@ namespace EnvioTeste
 
                         usuarioId: 1,
 
-                        isDev: IsTestEnvironment
+                        isDev: isDevelopment
                     );
 
                     for (int i = 0; i < nfe.Count; i++)
@@ -98,7 +137,7 @@ namespace EnvioTeste
 
             // NfeExcluirController.Excluir(749458);
 
-            grvId = 934771;
+            grvId = 949073;
 
             #region Teste de Solicitação Simplificado
             try
@@ -109,7 +148,7 @@ namespace EnvioTeste
 
                     usuarioId: 1,
 
-                    isDev: IsTestEnvironment
+                    isDev: isDevelopment
                 );
 
                 for (int i = 0; i < nfe.Count; i++)
@@ -124,6 +163,8 @@ namespace EnvioTeste
             #endregion Teste de Solicitação Simplificado
 
 
+            grvId = 949073;
+
             #region Teste de Solicitação de uma nova NF
             try
             {
@@ -131,11 +172,11 @@ namespace EnvioTeste
                 (
                     grvId: grvId,
 
-                    identificadorNota: "796512",
+                    identificadorNota: "801814",
 
                     usuarioId: 1,
 
-                    isDev: IsTestEnvironment
+                    isDev: isDevelopment
                 );
 
                 Console.WriteLine("MENSAGEM: " + novaNfe[0]);
@@ -167,14 +208,19 @@ namespace EnvioTeste
                 {
                     GrvId = grvId,
 
-                    IdentificadorNota = "737863",
+                    IdentificadorNota = "762905",
 
-                    Homologacao = IsTestEnvironment,
+                    Homologacao = isDevelopment,
 
                     UsuarioId = 1
                 });
 
                 Console.WriteLine("MENSAGEM: " + aux);
+
+                if (true)
+                {
+
+                }
 
                 //aux = new NfeReceberNotaFiscalController().ReceberNotaFiscal(new Consulta
                 //{
@@ -279,8 +325,6 @@ namespace EnvioTeste
             {
                 Console.WriteLine("ERRO: " + ex.Message);
             }
-
-            Console.ReadLine();
         }
     }
 }

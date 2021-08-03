@@ -30,9 +30,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             GrvEntity grv = new GrvController().Selecionar(identificaoNotaFiscal.GrvId);
 
-            #region Cliente Depósito
             ClienteDepositoEntity ClienteDeposito = new ClienteDepositoController().Selecionar(new ClienteDepositoEntity { ClienteId = grv.ClienteId, DepositoId = grv.DepositoId });
-            #endregion Cliente Depósito
 
             #region Empresa
             EmpresaEntity Empresa;
