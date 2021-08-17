@@ -59,5 +59,7 @@ namespace NFSE.Domain.Entities.Global
         public char FlagIssRetido { get; set; }
 
         public char FlagAtivo { get; set; }
+
+        public char OptanteSimplesNacional { get; set; }
     }
 }

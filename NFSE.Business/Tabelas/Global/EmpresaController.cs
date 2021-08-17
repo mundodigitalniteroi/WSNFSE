@@ -68,6 +68,8 @@ namespace NFSE.Business.Tabelas.Global
 
             SQL.AppendLine("      ,tb_glo_emp_empresas.flag_ativo AS FlagAtivo");
 
+            SQL.AppendLine("      ,tb_glo_emp_empresas.optante_simples_nacional AS OptanteSimplesNacional");
+
             SQL.AppendLine("  FROM db_global.dbo.tb_glo_emp_empresas");
 
             SQL.AppendLine(" WHERE 1 = 1");

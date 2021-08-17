@@ -496,7 +496,7 @@ namespace NFSE.Business.Tabelas.NFe
 
                 natureza_operacao = "1",
 
-                optante_simples_nacional = "false",
+                optante_simples_nacional = empresa.OptanteSimplesNacional.Equals('S') ? "true" : "false",
 
                 prestador = Prestador(empresa, composicao.FlagEnviarInscricaoEstadual),
 
