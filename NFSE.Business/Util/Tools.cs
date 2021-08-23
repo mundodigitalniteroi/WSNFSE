@@ -119,7 +119,7 @@ namespace NFSE.Business.Util
                 if (column == null)
                     stringBuilder.Append(";");
                 else
-                    stringBuilder.Append("\"" + column.ToString().Replace("\"", "\"\"") + "\";");
+                    stringBuilder.Append('\"').Append(column.ToString().Replace("\"", "\"\"")).Append("\";");
             }
 
             stringBuilder.Replace(";", Environment.NewLine, stringBuilder.Length - 1, 1);
@@ -131,7 +131,7 @@ namespace NFSE.Business.Util
                     if (obj == null)
                         stringBuilder.Append(";");
                     else
-                        stringBuilder.Append("\"" + obj.ToString().Replace("\"", "\"\"") + "\";");
+                        stringBuilder.Append('\"').Append(obj.ToString().Replace("\"", "\"\"")).Append("\";");
                 }
 
                 stringBuilder.Replace(";", Environment.NewLine, stringBuilder.Length - 1, 1);
@@ -144,7 +144,7 @@ namespace NFSE.Business.Util
         {
             Bitmap Retorno = null;
 
-            var thread = new Thread(() => Retorno = new Bitmap(CaptureWebPage(url)));
+            Thread thread = new Thread(() => Retorno = new Bitmap(CaptureWebPage(url)));
 
             thread.SetApartmentState(ApartmentState.STA);
 
@@ -156,9 +156,11 @@ namespace NFSE.Business.Util
 
             while (thread.IsAlive)
             {
-                if (stopwatch.Elapsed.Seconds > 180)
+                if (stopwatch.Elapsed.TotalSeconds > 180)
                 {
                     thread.Abort();
+
+                    break;
                 }
             }
 
@@ -178,16 +180,16 @@ namespace NFSE.Business.Util
 
                 // Thread.Sleep(2500);
 
-                int width = 1500;
+                const int width = 1500;
 
-                int height = 1700; // webBrowser.Document.Body.ScrollRectangle.Height + 50;
+                const int height = 1700; // webBrowser.Document.Body.ScrollRectangle.Height + 50;
 
                 webBrowser.Width = width;
                 webBrowser.Height = height;
 
                 Bitmap bitmap = new Bitmap(width, height);
 
-                webBrowser.DrawToBitmap(bitmap, new Rectangle(0, 0, width, height));                
+                webBrowser.DrawToBitmap(bitmap, new Rectangle(0, 0, width, height));
 
                 return bitmap;
             }

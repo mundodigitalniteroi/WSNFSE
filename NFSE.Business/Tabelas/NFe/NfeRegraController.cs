@@ -58,27 +58,27 @@ namespace NFSE.Business.Tabelas.NFe
 
                 if (model.NfeRegraId > 0)
                 {
-                    SQL.AppendLine("   AND vw_dep_nfe_regras.NfeRegraId = " + model.NfeRegraId);
+                    SQL.Append("   AND vw_dep_nfe_regras.NfeRegraId = ").Append(model.NfeRegraId).AppendLine();
                 }
 
                 if (model.NfeRegraTipoId > 0)
                 {
-                    SQL.AppendLine("   AND vw_dep_nfe_regras.NfeRegraTipoId = " + model.NfeRegraTipoId);
+                    SQL.Append("   AND vw_dep_nfe_regras.NfeRegraTipoId = ").Append(model.NfeRegraTipoId).AppendLine();
                 }
 
                 if (model.ClienteId > 0)
                 {
-                    SQL.AppendLine("   AND vw_dep_nfe_regras.ClienteId = " + model.ClienteId);
+                    SQL.Append("   AND vw_dep_nfe_regras.ClienteId = ").Append(model.ClienteId).AppendLine();
                 }
 
                 if (model.DepositoId > 0)
                 {
-                    SQL.AppendLine("   AND vw_dep_nfe_regras.DepositoId = " + model.DepositoId);
+                    SQL.Append("   AND vw_dep_nfe_regras.DepositoId = ").Append(model.DepositoId).AppendLine();
                 }
 
                 if (model.ClienteDepositoId > 0)
                 {
-                    SQL.AppendLine("   AND vw_dep_nfe_regras.ClienteDepositoId = " + model.ClienteDepositoId);
+                    SQL.Append("   AND vw_dep_nfe_regras.ClienteDepositoId = ").Append(model.ClienteDepositoId).AppendLine();
                 }
             }
 

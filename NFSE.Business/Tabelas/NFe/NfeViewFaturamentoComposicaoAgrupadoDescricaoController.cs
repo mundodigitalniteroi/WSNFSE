@@ -48,7 +48,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             SQL.AppendLine("  FROM dbo.vw_dep_nfe_faturamento_composicao_agrupado_descricao");
 
-            SQL.AppendLine(" WHERE vw_dep_nfe_faturamento_composicao_agrupado_descricao.GrvId = " + grvId);
+            SQL.Append(" WHERE vw_dep_nfe_faturamento_composicao_agrupado_descricao.GrvId = ").Append(grvId).AppendLine();
 
             using (var dataTable = DataBase.Select(SQL))
             {

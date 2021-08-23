@@ -54,11 +54,11 @@ namespace NFSE.Business.Tabelas.Global
 
             if (model.CepId > 0)
             {
-                SQL.AppendLine(" WHERE vw_glo_consultar_endereco_completo.id_cep = " + model.CepId);
+                SQL.Append(" WHERE vw_glo_consultar_endereco_completo.id_cep = ").Append(model.CepId).AppendLine();
             }
             else
             {
-                SQL.AppendLine(" WHERE vw_glo_consultar_endereco_completo.cep = '" + model.Cep + "'");
+                SQL.Append(" WHERE vw_glo_consultar_endereco_completo.cep = '").Append(model.Cep).AppendLine("'");
             }
 
             using (var dataTable = DataBase.Select(SQL))

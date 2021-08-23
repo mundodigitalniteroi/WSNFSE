@@ -26,7 +26,7 @@ namespace NFSE.Business.Tabelas.Global
 
             SQL.AppendLine("  FROM db_global.dbo.tb_glo_loc_municipios");
 
-            SQL.AppendLine(" WHERE tb_glo_loc_municipios.uf = '" + uf + "'");
+            SQL.Append(" WHERE tb_glo_loc_municipios.uf = '").Append(uf).AppendLine("'");
 
             using (var dataTable = DataBase.Select(SQL))
             {
@@ -49,7 +49,7 @@ namespace NFSE.Business.Tabelas.Global
 
             SQL.AppendLine("  FROM db_global.dbo.tb_glo_loc_municipios");
 
-            SQL.AppendLine(" WHERE uf = '" + uf + "'");
+            SQL.Append(" WHERE uf = '").Append(uf).AppendLine("'");
             SQL.AppendLine("   AND codigo_municipio_ibge IS NOT NULL");
 
             using (var result = DataBase.Select(SQL))

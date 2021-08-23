@@ -30,17 +30,17 @@ namespace NFSE.Business.Tabelas.Global
 
             if (!string.IsNullOrWhiteSpace(model.CodigoCnae))
             {
-                SQL.AppendLine("   AND tb_gov_parametro_municipio.CodigoCnae = '" + model.CodigoCnae + "'");
+                SQL.Append("   AND tb_gov_parametro_municipio.CodigoCnae = '").Append(model.CodigoCnae).AppendLine("'");
             }
 
             if (!string.IsNullOrWhiteSpace(model.ItemListaServico))
             {
-                SQL.AppendLine("   AND tb_gov_parametro_municipio.ItemListaServico = '" + model.ItemListaServico + "'");
+                SQL.Append("   AND tb_gov_parametro_municipio.ItemListaServico = '").Append(model.ItemListaServico).AppendLine("'");
             }
 
             if (!string.IsNullOrWhiteSpace(model.CodigoMunicipioIbge))
             {
-                SQL.AppendLine("   AND tb_gov_parametro_municipio.CodigoMunicipioIbge = '" + model.CodigoMunicipioIbge + "'");
+                SQL.Append("   AND tb_gov_parametro_municipio.CodigoMunicipioIbge = '").Append(model.CodigoMunicipioIbge).AppendLine("'");
             }
 
             using (var dataTable = DataBase.Select(SQL))

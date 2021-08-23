@@ -36,11 +36,11 @@ namespace NFSE.Business.Tabelas.DP
 
             SQL.AppendLine("  FROM dbo.tb_dep_faturamento_regras");
 
-            SQL.AppendLine(" WHERE tb_dep_faturamento_regras.id_cliente = " + clienteId);
+            SQL.Append(" WHERE tb_dep_faturamento_regras.id_cliente = ").Append(clienteId).AppendLine();
 
-            SQL.AppendLine("   AND tb_dep_faturamento_regras.id_deposito = " + depositoId);
+            SQL.Append("   AND tb_dep_faturamento_regras.id_deposito = ").Append(depositoId).AppendLine();
 
-            SQL.AppendLine("   AND tb_dep_faturamento_regras.id_faturamento_regra_tipo = " + faturamentoRegraTipoId);
+            SQL.Append("   AND tb_dep_faturamento_regras.id_faturamento_regra_tipo = ").Append(faturamentoRegraTipoId).AppendLine();
 
             using (var dataTable = DataBase.Select(SQL))
             {

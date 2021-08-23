@@ -155,7 +155,7 @@ namespace NFSE.Business.Tabelas.NFe
 
                 if (!string.IsNullOrWhiteSpace(retornoConsulta.url))
                 {
-                    retornoConsulta.ImagemNotaFiscal = BaixarImagem(grv.ClienteId, grv.DepositoId, nfe.GrvId, nfe.IdentificadorNota, identificaoNotaFiscal, retornoConsulta.url);
+                    retornoConsulta.ImagemNotaFiscal = BaixarImagem(grv.ClienteId, grv.DepositoId, nfe.IdentificadorNota, identificaoNotaFiscal, retornoConsulta.url);
                 }
 
                 if (identificaoNotaFiscal.BaixarImagemOriginal)
@@ -175,9 +175,9 @@ namespace NFSE.Business.Tabelas.NFe
             return retornoConsulta;
         }
 
-        private byte[] BaixarImagem(int clienteId, int depositoId, int grvId, string identificadorNota, Consulta identificaoNotaFiscal, string url)
+        private byte[] BaixarImagem(int clienteId, int depositoId, string identificadorNota, Consulta identificaoNotaFiscal, string url)
         {
-            byte[] ImagemNotaFiscal;
+            byte[] imagemNotaFiscal;
 
             NfeConfiguracaoImagemEntity ConfiguracaoImagem;
 
@@ -218,7 +218,7 @@ namespace NFSE.Business.Tabelas.NFe
                 DepositoId = depositoId
             });
 
-            if (regrasNfe != null && regrasNfe.Where(w => w.RegraCodigo.Equals("NFPDF") && w.Ativo.Equals(1)).Count() > 0)
+            if (regrasNfe?.Count(w => w.RegraCodigo.Equals("NFPDF") && w.Ativo.Equals(1)) > 0 || url.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
             {
                 using (WebClient webClient = new WebClient())
                 {
@@ -235,7 +235,7 @@ namespace NFSE.Business.Tabelas.NFe
                     {
                         Image.FromFile(str2).Save(memoryStream, ImageFormat.Jpeg);
 
-                        ImagemNotaFiscal = memoryStream.ToArray();
+                        imagemNotaFiscal = memoryStream.ToArray();
                     }
                 }
             }
@@ -245,14 +245,12 @@ namespace NFSE.Business.Tabelas.NFe
                 {
                     new Tools().ObterImagemEndereco(url).Save(memoryStream, ImageFormat.Jpeg);
 
-                    ImagemNotaFiscal = memoryStream.ToArray();
-
-                    // File.WriteAllBytes(directory + identificadorNota + "Original.jpg", ImagemNotaFiscal);
+                    imagemNotaFiscal = memoryStream.ToArray();
                 }
 
                 try
                 {
-                    if (!IsImage(ImagemNotaFiscal))
+                    if (!IsImage(imagemNotaFiscal))
                     {
                         throw new Exception("A Imagem retornada nao é uma Imagem válida");
                     }
@@ -276,11 +274,11 @@ namespace NFSE.Business.Tabelas.NFe
                 {
                     if (!identificaoNotaFiscal.BaixarImagemOriginal)
                     {
-                        ImagemNotaFiscal = CropImage(ImagemNotaFiscal, new Rectangle(ConfiguracaoImagem.ValueX, ConfiguracaoImagem.ValueY, ConfiguracaoImagem.Width, ConfiguracaoImagem.Height));
+                        imagemNotaFiscal = CropImage(imagemNotaFiscal, new Rectangle(ConfiguracaoImagem.ValueX, ConfiguracaoImagem.ValueY, ConfiguracaoImagem.Width, ConfiguracaoImagem.Height));
 
                         // File.WriteAllBytes(directory + identificadorNota + "Recortado.jpg", ImagemNotaFiscal);
 
-                        if (!IsImage(ImagemNotaFiscal))
+                        if (!IsImage(imagemNotaFiscal))
                         {
                             throw new Exception("A Imagem recortada nao é uma Imagem válida");
                         }
@@ -292,7 +290,7 @@ namespace NFSE.Business.Tabelas.NFe
                 }
             }
 
-            return ImagemNotaFiscal;
+            return imagemNotaFiscal;
         }
 
         private bool IsImage(byte[] bytes)

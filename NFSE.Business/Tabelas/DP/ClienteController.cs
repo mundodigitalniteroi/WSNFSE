@@ -88,7 +88,7 @@ namespace NFSE.Business.Tabelas.DP
 
             SQL.AppendLine("  FROM dbo.tb_dep_clientes");
 
-            SQL.AppendLine(" WHERE tb_dep_clientes.id_cliente = " + clienteId);
+            SQL.Append(" WHERE tb_dep_clientes.id_cliente = ").Append(clienteId).AppendLine();
 
             using (var dataTable = DataBase.Select(SQL))
             {

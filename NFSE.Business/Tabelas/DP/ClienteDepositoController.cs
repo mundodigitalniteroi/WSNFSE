@@ -30,22 +30,22 @@ namespace NFSE.Business.Tabelas.DP
 
             if (model.ClienteDepositoId > 0)
             {
-                SQL.AppendLine("   AND tb_dep_clientes_depositos.id_cliente_deposito = " + model.ClienteDepositoId);
+                SQL.Append("   AND tb_dep_clientes_depositos.id_cliente_deposito = ").Append(model.ClienteDepositoId).AppendLine();
             }
 
             if (model.ClienteId > 0)
             {
-                SQL.AppendLine("   AND tb_dep_clientes_depositos.id_cliente = " + model.ClienteId);
+                SQL.Append("   AND tb_dep_clientes_depositos.id_cliente = ").Append(model.ClienteId).AppendLine();
             }
 
             if (model.DepositoId > 0)
             {
-                SQL.AppendLine("   AND tb_dep_clientes_depositos.id_deposito = " + model.DepositoId);
+                SQL.Append("   AND tb_dep_clientes_depositos.id_deposito = ").Append(model.DepositoId).AppendLine();
             }
 
             if (model.EmpresaId > 0)
             {
-                SQL.AppendLine("   AND tb_dep_clientes_depositos.id_empresa = " + model.EmpresaId);
+                SQL.Append("   AND tb_dep_clientes_depositos.id_empresa = ").Append(model.EmpresaId).AppendLine();
             }
 
             using (var dataTable = DataBase.Select(SQL))

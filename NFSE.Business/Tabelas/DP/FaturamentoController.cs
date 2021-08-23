@@ -70,9 +70,9 @@ namespace NFSE.Business.Tabelas.DP
 
             SQL.AppendLine("  FROM dbo.tb_dep_faturamento");
 
-            SQL.AppendLine(" WHERE tb_dep_faturamento.id_atendimento = " + atendimentoId);
+            SQL.Append(" WHERE tb_dep_faturamento.id_atendimento = ").Append(atendimentoId).AppendLine();
 
-            SQL.AppendLine("   AND tb_dep_faturamento.status = '" + status + "'");
+            SQL.Append("   AND tb_dep_faturamento.status = '").Append(status).AppendLine("'");
 
             SQL.AppendLine("   AND tb_dep_faturamento.valor_pagamento > 0");
 

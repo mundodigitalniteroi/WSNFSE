@@ -48,17 +48,17 @@ namespace NFSE.Business.Tabelas.Global
 
             if (model.CnaeId > 0)
             {
-                SQL.AppendLine("   AND vw_gov_cnae_lista_servico_parametro_municipio.CnaeId = " + model.CnaeId);
+                SQL.Append("   AND vw_gov_cnae_lista_servico_parametro_municipio.CnaeId = ").Append(model.CnaeId).AppendLine();
             }
 
             if (model.ListaServicoId > 0)
             {
-                SQL.AppendLine("   AND vw_gov_cnae_lista_servico_parametro_municipio.ListaServicoId = " + model.ListaServicoId);
+                SQL.Append("   AND vw_gov_cnae_lista_servico_parametro_municipio.ListaServicoId = ").Append(model.ListaServicoId).AppendLine();
             }
 
             if (!string.IsNullOrWhiteSpace(model.CodigoMunicipioIbge))
             {
-                SQL.AppendLine("   AND vw_gov_cnae_lista_servico_parametro_municipio.CodigoMunicipioIbge = '" + model.CodigoMunicipioIbge + "'");
+                SQL.Append("   AND vw_gov_cnae_lista_servico_parametro_municipio.CodigoMunicipioIbge = '").Append(model.CodigoMunicipioIbge).AppendLine("'");
             }
 
             using (var dataTable = DataBase.Select(SQL))

@@ -6,7 +6,6 @@ using NFSE.Domain.Enum;
 using NFSE.Infra.Data;
 using System;
 using System.Diagnostics;
-using System.Linq;
 
 namespace EnvioTeste
 {
@@ -20,17 +19,14 @@ namespace EnvioTeste
 
             bool isDevelopment = DataBase.SystemEnvironment.Equals(SystemEnvironment.Development);
 
-            int grvId = 940299;
+            const int grvId = 967746;
 
-            string identificadorNota = "762298";
+            const string identificadorNota = "765666";
 
             ReceberNotaFiscal(isDevelopment, grvId, identificadorNota);
 
             Console.ReadLine();
         }
-
-        // 
-        // v
 
         #region Teste de retorno da Nota Fiscal (Download da NF)
         private static void ReceberNotaFiscal(bool isDevelopment, int grvId, string identificadorNota)

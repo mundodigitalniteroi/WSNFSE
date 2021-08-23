@@ -1,4 +1,6 @@
-﻿namespace NFSE.Domain.Entities.NFe
+﻿using System;
+
+namespace NFSE.Domain.Entities.NFe
 {
     public class NfeImagemEntity
     {
@@ -7,5 +9,7 @@
         public int NfeId { get; set; }
 
         public byte[] Imagem { get; set; }
+
+        public DateTime DataCadastro { get; set; }
     }
 }

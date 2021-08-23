@@ -263,11 +263,11 @@ namespace NFSE.Business.Tabelas.NFe
                 {
                     if (item.TipoDesconto != '\0')
                     {
-                        descricaoConfiguracaoNfe.AppendLine($"{item.DescricaoConfiguracaoNfe}. QTD: {string.Format("{0:N2}", item.QuantidadeComposicao)}. VALOR: R$ {string.Format("{0:N2}", item.ValorTipoComposicao)}. DSCT: R$ {string.Format("{0:N2}", item.ValorDesconto)}. TOT: R$ {string.Format("{0:N2}", item.TotalComDesconto)}");
+                        descricaoConfiguracaoNfe.Append(item.DescricaoConfiguracaoNfe).Append(". QTD: ").Append(string.Format("{0:N2}", item.QuantidadeComposicao)).Append(". VALOR: R$ ").Append(string.Format("{0:N2}", item.ValorTipoComposicao)).Append(". DSCT: R$ ").Append(string.Format("{0:N2}", item.ValorDesconto)).Append(". TOT: R$ ").AppendLine(string.Format("{0:N2}", item.TotalComDesconto));
                     }
                     else
                     {
-                        descricaoConfiguracaoNfe.AppendLine($"{item.DescricaoConfiguracaoNfe}. QTD: {string.Format("{0:N2}", item.QuantidadeComposicao)}. VALOR: R$ {string.Format("{0:N2}", item.ValorTipoComposicao)}. TOT: R$ {string.Format("{0:N2}", item.TotalComDesconto)}");
+                        descricaoConfiguracaoNfe.Append(item.DescricaoConfiguracaoNfe).Append(". QTD: ").Append(string.Format("{0:N2}", item.QuantidadeComposicao)).Append(". VALOR: R$ ").Append(string.Format("{0:N2}", item.ValorTipoComposicao)).Append(". TOT: R$ ").AppendLine(string.Format("{0:N2}", item.TotalComDesconto));
                     }
                 }
 

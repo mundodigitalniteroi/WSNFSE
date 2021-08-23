@@ -24,7 +24,7 @@ namespace NFSE.Business.Tabelas.DP
 
             SQL.AppendLine("  FROM dbo.tb_dep_faturamento_regras_tipos");
 
-            SQL.AppendLine(" WHERE tb_dep_faturamento_regras_tipos.codigo = '" + codigo + "'");
+            SQL.Append(" WHERE tb_dep_faturamento_regras_tipos.codigo = '").Append(codigo).AppendLine("'");
 
             using (var dataTable = DataBase.Select(SQL))
             {

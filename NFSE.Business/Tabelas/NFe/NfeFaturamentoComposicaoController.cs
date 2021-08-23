@@ -20,7 +20,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             SQL.AppendLine("  FROM dbo.tb_dep_nfe_faturamento_composicao");
 
-            SQL.AppendLine(" WHERE tb_dep_nfe_faturamento_composicao.NfeId = " + nfeId);
+            SQL.Append(" WHERE tb_dep_nfe_faturamento_composicao.NfeId = ").Append(nfeId).AppendLine();
 
             using (var dataTable = DataBase.Select(SQL))
             {
@@ -41,17 +41,17 @@ namespace NFSE.Business.Tabelas.NFe
 
             SQL.AppendLine("INSERT INTO dbo.tb_dep_nfe_faturamento_composicao");
 
-            //SQL.AppendLine("      (NfeId");
-            //SQL.AppendLine("      ,FaturamentoComposicaoId)");
+            SQL.AppendLine("      (NfeId");
+            SQL.AppendLine("      ,FaturamentoComposicaoId)");
 
             SQL.AppendLine("VALUES");
 
-            var lastItem = list.LastOrDefault();
+            var lastItem = list.Last();
 
             foreach (var item in list)
             {
-                SQL.AppendLine("      (" + nfeId);
-                SQL.Append    ("      ," + item.FaturamentoComposicaoId + ")");
+                SQL.Append("      (").Append(nfeId).AppendLine();
+                SQL.Append("      ,").Append(item.FaturamentoComposicaoId).Append(')');
 
                 if (item != lastItem)
                 {

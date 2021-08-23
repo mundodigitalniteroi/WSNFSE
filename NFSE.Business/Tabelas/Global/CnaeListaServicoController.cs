@@ -36,12 +36,12 @@ namespace NFSE.Business.Tabelas.Global
 
             if (model.CnaeId > 0)
             {
-                SQL.AppendLine("   AND vw_gov_cnae_lista_servico.CnaeId = " + model.CnaeId);
+                SQL.Append("   AND vw_gov_cnae_lista_servico.CnaeId = ").Append(model.CnaeId).AppendLine();
             }
 
             if (model.ListaServicoId > 0)
             {
-                SQL.AppendLine("   AND vw_gov_cnae_lista_servico.ListaServicoId = " + model.ListaServicoId);
+                SQL.Append("   AND vw_gov_cnae_lista_servico.ListaServicoId = ").Append(model.ListaServicoId).AppendLine();
             }
 
             using (var dataTable = DataBase.Select(SQL))

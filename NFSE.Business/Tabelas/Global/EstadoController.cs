@@ -30,7 +30,7 @@ namespace NFSE.Business.Tabelas.Global
 
             SQL.AppendLine("  FROM db_global.dbo.tb_glo_loc_estados");
 
-            SQL.AppendLine(" WHERE tb_glo_loc_estados.uf = '" + uf + "'");
+            SQL.Append(" WHERE tb_glo_loc_estados.uf = '").Append(uf).AppendLine("'");
 
             using (var dataTable = DataBase.Select(SQL))
             {

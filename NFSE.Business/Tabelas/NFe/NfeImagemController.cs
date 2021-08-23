@@ -18,11 +18,13 @@ namespace NFSE.Business.Tabelas.NFe
 
             SQL.AppendLine("      ,tb_dep_nfe_imagens.NfeID AS NfeId");
 
-            SQL.AppendLine("      ,tb_dep_nfe_imagens.Imagem AS Imagem");
+            SQL.AppendLine("      ,tb_dep_nfe_imagens.Imagem");
+
+            SQL.AppendLine("      ,tb_dep_nfe_imagens.DataCadastro");
 
             SQL.AppendLine("  FROM dbo.tb_dep_nfe_imagens");
 
-            SQL.AppendLine(" WHERE tb_dep_nfe_imagens.NfeId = " + nfeId);
+            SQL.Append(" WHERE tb_dep_nfe_imagens.NfeId = ").Append(nfeId).AppendLine();
 
             using (var dataTable = DataBase.Select(SQL))
             {
@@ -49,7 +51,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             SQL.AppendLine("VALUES");
 
-            SQL.AppendLine("      (" + nfeId);
+            SQL.Append("      (").Append(nfeId).AppendLine();
             SQL.AppendLine("      ,@Imagem)");
 
             var sqlParameter = new SqlParameter[1];
@@ -70,7 +72,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             SQL.AppendLine("DELETE FROM dbo.tb_dep_nfe_imagens");
 
-            SQL.AppendLine(" WHERE NfeID = " + nfeID);
+            SQL.Append(" WHERE NfeID = ").Append(nfeID).AppendLine();
 
             DataBase.Execute(SQL);
         }

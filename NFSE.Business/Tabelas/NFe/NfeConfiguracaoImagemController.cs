@@ -32,21 +32,21 @@ namespace NFSE.Business.Tabelas.NFe
 
             if (model.ConfiguracaoImagemId > 0)
             {
-                SQL.AppendLine("   AND tb_dep_clientes_depositos.ConfiguracaoImagemId = " + model.ConfiguracaoImagemId);
+                SQL.Append("   AND tb_dep_clientes_depositos.ConfiguracaoImagemId = ").Append(model.ConfiguracaoImagemId).AppendLine();
             }
             else if (model.ClienteDepositoId > 0)
             {
-                SQL.AppendLine("   AND tb_dep_clientes_depositos.ClienteDepositoId = " + model.ClienteDepositoId);
+                SQL.Append("   AND tb_dep_clientes_depositos.ClienteDepositoId = ").Append(model.ClienteDepositoId).AppendLine();
             }
 
             if (model.ClienteId > 0)
             {
-                SQL.AppendLine("   AND tb_dep_clientes_depositos.id_cliente = " + model.ClienteId);
+                SQL.Append("   AND tb_dep_clientes_depositos.id_cliente = ").Append(model.ClienteId).AppendLine();
             }
 
             if (model.DepositoId > 0)
             {
-                SQL.AppendLine("   AND tb_dep_clientes_depositos.id_deposito = " + model.DepositoId);
+                SQL.Append("   AND tb_dep_clientes_depositos.id_deposito = ").Append(model.DepositoId).AppendLine();
             }
 
             using (var dataTable = DataBase.Select(SQL))
@@ -79,12 +79,12 @@ namespace NFSE.Business.Tabelas.NFe
 
             SQL.AppendLine("VALUES");
 
-            SQL.AppendLine("      (" + model.ClienteDepositoId);
+            SQL.Append("      (").Append(model.ClienteDepositoId).AppendLine();
             SQL.AppendLine("      ,1");
-            SQL.AppendLine("      ," + model.ValueX);
-            SQL.AppendLine("      ," + model.ValueY);
-            SQL.AppendLine("      ," + model.Width);
-            SQL.AppendLine("      ," + model.Height + ")");
+            SQL.Append("      ,").Append(model.ValueX).AppendLine();
+            SQL.Append("      ,").Append(model.ValueY).AppendLine();
+            SQL.Append("      ,").Append(model.Width).AppendLine();
+            SQL.Append("      ,").Append(model.Height).AppendLine(")");
 
             return DataBase.ExecuteScopeIdentity(SQL);
         }
@@ -99,13 +99,13 @@ namespace NFSE.Business.Tabelas.NFe
             SQL.AppendLine("UPDATE dbo.tb_dep_nfe_configuracao_imagem");
 
             SQL.AppendLine("   SET UsuarioAlteracaoId = 1");
-            SQL.AppendLine("      ,ValueX = " + model.ValueX);
-            SQL.AppendLine("      ,ValueY = " + model.ValueY);
-            SQL.AppendLine("      ,Width = " + model.Width);
-            SQL.AppendLine("      ,Height = " + model.Height);
+            SQL.Append("      ,ValueX = ").Append(model.ValueX).AppendLine();
+            SQL.Append("      ,ValueY = ").Append(model.ValueY).AppendLine();
+            SQL.Append("      ,Width = ").Append(model.Width).AppendLine();
+            SQL.Append("      ,Height = ").Append(model.Height).AppendLine();
             SQL.AppendLine("      ,DataAlteracao = GETDATE()");
 
-            SQL.AppendLine(" WHERE ConfiguracaoImagemId = " + model.ConfiguracaoImagemId);
+            SQL.Append(" WHERE ConfiguracaoImagemId = ").Append(model.ConfiguracaoImagemId).AppendLine();
 
             return DataBase.Execute(SQL);
         }

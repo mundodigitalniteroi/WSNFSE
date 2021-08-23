@@ -30,11 +30,11 @@ namespace NFSE.Business.Tabelas.Global
 
             if (model.CepId > 0)
             {
-                SQL.AppendLine(" WHERE tb_glo_loc_cep.id_cep = " + model.CepId);
+                SQL.Append(" WHERE tb_glo_loc_cep.id_cep = ").Append(model.CepId).AppendLine();
             }
             else
             {
-                SQL.AppendLine(" WHERE tb_glo_loc_cep.cep = '" + model.Cep + "'");
+                SQL.Append(" WHERE tb_glo_loc_cep.cep = '").Append(model.Cep).AppendLine("'");
             }
 
             using (var dataTable = DataBase.Select(SQL))

@@ -76,12 +76,12 @@ namespace NFSE.Business.Tabelas.Global
 
             if (model.EmpresaId > 0)
             {
-                SQL.AppendLine("   AND tb_glo_emp_empresas.id_empresa = " + model.EmpresaId);
+                SQL.Append("   AND tb_glo_emp_empresas.id_empresa = ").Append(model.EmpresaId).AppendLine();
             }
 
             if (!string.IsNullOrWhiteSpace(model.Cnpj))
             {
-                SQL.AppendLine("   AND tb_glo_emp_empresas.cnpj = '" + model.Cnpj + "'");
+                SQL.Append("   AND tb_glo_emp_empresas.cnpj = '").Append(model.Cnpj).AppendLine("'");
             }
 
             using (var dataTable = DataBase.Select(SQL))

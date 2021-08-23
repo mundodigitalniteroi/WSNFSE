@@ -132,7 +132,7 @@ namespace NFSE.Business.Tabelas.DP
 
             SQL.AppendLine("  FROM dbo.tb_dep_atendimento");
 
-            SQL.AppendLine(" WHERE tb_dep_atendimento.id_grv = " + grvId);
+            SQL.Append(" WHERE tb_dep_atendimento.id_grv = ").Append(grvId).AppendLine();
 
             using (var dataTable = DataBase.Select(SQL))
             {

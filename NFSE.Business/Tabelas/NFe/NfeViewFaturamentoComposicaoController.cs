@@ -36,10 +36,10 @@ namespace NFSE.Business.Tabelas.NFe
             {
                 SQL.AppendLine("  JOIN dbo.tb_dep_nfe_faturamento_composicao");
                 SQL.AppendLine("    ON tb_dep_nfe_faturamento_composicao.FaturamentoComposicaoId = vw_dep_nfe_faturamento_composicao.FaturamentoComposicaoId");
-                SQL.AppendLine("   AND tb_dep_nfe_faturamento_composicao.NfeId = " + nfeId);
+                SQL.Append("   AND tb_dep_nfe_faturamento_composicao.NfeId = ").Append(nfeId).AppendLine();
             }
 
-            SQL.AppendLine(" WHERE vw_dep_nfe_faturamento_composicao.GrvId = " + grvId);
+            SQL.Append(" WHERE vw_dep_nfe_faturamento_composicao.GrvId = ").Append(grvId).AppendLine();
 
             using (var dataTable = DataBase.Select(SQL))
             {

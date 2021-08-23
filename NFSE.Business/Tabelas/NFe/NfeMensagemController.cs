@@ -24,7 +24,7 @@ namespace NFSE.Business.Tabelas.DP
 
             SQL.AppendLine("  FROM dbo.tb_dep_nfe_mensagens");
 
-            SQL.AppendLine("   AND tb_dep_NfeMensagem.NfeId = " + nfeId);
+            SQL.Append("   AND tb_dep_NfeMensagem.NfeId = ").Append(nfeId).AppendLine();
 
             using (var dataTable = DataBase.Select(SQL))
             {
@@ -51,9 +51,9 @@ namespace NFSE.Business.Tabelas.DP
 
             SQL.AppendLine("VALUES");
 
-            SQL.AppendLine("      (" + model.NfeId);
-            SQL.AppendLine("      ,'" + model.Mensagem.Trim().ToUpper() + "'");
-            SQL.AppendLine("      ,'" + model.Tipo + "')");
+            SQL.Append("      (").Append(model.NfeId).AppendLine();
+            SQL.Append("      ,'").Append(model.Mensagem.Trim().ToUpper()).AppendLine("'");
+            SQL.Append("      ,'").Append(model.Tipo).AppendLine("')");
 
             return DataBase.ExecuteScopeIdentity(SQL);
         }
