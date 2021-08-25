@@ -56,9 +56,11 @@ namespace NFSE.Business.Util
 
         public string CancelarNfse(string uri, string json, string token)
         {
-            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(uri);
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("pt-BR");
 
-            string base64String = Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes(token + ":" + ""));
+            string base64String = Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes(token + ":"));
+
+            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(uri);
 
             httpWebRequest.Method = "DELETE";
 
@@ -79,7 +81,7 @@ namespace NFSE.Business.Util
             {
                 using (HttpWebResponse response = (HttpWebResponse)httpWebRequest.GetResponse())
                 {
-                    using (var streamReader = new StreamReader(response.GetResponseStream()))
+                    using (StreamReader streamReader = new StreamReader(response.GetResponseStream()))
                     {
                         return streamReader.ReadToEnd().Trim();
                     }

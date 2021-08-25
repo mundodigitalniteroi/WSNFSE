@@ -23,7 +23,7 @@ namespace NFSE.Business.Tabelas.NFe
             {
                 new NfeWsErroController().CadastrarErroGenerico(model.GrvId, model.UsuarioId, model.IdentificadorNota, OrigemErro.MobLink, Acao.Retorno, "Nota Fiscal não encontrada");
 
-                throw new Exception("Nota Fiscal não encontrada");
+                return $"Nota Fiscal {model.GrvId}/{model.IdentificadorNota} não encontrada";
             }
 
             var grv = new GrvController().Selecionar(model.GrvId);
@@ -31,11 +31,17 @@ namespace NFSE.Business.Tabelas.NFe
             #region Empresa
             EmpresaEntity Empresa;
 
-            if ((Empresa = new EmpresaController().Selecionar(new EmpresaEntity { EmpresaId = new DepositoController().Selecionar(grv.DepositoId).EmpresaId } )) == null)
+            if ((Empresa = new EmpresaController().Selecionar(new EmpresaEntity { EmpresaId = new DepositoController().Selecionar(grv.DepositoId).EmpresaId })) == null)
             {
                 new NfeWsErroController().CadastrarErroGenerico(model.GrvId, model.UsuarioId, model.IdentificadorNota, OrigemErro.MobLink, Acao.Retorno, "Empresa associada não encontrada");
 
-                throw new Exception("Empresa associada não encontrada");
+                return "Empresa associada não encontrada";
+            }
+            else if (Empresa.Token == null)
+            {
+                new NfeWsErroController().CadastrarErroGenerico(model.GrvId, model.UsuarioId, model.IdentificadorNota, OrigemErro.MobLink, Acao.Retorno, $"Empresa {Empresa.Nome} sem Token cadastrado");
+
+                return $"Empresa {Empresa.Nome} sem Token cadastrado";
             }
             #endregion Empresa
 
@@ -59,7 +65,7 @@ namespace NFSE.Business.Tabelas.NFe
             {
                 new NfeWsErroController().CadastrarErroGenerico(nfe.GrvId, model.UsuarioId, nfe.IdentificadorNota, OrigemErro.WebService, Acao.Cancelamento, "Ocorreu um erro ao cancelar a Nota Fiscal: " + ex.Message);
 
-                throw new Exception("Ocorreu um erro ao cancelar a Nota Fiscal (" + model.IdentificadorNota + "): " + ex.Message);
+                return $"Ocorreu um erro ao cancelar a Nota Fiscal ({model.GrvId}/{model.IdentificadorNota}): {ex.Message}";
             }
 
             try
@@ -111,7 +117,7 @@ namespace NFSE.Business.Tabelas.NFe
                 }
             }
 
-            
+
 
             nfe.Status = 'N';
 

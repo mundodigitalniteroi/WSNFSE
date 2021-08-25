@@ -13,23 +13,53 @@ namespace EnvioTeste
     {
         private static void Main()
         {
-            DataBase.SystemEnvironment = SystemEnvironment.Production;
+            DataBase.SystemEnvironment = SystemEnvironment.Development;
 
             // DataBase.SystemEnvironment = SystemEnvironment.Development;
 
             bool isDevelopment = DataBase.SystemEnvironment.Equals(SystemEnvironment.Development);
 
-            const int grvId = 967746;
+            const int grvId = 947140;
 
-            const string identificadorNota = "765666";
+            const string identificadorNota = "801210";
 
-            ReceberNotaFiscal(isDevelopment, grvId, identificadorNota);
+            // SolicitarNotaFiscal(grvId, isDevelopment);
+
+            // ReceberNotaFiscal(grvId, identificadorNota, isDevelopment);
+
+            CancelarNotaFiscal(grvId, identificadorNota, isDevelopment);
 
             Console.ReadLine();
         }
 
+        #region Teste de solicitação de Nota Fiscal
+        private static void SolicitarNotaFiscal(int grvId, bool isDevelopment)
+        {
+            try
+            {
+                var nfe = new NfeGerarNotaFiscalController().GerarNotaFiscal
+                (
+                    grvId: grvId,
+
+                    usuarioId: 1,
+
+                    isDev: isDevelopment
+                );
+
+                for (int i = 0; i < nfe.Count; i++)
+                {
+                    Console.WriteLine("MENSAGEM: " + nfe[i]);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERRO: " + ex.Message);
+            }
+        }
+        #endregion Teste de solicitação da Nota Fiscal
+
         #region Teste de retorno da Nota Fiscal (Download da NF)
-        private static void ReceberNotaFiscal(bool isDevelopment, int grvId, string identificadorNota)
+        private static void ReceberNotaFiscal(int grvId, string identificadorNota, bool isDevelopment)
         {
             try
             {
@@ -54,6 +84,33 @@ namespace EnvioTeste
             }
         }
         #endregion Teste de retorno da Nota Fiscal (Download da NF)
+
+        #region Teste de cancelamento da Nota Fiscal
+        private static void CancelarNotaFiscal(int grvId, string identificadorNota, bool isDevelopment)
+        {
+            try
+            {
+                var aux = new NfeCancelamentoController().CancelarNotaFiscal(new Cancelamento
+                {
+                    GrvId = grvId,
+
+                    IdentificadorNota = identificadorNota,
+
+                    Justificativa = "TESTE",
+
+                    Homologacao = isDevelopment,
+
+                    UsuarioId = 1
+                });
+
+                Console.WriteLine("MENSAGEM: " + aux);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERRO: " + ex.Message);
+            }
+        }
+        #endregion Teste de cancelamento da Nota Fiscal
 
         private static void Processamentos(bool isDevelopment, int grvId, int identificadorNota = 0)
         {
