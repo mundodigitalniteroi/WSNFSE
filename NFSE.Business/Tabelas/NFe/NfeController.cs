@@ -103,9 +103,14 @@ namespace NFSE.Business.Tabelas.NFe
             {
                 SQL.Append("   AND IdentificadorNota = '").Append(model.IdentificadorNota).AppendLine("'");
             }
-            else
+            else if (model.GrvId > 0)
             {
                 SQL.Append("   AND GrvId = ").Append(model.GrvId).AppendLine();
+            }
+
+            if (model.NfeId > 0)
+            {
+                SQL.Append("   AND NfeId = ").Append(model.NfeId).AppendLine();
             }
 
             if (!selecionarNotaFiscalCancelada)
@@ -157,7 +162,14 @@ namespace NFSE.Business.Tabelas.NFe
                 SQL.AppendLine("      ,'R')");
             }
 
-            return DataBase.ExecuteScopeIdentity(SQL);
+            try
+            {
+                return DataBase.ExecuteScopeIdentity(SQL);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message + ": " + SQL.ToString());
+            }
         }
 
         public int Atualizar(NfeEntity model)
@@ -279,6 +291,17 @@ namespace NFSE.Business.Tabelas.NFe
             }
 
             return nfe.FirstOrDefault();
+        }
+
+        public void Excluir(int nfeId)
+        {
+            var SQL = new StringBuilder();
+
+            SQL.AppendLine("DELETE FROM dbo.tb_dep_nfe");
+
+            SQL.Append(" WHERE NfeId = ").Append(nfeId).AppendLine();
+
+            DataBase.Execute(SQL);
         }
     }
 }

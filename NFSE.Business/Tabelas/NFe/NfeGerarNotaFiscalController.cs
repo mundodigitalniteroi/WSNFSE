@@ -20,9 +20,9 @@ namespace NFSE.Business.Tabelas.NFe
 {
     public class NfeGerarNotaFiscalController
     {
-        public List<string> GerarNotaFiscal(int grvId, int usuarioId, bool isDev)
+        public List<string> GerarNotaFiscal(int grvId, int usuarioId, bool isDev, bool forcarGeracaoNfe = false)
         {
-            return GerarNotaFiscal(grvId, "", usuarioId, isDev);
+            return GerarNotaFiscal(grvId, "", usuarioId, isDev, forcarGeracaoNfe);
         }
 
         public List<string> GerarNovaNotaFiscal(int grvId, string identificadorNota, int usuarioId, bool isDev)
@@ -30,7 +30,7 @@ namespace NFSE.Business.Tabelas.NFe
             return GerarNotaFiscal(grvId, identificadorNota, usuarioId, isDev);
         }
 
-        private List<string> GerarNotaFiscal(int grvId, string identificadorNota, int usuarioId, bool isDev)
+        private List<string> GerarNotaFiscal(int grvId, string identificadorNota, int usuarioId, bool isDev, bool forcarGeracaoNfe = false)
         {
             Thread.CurrentThread.CurrentCulture = new CultureInfo("pt-BR");
 
@@ -38,12 +38,12 @@ namespace NFSE.Business.Tabelas.NFe
 
             DataBase.SetContextInfo(usuarioId);
 
-            var acao = Acao.Solicitação;
+            const Acao acao = Acao.Solicitação;
 
-            var returnList = new List<string>();
+            List<string> returnList = new List<string>();
 
             #region NFe
-            var NfeList = new List<NfeEntity>();
+            List<NfeEntity> NfeList = new List<NfeEntity>();
 
             // STATUS:
             //   C: Cadastro;
@@ -89,19 +89,30 @@ namespace NFSE.Business.Tabelas.NFe
             }
             else if ((NfeList = new NfeController().Listar(Nfe)) != null)
             {
-                var status = new char[] { 'C', 'A', 'P', 'R', 'S', 'T', 'M' };
-
-                if (NfeList.Where(w => status.Contains(w.Status)).Count() > 0)
+                if (!forcarGeracaoNfe)
                 {
-                    if (NfeList.Count == 1)
+                    var status = new char[] { 'C', 'A', 'P', 'R', 'S', 'T', 'M' };
+
+                    if (NfeList.Count(w => status.Contains(w.Status)) > 0)
                     {
-                        Nfe = NfeList.FirstOrDefault();
-
-                        if (Nfe.Status == 'C' && Nfe.DataCadastro.Date < DateTime.Now.Date)
+                        if (NfeList.Count == 1)
                         {
-                            Nfe.Status = 'I';
+                            Nfe = NfeList.FirstOrDefault();
 
-                            new NfeController().Atualizar(Nfe);
+                            if (Nfe.Status == 'C' && Nfe.DataCadastro.Date < DateTime.Now.Date)
+                            {
+                                Nfe.Status = 'I';
+
+                                new NfeController().Atualizar(Nfe);
+                            }
+                            else
+                            {
+                                new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, "GRV já possui Nota Fiscal cadastrada");
+
+                                returnList.Add("AVISO: GRV já possui Nota Fiscal cadastrada");
+
+                                return returnList;
+                            }
                         }
                         else
                         {
@@ -111,14 +122,6 @@ namespace NFSE.Business.Tabelas.NFe
 
                             return returnList;
                         }
-                    }
-                    else
-                    {
-                        new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, "GRV já possui Nota Fiscal cadastrada");
-
-                        returnList.Add("AVISO: GRV já possui Nota Fiscal cadastrada");
-
-                        return returnList;
                     }
                 }
             }
@@ -185,7 +188,7 @@ namespace NFSE.Business.Tabelas.NFe
             #endregion Atendimento
 
             #region Faturamento
-            var Faturamentos = new List<FaturamentoEntity>();
+            List<FaturamentoEntity> Faturamentos = new List<FaturamentoEntity>();
 
             if ((Faturamentos = new FaturamentoController().Listar(Atendimento.AtendimentoId, 'P')) == null)
             {
@@ -197,197 +200,298 @@ namespace NFSE.Business.Tabelas.NFe
             }
             #endregion Faturamento
 
-            #region Valores somados da Composição do Faturamento
-            var ComposicoesAgrupadas = new List<NfeViewFaturamentoComposicaoAgrupadoEntity>();
+            List<FaturamentoEntity> listaFaturamento = new List<FaturamentoEntity>();
 
-            if ((ComposicoesAgrupadas = new NfeViewFaturamentoComposicaoAgrupadoController().Listar(grvId)) == null)
+            // if (!PossuiRegraNfe(NfeRegras, "EMITIR_NFE_POR_FAT") || DataBase.SystemEnvironment == SystemEnvironment.Production)
+            if (!PossuiRegraNfe(NfeRegras, "EMITIR_NFE_POR_FAT"))
             {
-                new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, "Composição do Faturamento não encontrada");
-
-                returnList.Add("AVISO: Composição do Faturamento não encontrado");
-
-                return returnList;
+                listaFaturamento.Add(Faturamentos[0]);
             }
-            #endregion Valores somados da Composição do Faturamento
-
-            #region Valores somados da Composição do Faturamento
-            var ComposicoesAgrupadasDescricao = new List<NfeViewFaturamentoComposicaoAgrupadoDescricaoEntity>();
-
-            if ((ComposicoesAgrupadasDescricao = new NfeViewFaturamentoComposicaoAgrupadoDescricaoController().Listar(grvId)) == null)
+            else
             {
-                new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, "Composição do Faturamento não encontrada");
-
-                returnList.Add("AVISO: Composição do Faturamento não encontrado");
-
-                return returnList;
-            }
-            #endregion Valores somados da Composição do Faturamento
-
-            #region Composições
-            var Composicoes = new List<NfeViewFaturamentoComposicaoEntity>();
-
-            if ((Composicoes = new NfeViewFaturamentoComposicaoController().Listar(grvId, Nfe.NfeId)) == null)
-            {
-                new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, "Composição do Faturamento da Nota Fiscal não encontrada");
-
-                returnList.Add("AVISO: Composição do Faturamento não encontrado");
-
-                return returnList;
-            }
-            #endregion Composições
-
-            if (Nfe.NfeId > 0)
-            {
-                var Composicao = Composicoes.FirstOrDefault();
-
-                ComposicoesAgrupadas = ComposicoesAgrupadas.Where(w => w.CnaeId == Composicao.CnaeId && w.ListaServicoId == Composicao.ListaServicoId).ToList();
-
-                ComposicoesAgrupadasDescricao = ComposicoesAgrupadasDescricao.Where(w => w.CnaeId == Composicao.CnaeId && w.ListaServicoId == Composicao.ListaServicoId).ToList();
+                listaFaturamento = new FaturamentoController().Listar(Atendimento.AtendimentoId, 'P');
             }
 
-            var CapaAutorizacaoNfse = new CapaAutorizacaoNfse();
 
-            string json;
-
-            List<NfeFaturamentoComposicaoEntity> NfeFaturamentoComposicaoList;
-
-            StringBuilder descricaoConfiguracaoNfe = new StringBuilder();
-
-            foreach (var agrupamento in ComposicoesAgrupadas)
+            foreach (FaturamentoEntity Faturamento in listaFaturamento)
             {
-                descricaoConfiguracaoNfe = new StringBuilder();
+                #region Valores somados da Composição do Faturamento
+                var ComposicoesAgrupadas = new List<NfeViewFaturamentoComposicaoAgrupadoEntity>();
 
-                var aux = ComposicoesAgrupadasDescricao.Where(w => w.CnaeId == agrupamento.CnaeId && w.ListaServicoId == agrupamento.ListaServicoId).ToList();
-
-                foreach (var item in aux)
+                if (PossuiRegraNfe(NfeRegras, "EMITIR_NFE_POR_FAT"))
                 {
-                    if (item.TipoDesconto != '\0')
+                    if ((ComposicoesAgrupadas = new NfeViewFaturamentoComposicaoAgrupadoPorFaturaController().Listar(Faturamento.FaturamentoId)) == null)
                     {
-                        descricaoConfiguracaoNfe.Append(item.DescricaoConfiguracaoNfe).Append(". QTD: ").Append(string.Format("{0:N2}", item.QuantidadeComposicao)).Append(". VALOR: R$ ").Append(string.Format("{0:N2}", item.ValorTipoComposicao)).Append(". DSCT: R$ ").Append(string.Format("{0:N2}", item.ValorDesconto)).Append(". TOT: R$ ").AppendLine(string.Format("{0:N2}", item.TotalComDesconto));
-                    }
-                    else
-                    {
-                        descricaoConfiguracaoNfe.Append(item.DescricaoConfiguracaoNfe).Append(". QTD: ").Append(string.Format("{0:N2}", item.QuantidadeComposicao)).Append(". VALOR: R$ ").Append(string.Format("{0:N2}", item.ValorTipoComposicao)).Append(". TOT: R$ ").AppendLine(string.Format("{0:N2}", item.TotalComDesconto));
-                    }
-                }
+                        new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, "Composição do Faturamento não encontrada");
 
-                #region Preenchimento da Entidade
-                try
-                {
-                    CapaAutorizacaoNfse = new CapaAutorizacaoNfse
-                    {
-                        GrvId = grvId,
+                        returnList.Add("AVISO: Composição do Faturamento não encontrado");
 
-                        IdentificadorNota = new DetranController().GetDetranSequence("NFE"),
-
-                        UsuarioId = usuarioId,
-
-                        Homologacao = isDev,
-
-                        Autorizacao = Autorizar(grv, Deposito, ClienteDeposito, NfeRegras, Empresa, Atendimento, agrupamento, descricaoConfiguracaoNfe.ToString().Trim(), isDev)
-                    };
-                }
-                catch (Exception ex)
-                {
-                    new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, ex.Message);
-
-                    returnList.Add(ex.Message);
-
-                    continue;
-                }
-                #endregion Preenchimento da Entidade
-
-
-                #region Cadastro do Envio/Reenvio
-                try
-                {
-                    if (Nfe.NfeId == 0)
-                    {
-                        // Cadastro do Envio
-                        Nfe = CadastrarNfe(grvId, Empresa.Cnpj, CapaAutorizacaoNfse.IdentificadorNota, usuarioId);
-                    }
-                    else
-                    {
-                        // Cadastro do Reenvio
-                        Nfe = CadastrarNfe(grvId, Empresa.Cnpj, CapaAutorizacaoNfse.IdentificadorNota, usuarioId, Nfe.NfeId);
+                        return returnList;
                     }
                 }
-                catch (Exception ex)
+                else
                 {
-                    new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, ex.Message);
-
-                    returnList.Add("Erro ao cadastrar a NF: " + ex.Message);
-
-                    continue;
-                }
-
-                Nfe.Cliente = Cliente.Nome;
-
-                Nfe.Deposito = Deposito.Descricao;
-
-                #endregion Cadastro do Envio/Reenvio
-
-
-                #region Cadastro da Composição da Nota Fiscal
-
-                NfeFaturamentoComposicaoList = new List<NfeFaturamentoComposicaoEntity>();
-
-                try
-                {
-                    new NfeFaturamentoComposicaoController().Cadastrar(Nfe.NfeId, Composicoes.Where(w => w.Servico == agrupamento.Servico).ToList());
-                }
-                catch (Exception ex)
-                {
-                    new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, ex.Message);
-
-                    returnList.Add("Erro ao cadastrar a composição da NF: " + ex.Message);
-
-                    continue;
-                }
-                #endregion Cadastro da Composição da Nota Fiscal
-
-
-                #region Execução do Web Service
-                try
-                {
-                    json = new NfeSolicitarEmissaoNotaFiscalController().SolicitarEmissaoNotaFiscal(CapaAutorizacaoNfse);
-                }
-                catch (Exception ex)
-                {
-                    new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, ex.Message);
-
-                    returnList.Add("Erro na Execução do Web Service: " + ex.Message);
-
-                    continue;
-                }
-
-                returnList.Add(json);
-                #endregion Execução do Web Service
-
-
-                #region Processamento do resultado
-                try
-                {
-                    if (!ProcessarResultado(json, usuarioId, Nfe))
+                    if ((ComposicoesAgrupadas = new NfeViewFaturamentoComposicaoAgrupadoController().Listar(grvId)) == null)
                     {
+                        new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, "Composição do Faturamento não encontrada");
+
+                        returnList.Add("AVISO: Composição do Faturamento não encontrado");
+
+                        return returnList;
+                    }
+                }
+                #endregion Valores somados da Composição do Faturamento
+
+                #region Valores somados da Composição do Faturamento
+                var ComposicoesAgrupadasDescricao = new List<NfeViewFaturamentoComposicaoAgrupadoDescricaoEntity>();
+
+                if (PossuiRegraNfe(NfeRegras, "EMITIR_NFE_POR_FAT"))
+                {
+                    if ((ComposicoesAgrupadasDescricao = new NfeViewFaturamentoComposicaoAgrupadoDescricaoPorFaturaController().Listar(Faturamento.FaturamentoId)) == null)
+                    {
+                        new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, "Composição do Faturamento não encontrada");
+
+                        returnList.Add("AVISO: Composição do Faturamento não encontrado");
+
+                        return returnList;
+                    }
+                }
+                else
+                {
+                    if ((ComposicoesAgrupadasDescricao = new NfeViewFaturamentoComposicaoAgrupadoDescricaoController().Listar(grvId)) == null)
+                    {
+                        new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, "Composição do Faturamento não encontrada");
+
+                        returnList.Add("AVISO: Composição do Faturamento não encontrado");
+
+                        return returnList;
+                    }
+                }
+                #endregion Valores somados da Composição do Faturamento
+
+                #region Composições
+                var Composicoes = new List<NfeViewFaturamentoComposicaoEntity>();
+
+                if (PossuiRegraNfe(NfeRegras, "EMITIR_NFE_POR_FAT"))
+                {
+                    if ((Composicoes = new NfeViewFaturamentoComposicaoPorFaturaController().Listar(grvId, Nfe.NfeId, Faturamento.FaturamentoId)) == null)
+                    {
+                        new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, "Composição do Faturamento da Nota Fiscal não encontrada");
+
+                        returnList.Add("AVISO: Composição do Faturamento não encontrado");
+
+                        return returnList;
+                    }
+                }
+                else
+                {
+                    if ((Composicoes = new NfeViewFaturamentoComposicaoController().Listar(grvId, Nfe.NfeId)) == null)
+                    {
+                        new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, "Composição do Faturamento da Nota Fiscal não encontrada");
+
+                        returnList.Add("AVISO: Composição do Faturamento não encontrado");
+
+                        return returnList;
+                    }
+                }
+                #endregion Composições
+
+                if (Nfe.NfeId > 0)
+                {
+                    var Composicao = Composicoes.FirstOrDefault();
+
+                    ComposicoesAgrupadas = ComposicoesAgrupadas.Where(w => w.CnaeId == Composicao.CnaeId && w.ListaServicoId == Composicao.ListaServicoId).ToList();
+
+                    ComposicoesAgrupadasDescricao = ComposicoesAgrupadasDescricao.Where(w => w.CnaeId == Composicao.CnaeId && w.ListaServicoId == Composicao.ListaServicoId).ToList();
+                }
+
+                var CapaAutorizacaoNfse = new CapaAutorizacaoNfse();
+
+                string json;
+
+                List<NfeFaturamentoComposicaoEntity> NfeFaturamentoComposicaoList;
+
+                StringBuilder descricaoConfiguracaoNfe = new StringBuilder();
+
+                bool naoGerar = false;
+
+                foreach (var agrupamento in ComposicoesAgrupadas)
+                {
+                    descricaoConfiguracaoNfe = new StringBuilder();
+
+                    List<NfeViewFaturamentoComposicaoAgrupadoDescricaoEntity> aux = ComposicoesAgrupadasDescricao.Where(w => w.CnaeId == agrupamento.CnaeId && w.ListaServicoId == agrupamento.ListaServicoId).ToList();
+
+                    foreach (var item in aux)
+                    {
+                        if (item.TipoDesconto != '\0')
+                        {
+                            descricaoConfiguracaoNfe
+                                .Append(item.DescricaoConfiguracaoNfe)
+                                .Append(". QTD: ")
+                                .AppendFormat("{0:N2}", item.QuantidadeComposicao)
+                                .Append(". VALOR: R$ ")
+                                .AppendFormat("{0:N2}", item.ValorTipoComposicao)
+                                .Append(". DSCT: R$ ")
+                                .AppendFormat("{0:N2}", item.ValorDesconto)
+                                .Append(". TOT: R$ ")
+                                .AppendFormat("{0:N2}", item.TotalComDesconto)
+                                .AppendLine();
+                        }
+                        else
+                        {
+                            descricaoConfiguracaoNfe
+                                .Append(item.DescricaoConfiguracaoNfe)
+                                .Append(". QTD: ")
+                                .AppendFormat("{0:N2}", item.QuantidadeComposicao)
+                                .Append(". VALOR: R$ ")
+                                .AppendFormat("{0:N2}", item.ValorTipoComposicao)
+                                .Append(". TOT: R$ ")
+                                .AppendFormat("{0:N2}", item.TotalComDesconto)
+                                .AppendLine();
+                        }
+                    }
+
+                    if (forcarGeracaoNfe)
+                    {
+                        foreach (NfeViewFaturamentoComposicaoEntity composicao in Composicoes)
+                        {
+                            if (aux[0].Cnae == composicao.Cnae)
+                            {
+                                if (new NfeFaturamentoComposicaoController().Listar(0, composicao.FaturamentoComposicaoId) != null)
+                                {
+                                    naoGerar = true;
+
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    if (naoGerar)
+                    {
+                        naoGerar = false;
+
                         continue;
                     }
-                }
-                catch (Exception ex)
-                {
-                    new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, ex.Message);
 
-                    returnList.Add("Erro no processamento do resultado do Web Service: " + ex.Message);
+                    #region Preenchimento da Entidade
+                    try
+                    {
+                        CapaAutorizacaoNfse = new CapaAutorizacaoNfse
+                        {
+                            GrvId = grvId,
 
-                    continue;
-                }
-                finally
-                {
+                            IdentificadorNota = new DetranController().GetDetranSequence("NFE"),
+
+                            UsuarioId = usuarioId,
+
+                            Homologacao = isDev,
+
+                            Autorizacao = Autorizar(grv, Deposito, ClienteDeposito, NfeRegras, Empresa, Atendimento, agrupamento, descricaoConfiguracaoNfe.ToString().Trim(), isDev)
+                        };
+                    }
+                    catch (Exception ex)
+                    {
+                        new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, ex.Message);
+
+                        returnList.Add(ex.Message);
+
+                        continue;
+                    }
+                    #endregion Preenchimento da Entidade
+
+
+                    #region Cadastro do Envio/Reenvio
+                    try
+                    {
+                        if (!string.IsNullOrWhiteSpace(identificadorNota))
+                        {
+                            // Cadastro do Reenvio
+                            Nfe = CadastrarNfe(grvId, Empresa.Cnpj, CapaAutorizacaoNfse.IdentificadorNota, usuarioId, Nfe.NfeId);
+                        }
+                        else
+                        {
+                            // Cadastro do Envio
+                            Nfe = CadastrarNfe(grvId, Empresa.Cnpj, CapaAutorizacaoNfse.IdentificadorNota, usuarioId);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, ex.Message);
+
+                        returnList.Add("Erro ao cadastrar a NF: " + ex.Message);
+
+                        continue;
+                    }
+
+                    Nfe.Cliente = Cliente.Nome;
+
+                    Nfe.Deposito = Deposito.Descricao;
+
+                    #endregion Cadastro do Envio/Reenvio
+
+
+                    #region Cadastro da Composição da Nota Fiscal
+
+                    NfeFaturamentoComposicaoList = new List<NfeFaturamentoComposicaoEntity>();
+
+                    try
+                    {
+                        new NfeFaturamentoComposicaoController().Cadastrar(Nfe.NfeId, Composicoes.Where(w => w.Servico == agrupamento.Servico).ToList());
+                    }
+                    catch (Exception ex)
+                    {
+                        new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, ex.Message);
+
+                        returnList.Add("Erro ao cadastrar a composição da NF: " + ex.Message);
+
+                        continue;
+                    }
+                    #endregion Cadastro da Composição da Nota Fiscal
+
+
+                    #region Execução do Web Service
+                    try
+                    {
+                        json = new NfeSolicitarEmissaoNotaFiscalController().SolicitarEmissaoNotaFiscal(CapaAutorizacaoNfse);
+                    }
+                    catch (Exception ex)
+                    {
+                        new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, ex.Message);
+
+                        returnList.Add("Erro na Execução do Web Service: " + ex.Message);
+
+                        continue;
+                    }
+
+                    returnList.Add(json);
+                    #endregion Execução do Web Service
+
+
+                    #region Processamento do resultado
+                    try
+                    {
+                        if (!ProcessarResultado(json, usuarioId, Nfe))
+                        {
+                            continue;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, ex.Message);
+
+                        returnList.Add("Erro no processamento do resultado do Web Service: " + ex.Message);
+
+                        continue;
+                    }
+                    finally
+                    {
+                        Nfe = new NfeEntity();
+                    }
+                    #endregion Processamento do resultado
+
                     Nfe = new NfeEntity();
                 }
-                #endregion Processamento do resultado
-
-                Nfe = new NfeEntity();
             }
 
             return returnList;
@@ -490,13 +594,20 @@ namespace NFSE.Business.Tabelas.NFe
         {
             var now = DateTime.Now.AddHours(-1);
 
+            string regimeEspecialTributacao = null;
+
+            if (PossuiRegraNfe(nfeRegras, "REGIMEESPECTRIBUTAC"))
+            {
+                regimeEspecialTributacao = nfeRegras.Where(w => w.RegraCodigo.Equals("REGIMEESPECTRIBUTAC")).Select(s => s.Valor).ToList()[0];
+            }
+
             var Autorizacao = new Autorizacao
             {
                 data_emissao = now.ToString("yyyy-MM-dd") + "T" + now.ToString("HH:mm:ss"),
 
-                natureza_operacao = "1",
+                regime_especial_tributacao = regimeEspecialTributacao,
 
-                optante_simples_nacional = empresa.OptanteSimplesNacional.Equals('S') ? "true" : "false",
+                optante_simples_nacional = empresa.OptanteSimplesNacional.Equals('S'),
 
                 prestador = Prestador(empresa, composicao.FlagEnviarInscricaoEstadual),
 
@@ -544,7 +655,7 @@ namespace NFSE.Business.Tabelas.NFe
 
         private Endereco Endereco(AtendimentoEntity atendimento)
         {
-            var CEP = new EnderecoCompletoController().Selecionar(atendimento.NotaFiscalCep);
+            EnderecoCompletoEntity CEP = new EnderecoCompletoController().Selecionar(atendimento.NotaFiscalCep);
 
             string CodigoMunicipioIbge;
 
@@ -657,21 +768,6 @@ namespace NFSE.Business.Tabelas.NFe
                 valorIss = Math.Truncate(100 * valorIss) / 100;
             }
 
-            //else
-            //{
-            //    var regra = nfeRegras.Where(w => w.RegraCodigo.Equals("VLSERVICO=TOTAL+IMP") && w.Ativo == 1)
-            //        .FirstOrDefault();
-
-            //    if (regra != null)
-            //    {
-            //        valorServicos = Math.Round(composicao.TotalComDesconto + valorIss, 2).ToString().Replace(",", ".");
-            //    }
-            //    else
-            //    {
-            //        valorServicos = Math.Round(composicao.TotalComDesconto, 2).ToString().Replace(",", ".");
-            //    }
-            //}
-
             string valorServicos;
 
             if (isDev)
@@ -690,7 +786,7 @@ namespace NFSE.Business.Tabelas.NFe
                 GravarLog("R7: POSSUI REGRA 'BASE_CALCULO'");
 
                 GravarLog("R7.1: baseCalculo = valorServicos");
-                GravarLog($"      baseCalculo = {valorServicos}");
+                GravarLog($"     baseCalculo = {valorServicos}");
 
                 baseCalculo = valorServicos;
             }
@@ -713,13 +809,16 @@ namespace NFSE.Business.Tabelas.NFe
 
             GravarLog($"F9: BASE DE CÁLCULO: {(!string.IsNullOrWhiteSpace(baseCalculo) ? baseCalculo : "CLIDEP NÃO POSSUI A REGRA 'BASE_CALCULO'")}");
 
+            if (PossuiRegraNfe(nfeRegras, "ALIQUOTANULA"))
+            {
+                GravarLog("R1: POSSUI REGRA 'ALIQUOTANULA'");
+            }
+
             return new Servico
             {
-                aliquota = string.Format("{0:N2}", AliquotaIss).Replace(",", "."),
+                aliquota = PossuiRegraNfe(nfeRegras, "ALIQUOTANULA") ? null : string.Format("{0:N2}", AliquotaIss).Replace(",", "."),
 
                 discriminacao = descricaoConfiguracaoNfe + " CONFORME PROCESSO " + grv.NumeroFormularioGrv,
-
-                iss_retido = "false",
 
                 codigo_cnae = composicao.Cnae,
 

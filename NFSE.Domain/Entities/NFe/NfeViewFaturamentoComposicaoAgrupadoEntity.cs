@@ -8,6 +8,8 @@
 
         public int AtendimentoId { get; set; }
 
+        public int FaturamentoId { get; set; }
+
         public int CnaeId { get; set; }
 
         public string Cnae { get; set; }

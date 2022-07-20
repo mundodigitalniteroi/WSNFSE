@@ -65,7 +65,7 @@ namespace NFSE.Business.Tabelas.NFe
                     goto Outer;
                 }
 
-                AtualizarNotaFiscal(nfe);
+                AtualizarStatusNotaFiscal(nfe);
 
                 new NfeWsErroController().CadastrarErroGenerico(nfe.GrvId, identificaoNotaFiscal.UsuarioId, nfe.IdentificadorNota, OrigemErro.WebService, Acao.Retorno, "Ocorreu um erro ao receber a Nota Fiscal: " + ex.Message);
 
@@ -78,7 +78,7 @@ namespace NFSE.Business.Tabelas.NFe
             }
             catch (Exception ex)
             {
-                AtualizarNotaFiscal(nfe);
+                AtualizarStatusNotaFiscal(nfe);
 
                 new NfeWsErroController().CadastrarErroGenerico(nfe.GrvId, identificaoNotaFiscal.UsuarioId, nfe.IdentificadorNota, OrigemErro.MobLink, Acao.Retorno, "Ocorreu um erro ao cadastrar a Nota Fiscal: " + ex.Message);
 
@@ -218,7 +218,7 @@ namespace NFSE.Business.Tabelas.NFe
                 DepositoId = depositoId
             });
 
-            if (regrasNfe?.Count(w => w.RegraCodigo.Equals("NFPDF") && w.Ativo.Equals(1)) > 0 || url.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
+            if (regrasNfe?.Count(w => w.RegraCodigo.Equals("NFPDF") && w.Ativo.Equals(1)) > 0 || url.EndsWith(".pdf", StringComparison.CurrentCultureIgnoreCase))
             {
                 using (WebClient webClient = new WebClient())
                 {
@@ -229,7 +229,7 @@ namespace NFSE.Business.Tabelas.NFe
 
                     webClient.DownloadFile(url, str1);
 
-                    new PdfToJpg().Process(str1, str2);
+                    PdfToJpg.Process(str1, str2);
 
                     using (MemoryStream memoryStream = new MemoryStream())
                     {
@@ -243,7 +243,7 @@ namespace NFSE.Business.Tabelas.NFe
             {
                 using (MemoryStream memoryStream = new MemoryStream())
                 {
-                    new Tools().ObterImagemEndereco(url).Save(memoryStream, ImageFormat.Jpeg);
+                    Tools.ObterImagemEndereco(url).Save(memoryStream, ImageFormat.Jpeg);
 
                     imagemNotaFiscal = memoryStream.ToArray();
                 }
@@ -345,8 +345,13 @@ namespace NFSE.Business.Tabelas.NFe
             return bmpImage.Clone(cropArea, bmpImage.PixelFormat);
         }
 
-        private void AtualizarNotaFiscal(NfeEntity nfe)
+        private void AtualizarStatusNotaFiscal(NfeEntity nfe)
         {
+            if (nfe.Status == 'P' || nfe.Status == 'T')
+            {
+                return;
+            }
+
             nfe.Status = 'E';
 
             new NfeController().Atualizar(nfe);
@@ -389,7 +394,7 @@ namespace NFSE.Business.Tabelas.NFe
                     goto Outer;
                 }
 
-                AtualizarNotaFiscal(nfe);
+                AtualizarStatusNotaFiscal(nfe);
 
                 throw new Exception("Ocorreu um erro ao receber a Nota Fiscal (" + model.IdentificadorNota + "): " + ex.Message);
             }
@@ -400,7 +405,7 @@ namespace NFSE.Business.Tabelas.NFe
             }
             catch (Exception ex)
             {
-                AtualizarNotaFiscal(nfe);
+                AtualizarStatusNotaFiscal(nfe);
 
                 throw new Exception("Ocorreu um erro ao cadastrar a Nota Fiscal (" + model.IdentificadorNota + "): " + ex.Message);
             }

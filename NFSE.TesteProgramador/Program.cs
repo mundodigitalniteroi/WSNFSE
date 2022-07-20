@@ -5,6 +5,7 @@ using NFSE.Domain.Entities.NFe;
 using NFSE.Domain.Enum;
 using NFSE.Infra.Data;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace EnvioTeste
@@ -13,21 +14,71 @@ namespace EnvioTeste
     {
         private static void Main()
         {
-            DataBase.SystemEnvironment = SystemEnvironment.Development;
-
             // DataBase.SystemEnvironment = SystemEnvironment.Development;
+
+            DataBase.SystemEnvironment = SystemEnvironment.Production;
 
             bool isDevelopment = DataBase.SystemEnvironment.Equals(SystemEnvironment.Development);
 
-            const int grvId = 947140;
+            int grvId = 999762;
 
-            const string identificadorNota = "801210";
+            GrvEntity grv;
 
-            // SolicitarNotaFiscal(grvId, isDevelopment);
+            string[] grvs = { "748965"
+ };
+
+            List<GrvEntity> resultado;
+
+            for (int i = 0; i < grvs.Length; i++)
+            {
+                resultado = new GrvController().Listar(new GrvEntity { NumeroFormularioGrv = grvs[i]/*, ClienteId = 41*/ });
+
+                if (resultado != null)
+                {
+                    if (resultado.Count > 1)
+                    {
+                        Console.WriteLine("GRV DUPLICADO: " + grvs[i] + ". PLACAS: ");
+
+                        foreach (var res in resultado)
+                        {
+                            Console.WriteLine(res.Placa);
+                        }
+
+                        continue;
+                    }
+
+                    SolicitarNotaFiscal(resultado[0].GrvId, isDevelopment);
+
+                    Console.WriteLine("GRV PROCESSADO: " + grvs[i]);
+                }
+                else
+                {
+                    if (true)
+                    {
+
+                    }
+                }
+            }
+
+            if (true)
+            {
+                grv = new GrvController().Selecionar("909361412");
+
+                if (grv != null)
+                {
+                    grvId = grv.GrvId;
+                }
+            }
+
+            //const string identificadorNota = "801865";
+
+            SolicitarNotaFiscal(grvId, isDevelopment);
+
+            // SolicitarNovaNotaFiscal(grvId, identificadorNota, isDevelopment);
 
             // ReceberNotaFiscal(grvId, identificadorNota, isDevelopment);
 
-            CancelarNotaFiscal(grvId, identificadorNota, isDevelopment);
+            // CancelarNotaFiscal(grvId, identificadorNota, isDevelopment);
 
             Console.ReadLine();
         }
@@ -40,6 +91,36 @@ namespace EnvioTeste
                 var nfe = new NfeGerarNotaFiscalController().GerarNotaFiscal
                 (
                     grvId: grvId,
+
+                    usuarioId: 1,
+
+                    isDev: isDevelopment,
+
+                    forcarGeracaoNfe: true
+                );
+
+                for (int i = 0; i < nfe.Count; i++)
+                {
+                    Console.WriteLine("MENSAGEM: " + nfe[i]);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("ERRO: " + ex.Message);
+            }
+        }
+        #endregion Teste de solicitação da Nota Fiscal
+
+        #region Teste de solicitação de Nota Fiscal
+        private static void SolicitarNovaNotaFiscal(int grvId, string identificadorNota, bool isDevelopment)
+        {
+            try
+            {
+                var nfe = new NfeGerarNotaFiscalController().GerarNovaNotaFiscal
+                (
+                    grvId: grvId,
+
+                    identificadorNota: identificadorNota,
 
                     usuarioId: 1,
 
@@ -326,8 +407,8 @@ namespace EnvioTeste
                 Autorizacao = new Autorizacao
                 {
                     data_emissao = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss"),
-                    natureza_operacao = "1",
-                    optante_simples_nacional = "false",
+                    natureza_operacao = 1,
+                    optante_simples_nacional = false,
 
                     prestador = new Prestador
                     {
@@ -343,7 +424,6 @@ namespace EnvioTeste
                         codigo_tributario_municipio = "",
                         discriminacao = "ISS Tributado de acordo com a Lei Complementar Nº 460 de 22/10/2008 Processo Nº 9094604500 - Carga Tributária 18,45% fonte IBPT Serviços de Transporte/Remoção de Veículos",
                         item_lista_servico = "1101",
-                        iss_retido = "false",
                         valor_iss = "0.05",
                         valor_servicos = "1.0"
                     },

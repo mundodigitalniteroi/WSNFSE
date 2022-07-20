@@ -45,9 +45,7 @@ namespace NFSE.Business.Tabelas.NFe
             }
             #endregion Empresa
 
-            var tools = new Tools();
-
-            string jsonEnvio = tools.ObjToJSON(new Dictionary<string, string>()
+            string jsonEnvio = Tools.ObjToJSON(new Dictionary<string, string>()
             {
                 {
                     "justificativa",
@@ -59,7 +57,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             try
             {
-                jsonRetorno = tools.CancelarNfse(new NfeConfiguracao().GetRemoteServer() + "/" + model.IdentificadorNota, jsonEnvio, Empresa.Token);
+                jsonRetorno = Tools.CancelarNfse(new NfeConfiguracao().GetRemoteServer() + "/" + model.IdentificadorNota, jsonEnvio, Empresa.Token);
             }
             catch (Exception ex)
             {
@@ -148,12 +146,11 @@ namespace NFSE.Business.Tabelas.NFe
             }
             #endregion Empresa
 
-            var tools = new Tools();
-
-            string jsonEnvio = tools.ObjToJSON(new Dictionary<string, string>()
+            string jsonEnvio = Tools.ObjToJSON(new Dictionary<string, string>()
             {
                 {
                     "justificativa",
+
                     model.Justificativa
                 }
             });
@@ -162,7 +159,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             try
             {
-                jsonRetorno = tools.CancelarNfse(new NfeConfiguracao().GetRemoteServer() + "/" + model.IdentificadorNota, jsonEnvio, Empresa.Token);
+                jsonRetorno = Tools.CancelarNfse(new NfeConfiguracao().GetRemoteServer() + "/" + model.IdentificadorNota, jsonEnvio, Empresa.Token);
             }
             catch (Exception ex)
             {

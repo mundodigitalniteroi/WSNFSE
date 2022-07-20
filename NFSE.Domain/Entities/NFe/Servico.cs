@@ -6,7 +6,7 @@
 
         public string discriminacao { get; set; }
 
-        public string iss_retido { get; set; }
+        public bool iss_retido { get; set; }
 
         public string item_lista_servico { get; set; }
 

@@ -52,9 +52,11 @@ namespace NFSE.Business.Tabelas.NFe
                 throw new Exception("Ocorreu um erro ao criar o JSON da Nota Fiscal (" + model.IdentificadorNota + "): " + ex.Message);
             }
 
+            Console.WriteLine(json);
+
             try
             {
-                resposta = new Tools().PostNfse
+                resposta = Tools.PostNfse
                 (
                     uri: new NfeConfiguracao().GetRemoteServer() + "?ref=" + model.IdentificadorNota,
                     json: json,
@@ -107,7 +109,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             try
             {
-                return new Tools().PostNfse
+                return Tools.PostNfse
                 (
                     uri: new NfeConfiguracao().GetRemoteServer() + "?ref=" + model.IdentificadorNota,
                     json: CreateJson(model),
@@ -122,22 +124,13 @@ namespace NFSE.Business.Tabelas.NFe
 
         private string CreateJson(CapaAutorizacaoNfse model)
         {
-            var tools = new Tools();
-
-            string json = tools.ObjToJSON(model.Autorizacao);
+            string json = Tools.ObjToJSON(model.Autorizacao);
 
             var jsonUtil = new JsonUtil.JsonUtil();
 
-            if (string.IsNullOrWhiteSpace(model.Autorizacao.tomador.cnpj))
-            {
-                json = jsonUtil.RemoveElement(json, "tomador", "cnpj");
-            }
-            else
-            {
-                json = jsonUtil.RemoveElement(json, "tomador", "cpf");
-            }
-
-            return json;
+            return string.IsNullOrWhiteSpace(model.Autorizacao.tomador.cnpj)
+                ? jsonUtil.RemoveElement(json, "tomador", "cnpj")
+                : jsonUtil.RemoveElement(json, "tomador", "cpf");
         }
     }
 }

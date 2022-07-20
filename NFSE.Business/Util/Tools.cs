@@ -15,7 +15,7 @@ namespace NFSE.Business.Util
 {
     public class Tools
     {
-        public string PostNfse(string uri, string json, string token)
+        public static string PostNfse(string uri, string json, string token)
         {
             Thread.CurrentThread.CurrentCulture = new CultureInfo("pt-BR");
 
@@ -54,7 +54,7 @@ namespace NFSE.Business.Util
             }
         }
 
-        public string CancelarNfse(string uri, string json, string token)
+        public static string CancelarNfse(string uri, string json, string token)
         {
             Thread.CurrentThread.CurrentCulture = new CultureInfo("pt-BR");
 
@@ -93,7 +93,7 @@ namespace NFSE.Business.Util
             }
         }
 
-        public string ObjToJSON(object obj)
+        public static string ObjToJSON(object obj)
         {
             return new JavaScriptSerializer()
             {
@@ -101,7 +101,7 @@ namespace NFSE.Business.Util
             }.Serialize(obj);
         }
 
-        public object JSONToObj(string serial, Type tipo)
+        public static object JSONToObj(string serial, Type tipo)
         {
             return new JavaScriptSerializer()
             {
@@ -109,19 +109,25 @@ namespace NFSE.Business.Util
             }.Deserialize(serial, tipo);
         }
 
-        public string ToCsv(DataTable dataTable)
+        public static string ToCsv(DataTable dataTable)
         {
             StringBuilder stringBuilder = new StringBuilder();
 
             if (dataTable.Columns.Count == 0)
+            {
                 return (string)null;
+            }
 
             foreach (object column in (InternalDataCollectionBase)dataTable.Columns)
             {
                 if (column == null)
+                {
                     stringBuilder.Append(";");
+                }
                 else
+                {
                     stringBuilder.Append('\"').Append(column.ToString().Replace("\"", "\"\"")).Append("\";");
+                }
             }
 
             stringBuilder.Replace(";", Environment.NewLine, stringBuilder.Length - 1, 1);
@@ -131,9 +137,13 @@ namespace NFSE.Business.Util
                 foreach (object obj in row.ItemArray)
                 {
                     if (obj == null)
+                    {
                         stringBuilder.Append(";");
+                    }
                     else
+                    {
                         stringBuilder.Append('\"').Append(obj.ToString().Replace("\"", "\"\"")).Append("\";");
+                    }
                 }
 
                 stringBuilder.Replace(";", Environment.NewLine, stringBuilder.Length - 1, 1);
@@ -142,7 +152,7 @@ namespace NFSE.Business.Util
             return stringBuilder.ToString();
         }
 
-        public Bitmap ObterImagemEndereco(string url)
+        public static Bitmap ObterImagemEndereco(string url)
         {
             Bitmap Retorno = null;
 
@@ -169,7 +179,7 @@ namespace NFSE.Business.Util
             return Retorno;
         }
 
-        public Bitmap CaptureWebPage(string URL)
+        public static Bitmap CaptureWebPage(string URL)
         {
             using (var webBrowser = new WebBrowser { ScrollBarsEnabled = false, ScriptErrorsSuppressed = true })
             {
@@ -187,6 +197,7 @@ namespace NFSE.Business.Util
                 const int height = 1700; // webBrowser.Document.Body.ScrollRectangle.Height + 50;
 
                 webBrowser.Width = width;
+
                 webBrowser.Height = height;
 
                 Bitmap bitmap = new Bitmap(width, height);

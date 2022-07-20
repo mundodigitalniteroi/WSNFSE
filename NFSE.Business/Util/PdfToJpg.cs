@@ -5,9 +5,9 @@ using System.IO;
 
 namespace NFSE.Business.Util
 {
-    public class PdfToJpg
+    public abstract class PdfToJpg
     {
-        public void Process(string pdfFileName, string jpgFileName)
+        public static void Process(string pdfFileName, string jpgFileName)
         {
             if (File.Exists(jpgFileName))
             {

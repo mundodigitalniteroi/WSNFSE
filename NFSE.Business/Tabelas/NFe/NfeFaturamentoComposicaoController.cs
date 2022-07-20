@@ -8,7 +8,7 @@ namespace NFSE.Business.Tabelas.NFe
 {
     public class NfeFaturamentoComposicaoController
     {
-        public List<NfeFaturamentoComposicaoEntity> Listar(int nfeId)
+        public List<NfeFaturamentoComposicaoEntity> Listar(int nfeId, int faturamentoComposicaoId = 0)
         {
             var SQL = new StringBuilder();
 
@@ -20,7 +20,14 @@ namespace NFSE.Business.Tabelas.NFe
 
             SQL.AppendLine("  FROM dbo.tb_dep_nfe_faturamento_composicao");
 
-            SQL.Append(" WHERE tb_dep_nfe_faturamento_composicao.NfeId = ").Append(nfeId).AppendLine();
+            if (nfeId > 0)
+            {
+                SQL.Append(" WHERE tb_dep_nfe_faturamento_composicao.NfeId = ").Append(nfeId).AppendLine();
+            }
+            else if (faturamentoComposicaoId > 0)
+            {
+                SQL.Append(" WHERE tb_dep_nfe_faturamento_composicao.FaturamentoComposicaoId = ").Append(faturamentoComposicaoId).AppendLine();
+            }
 
             using (var dataTable = DataBase.Select(SQL))
             {
@@ -58,6 +65,17 @@ namespace NFSE.Business.Tabelas.NFe
                     SQL.AppendLine(",");
                 }
             }
+
+            DataBase.Execute(SQL);
+        }
+
+        public void Excluir(int nfeId)
+        {
+            var SQL = new StringBuilder();
+
+            SQL.AppendLine("DELETE FROM dbo.tb_dep_nfe_faturamento_composicao");
+
+            SQL.Append(" WHERE NfeId = ").Append(nfeId).AppendLine();
 
             DataBase.Execute(SQL);
         }

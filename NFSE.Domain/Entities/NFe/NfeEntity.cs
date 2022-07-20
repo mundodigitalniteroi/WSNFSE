@@ -28,10 +28,10 @@ namespace NFSE.Domain.Entities.NFe
 
         // STATUS:
         //   C: Cadastro;
-        //   A: Aguardando Processamento (envio da solicitação com sucesso, para a Prefeitura);
+        //   A: Aguardando Processamento (envio da solicitação, para a Prefeitura, com sucesso);
         //   P: Processado (download da Nfe e atualização da Nfe no Sistema concluídos com sucesso);
         //   R: Reprocessar (marcação manual para o envio de uma nova solicitação de Nfe para o mesmo GRV, esta opção gera um novo registro de Nfe);
-        //   S: Aguardando Reprocessamento;
+        //   S: Aguardando Reprocessamento (reenvio da solicitação, para a Prefeitura, com sucesso);
         //   T: Reprocessado (conclusão do reprocessamento);
         //   N: CaNcelado.
         //   E: Erro (quando a Prefeitura indicou algum problema);

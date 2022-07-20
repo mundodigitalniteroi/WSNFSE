@@ -70,6 +70,8 @@
     <Compile Include="Tabelas\NFe\NfePrestadorAvulsoPersistence.cs" />
     <Compile Include="Tabelas\NFe\NfeRegraController.cs" />
     <Compile Include="Tabelas\NFe\NfeViewFaturamentoComposicaoAgrupadoDescricaoController.cs" />
+    <Compile Include="Tabelas\NFe\NfeViewFaturamentoComposicaoAgrupadoDescricaoPorFaturaController.cs" />
+    <Compile Include="Tabelas\NFe\NfeViewFaturamentoComposicaoAgrupadoPorFaturaController.cs" />
     <Compile Include="Tabelas\NFe\NfeViewFaturamentoComposicaoController.cs" />
     <Compile Include="Tabelas\DP\UsuarioController.cs" />
     <Compile Include="Tabelas\Global\CnaeListaServicoParametroMunicipioController.cs" />
@@ -97,6 +99,7 @@
     <Compile Include="Tabelas\NFe\NfeController.cs" />
     <Compile Include="Tabelas\NFe\NfeGerarNotaFiscalController.cs" />
     <Compile Include="Tabelas\NFe\NfeReceberNotaFiscalController.cs" />
+    <Compile Include="Tabelas\NFe\NfeViewFaturamentoComposicaoPorFaturaController.cs" />
     <Compile Include="Tabelas\NFe\NfeWsErroController.cs" />
     <Compile Include="Tabelas\NFe\NfeRetornoController.cs" />
     <Compile Include="Tabelas\NFe\NfeMensagemController.cs" />

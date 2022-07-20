@@ -125,7 +125,9 @@ namespace NFSE.Business.Tabelas.NFe
 
             SQL.Append("      (").Append(nfe.NfeId).AppendLine();
             SQL.Append("      ,").AppendLine(DataBase.SetNullIfEmpty(capaAutorizacaoNfse.Autorizacao.natureza_operacao));
-            SQL.Append("      ,").AppendLine(DataBase.SetNullIfEmpty(Convert.ToInt32(bool.Parse(capaAutorizacaoNfse.Autorizacao.optante_simples_nacional)).ToString()));
+
+            SQL.Append("      ,").AppendLine(capaAutorizacaoNfse.Autorizacao.optante_simples_nacional ? "1" : "0");
+
             SQL.Append("      ,").AppendLine(DataBase.SetNullIfEmpty(capaAutorizacaoNfse.Autorizacao.tomador.cpf));
             SQL.Append("      ,").AppendLine(DataBase.SetNullIfEmpty(capaAutorizacaoNfse.Autorizacao.tomador.cnpj));
             SQL.Append("      ,").AppendLine(DataBase.SetNullIfEmpty(capaAutorizacaoNfse.Autorizacao.tomador.razao_social));
@@ -140,7 +142,9 @@ namespace NFSE.Business.Tabelas.NFe
             SQL.Append("      ,").AppendLine(DataBase.SetNullIfEmpty(capaAutorizacaoNfse.Autorizacao.tomador.endereco.cep));
             SQL.Append("      ,").AppendLine(DataBase.SetNullIfEmpty(capaAutorizacaoNfse.Autorizacao.servico.aliquota));
             SQL.Append("      ,").AppendLine(DataBase.SetNullIfEmpty(capaAutorizacaoNfse.Autorizacao.servico.discriminacao));
-            SQL.Append("      ,").AppendLine(DataBase.SetNullIfEmpty(Convert.ToInt32(Convert.ToBoolean(capaAutorizacaoNfse.Autorizacao.servico.iss_retido)).ToString()));
+
+            SQL.Append("      ,").AppendLine(capaAutorizacaoNfse.Autorizacao.servico.iss_retido ? "1" : "0");
+
             SQL.Append("      ,").AppendLine(DataBase.SetNullIfEmpty(capaAutorizacaoNfse.Autorizacao.servico.valor_iss));
             SQL.Append("      ,").AppendLine(DataBase.SetNullIfEmpty(capaAutorizacaoNfse.Autorizacao.servico.codigo_cnae));
             SQL.Append("      ,").AppendLine(DataBase.SetNullIfEmpty(capaAutorizacaoNfse.Autorizacao.servico.item_lista_servico));
