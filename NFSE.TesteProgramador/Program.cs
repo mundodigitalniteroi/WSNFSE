@@ -24,8 +24,16 @@ namespace EnvioTeste
 
             GrvEntity grv;
 
-            string[] grvs = { "748965"
- };
+            string[] grvs =
+            {
+                "912231021",
+                "963090054",
+                "912231121",
+                "912290660",
+                "912790942",
+                "912790670",
+                "910484487"
+            };
 
             List<GrvEntity> resultado;
 
@@ -53,26 +61,23 @@ namespace EnvioTeste
                 }
                 else
                 {
-                    if (true)
-                    {
-
-                    }
+                    Console.WriteLine("GRV INEXISTENTE: " + grvs[i]);
                 }
             }
 
-            if (true)
-            {
-                grv = new GrvController().Selecionar("909361412");
+            //if (true)
+            //{
+            //    grv = new GrvController().Selecionar("912870087");
 
-                if (grv != null)
-                {
-                    grvId = grv.GrvId;
-                }
-            }
+            //    if (grv != null)
+            //    {
+            //        grvId = grv.GrvId;
+            //    }
+            //}
 
             //const string identificadorNota = "801865";
 
-            SolicitarNotaFiscal(grvId, isDevelopment);
+            // SolicitarNotaFiscal(grvId, isDevelopment);
 
             // SolicitarNovaNotaFiscal(grvId, identificadorNota, isDevelopment);
 
@@ -199,11 +204,11 @@ namespace EnvioTeste
 
             //if (DataBase.SystemEnvironment == SystemEnvironment.Development)
             //{
-            //    DataBase.ConnectDataBase("Data Source=187.84.228.60;Initial Catalog=dbMobLinkDepositoPublicoDesenvolvimento;Persist Security Info=True;User ID=dp_user_dev;Password=5y3d#%&&!x");
+            //    DataBase.ConnectDataBase("Data Source=20.236.82.177;Initial Catalog=dbMobLinkDepositoPublicoDesenvolvimento;Persist Security Info=True;User ID=dp_user_dev;Password=5y3d#%&&!x");
             //}
             //else
             //{
-            //    DataBase.ConnectDataBase("Data Source=187.84.228.60;Initial Catalog=dbMobLinkDepositoPublicoProducao;Persist Security Info=True;User ID=dp_user_prd;Password=4y3d#%&&!x");
+            //    DataBase.ConnectDataBase("Data Source=20.236.82.177;Initial Catalog=dbMobLinkDepositoPublicoProducao;Persist Security Info=True;User ID=dp_user_prd;Password=4y3d#%&&!x");
             //}
 
             // DataBase.ConnectDataBase();
