@@ -30,7 +30,7 @@ namespace NFSE.Business.Tabelas.Global
 
             using (var dataTable = DataBase.Select(SQL))
             {
-                return dataTable == null ? null : DataTableUtil.DataTableToList<MunicipioEntity>(dataTable);
+                return DataTableUtil.DataTableToList<MunicipioEntity>(dataTable);
             }
         }
 

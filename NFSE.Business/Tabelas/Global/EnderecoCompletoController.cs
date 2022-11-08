@@ -63,7 +63,7 @@ namespace NFSE.Business.Tabelas.Global
 
             using (var dataTable = DataBase.Select(SQL))
             {
-                return dataTable == null ? null : DataTableUtil.DataTableToList<EnderecoCompletoEntity>(dataTable);
+                return DataTableUtil.DataTableToList<EnderecoCompletoEntity>(dataTable);
             }
         }
 

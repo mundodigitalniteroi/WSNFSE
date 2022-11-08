@@ -67,7 +67,7 @@ namespace NFSE.Business.Tabelas.DP
 
             using (var dataTable = DataBase.Select(SQL))
             {
-                return dataTable == null ? null : DataTableUtil.DataTableToList<UsuarioEntity>(dataTable);
+                return DataTableUtil.DataTableToList<UsuarioEntity>(dataTable);
             }
         }
 

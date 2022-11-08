@@ -50,7 +50,7 @@ namespace NFSE.Business.Tabelas.DP
 
             using (var dataTable = DataBase.Select(SQL))
             {
-                return dataTable == null ? null : DataTableUtil.DataTableToList<ClienteDepositoEntity>(dataTable);
+                return DataTableUtil.DataTableToList<ClienteDepositoEntity>(dataTable);
             }
         }
 

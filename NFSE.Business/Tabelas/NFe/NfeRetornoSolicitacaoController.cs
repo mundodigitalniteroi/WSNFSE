@@ -77,7 +77,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             using (var dataTable = DataBase.Select(SQL))
             {
-                return dataTable == null ? null : DataTableUtil.DataTableToList<NfeRetornoSolicitacaoEntity>(dataTable);
+                return DataTableUtil.DataTableToList<NfeRetornoSolicitacaoEntity>(dataTable);
             }
         }
 

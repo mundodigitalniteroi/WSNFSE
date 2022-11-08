@@ -176,7 +176,7 @@ namespace NFSE.Business.Tabelas.DP
 
             using (var dataTable = DataBase.Select(SQL))
             {
-                return dataTable != null ? DataTableUtil.DataTableToList<GrvEntity>(dataTable) : null;
+                return DataTableUtil.DataTableToList<GrvEntity>(dataTable);
             }
         }
 

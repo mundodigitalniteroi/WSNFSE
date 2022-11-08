@@ -82,7 +82,7 @@ namespace NFSE.Business.Tabelas.NFe
                 {
                     new NfeWsErroController().CadastrarErroGenerico(Nfe.GrvId, usuarioId, Nfe.IdentificadorNota, OrigemErro.MobLink, acao, "Nota Fiscal não está apto para reprocessamento");
 
-                    returnList.Add("AVISO: Nota Fiscal não está apto para reprocessamento");
+                    returnList.Add("AVISO: Nota Fiscal não está apta para reprocessamento");
 
                     return returnList;
                 }
@@ -298,7 +298,7 @@ namespace NFSE.Business.Tabelas.NFe
 
                 if (Nfe.NfeId > 0)
                 {
-                    var Composicao = Composicoes.FirstOrDefault();
+                    NfeViewFaturamentoComposicaoEntity Composicao = Composicoes.FirstOrDefault();
 
                     ComposicoesAgrupadas = ComposicoesAgrupadas.Where(w => w.CnaeId == Composicao.CnaeId && w.ListaServicoId == Composicao.ListaServicoId).ToList();
 
@@ -400,6 +400,23 @@ namespace NFSE.Business.Tabelas.NFe
                     }
                     #endregion Preenchimento da Entidade
 
+                    try
+                    {
+                        DataBase.BeginTransaction();
+                    }
+                    catch (Exception ex)
+                    {
+                        if (string.IsNullOrWhiteSpace(identificadorNota))
+                        {
+                            identificadorNota = CapaAutorizacaoNfse.IdentificadorNota;
+                        }
+
+                        new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, ex.Message);
+
+                        returnList.Add("Erro ao iniciar a transação com o BD: " + ex.Message);
+
+                        continue;
+                    }
 
                     #region Cadastro do Envio/Reenvio
                     try
@@ -417,6 +434,11 @@ namespace NFSE.Business.Tabelas.NFe
                     }
                     catch (Exception ex)
                     {
+                        if (string.IsNullOrWhiteSpace(identificadorNota))
+                        {
+                            identificadorNota = CapaAutorizacaoNfse.IdentificadorNota;
+                        }
+
                         new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, ex.Message);
 
                         returnList.Add("Erro ao cadastrar a NF: " + ex.Message);
@@ -489,6 +511,24 @@ namespace NFSE.Business.Tabelas.NFe
                         Nfe = new NfeEntity();
                     }
                     #endregion Processamento do resultado
+
+                    try
+                    {
+                        DataBase.CommitTransaction();
+                    }
+                    catch (Exception ex)
+                    {
+                        if (string.IsNullOrWhiteSpace(identificadorNota))
+                        {
+                            identificadorNota = CapaAutorizacaoNfse.IdentificadorNota;
+                        }
+
+                        new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, ex.Message);
+
+                        returnList.Add("Erro ao finalizar a transação com o BD: " + ex.Message);
+
+                        continue;
+                    }
 
                     Nfe = new NfeEntity();
                 }

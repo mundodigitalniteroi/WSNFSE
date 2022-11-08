@@ -39,7 +39,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             using (var dataTable = DataBase.Select(SQL))
             {
-                return dataTable == null ? null : DataTableUtil.DataTableToList<NfePrestadorAvulsoEntity>(dataTable);
+                return DataTableUtil.DataTableToList<NfePrestadorAvulsoEntity>(dataTable);
             }
         }
 

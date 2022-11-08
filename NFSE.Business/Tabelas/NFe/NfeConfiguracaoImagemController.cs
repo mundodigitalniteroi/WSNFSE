@@ -51,7 +51,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             using (var dataTable = DataBase.Select(SQL))
             {
-                return dataTable == null ? null : DataTableUtil.DataTableToList<NfeConfiguracaoImagemEntity>(dataTable);
+                return DataTableUtil.DataTableToList<NfeConfiguracaoImagemEntity>(dataTable);
             }
         }
 

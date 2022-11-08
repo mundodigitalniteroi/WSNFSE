@@ -57,7 +57,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             using (var dataTable = DataBase.Select(SQL, sqlParameters))
             {
-                return dataTable == null ? null : DataTableUtil.DataTableToList<NfeEntity>(dataTable);
+                return DataTableUtil.DataTableToList<NfeEntity>(dataTable);
             }
         }
 
@@ -120,7 +120,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             using (var dataTable = DataBase.Select(SQL))
             {
-                return dataTable == null ? null : DataTableUtil.DataTableToList<NfeEntity>(dataTable);
+                return DataTableUtil.DataTableToList<NfeEntity>(dataTable);
             }
         }
 

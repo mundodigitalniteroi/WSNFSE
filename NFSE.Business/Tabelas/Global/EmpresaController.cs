@@ -86,7 +86,7 @@ namespace NFSE.Business.Tabelas.Global
 
             using (var dataTable = DataBase.Select(SQL))
             {
-                return dataTable == null ? null : DataTableUtil.DataTableToList<EmpresaEntity>(dataTable);
+                return DataTableUtil.DataTableToList<EmpresaEntity>(dataTable);
             }
         }
 

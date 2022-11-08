@@ -31,7 +31,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             using (var dataTable = DataBase.Select(SQL))
             {
-                return dataTable != null ? DataTableUtil.DataTableToList<NfeFaturamentoComposicaoEntity>(dataTable) : null;
+                return DataTableUtil.DataTableToList<NfeFaturamentoComposicaoEntity>(dataTable);
             }
         }
 

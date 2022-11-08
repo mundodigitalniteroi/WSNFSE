@@ -46,7 +46,7 @@ namespace NFSE.Business.Tabelas.Global
 
             using (var dataTable = DataBase.Select(SQL))
             {
-                return dataTable == null ? null : DataTableUtil.DataTableToList<CnaeListaServicoEntity>(dataTable);
+                return DataTableUtil.DataTableToList<CnaeListaServicoEntity>(dataTable);
             }
         }
 

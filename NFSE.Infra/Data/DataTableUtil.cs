@@ -8,9 +8,15 @@ namespace NFSE.Infra.Data
 {
     public static class DataTableUtil
     {
+        /// <summary>
+        /// Função que converte um DataTable para uma Lista T.
+        /// </summary>
+        /// <typeparam name="T">Entidade</typeparam>
+        /// <param name="dataTable">DataTable</param>
+        /// <returns>Lista da Entidade ou nulo caso não exista registro</returns>
         public static List<T> DataTableToList<T>(DataTable dataTable)
         {
-            if (dataTable == null || dataTable.Rows.Count.Equals(0) || dataTable.Columns.Count.Equals(0))
+            if (dataTable?.Rows.Count.Equals(0) != false || dataTable.Columns.Count.Equals(0))
             {
                 return null;
             }

@@ -52,17 +52,13 @@ namespace NFSE.Business.Tabelas.NFe
 
             using (var dataTable = DataBase.Select(SQL))
             {
-                if (dataTable == null)
-                {
-                    return null;
-                }
-
-                return DataTableUtil.DataTableToList<NfeViewFaturamentoComposicaoEntity>(dataTable);
+                return DataTableUtil.DataTableToList<NfeViewFaturamentoComposicaoEntity>(DataBase.Select(SQL));
             }
         }
+
         public NfeViewFaturamentoComposicaoEntity Selecionar(int grvId)
         {
-            var list = Listar(grvId);
+            List<NfeViewFaturamentoComposicaoEntity> list = Listar(grvId);
 
             return list?.FirstOrDefault();
         }

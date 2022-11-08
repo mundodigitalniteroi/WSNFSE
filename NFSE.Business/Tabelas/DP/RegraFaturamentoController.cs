@@ -44,7 +44,7 @@ namespace NFSE.Business.Tabelas.DP
 
             using (var dataTable = DataBase.Select(SQL))
             {
-                return dataTable == null ? null : DataTableUtil.DataTableToList<RegraFaturamentoEntity>(dataTable);
+                return DataTableUtil.DataTableToList<RegraFaturamentoEntity>(dataTable);
             }
         }
 

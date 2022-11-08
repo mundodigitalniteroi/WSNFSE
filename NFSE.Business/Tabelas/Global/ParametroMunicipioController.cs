@@ -45,7 +45,7 @@ namespace NFSE.Business.Tabelas.Global
 
             using (var dataTable = DataBase.Select(SQL))
             {
-                return dataTable == null ? null : DataTableUtil.DataTableToList<ParametroMunicipioEntity>(dataTable);
+                return DataTableUtil.DataTableToList<ParametroMunicipioEntity>(dataTable);
             }
         }
 

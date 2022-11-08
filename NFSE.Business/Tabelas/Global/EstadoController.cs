@@ -34,7 +34,7 @@ namespace NFSE.Business.Tabelas.Global
 
             using (var dataTable = DataBase.Select(SQL))
             {
-                return dataTable == null ? null : DataTableUtil.DataTableToList<EstadoEntity>(dataTable);
+                return DataTableUtil.DataTableToList<EstadoEntity>(dataTable);
             }
         }
 

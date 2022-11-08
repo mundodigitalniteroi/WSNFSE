@@ -54,11 +54,6 @@ namespace NFSE.Business.Tabelas.NFe
 
             using (var dataTable = DataBase.Select(SQL))
             {
-                if (dataTable == null)
-                {
-                    return null;
-                }
-
                 return DataTableUtil.DataTableToList<NfeViewFaturamentoComposicaoAgrupadoDescricaoEntity>(dataTable);
             }
         }

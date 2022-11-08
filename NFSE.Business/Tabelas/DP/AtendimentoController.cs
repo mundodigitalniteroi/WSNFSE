@@ -136,7 +136,7 @@ namespace NFSE.Business.Tabelas.DP
 
             using (var dataTable = DataBase.Select(SQL))
             {
-                return dataTable == null ? null : DataTableUtil.DataTableToList<AtendimentoEntity>(dataTable);
+                return DataTableUtil.DataTableToList<AtendimentoEntity>(dataTable);
             }
         }
 

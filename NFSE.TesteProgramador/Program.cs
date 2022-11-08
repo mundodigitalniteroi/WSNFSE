@@ -26,13 +26,7 @@ namespace EnvioTeste
 
             string[] grvs =
             {
-                "912231021",
-                "963090054",
-                "912231121",
-                "912290660",
-                "912790942",
-                "912790670",
-                "910484487"
+                "913080147"
             };
 
             List<GrvEntity> resultado;
@@ -79,7 +73,7 @@ namespace EnvioTeste
 
             // SolicitarNotaFiscal(grvId, isDevelopment);
 
-            // SolicitarNovaNotaFiscal(grvId, identificadorNota, isDevelopment);
+            SolicitarNovaNotaFiscal(1012553, "899284", isDevelopment);
 
             // ReceberNotaFiscal(grvId, identificadorNota, isDevelopment);
 
@@ -116,7 +110,7 @@ namespace EnvioTeste
         }
         #endregion Teste de solicitação da Nota Fiscal
 
-        #region Teste de solicitação de Nota Fiscal
+        #region Teste de solicitação de Nova Nota Fiscal
         private static void SolicitarNovaNotaFiscal(int grvId, string identificadorNota, bool isDevelopment)
         {
             try
@@ -142,7 +136,7 @@ namespace EnvioTeste
                 Console.WriteLine("ERRO: " + ex.Message);
             }
         }
-        #endregion Teste de solicitação da Nota Fiscal
+        #endregion Teste de solicitação da Nova Nota Fiscal
 
         #region Teste de retorno da Nota Fiscal (Download da NF)
         private static void ReceberNotaFiscal(int grvId, string identificadorNota, bool isDevelopment)
