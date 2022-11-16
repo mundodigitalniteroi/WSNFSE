@@ -387,7 +387,7 @@ namespace NFSE.Business.Tabelas.NFe
 
                             Homologacao = isDev,
 
-                            Autorizacao = Autorizar(grv, Deposito, ClienteDeposito, NfeRegras, Empresa, Atendimento, agrupamento, descricaoConfiguracaoNfe.ToString().Trim(), isDev)
+                            Autorizacao = Autorizar(grv, Cliente, Deposito, ClienteDeposito, NfeRegras, Empresa, Atendimento, agrupamento, descricaoConfiguracaoNfe.ToString().Trim(), isDev)
                         };
                     }
                     catch (Exception ex)
@@ -400,23 +400,7 @@ namespace NFSE.Business.Tabelas.NFe
                     }
                     #endregion Preenchimento da Entidade
 
-                    try
-                    {
-                        DataBase.BeginTransaction();
-                    }
-                    catch (Exception ex)
-                    {
-                        if (string.IsNullOrWhiteSpace(identificadorNota))
-                        {
-                            identificadorNota = CapaAutorizacaoNfse.IdentificadorNota;
-                        }
-
-                        new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, ex.Message);
-
-                        returnList.Add("Erro ao iniciar a transação com o BD: " + ex.Message);
-
-                        continue;
-                    }
+                    DataBase.BeginTransaction();
 
                     #region Cadastro do Envio/Reenvio
                     try
@@ -443,6 +427,8 @@ namespace NFSE.Business.Tabelas.NFe
 
                         returnList.Add("Erro ao cadastrar a NF: " + ex.Message);
 
+                        DataBase.RollbackTransaction();
+
                         continue;
                     }
 
@@ -467,6 +453,8 @@ namespace NFSE.Business.Tabelas.NFe
 
                         returnList.Add("Erro ao cadastrar a composição da NF: " + ex.Message);
 
+                        DataBase.RollbackTransaction();
+
                         continue;
                     }
                     #endregion Cadastro da Composição da Nota Fiscal
@@ -482,6 +470,8 @@ namespace NFSE.Business.Tabelas.NFe
                         new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, ex.Message);
 
                         returnList.Add("Erro na Execução do Web Service: " + ex.Message);
+
+                        DataBase.CommitTransaction();
 
                         continue;
                     }
@@ -504,6 +494,8 @@ namespace NFSE.Business.Tabelas.NFe
 
                         returnList.Add("Erro no processamento do resultado do Web Service: " + ex.Message);
 
+                        DataBase.CommitTransaction();
+
                         continue;
                     }
                     finally
@@ -512,23 +504,7 @@ namespace NFSE.Business.Tabelas.NFe
                     }
                     #endregion Processamento do resultado
 
-                    try
-                    {
-                        DataBase.CommitTransaction();
-                    }
-                    catch (Exception ex)
-                    {
-                        if (string.IsNullOrWhiteSpace(identificadorNota))
-                        {
-                            identificadorNota = CapaAutorizacaoNfse.IdentificadorNota;
-                        }
-
-                        new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, ex.Message);
-
-                        returnList.Add("Erro ao finalizar a transação com o BD: " + ex.Message);
-
-                        continue;
-                    }
+                    DataBase.CommitTransaction();
 
                     Nfe = new NfeEntity();
                 }
@@ -630,7 +606,7 @@ namespace NFSE.Business.Tabelas.NFe
             }
         }
 
-        private Autorizacao Autorizar(GrvEntity grv, DepositoEntity deposito, ClienteDepositoEntity clienteDeposito, List<NfeRegraEntity> nfeRegras, EmpresaEntity empresa, AtendimentoEntity atendimento, NfeViewFaturamentoComposicaoAgrupadoEntity composicao, string descricaoConfiguracaoNfe, bool isDev)
+        private Autorizacao Autorizar(GrvEntity grv, ClienteEntity cliente, DepositoEntity deposito, ClienteDepositoEntity clienteDeposito, List<NfeRegraEntity> nfeRegras, EmpresaEntity empresa, AtendimentoEntity atendimento, NfeViewFaturamentoComposicaoAgrupadoEntity composicao, string descricaoConfiguracaoNfe, bool isDev)
         {
             var now = DateTime.Now.AddHours(-1);
 
@@ -654,7 +630,7 @@ namespace NFSE.Business.Tabelas.NFe
                 tomador = Tomador(deposito, atendimento)
             };
 
-            Autorizacao.servico = Servico(grv, composicao, Autorizacao.prestador, clienteDeposito, nfeRegras, descricaoConfiguracaoNfe, isDev);
+            Autorizacao.servico = Servico(grv, cliente, composicao, Autorizacao.prestador, clienteDeposito, nfeRegras, descricaoConfiguracaoNfe, isDev);
 
             return Autorizacao;
         }
@@ -726,7 +702,7 @@ namespace NFSE.Business.Tabelas.NFe
             };
         }
 
-        private Servico Servico(GrvEntity grv, NfeViewFaturamentoComposicaoAgrupadoEntity composicao, Prestador prestador, ClienteDepositoEntity clienteDeposito, List<NfeRegraEntity> nfeRegras, string descricaoConfiguracaoNfe, bool isDev)
+        private Servico Servico(GrvEntity grv, ClienteEntity cliente, NfeViewFaturamentoComposicaoAgrupadoEntity composicao, Prestador prestador, ClienteDepositoEntity clienteDeposito, List<NfeRegraEntity> nfeRegras, string descricaoConfiguracaoNfe, bool isDev)
         {
             CnaeListaServicoParametroMunicipioEntity CnaeListaServicoParametroMunicipio = new CnaeListaServicoParametroMunicipioEntity
             {
@@ -854,7 +830,7 @@ namespace NFSE.Business.Tabelas.NFe
                 GravarLog("R1: POSSUI REGRA 'ALIQUOTANULA'");
             }
 
-            return new Servico
+            Servico servico = new Servico
             {
                 aliquota = PossuiRegraNfe(nfeRegras, "ALIQUOTANULA") ? null : string.Format("{0:N2}", AliquotaIss).Replace(",", "."),
 
@@ -870,8 +846,30 @@ namespace NFSE.Business.Tabelas.NFe
 
                 valor_servicos = valorServicos,
 
-                base_calculo = !string.IsNullOrWhiteSpace(baseCalculo) ? baseCalculo : null,
+                base_calculo = !string.IsNullOrWhiteSpace(baseCalculo) ? baseCalculo : null
             };
+
+            if (!string.IsNullOrWhiteSpace(grv.Placa))
+            {
+                servico.discriminacao += ", PLACA " + grv.Placa;
+            }
+
+            if (!string.IsNullOrWhiteSpace(grv.Chassi))
+            {
+                servico.discriminacao += ", CHASSI " + grv.Chassi;
+            }
+
+            if (cliente.FlagPossuiClienteCodigoIdentificacao == 'S')
+            {
+                CodigoIdentificacaoClienteEntity CodigoIdentificacaoCliente = CodigoIdentificacaoClienteController.Selecionar(grv.GrvId);
+
+                if (CodigoIdentificacaoCliente != null)
+                {
+                    servico.discriminacao += ", " + cliente.LabelClienteCodigoIdentificacao + " " + CodigoIdentificacaoCliente.CodigoIdentificacao;
+                }
+            }
+
+            return servico;
         }
 
         private void GravarLog(string message)
