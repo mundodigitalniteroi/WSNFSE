@@ -81,6 +81,7 @@
     <Compile Include="Enum\Acao.cs" />
     <Compile Include="Enum\OrigemErro.cs" />
     <Compile Include="Enum\SystemEnvironment.cs" />
+    <Compile Include="NfseRenviar.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
