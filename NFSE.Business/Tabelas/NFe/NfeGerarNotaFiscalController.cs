@@ -400,8 +400,6 @@ namespace NFSE.Business.Tabelas.NFe
                     }
                     #endregion Preenchimento da Entidade
 
-                    DataBase.BeginTransaction();
-
                     #region Cadastro do Envio/Reenvio
                     try
                     {
@@ -427,8 +425,6 @@ namespace NFSE.Business.Tabelas.NFe
 
                         returnList.Add("Erro ao cadastrar a NF: " + ex.Message);
 
-                        DataBase.RollbackTransaction();
-
                         continue;
                     }
 
@@ -453,7 +449,9 @@ namespace NFSE.Business.Tabelas.NFe
 
                         returnList.Add("Erro ao cadastrar a composição da NF: " + ex.Message);
 
-                        DataBase.RollbackTransaction();
+                        Nfe.Status = 'E';
+
+                        new NfeController().Atualizar(Nfe);
 
                         continue;
                     }
@@ -471,7 +469,9 @@ namespace NFSE.Business.Tabelas.NFe
 
                         returnList.Add("Erro na Execução do Web Service: " + ex.Message);
 
-                        DataBase.CommitTransaction();
+                        Nfe.Status = 'E';
+
+                        new NfeController().Atualizar(Nfe);
 
                         continue;
                     }
@@ -494,7 +494,9 @@ namespace NFSE.Business.Tabelas.NFe
 
                         returnList.Add("Erro no processamento do resultado do Web Service: " + ex.Message);
 
-                        DataBase.CommitTransaction();
+                        Nfe.Status = 'E';
+
+                        new NfeController().Atualizar(Nfe);
 
                         continue;
                     }
@@ -503,8 +505,6 @@ namespace NFSE.Business.Tabelas.NFe
                         Nfe = new NfeEntity();
                     }
                     #endregion Processamento do resultado
-
-                    DataBase.CommitTransaction();
 
                     Nfe = new NfeEntity();
                 }
