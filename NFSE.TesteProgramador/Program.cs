@@ -20,13 +20,13 @@ namespace EnvioTeste
 
             bool isDevelopment = DataBase.SystemEnvironment.Equals(SystemEnvironment.Development);
 
-            int grvId = 999762;
+            int grvId = 1042383;
 
             GrvEntity grv;
 
             string[] grvs =
             {
-                "912960157"
+                "904112292"
             };
 
             List<GrvEntity> resultado;
@@ -69,13 +69,13 @@ namespace EnvioTeste
             //    }
             //}
 
-            //const string identificadorNota = "801865";
+            const string identificadorNota = "948934";
 
             // SolicitarNotaFiscal(grvId, isDevelopment);
 
-            SolicitarNovaNotaFiscal(1012553, "899284", isDevelopment);
+            // SolicitarNovaNotaFiscal(1012553, "899284", isDevelopment);
 
-            // ReceberNotaFiscal(grvId, identificadorNota, isDevelopment);
+            ReceberNotaFiscal(grvId, identificadorNota, isDevelopment);
 
             // CancelarNotaFiscal(grvId, identificadorNota, isDevelopment);
 

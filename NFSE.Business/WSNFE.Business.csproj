@@ -107,6 +107,7 @@
     <Compile Include="Tabelas\Global\ParametroMunicipioController.cs" />
     <Compile Include="Tabelas\NFe\NfeConfiguracao.cs" />
     <Compile Include="Util\EmailController.cs" />
+    <Compile Include="Util\InternetService.cs" />
     <Compile Include="Util\PdfToJpg.cs" />
     <Compile Include="Util\Tools.cs" />
   </ItemGroup>
