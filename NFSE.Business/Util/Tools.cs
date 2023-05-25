@@ -156,7 +156,7 @@ namespace NFSE.Business.Util
         {
             Bitmap Retorno = null;
 
-            Thread thread = new Thread(() => Retorno = new Bitmap(CaptureWebPage(url)));
+            Thread thread = new Thread(() => Retorno = new Bitmap(CaptureWebPageNew(url)));
 
             thread.SetApartmentState(ApartmentState.STA);
 
@@ -172,24 +172,30 @@ namespace NFSE.Business.Util
                 {
                     thread.Abort();
 
-                    break;
+                    throw new Exception($"A tentativa de download da imagem superou {stopwatch.Elapsed.Minutes} e foi abortada pelo WebService");
                 }
             }
+
+            stopwatch.Stop();
 
             return Retorno;
         }
 
-        public static Bitmap CaptureWebPage(string URL)
+        public static Bitmap CaptureWebPage(string url)
         {
             using (var webBrowser = new WebBrowser { ScrollBarsEnabled = false, ScriptErrorsSuppressed = true })
             {
-                webBrowser.Navigate(URL);
+                webBrowser.Navigate(url);
+
+                // Já tentei isso, não funciona
+                // webBrowser.ScriptErrorsSuppressed = false;
 
                 while (webBrowser.ReadyState != WebBrowserReadyState.Complete)
                 {
                     Application.DoEvents();
                 }
 
+                // TODO: Desabilitar a linha abaixo
                 // Thread.Sleep(2500);
 
                 const int width = 1500;
@@ -206,6 +212,45 @@ namespace NFSE.Business.Util
 
                 return bitmap;
             }
+        }
+
+        public static Bitmap CaptureWebPageNew(string url)
+        {
+            var navigator = new InternetService();
+
+            navigator.Navigate(url);
+
+            return null;
+
+            //using (var webBrowser = new WebBrowser { ScrollBarsEnabled = false, ScriptErrorsSuppressed = true })
+            //{
+            //    webBrowser.Navigate(url);
+
+            //    // Já tentei isso, não funciona
+            //    // webBrowser.ScriptErrorsSuppressed = false;
+
+            //    while (webBrowser.ReadyState != WebBrowserReadyState.Complete)
+            //    {
+            //        Application.DoEvents();
+            //    }
+
+            //    // TODO: Desabilitar a linha abaixo
+            //    // Thread.Sleep(2500);
+
+            //    const int width = 1500;
+
+            //    const int height = 1700; // webBrowser.Document.Body.ScrollRectangle.Height + 50;
+
+            //    webBrowser.Width = width;
+
+            //    webBrowser.Height = height;
+
+            //    Bitmap bitmap = new Bitmap(width, height);
+
+            //    webBrowser.DrawToBitmap(bitmap, new Rectangle(0, 0, width, height));
+
+            //    return bitmap;
+            //}
         }
 
         internal string GetNfse(string uri, string token)
