@@ -840,7 +840,7 @@ namespace NFSE.Business.Tabelas.NFe
 
                 item_lista_servico = CnaeListaServicoParametroMunicipio.ListaServico,
 
-                valor_iss = string.Format("{0:N2}", valorIss).Replace(",", "."),
+                valor_iss = Math.Round(valorIss, 2, MidpointRounding.AwayFromZero).ToString(CultureInfo.GetCultureInfo("en-US")),
 
                 codigo_tributario_municipio = CnaeListaServicoParametroMunicipio.CodigoTributarioMunicipio,
 

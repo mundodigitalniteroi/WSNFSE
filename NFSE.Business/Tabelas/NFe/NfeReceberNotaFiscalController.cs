@@ -150,7 +150,7 @@ namespace NFSE.Business.Tabelas.NFe
             }
 
             if (!string.IsNullOrWhiteSpace(retornoConsulta.url))
-            {
+            {              
                 retornoConsulta.url = retornoConsulta.url.Replace("nfse.aspx", "/NFSE/contribuinte/notaprintimg.aspx");
 
                 if (!string.IsNullOrWhiteSpace(retornoConsulta.url))
@@ -222,6 +222,7 @@ namespace NFSE.Business.Tabelas.NFe
             {
                 using (WebClient webClient = new WebClient())
                 {
+                    System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                     string str1 = directory + identificadorNota + "Original.pdf";
                     string str2 = directory + identificadorNota + ".jpg";
 
