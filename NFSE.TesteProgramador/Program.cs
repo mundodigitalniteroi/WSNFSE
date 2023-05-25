@@ -22,42 +22,42 @@ namespace EnvioTeste
 
             int grvId = 1042383;
 
-            GrvEntity grv;
+            //GrvEntity grv;
 
             string[] grvs =
             {
                 "904112292"
             };
 
-            List<GrvEntity> resultado;
+            //List<GrvEntity> resultado;
 
-            for (int i = 0; i < grvs.Length; i++)
-            {
-                resultado = new GrvController().Listar(new GrvEntity { NumeroFormularioGrv = grvs[i]/*, ClienteId = 41*/ });
+            //for (int i = 0; i < grvs.Length; i++)
+            //{
+            //    resultado = new GrvController().Listar(new GrvEntity { NumeroFormularioGrv = grvs[i]/*, ClienteId = 41*/ });
 
-                if (resultado != null)
-                {
-                    if (resultado.Count > 1)
-                    {
-                        Console.WriteLine("GRV DUPLICADO: " + grvs[i] + ". PLACAS: ");
+            //    if (resultado != null)
+            //    {
+            //        if (resultado.Count > 1)
+            //        {
+            //            Console.WriteLine("GRV DUPLICADO: " + grvs[i] + ". PLACAS: ");
 
-                        foreach (var res in resultado)
-                        {
-                            Console.WriteLine(res.Placa);
-                        }
+            //            foreach (var res in resultado)
+            //            {
+            //                Console.WriteLine(res.Placa);
+            //            }
 
-                        continue;
-                    }
+            //            continue;
+            //        }
 
-                    SolicitarNotaFiscal(resultado[0].GrvId, isDevelopment);
+            //        SolicitarNotaFiscal(resultado[0].GrvId, isDevelopment);
 
-                    Console.WriteLine("GRV PROCESSADO: " + grvs[i]);
-                }
-                else
-                {
-                    Console.WriteLine("GRV INEXISTENTE: " + grvs[i]);
-                }
-            }
+            //        Console.WriteLine("GRV PROCESSADO: " + grvs[i]);
+            //    }
+            //    else
+            //    {
+            //        Console.WriteLine("GRV INEXISTENTE: " + grvs[i]);
+            //    }
+            //}
 
             //if (true)
             //{
@@ -71,14 +71,14 @@ namespace EnvioTeste
 
             const string identificadorNota = "948934";
 
-            // SolicitarNotaFiscal(grvId, isDevelopment);
+            //SolicitarNotaFiscal(grvId, isDevelopment);
 
             // SolicitarNovaNotaFiscal(1012553, "899284", isDevelopment);
 
             ReceberNotaFiscal(grvId, identificadorNota, isDevelopment);
 
             // CancelarNotaFiscal(grvId, identificadorNota, isDevelopment);
-
+            Console.WriteLine("CONCLUIDO");
             Console.ReadLine();
         }
 
@@ -458,5 +458,12 @@ namespace EnvioTeste
                 Console.WriteLine("ERRO: " + ex.Message);
             }
         }
+
+    }
+
+    public class Nota
+    {
+        public int Grv { get; set; }
+        public string Identificador { get; set; }
     }
 }
