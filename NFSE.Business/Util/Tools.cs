@@ -156,7 +156,7 @@ namespace NFSE.Business.Util
         {
             Bitmap Retorno = null;
 
-            Thread thread = new Thread(() => Retorno = new Bitmap(CaptureWebPageNew(url)));
+            Thread thread = new Thread(() => Retorno = new Bitmap(CaptureWebPage(url)));
 
             thread.SetApartmentState(ApartmentState.STA);
 
