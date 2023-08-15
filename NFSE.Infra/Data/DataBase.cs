@@ -65,7 +65,7 @@ namespace NFSE.Infra.Data
 
             SetConnectionString();
 
-            return ConnectionFactory.Consultar(SQL);
+            return ConnectionFactory.Select(SQL);
         }
 
         public static DataTable Select(StringBuilder SQL)

@@ -305,25 +305,22 @@ namespace NFSE.Business.Util
 
         public string DriveToSave()
         {
-            string drive;
+            return @"C:\";
+        }
 
-            try
+        public void GravarLog(string message)
+        {
+            string drive = new Tools().DriveToSave();
+
+            if (!Directory.Exists($@"{drive}Sistemas\GeradorNF\NFE"))
             {
-                if (Directory.Exists(@"D:\"))
-                {
-                    drive = @"D:\";
-                }
-                else
-                {
-                    drive = @"C:\";
-                }
-            }
-            catch (Exception)
-            {
-                drive = @"C:\";
+                Directory.CreateDirectory($@"{drive}Sistemas\GeradorNF\NFE");
             }
 
-            return drive;
+            using (StreamWriter sw = new StreamWriter($@"{drive}Sistemas\GeradorNF\NFE\NfeGerarNotaFiscalController.log", true, Encoding.UTF8))
+            {
+                sw.WriteLine(message);
+            }
         }
     }
 }

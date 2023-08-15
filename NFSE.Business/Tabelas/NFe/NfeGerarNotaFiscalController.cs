@@ -665,7 +665,7 @@ namespace NFSE.Business.Tabelas.NFe
 
                 endereco = Endereco(atendimento),
 
-                inscricao_municipal = atendimento.NotaFiscalEmailInscricaoMunicipalTomadorServico
+                inscricao_municipal = !string.IsNullOrWhiteSpace(atendimento.NotaFiscalEmailInscricaoMunicipalTomadorServico) ? atendimento.NotaFiscalEmailInscricaoMunicipalTomadorServico : string.Empty
             };
         }
 

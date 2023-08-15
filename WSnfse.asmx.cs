@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Web.Services;
+using System.Web.Services.Description;
 
 namespace NFSE
 {
@@ -24,7 +25,7 @@ namespace NFSE
             }
             catch (Exception ex)
             {
-                new EmailController().Enviar(ex.Message, model.Homologacao);
+                new Tools().GravarLog("Erro em SolicitarEmissaoNotaFiscal: " + ex.Message);
 
                 throw new Exception(ex.Message);
             }
@@ -39,6 +40,8 @@ namespace NFSE
             }
             catch (Exception ex)
             {
+                new Tools().GravarLog("Erro em SolicitarEmissaoNotaFiscalAvulso: " + ex.Message);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -52,7 +55,7 @@ namespace NFSE
             }
             catch (Exception ex)
             {
-                new EmailController().Enviar(ex.Message, model.Homologacao);
+                new Tools().GravarLog("Erro em ReceberNotaFiscal: " + ex.Message);
 
                 throw new Exception(ex.Message);
             }
@@ -67,6 +70,8 @@ namespace NFSE
             }
             catch (Exception ex)
             {
+                new Tools().GravarLog("Erro em ReceberNotaFiscalAvulso: " + ex.Message);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -80,7 +85,7 @@ namespace NFSE
             }
             catch (Exception ex)
             {
-                new EmailController().Enviar(ex.Message, model.Homologacao);
+                new Tools().GravarLog("Erro em CancelarNotaFiscal: " + ex.Message);
 
                 throw new Exception(ex.Message);
             }
@@ -95,6 +100,8 @@ namespace NFSE
             }
             catch (Exception ex)
             {
+                new Tools().GravarLog("Erro em CancelarNotaFiscalAvulso: " + ex.Message);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -108,7 +115,7 @@ namespace NFSE
             }
             catch (Exception ex)
             {
-                new EmailController().Enviar(ex.Message, isDev);
+                new Tools().GravarLog("Erro em GerarNotaFiscal: " + ex.Message);
 
                 throw new Exception(ex.Message);
             }
@@ -123,7 +130,7 @@ namespace NFSE
             }
             catch (Exception ex)
             {
-                new EmailController().Enviar(ex.Message, isDev);
+                new Tools().GravarLog("Erro em GerarNovaNotaFiscal: " + ex.Message);
 
                 throw new Exception(ex.Message);
             }

@@ -408,7 +408,7 @@ namespace NFSE.Business.Tabelas.NFe
             {
                 AtualizarStatusNotaFiscal(nfe);
 
-                throw new Exception("Ocorreu um erro ao cadastrar a Nota Fiscal (" + model.IdentificadorNota + "): " + ex.Message);
+                throw new Exception("Ocorreu um erro ao cadastrar a Nota Fiscal Avulso (" + model.IdentificadorNota + "): " + ex.Message);
             }
         }
 
