@@ -52,10 +52,10 @@ namespace NFSE.Business.Tabelas.NFe
             //   R: Reprocessar (marcação manual para o envio de uma nova solicitação de Nfe para o mesmo GRV, esta opção gera um novo registro de Nfe);
             //   S: Aguardando Reprocessamento;
             //   T: Reprocessado (conclusão do reprocessamento);
-            //   N: CaNcelado.
+            //   N: CaNcelado;
             //   E: Erro (quando a Prefeitura indicou algum problema);
-            //   I: Inválido (quando ocorreu um erro Mob-Link);
-            //   M: Cadastro Manual
+            //   I: Inválido (quando ocorreu um erro Web-Zi);
+            //   M: Cadastro Manual.
 
             var Nfe = new NfeEntity
             {
@@ -319,34 +319,34 @@ namespace NFSE.Business.Tabelas.NFe
                 {
                     descricaoConfiguracaoNfe = new StringBuilder();
 
-                    List<NfeViewFaturamentoComposicaoAgrupadoDescricaoEntity> aux = ComposicoesAgrupadasDescricao.Where(w => w.CnaeId == agrupamento.CnaeId && w.ListaServicoId == agrupamento.ListaServicoId).ToList();
+                    List<NfeViewFaturamentoComposicaoAgrupadoDescricaoEntity> FaturamentosComposicoesAgrupadosPorDescricao = ComposicoesAgrupadasDescricao.Where(w => w.CnaeId == agrupamento.CnaeId && w.ListaServicoId == agrupamento.ListaServicoId).ToList();
 
-                    foreach (var item in aux)
+                    foreach (var FaturamentoComposicaoAgrupadoPorDescricao in FaturamentosComposicoesAgrupadosPorDescricao)
                     {
-                        if (item.TipoDesconto != '\0')
+                        if (FaturamentoComposicaoAgrupadoPorDescricao.TipoDesconto != '\0')
                         {
                             descricaoConfiguracaoNfe
-                                .Append(item.DescricaoConfiguracaoNfe)
+                                .Append(FaturamentoComposicaoAgrupadoPorDescricao.DescricaoConfiguracaoNfe)
                                 .Append(". QTD: ")
-                                .AppendFormat("{0:N2}", item.QuantidadeComposicao)
+                                .AppendFormat("{0:N2}", FaturamentoComposicaoAgrupadoPorDescricao.QuantidadeComposicao)
                                 .Append(". VALOR: R$ ")
-                                .AppendFormat("{0:N2}", item.ValorTipoComposicao)
+                                .AppendFormat("{0:N2}", FaturamentoComposicaoAgrupadoPorDescricao.ValorTipoComposicao)
                                 .Append(". DSCT: R$ ")
-                                .AppendFormat("{0:N2}", item.ValorDesconto)
+                                .AppendFormat("{0:N2}", FaturamentoComposicaoAgrupadoPorDescricao.ValorDesconto)
                                 .Append(". TOT: R$ ")
-                                .AppendFormat("{0:N2}", item.TotalComDesconto)
+                                .AppendFormat("{0:N2}", FaturamentoComposicaoAgrupadoPorDescricao.TotalComDesconto)
                                 .AppendLine();
                         }
                         else
                         {
                             descricaoConfiguracaoNfe
-                                .Append(item.DescricaoConfiguracaoNfe)
+                                .Append(FaturamentoComposicaoAgrupadoPorDescricao.DescricaoConfiguracaoNfe)
                                 .Append(". QTD: ")
-                                .AppendFormat("{0:N2}", item.QuantidadeComposicao)
+                                .AppendFormat("{0:N2}", FaturamentoComposicaoAgrupadoPorDescricao.QuantidadeComposicao)
                                 .Append(". VALOR: R$ ")
-                                .AppendFormat("{0:N2}", item.ValorTipoComposicao)
+                                .AppendFormat("{0:N2}", FaturamentoComposicaoAgrupadoPorDescricao.ValorTipoComposicao)
                                 .Append(". TOT: R$ ")
-                                .AppendFormat("{0:N2}", item.TotalComDesconto)
+                                .AppendFormat("{0:N2}", FaturamentoComposicaoAgrupadoPorDescricao.TotalComDesconto)
                                 .AppendLine();
                         }
                     }
@@ -355,7 +355,7 @@ namespace NFSE.Business.Tabelas.NFe
                     {
                         foreach (NfeViewFaturamentoComposicaoEntity composicao in Composicoes)
                         {
-                            if (aux[0].Cnae == composicao.Cnae)
+                            if (FaturamentosComposicoesAgrupadosPorDescricao[0].Cnae == composicao.Cnae)
                             {
                                 if (new NfeFaturamentoComposicaoController().Listar(0, composicao.FaturamentoComposicaoId) != null)
                                 {
@@ -403,6 +403,8 @@ namespace NFSE.Business.Tabelas.NFe
                     #region Cadastro do Envio/Reenvio
                     try
                     {
+                        DataBase.BeginTransaction();
+
                         if (!string.IsNullOrWhiteSpace(identificadorNota))
                         {
                             // Cadastro do Reenvio
@@ -416,6 +418,8 @@ namespace NFSE.Business.Tabelas.NFe
                     }
                     catch (Exception ex)
                     {
+                        DataBase.RollbackTransaction();
+
                         if (string.IsNullOrWhiteSpace(identificadorNota))
                         {
                             identificadorNota = CapaAutorizacaoNfse.IdentificadorNota;
@@ -445,6 +449,8 @@ namespace NFSE.Business.Tabelas.NFe
                     }
                     catch (Exception ex)
                     {
+                        DataBase.RollbackTransaction();
+
                         new NfeWsErroController().CadastrarErroGenerico(grvId, usuarioId, identificadorNota, OrigemErro.MobLink, acao, ex.Message);
 
                         returnList.Add("Erro ao cadastrar a composição da NF: " + ex.Message);
@@ -457,6 +463,7 @@ namespace NFSE.Business.Tabelas.NFe
                     }
                     #endregion Cadastro da Composição da Nota Fiscal
 
+                    DataBase.CommitTransaction();
 
                     #region Execução do Web Service
                     try
@@ -665,7 +672,7 @@ namespace NFSE.Business.Tabelas.NFe
 
                 endereco = Endereco(atendimento),
 
-                inscricao_municipal = !string.IsNullOrWhiteSpace(atendimento.NotaFiscalEmailInscricaoMunicipalTomadorServico) ? atendimento.NotaFiscalEmailInscricaoMunicipalTomadorServico : string.Empty
+                inscricao_municipal = !string.IsNullOrWhiteSpace(atendimento.NotaFiscalEmailInscricaoMunicipalTomadorServico) ? atendimento.NotaFiscalEmailInscricaoMunicipalTomadorServico : deposito.EmailNfe
             };
         }
 
@@ -727,6 +734,11 @@ namespace NFSE.Business.Tabelas.NFe
             GravarLog("");
 
             composicao.TotalComDesconto = Math.Round(composicao.TotalComDesconto, 2);
+
+            if (isDev)
+            {
+                composicao.TotalComDesconto = 1;
+            }
 
             if (PossuiRegraNfe(nfeRegras, "SEMALIQUOTA"))
             {

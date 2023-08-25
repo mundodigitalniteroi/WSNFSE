@@ -72,6 +72,8 @@ namespace NFSE.Business.Tabelas.NFe
                 throw new Exception("Ocorreu um erro ao receber a Nota Fiscal (" + identificaoNotaFiscal.IdentificadorNota + "): " + ex.Message);
             }
 
+            Console.WriteLine(json);
+
             try
             {
                 return ProcessarRetorno(grv, nfe, identificaoNotaFiscal, json);
@@ -151,23 +153,25 @@ namespace NFSE.Business.Tabelas.NFe
 
             if (!string.IsNullOrWhiteSpace(retornoConsulta.url))
             {              
-                retornoConsulta.url = retornoConsulta.url.Replace("nfse.aspx", "/NFSE/contribuinte/notaprintimg.aspx").Replace("https://", "http://");
+                retornoConsulta.url = retornoConsulta.url
+                    .Replace("nfse.aspx", "/NFSE/contribuinte/notaprintimg.aspx")
+                    .Replace("https://", "http://");
 
-                if (!string.IsNullOrWhiteSpace(retornoConsulta.url))
-                {
-                    retornoConsulta.ImagemNotaFiscal = BaixarImagem(grv.ClienteId, grv.DepositoId, nfe.IdentificadorNota, identificaoNotaFiscal, retornoConsulta.url);
-                }
+                //if (!string.IsNullOrWhiteSpace(retornoConsulta.url))
+                //{
+                //    retornoConsulta.ImagemNotaFiscal = BaixarImagem(grv.ClienteId, grv.DepositoId, nfe.IdentificadorNota, identificaoNotaFiscal, retornoConsulta.url);
+                //}
 
-                if (identificaoNotaFiscal.BaixarImagemOriginal)
-                {
-                    return retornoConsulta;
-                }
+                //if (identificaoNotaFiscal.BaixarImagemOriginal)
+                //{
+                //    return retornoConsulta;
+                //}
 
                 nfe.Status = nfe.Status == 'A' ? 'P' : 'T';
 
-                new NfeImagemController().Excluir(nfe.NfeId);
+                //new NfeImagemController().Excluir(nfe.NfeId);
 
-                new NfeImagemController().Cadastrar(nfe.NfeId, retornoConsulta.ImagemNotaFiscal);
+                //new NfeImagemController().Cadastrar(nfe.NfeId, retornoConsulta.ImagemNotaFiscal);
 
                 new NfeController().AtualizarRetornoNotaFiscal(nfe, retornoConsulta);
             }
@@ -175,176 +179,176 @@ namespace NFSE.Business.Tabelas.NFe
             return retornoConsulta;
         }
 
-        private byte[] BaixarImagem(int clienteId, int depositoId, string identificadorNota, Consulta identificaoNotaFiscal, string url)
-        {
-            byte[] imagemNotaFiscal;
+        //private byte[] BaixarImagem(int clienteId, int depositoId, string identificadorNota, Consulta identificaoNotaFiscal, string url)
+        //{
+        //    byte[] imagemNotaFiscal;
 
-            NfeConfiguracaoImagemEntity ConfiguracaoImagem;
+        //    NfeConfiguracaoImagemEntity ConfiguracaoImagem;
 
-            NfeConfiguracaoImagemController NfeConfiguracaoImagemController = new NfeConfiguracaoImagemController();
+        //    NfeConfiguracaoImagemController NfeConfiguracaoImagemController = new NfeConfiguracaoImagemController();
 
-            if ((ConfiguracaoImagem = NfeConfiguracaoImagemController.Selecionar(new NfeConfiguracaoImagemEntity { ClienteId = clienteId, DepositoId = depositoId })) == null)
-            {
-                ConfiguracaoImagem = new NfeConfiguracaoImagemEntity
-                {
-                    ClienteDepositoId = new ClienteDepositoController().Selecionar(new ClienteDepositoEntity { ClienteId = clienteId, DepositoId = depositoId }).ClienteDepositoId,
+        //    if ((ConfiguracaoImagem = NfeConfiguracaoImagemController.Selecionar(new NfeConfiguracaoImagemEntity { ClienteId = clienteId, DepositoId = depositoId })) == null)
+        //    {
+        //        ConfiguracaoImagem = new NfeConfiguracaoImagemEntity
+        //        {
+        //            ClienteDepositoId = new ClienteDepositoController().Selecionar(new ClienteDepositoEntity { ClienteId = clienteId, DepositoId = depositoId }).ClienteDepositoId,
 
-                    ValueX = 10,
+        //            ValueX = 10,
 
-                    ValueY = 10,
+        //            ValueY = 10,
 
-                    Height = 500,
+        //            Height = 500,
 
-                    Width = 500
-                };
+        //            Width = 500
+        //        };
 
-                ConfiguracaoImagem.ConfiguracaoImagemId = NfeConfiguracaoImagemController.Cadastrar(ConfiguracaoImagem);
-            }
+        //        ConfiguracaoImagem.ConfiguracaoImagemId = NfeConfiguracaoImagemController.Cadastrar(ConfiguracaoImagem);
+        //    }
 
-            string directory;
+        //    string directory;
 
-            string drive = new Tools().DriveToSave();
+        //    string drive = new Tools().DriveToSave();
 
-            directory = $@"{drive}Sistemas\GeradorNF\NFE\" + DataBase.SystemEnvironment.ToString() + "\\" + DateTime.Now.Year + "\\" + DateTime.Now.ToString("MM") + "\\" + DateTime.Now.ToString("dd") + "\\";
+        //    directory = $@"{drive}Sistemas\GeradorNF\NFE\" + DataBase.SystemEnvironment.ToString() + "\\" + DateTime.Now.Year + "\\" + DateTime.Now.ToString("MM") + "\\" + DateTime.Now.ToString("dd") + "\\";
 
-            if (!Directory.Exists(directory))
-            {
-                Directory.CreateDirectory(directory);
-            }
+        //    if (!Directory.Exists(directory))
+        //    {
+        //        Directory.CreateDirectory(directory);
+        //    }
 
-            List<NfeRegraEntity> regrasNfe = new NfeRegraController().Listar(new NfeRegraEntity()
-            {
-                ClienteId = clienteId,
-                DepositoId = depositoId
-            });
+        //    List<NfeRegraEntity> regrasNfe = new NfeRegraController().Listar(new NfeRegraEntity()
+        //    {
+        //        ClienteId = clienteId,
+        //        DepositoId = depositoId
+        //    });
 
-            if (regrasNfe?.Count(w => w.RegraCodigo.Equals("NFPDF") && w.Ativo.Equals(1)) > 0 || url.EndsWith(".pdf", StringComparison.CurrentCultureIgnoreCase))
-            {
-                using (WebClient webClient = new WebClient())
-                {
-                    System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-                    string str1 = directory + identificadorNota + "Original.pdf";
-                    string str2 = directory + identificadorNota + ".jpg";
+        //    if (regrasNfe?.Count(w => w.RegraCodigo.Equals("NFPDF") && w.Ativo.Equals(1)) > 0 || url.EndsWith(".pdf", StringComparison.CurrentCultureIgnoreCase))
+        //    {
+        //        using (WebClient webClient = new WebClient())
+        //        {
+        //            System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+        //            string str1 = directory + identificadorNota + "Original.pdf";
+        //            string str2 = directory + identificadorNota + ".jpg";
 
-                    webClient.Headers.Add("user-agent", "Mob-Link");
+        //            webClient.Headers.Add("user-agent", "Mob-Link");
 
-                    webClient.DownloadFile(url, str1);
+        //            webClient.DownloadFile(url, str1);
 
-                    PdfToJpg.Process(str1, str2);
+        //            PdfToJpg.Process(str1, str2);
 
-                    using (MemoryStream memoryStream = new MemoryStream())
-                    {
-                        Image.FromFile(str2).Save(memoryStream, ImageFormat.Jpeg);
+        //            using (MemoryStream memoryStream = new MemoryStream())
+        //            {
+        //                Image.FromFile(str2).Save(memoryStream, ImageFormat.Jpeg);
 
-                        imagemNotaFiscal = memoryStream.ToArray();
-                    }
-                }
-            }
-            else
-            {
-                using (MemoryStream memoryStream = new MemoryStream())
-                {
-                    Tools.ObterImagemEndereco(url).Save(memoryStream, ImageFormat.Jpeg);
+        //                imagemNotaFiscal = memoryStream.ToArray();
+        //            }
+        //        }
+        //    }
+        //    else
+        //    {
+        //        using (MemoryStream memoryStream = new MemoryStream())
+        //        {
+        //            Tools.ObterImagemEndereco(url).Save(memoryStream, ImageFormat.Jpeg);
 
-                    imagemNotaFiscal = memoryStream.ToArray();
-                }
+        //            imagemNotaFiscal = memoryStream.ToArray();
+        //        }
 
-                try
-                {
-                    if (!IsImage(imagemNotaFiscal))
-                    {
-                        throw new Exception("A Imagem retornada nao é uma Imagem válida");
-                    }
-                }
-                catch (Exception)
-                {
-                    throw new Exception("Ocorreu um erro ao analisar a Imagem retornada");
-                }
+        //        try
+        //        {
+        //            if (!IsImage(imagemNotaFiscal))
+        //            {
+        //                throw new Exception("A Imagem retornada nao é uma Imagem válida");
+        //            }
+        //        }
+        //        catch (Exception)
+        //        {
+        //            throw new Exception("Ocorreu um erro ao analisar a Imagem retornada");
+        //        }
 
-                #region Início do trecho para testes
-                //if (new[] { "BETODELL", "BETOLENOVO", "SUPREMELEADER" }.Contains(SystemInformation.ComputerName))
-                //{
-                //    configuracaoImagem.ValueX = 0; // Margem Esquerda
-                //    configuracaoImagem.ValueY = 0; // Margem Superior
-                //    configuracaoImagem.Width = 1035; // Margem Direita
-                //    configuracaoImagem.Height = 1315; // Margem Inferior
-                //}
-                #endregion Fim do trecho para testes
+        //        #region Início do trecho para testes
+        //        //if (new[] { "BETODELL", "BETOLENOVO", "SUPREMELEADER" }.Contains(SystemInformation.ComputerName))
+        //        //{
+        //        //    configuracaoImagem.ValueX = 0; // Margem Esquerda
+        //        //    configuracaoImagem.ValueY = 0; // Margem Superior
+        //        //    configuracaoImagem.Width = 1035; // Margem Direita
+        //        //    configuracaoImagem.Height = 1315; // Margem Inferior
+        //        //}
+        //        #endregion Fim do trecho para testes
 
-                try
-                {
-                    if (!identificaoNotaFiscal.BaixarImagemOriginal)
-                    {
-                        imagemNotaFiscal = CropImage(imagemNotaFiscal, new Rectangle(ConfiguracaoImagem.ValueX, ConfiguracaoImagem.ValueY, ConfiguracaoImagem.Width, ConfiguracaoImagem.Height));
+        //        try
+        //        {
+        //            if (!identificaoNotaFiscal.BaixarImagemOriginal)
+        //            {
+        //                imagemNotaFiscal = CropImage(imagemNotaFiscal, new Rectangle(ConfiguracaoImagem.ValueX, ConfiguracaoImagem.ValueY, ConfiguracaoImagem.Width, ConfiguracaoImagem.Height));
 
-                        // File.WriteAllBytes(directory + identificadorNota + "Recortado.jpg", ImagemNotaFiscal);
+        //                // File.WriteAllBytes(directory + identificadorNota + "Recortado.jpg", ImagemNotaFiscal);
 
-                        if (!IsImage(imagemNotaFiscal))
-                        {
-                            throw new Exception("A Imagem recortada nao é uma Imagem válida");
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception("Ocorreu um erro ao recortar a Imagem retornada: " + ex.Message);
-                }
-            }
+        //                if (!IsImage(imagemNotaFiscal))
+        //                {
+        //                    throw new Exception("A Imagem recortada nao é uma Imagem válida");
+        //                }
+        //            }
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            throw new Exception("Ocorreu um erro ao recortar a Imagem retornada: " + ex.Message);
+        //        }
+        //    }
 
-            return imagemNotaFiscal;
-        }
+        //    return imagemNotaFiscal;
+        //}
 
-        private bool IsImage(byte[] bytes)
-        {
-            byte[] bmp = Encoding.ASCII.GetBytes("BM"); // BMP
-            byte[] gif = Encoding.ASCII.GetBytes("GIF"); // GIF
-            byte[] jpeg = new byte[] { 255, 216, 255, 224 }; // JPEG
-            byte[] jpeg2 = new byte[] { 255, 216, 255, 225 }; // JPEG Canon
-            byte[] png = new byte[] { 137, 80, 78, 71 }; // PNG
-            byte[] tiff = new byte[] { 73, 73, 42 }; // TIFF
-            byte[] tiff2 = new byte[] { 77, 77, 42 }; // TIFF
+        //private bool IsImage(byte[] bytes)
+        //{
+        //    byte[] bmp = Encoding.ASCII.GetBytes("BM"); // BMP
+        //    byte[] gif = Encoding.ASCII.GetBytes("GIF"); // GIF
+        //    byte[] jpeg = new byte[] { 255, 216, 255, 224 }; // JPEG
+        //    byte[] jpeg2 = new byte[] { 255, 216, 255, 225 }; // JPEG Canon
+        //    byte[] png = new byte[] { 137, 80, 78, 71 }; // PNG
+        //    byte[] tiff = new byte[] { 73, 73, 42 }; // TIFF
+        //    byte[] tiff2 = new byte[] { 77, 77, 42 }; // TIFF
 
-            if (bmp.SequenceEqual(bytes.Take(bmp.Length)) ||
-                gif.SequenceEqual(bytes.Take(gif.Length)) ||
-                png.SequenceEqual(bytes.Take(png.Length)) ||
-                tiff.SequenceEqual(bytes.Take(tiff.Length)) ||
-                tiff2.SequenceEqual(bytes.Take(tiff2.Length)) ||
-                jpeg.SequenceEqual(bytes.Take(jpeg.Length)) ||
-                jpeg2.SequenceEqual(bytes.Take(jpeg2.Length)))
-            {
-                return true;
-            }
+        //    if (bmp.SequenceEqual(bytes.Take(bmp.Length)) ||
+        //        gif.SequenceEqual(bytes.Take(gif.Length)) ||
+        //        png.SequenceEqual(bytes.Take(png.Length)) ||
+        //        tiff.SequenceEqual(bytes.Take(tiff.Length)) ||
+        //        tiff2.SequenceEqual(bytes.Take(tiff2.Length)) ||
+        //        jpeg.SequenceEqual(bytes.Take(jpeg.Length)) ||
+        //        jpeg2.SequenceEqual(bytes.Take(jpeg2.Length)))
+        //    {
+        //        return true;
+        //    }
 
-            return false;
-        }
+        //    return false;
+        //}
 
-        private byte[] CropImage(byte[] byteImage, Rectangle rectangle)
-        {
-            try
-            {
-                using (MemoryStream memoryStream = new MemoryStream(byteImage))
-                {
-                    Image imageSource = Image.FromStream(memoryStream);
+        //private byte[] CropImage(byte[] byteImage, Rectangle rectangle)
+        //{
+        //    try
+        //    {
+        //        using (MemoryStream memoryStream = new MemoryStream(byteImage))
+        //        {
+        //            Image imageSource = Image.FromStream(memoryStream);
 
-                    Image imageTarget = CropImage(imageSource, rectangle);
+        //            Image imageTarget = CropImage(imageSource, rectangle);
 
-                    ImageConverter converter = new ImageConverter();
+        //            ImageConverter converter = new ImageConverter();
 
-                    return (byte[])converter.ConvertTo(imageTarget, typeof(byte[]));
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
+        //            return (byte[])converter.ConvertTo(imageTarget, typeof(byte[]));
+        //        }
+        //    }
+        //    catch (Exception)
+        //    {
+        //        throw;
+        //    }
+        //}
 
-        private Image CropImage(Image img, Rectangle cropArea)
-        {
-            Bitmap bmpImage = new Bitmap(img);
+        //private Image CropImage(Image img, Rectangle cropArea)
+        //{
+        //    Bitmap bmpImage = new Bitmap(img);
 
-            return bmpImage.Clone(cropArea, bmpImage.PixelFormat);
-        }
+        //    return bmpImage.Clone(cropArea, bmpImage.PixelFormat);
+        //}
 
         private void AtualizarStatusNotaFiscal(NfeEntity nfe)
         {
@@ -437,15 +441,15 @@ namespace NFSE.Business.Tabelas.NFe
             {
                 retornoConsulta.url = retornoConsulta.url.Replace("nfse.aspx", "/NFSE/contribuinte/notaprintimg.aspx");
 
-                if (!string.IsNullOrWhiteSpace(retornoConsulta.url))
-                {
-                    retornoConsulta.Html = BaixarImagemAvulsa(nfe.IdentificadorNota, retornoConsulta.url);
-                }
+                //if (!string.IsNullOrWhiteSpace(retornoConsulta.url))
+                //{
+                //    retornoConsulta.Html = BaixarImagemAvulsa(nfe.IdentificadorNota, retornoConsulta.url);
+                //}
 
-                if (identificaoNotaFiscal.BaixarImagemOriginal)
-                {
-                    return retornoConsulta;
-                }
+                //if (identificaoNotaFiscal.BaixarImagemOriginal)
+                //{
+                //    return retornoConsulta;
+                //}
 
                 nfe.Status = nfe.Status == 'A' ? 'P' : 'T';
 
@@ -455,34 +459,34 @@ namespace NFSE.Business.Tabelas.NFe
             return retornoConsulta;
         }
 
-        private string BaixarImagemAvulsa(string identificadorNota, string url)
-        {
-            string directory;
+        //private string BaixarImagemAvulsa(string identificadorNota, string url)
+        //{
+        //    string directory;
 
-            string drive = new Tools().DriveToSave();
+        //    string drive = new Tools().DriveToSave();
 
-            directory = $@"{drive}Sistemas\GeradorNF\NFE\" + DataBase.SystemEnvironment.ToString() + "\\" + DateTime.Now.Year + "\\" + DateTime.Now.ToString("MM") + "\\" + DateTime.Now.ToString("dd") + "\\";
+        //    directory = $@"{drive}Sistemas\GeradorNF\NFE\" + DataBase.SystemEnvironment.ToString() + "\\" + DateTime.Now.Year + "\\" + DateTime.Now.ToString("MM") + "\\" + DateTime.Now.ToString("dd") + "\\";
 
-            if (!Directory.Exists(directory))
-            {
-                Directory.CreateDirectory(directory);
-            }
+        //    if (!Directory.Exists(directory))
+        //    {
+        //        Directory.CreateDirectory(directory);
+        //    }
 
-            string str1 = directory + identificadorNota + "Original.html";
+        //    string str1 = directory + identificadorNota + "Original.html";
 
-            if (File.Exists(str1))
-            {
-                File.Delete(str1);
-            }
+        //    if (File.Exists(str1))
+        //    {
+        //        File.Delete(str1);
+        //    }
 
-            using (WebClient webClient = new WebClient())
-            {
-                webClient.Headers.Add("user-agent", "Mob-Link");
+        //    using (WebClient webClient = new WebClient())
+        //    {
+        //        webClient.Headers.Add("user-agent", "Mob-Link");
 
-                webClient.DownloadFile(url, str1);
-            };
+        //        webClient.DownloadFile(url, str1);
+        //    };
 
-            return str1;
-        }
+        //    return str1;
+        //}
     }
 }
