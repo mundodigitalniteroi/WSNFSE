@@ -312,12 +312,12 @@ namespace NFSE.Business.Util
         {
             string drive = new Tools().DriveToSave();
 
-            if (!Directory.Exists($@"{drive}Sistemas\GeradorNF\NFE"))
+            if (!Directory.Exists($@"F:\Logs\NfeCadastroNotaFiscal"))
             {
-                Directory.CreateDirectory($@"{drive}Sistemas\GeradorNF\NFE");
+                Directory.CreateDirectory($@"F:\Logs\NfeCadastroNotaFiscal");
             }
 
-            using (StreamWriter sw = new StreamWriter($@"{drive}Sistemas\GeradorNF\NFE\NfeGerarNotaFiscalController.log", true, Encoding.UTF8))
+            using (StreamWriter sw = new StreamWriter($@"F:\Logs\NfeCadastroNotaFiscal\NfeGerarNotaFiscalController.log", true, Encoding.UTF8))
             {
                 sw.WriteLine(message);
             }

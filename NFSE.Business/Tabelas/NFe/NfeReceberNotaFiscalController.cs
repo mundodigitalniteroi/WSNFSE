@@ -152,10 +152,10 @@ namespace NFSE.Business.Tabelas.NFe
             }
 
             if (!string.IsNullOrWhiteSpace(retornoConsulta.url))
-            {              
+            {
                 retornoConsulta.url = retornoConsulta.url
-                    .Replace("nfse.aspx", "/NFSE/contribuinte/notaprintimg.aspx")
-                    .Replace("https://", "http://");
+                    .Replace("nfse.aspx", "/NFSE/contribuinte/notaprintimg.aspx");
+                    //.Replace("https://", "http://");
 
                 //if (!string.IsNullOrWhiteSpace(retornoConsulta.url))
                 //{
