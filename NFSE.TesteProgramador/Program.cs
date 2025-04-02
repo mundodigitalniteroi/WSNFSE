@@ -73,9 +73,9 @@ namespace EnvioTeste
 
             //SolicitarNotaFiscal(grvId, isDevelopment);
 
-            // SolicitarNovaNotaFiscal(1012553, "899284", isDevelopment);
+            SolicitarNovaNotaFiscal(1258863, "829262", isDevelopment);
 
-            ReceberNotaFiscal(grvId, identificadorNota, isDevelopment);
+            //ReceberNotaFiscal(grvId, identificadorNota, isDevelopment);
 
             // CancelarNotaFiscal(grvId, identificadorNota, isDevelopment);
             Console.WriteLine("CONCLUIDO");

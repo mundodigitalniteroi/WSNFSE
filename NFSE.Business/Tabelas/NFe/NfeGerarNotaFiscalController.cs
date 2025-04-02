@@ -634,7 +634,7 @@ namespace NFSE.Business.Tabelas.NFe
 
                 prestador = Prestador(empresa, composicao.FlagEnviarInscricaoEstadual),
 
-                tomador = Tomador(deposito, atendimento)
+                tomador = Tomador(deposito, atendimento, nfeRegras)
             };
 
             Autorizacao.servico = Servico(grv, cliente, composicao, Autorizacao.prestador, clienteDeposito, nfeRegras, descricaoConfiguracaoNfe, isDev);
@@ -656,7 +656,7 @@ namespace NFSE.Business.Tabelas.NFe
             };
         }
 
-        private Tomador Tomador(DepositoEntity deposito, AtendimentoEntity atendimento)
+        private Tomador Tomador(DepositoEntity deposito, AtendimentoEntity atendimento, List<NfeRegraEntity> nfeRegras)
         {
             return new Tomador
             {
@@ -672,7 +672,7 @@ namespace NFSE.Business.Tabelas.NFe
 
                 endereco = Endereco(atendimento),
 
-                inscricao_municipal = !string.IsNullOrWhiteSpace(atendimento.NotaFiscalEmailInscricaoMunicipalTomadorServico) ? atendimento.NotaFiscalEmailInscricaoMunicipalTomadorServico : deposito.EmailNfe
+                inscricao_municipal = !string.IsNullOrWhiteSpace(atendimento.NotaFiscalEmailInscricaoMunicipalTomadorServico) ? atendimento.NotaFiscalEmailInscricaoMunicipalTomadorServico : "0"
             };
         }
 

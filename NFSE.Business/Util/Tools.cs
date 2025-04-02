@@ -17,6 +17,8 @@ namespace NFSE.Business.Util
     {
         public static string PostNfse(string uri, string json, string token)
         {
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+
             Thread.CurrentThread.CurrentCulture = new CultureInfo("pt-BR");
 
             string base64String = Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes(token + ":" + ""));
@@ -98,6 +100,7 @@ namespace NFSE.Business.Util
             return new JavaScriptSerializer()
             {
                 MaxJsonLength = int.MaxValue
+                
             }.Serialize(obj);
         }
 
