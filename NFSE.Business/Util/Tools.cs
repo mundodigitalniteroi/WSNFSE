@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
@@ -17,6 +18,8 @@ namespace NFSE.Business.Util
     {
         public static string PostNfse(string uri, string json, string token)
         {
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+
             Thread.CurrentThread.CurrentCulture = new CultureInfo("pt-BR");
 
             string base64String = Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes(token + ":" + ""));
@@ -56,6 +59,8 @@ namespace NFSE.Business.Util
 
         public static string CancelarNfse(string uri, string json, string token)
         {
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+
             Thread.CurrentThread.CurrentCulture = new CultureInfo("pt-BR");
 
             string base64String = Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes(token + ":"));
@@ -95,10 +100,12 @@ namespace NFSE.Business.Util
 
         public static string ObjToJSON(object obj)
         {
-            return new JavaScriptSerializer()
+            string json = JsonConvert.SerializeObject(obj, new JsonSerializerSettings
             {
-                MaxJsonLength = int.MaxValue
-            }.Serialize(obj);
+                NullValueHandling = NullValueHandling.Ignore
+            });
+
+            return json;
         }
 
         public static object JSONToObj(string serial, Type tipo)
@@ -255,6 +262,8 @@ namespace NFSE.Business.Util
 
         internal string GetNfse(string uri, string token)
         {
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+
             string base64String = Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes(token + ":" + ""));
 
             var httpWebRequest = (HttpWebRequest)WebRequest.Create(uri);

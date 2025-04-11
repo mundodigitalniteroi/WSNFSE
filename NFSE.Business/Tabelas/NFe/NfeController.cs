@@ -222,7 +222,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             SQL.Append("      ,Url = '").Append(retornoNotaFiscal.url.Trim()).AppendLine("'");
 
-            SQL.Append("      ,CaminhoXmlNotaFiscal = '").Append(retornoNotaFiscal.caminho_xml_nota_fiscal.Trim()).AppendLine("'");
+            SQL.Append("      ,CaminhoXmlNotaFiscal = '").Append(retornoNotaFiscal.caminho_xml_nota_fiscal).AppendLine("'");
 
             SQL.Append("      ,Status = '").Append(nfe.Status).AppendLine("'");
 

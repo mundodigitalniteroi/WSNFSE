@@ -51,11 +51,13 @@ namespace NFSE
         {
             try
             {
+                new Tools().GravarLog("ReceberNotaFiscal: NfeId: " + model.NfeId + "Ambiente: " + (model.Homologacao ? "DEV" : "PROD"));
+
                 return new NfeReceberNotaFiscalController().ReceberNotaFiscal(model);
             }
             catch (Exception ex)
             {
-                new Tools().GravarLog("Erro em ReceberNotaFiscal: " + ex.Message);
+                new Tools().GravarLog("Erro em ReceberNotaFiscal: " + ex.Message + "Ambiente: " + (model.Homologacao ? "DEV" : "PROD"));
 
                 throw new Exception(ex.Message);
             }

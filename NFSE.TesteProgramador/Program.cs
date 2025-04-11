@@ -20,7 +20,7 @@ namespace EnvioTeste
 
             bool isDevelopment = DataBase.SystemEnvironment.Equals(SystemEnvironment.Development);
 
-            int grvId = 1042383;
+            int grvId = 1124013;
 
             //GrvEntity grv;
 
@@ -69,7 +69,7 @@ namespace EnvioTeste
             //    }
             //}
 
-            const string identificadorNota = "948934";
+            const string identificadorNota = "788690";
 
             //SolicitarNotaFiscal(grvId, isDevelopment);
 
