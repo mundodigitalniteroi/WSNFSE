@@ -31,5 +31,6 @@
         public string CodigoMunicipioIbge { get; set; }
 
         public string CodigoTributarioMunicipio { get; set; }
+        public string CodigoTributacaoNacionalIss { get; set; }
     }
 }

@@ -18,11 +18,17 @@ namespace NFSE.Business.Util
     {
         public static string PostNfse(string uri, string json, string token)
         {
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+            ServicePointManager.SecurityProtocol =
+                SecurityProtocolType.Ssl3
+                | SecurityProtocolType.Tls
+                | SecurityProtocolType.Tls11
+                | SecurityProtocolType.Tls12;
 
             Thread.CurrentThread.CurrentCulture = new CultureInfo("pt-BR");
 
-            string base64String = Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes(token + ":" + ""));
+            string base64String = Convert.ToBase64String(
+                Encoding.GetEncoding("ISO-8859-1").GetBytes(token + ":" + "")
+            );
 
             HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(uri);
 
@@ -34,7 +40,7 @@ namespace NFSE.Business.Util
 
             byte[] bytes = new UTF8Encoding().GetBytes(json);
 
-            httpWebRequest.ContentLength = (long)bytes.Length;
+            httpWebRequest.ContentLength = bytes.Length;
 
             using (Stream requestStream = httpWebRequest.GetRequestStream())
             {
@@ -45,7 +51,9 @@ namespace NFSE.Business.Util
             {
                 using (HttpWebResponse response = (HttpWebResponse)httpWebRequest.GetResponse())
                 {
-                    using (StreamReader streamReader = new StreamReader(response.GetResponseStream()))
+                    using (
+                        StreamReader streamReader = new StreamReader(response.GetResponseStream())
+                    )
                     {
                         return streamReader.ReadToEnd().Trim();
                     }
@@ -63,7 +71,9 @@ namespace NFSE.Business.Util
 
             Thread.CurrentThread.CurrentCulture = new CultureInfo("pt-BR");
 
-            string base64String = Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes(token + ":"));
+            string base64String = Convert.ToBase64String(
+                Encoding.GetEncoding("ISO-8859-1").GetBytes(token + ":")
+            );
 
             HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(uri);
 
@@ -75,7 +85,7 @@ namespace NFSE.Business.Util
 
             byte[] bytes = new UTF8Encoding().GetBytes(json);
 
-            httpWebRequest.ContentLength = (long)bytes.Length;
+            httpWebRequest.ContentLength = bytes.Length;
 
             using (Stream requestStream = httpWebRequest.GetRequestStream())
             {
@@ -86,7 +96,9 @@ namespace NFSE.Business.Util
             {
                 using (HttpWebResponse response = (HttpWebResponse)httpWebRequest.GetResponse())
                 {
-                    using (StreamReader streamReader = new StreamReader(response.GetResponseStream()))
+                    using (
+                        StreamReader streamReader = new StreamReader(response.GetResponseStream())
+                    )
                     {
                         return streamReader.ReadToEnd().Trim();
                     }
@@ -110,10 +122,10 @@ namespace NFSE.Business.Util
 
         public static object JSONToObj(string serial, Type tipo)
         {
-            return new JavaScriptSerializer()
-            {
-                MaxJsonLength = int.MaxValue
-            }.Deserialize(serial, tipo);
+            return new JavaScriptSerializer() { MaxJsonLength = int.MaxValue }.Deserialize(
+                serial,
+                tipo
+            );
         }
 
         public static string ToCsv(DataTable dataTable)
@@ -122,7 +134,7 @@ namespace NFSE.Business.Util
 
             if (dataTable.Columns.Count == 0)
             {
-                return (string)null;
+                return null;
             }
 
             foreach (object column in (InternalDataCollectionBase)dataTable.Columns)
@@ -133,7 +145,10 @@ namespace NFSE.Business.Util
                 }
                 else
                 {
-                    stringBuilder.Append('\"').Append(column.ToString().Replace("\"", "\"\"")).Append("\";");
+                    stringBuilder
+                        .Append('\"')
+                        .Append(column.ToString().Replace("\"", "\"\""))
+                        .Append("\";");
                 }
             }
 
@@ -149,7 +164,10 @@ namespace NFSE.Business.Util
                     }
                     else
                     {
-                        stringBuilder.Append('\"').Append(obj.ToString().Replace("\"", "\"\"")).Append("\";");
+                        stringBuilder
+                            .Append('\"')
+                            .Append(obj.ToString().Replace("\"", "\"\""))
+                            .Append("\";");
                     }
                 }
 
@@ -179,7 +197,9 @@ namespace NFSE.Business.Util
                 {
                     thread.Abort();
 
-                    throw new Exception($"A tentativa de download da imagem superou {stopwatch.Elapsed.Minutes} e foi abortada pelo WebService");
+                    throw new Exception(
+                        $"A tentativa de download da imagem superou {stopwatch.Elapsed.Minutes} e foi abortada pelo WebService"
+                    );
                 }
             }
 
@@ -190,7 +210,13 @@ namespace NFSE.Business.Util
 
         public static Bitmap CaptureWebPage(string url)
         {
-            using (var webBrowser = new WebBrowser { ScrollBarsEnabled = false, ScriptErrorsSuppressed = true })
+            using (
+                var webBrowser = new WebBrowser
+                {
+                    ScrollBarsEnabled = false,
+                    ScriptErrorsSuppressed = true,
+                }
+            )
             {
                 webBrowser.Navigate(url);
 
@@ -262,9 +288,15 @@ namespace NFSE.Business.Util
 
         internal string GetNfse(string uri, string token)
         {
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3 | SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+            ServicePointManager.SecurityProtocol =
+                SecurityProtocolType.Ssl3
+                | SecurityProtocolType.Tls
+                | SecurityProtocolType.Tls11
+                | SecurityProtocolType.Tls12;
 
-            string base64String = Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes(token + ":" + ""));
+            string base64String = Convert.ToBase64String(
+                Encoding.GetEncoding("ISO-8859-1").GetBytes(token + ":" + "")
+            );
 
             var httpWebRequest = (HttpWebRequest)WebRequest.Create(uri);
 
@@ -292,7 +324,8 @@ namespace NFSE.Business.Util
 
         public string DataTableToJSON(DataTable table)
         {
-            List<Dictionary<string, object>> dictionaryList = new List<Dictionary<string, object>>();
+            List<Dictionary<string, object>> dictionaryList =
+                new List<Dictionary<string, object>>();
 
             foreach (DataRow row in (InternalDataCollectionBase)table.Rows)
             {
@@ -300,16 +333,15 @@ namespace NFSE.Business.Util
 
                 foreach (DataColumn column in (InternalDataCollectionBase)table.Columns)
                 {
-                    dictionary[column.ColumnName] = (object)Convert.ToString(row[column]);
+                    dictionary[column.ColumnName] = Convert.ToString(row[column]);
                 }
 
                 dictionaryList.Add(dictionary);
             }
 
-            return new JavaScriptSerializer()
-            {
-                MaxJsonLength = int.MaxValue
-            }.Serialize((object)dictionaryList);
+            return new JavaScriptSerializer() { MaxJsonLength = int.MaxValue }.Serialize(
+                dictionaryList
+            );
         }
 
         public string DriveToSave()
