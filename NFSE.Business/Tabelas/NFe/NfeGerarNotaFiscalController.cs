@@ -672,7 +672,7 @@ namespace NFSE.Business.Tabelas.NFe
 
                 endereco = Endereco(atendimento),
 
-                inscricao_municipal = !string.IsNullOrWhiteSpace(atendimento.NotaFiscalEmailInscricaoMunicipalTomadorServico) ? atendimento.NotaFiscalEmailInscricaoMunicipalTomadorServico : "0"
+                inscricao_municipal = !string.IsNullOrWhiteSpace(atendimento.NotaFiscalEmailInscricaoMunicipalTomadorServico) ? atendimento.NotaFiscalEmailInscricaoMunicipalTomadorServico : ""
             };
         }
 
@@ -861,6 +861,11 @@ namespace NFSE.Business.Tabelas.NFe
                 base_calculo = !string.IsNullOrWhiteSpace(baseCalculo) ? baseCalculo : null
             };
 
+            if (!string.IsNullOrEmpty(CnaeListaServicoParametroMunicipio.CodigoTributacaoNacionalIss))
+            {
+                servico.codigo_tributacao_nacional_iss = CnaeListaServicoParametroMunicipio.CodigoTributacaoNacionalIss;
+            }
+
             if (!string.IsNullOrWhiteSpace(grv.Placa))
             {
                 servico.discriminacao += ", PLACA " + grv.Placa;
@@ -888,12 +893,12 @@ namespace NFSE.Business.Tabelas.NFe
         {
             string drive = new Tools().DriveToSave();
 
-            if (!Directory.Exists($@"F:\Logs\NfeCadastroNotaFiscal"))
+            if (!Directory.Exists($@"C:\Logs\NfeCadastroNotaFiscal"))
             {
-                Directory.CreateDirectory($@"F:\Logs\NfeCadastroNotaFiscal");
+                Directory.CreateDirectory($@"C:\Logs\NfeCadastroNotaFiscal");
             }
 
-            using (StreamWriter sw = new StreamWriter($@"F:\Logs\NfeCadastroNotaFiscal\NfeGerarNotaFiscalController.log", true, Encoding.UTF8))
+            using (StreamWriter sw = new StreamWriter($@"C:\Logs\NfeCadastroNotaFiscal\NfeGerarNotaFiscalController.log", true, Encoding.UTF8))
             {
                 sw.WriteLine(message);
             }

@@ -5,7 +5,6 @@ using NFSE.Domain.Entities.NFe;
 using NFSE.Domain.Enum;
 using NFSE.Infra.Data;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace EnvioTeste
@@ -19,15 +18,28 @@ namespace EnvioTeste
             DataBase.SystemEnvironment = SystemEnvironment.Production;
 
             bool isDevelopment = DataBase.SystemEnvironment.Equals(SystemEnvironment.Development);
-
-            int grvId = 1042383;
+            //const string identificadorNota = "1079896";
 
             //GrvEntity grv;
 
-            string[] grvs =
-            {
-                "904112292"
-            };
+            //var notas = Notas
+            //    .ObterNota()
+            //    .Split(',')
+            //    .Select(x =>
+            //    {
+            //        var nota = x.Split('|');
+
+            //        return new Nota { Grv = int.Parse(nota[0]), Identificador = nota[1] };
+            //    })
+            //    .ToList();
+
+            //foreach (var nota in notas)
+            //{
+            //    var grvId = nota.Grv;
+            //    string identificadorNota = nota.Identificador;
+            //    Console.WriteLine($"Processando GRV: {grvId}, Identificador: {identificadorNota}");
+            //    ReceberNotaFiscal(grvId, identificadorNota, isDevelopment);
+            //}
 
             //List<GrvEntity> resultado;
 
@@ -59,23 +71,13 @@ namespace EnvioTeste
             //    }
             //}
 
-            //if (true)
-            //{
-            //    grv = new GrvController().Selecionar("912870087");
 
-            //    if (grv != null)
-            //    {
-            //        grvId = grv.GrvId;
-            //    }
-            //}
-
-            const string identificadorNota = "948934";
 
             //SolicitarNotaFiscal(grvId, isDevelopment);
 
-            SolicitarNovaNotaFiscal(1258863, "829262", isDevelopment);
+            SolicitarNovaNotaFiscal(1136728, "1092376", isDevelopment);
 
-            //ReceberNotaFiscal(grvId, identificadorNota, isDevelopment);
+            //ReceberNotaFiscal(1133019, "1082398", isDevelopment);
 
             // CancelarNotaFiscal(grvId, identificadorNota, isDevelopment);
             Console.WriteLine("CONCLUIDO");
@@ -87,14 +89,10 @@ namespace EnvioTeste
         {
             try
             {
-                var nfe = new NfeGerarNotaFiscalController().GerarNotaFiscal
-                (
+                var nfe = new NfeGerarNotaFiscalController().GerarNotaFiscal(
                     grvId: grvId,
-
                     usuarioId: 1,
-
                     isDev: isDevelopment,
-
                     forcarGeracaoNfe: true
                 );
 
@@ -111,18 +109,18 @@ namespace EnvioTeste
         #endregion Teste de solicitação da Nota Fiscal
 
         #region Teste de solicitação de Nova Nota Fiscal
-        private static void SolicitarNovaNotaFiscal(int grvId, string identificadorNota, bool isDevelopment)
+        private static void SolicitarNovaNotaFiscal(
+            int grvId,
+            string identificadorNota,
+            bool isDevelopment
+        )
         {
             try
             {
-                var nfe = new NfeGerarNotaFiscalController().GerarNovaNotaFiscal
-                (
+                var nfe = new NfeGerarNotaFiscalController().GerarNovaNotaFiscal(
                     grvId: grvId,
-
                     identificadorNota: identificadorNota,
-
                     usuarioId: 1,
-
                     isDev: isDevelopment
                 );
 
@@ -139,22 +137,28 @@ namespace EnvioTeste
         #endregion Teste de solicitação da Nova Nota Fiscal
 
         #region Teste de retorno da Nota Fiscal (Download da NF)
-        private static void ReceberNotaFiscal(int grvId, string identificadorNota, bool isDevelopment)
+        private static void ReceberNotaFiscal(
+            int grvId,
+            string identificadorNota,
+            bool isDevelopment
+        )
         {
             try
             {
-                var aux = new NfeReceberNotaFiscalController().ReceberNotaFiscal(new Consulta
-                {
-                    GrvId = grvId,
+                var aux = new NfeReceberNotaFiscalController().ReceberNotaFiscal(
+                    new Consulta
+                    {
+                        GrvId = grvId,
 
-                    IdentificadorNota = identificadorNota,
+                        IdentificadorNota = identificadorNota,
 
-                    Homologacao = isDevelopment,
+                        Homologacao = isDevelopment,
 
-                    UsuarioId = 1,
+                        UsuarioId = 1,
 
-                    BaixarImagemOriginal = false
-                });
+                        BaixarImagemOriginal = false,
+                    }
+                );
 
                 Console.WriteLine("MENSAGEM: " + aux);
             }
@@ -166,22 +170,28 @@ namespace EnvioTeste
         #endregion Teste de retorno da Nota Fiscal (Download da NF)
 
         #region Teste de cancelamento da Nota Fiscal
-        private static void CancelarNotaFiscal(int grvId, string identificadorNota, bool isDevelopment)
+        private static void CancelarNotaFiscal(
+            int grvId,
+            string identificadorNota,
+            bool isDevelopment
+        )
         {
             try
             {
-                var aux = new NfeCancelamentoController().CancelarNotaFiscal(new Cancelamento
-                {
-                    GrvId = grvId,
+                var aux = new NfeCancelamentoController().CancelarNotaFiscal(
+                    new Cancelamento
+                    {
+                        GrvId = grvId,
 
-                    IdentificadorNota = identificadorNota,
+                        IdentificadorNota = identificadorNota,
 
-                    Justificativa = "TESTE",
+                        Justificativa = "TESTE",
 
-                    Homologacao = isDevelopment,
+                        Homologacao = isDevelopment,
 
-                    UsuarioId = 1
-                });
+                        UsuarioId = 1,
+                    }
+                );
 
                 Console.WriteLine("MENSAGEM: " + aux);
             }
@@ -212,18 +222,17 @@ namespace EnvioTeste
             // 943312
             // 877968
 
-            var grvs = new GrvController().Listar(new GrvEntity { NumeroFormularioGrv = "900691870" });
+            var grvs = new GrvController().Listar(
+                new GrvEntity { NumeroFormularioGrv = "900691870" }
+            );
 
             foreach (var grv in grvs)
             {
                 try
                 {
-                    var nfe = new NfeGerarNotaFiscalController().GerarNotaFiscal
-                    (
+                    var nfe = new NfeGerarNotaFiscalController().GerarNotaFiscal(
                         grvId: grv.GrvId,
-
                         usuarioId: 1,
-
                         isDev: isDevelopment
                     );
 
@@ -275,12 +284,9 @@ namespace EnvioTeste
             #region Teste de Solicitação Simplificado
             try
             {
-                var nfe = new NfeGerarNotaFiscalController().GerarNotaFiscal
-                (
+                var nfe = new NfeGerarNotaFiscalController().GerarNotaFiscal(
                     grvId: grvId,
-
                     usuarioId: 1,
-
                     isDev: isDevelopment
                 );
 
@@ -301,14 +307,10 @@ namespace EnvioTeste
             #region Teste de Solicitação de uma nova NF
             try
             {
-                var novaNfe = new NfeGerarNotaFiscalController().GerarNovaNotaFiscal
-                (
+                var novaNfe = new NfeGerarNotaFiscalController().GerarNovaNotaFiscal(
                     grvId: grvId,
-
                     identificadorNota: "801814",
-
                     usuarioId: 1,
-
                     isDev: isDevelopment
                 );
 
@@ -337,23 +339,22 @@ namespace EnvioTeste
             #region Teste de retorno da Nota Fiscal (Download da NF)
             try
             {
-                var aux = new NfeReceberNotaFiscalController().ReceberNotaFiscal(new Consulta
-                {
-                    GrvId = grvId,
+                var aux = new NfeReceberNotaFiscalController().ReceberNotaFiscal(
+                    new Consulta
+                    {
+                        GrvId = grvId,
 
-                    IdentificadorNota = "762905",
+                        IdentificadorNota = "762905",
 
-                    Homologacao = isDevelopment,
+                        Homologacao = isDevelopment,
 
-                    UsuarioId = 1
-                });
+                        UsuarioId = 1,
+                    }
+                );
 
                 Console.WriteLine("MENSAGEM: " + aux);
 
-                if (true)
-                {
-
-                }
+                if (true) { }
 
                 //aux = new NfeReceberNotaFiscalController().ReceberNotaFiscal(new Consulta
                 //{
@@ -413,7 +414,7 @@ namespace EnvioTeste
                     {
                         cnpj = "08397160003658",
                         codigo_municipio = "5103403",
-                        inscricao_municipal = "172692"
+                        inscricao_municipal = "172692",
                     },
 
                     servico = new Servico
@@ -421,10 +422,11 @@ namespace EnvioTeste
                         aliquota = "5.00",
                         codigo_cnae = "5223100",
                         codigo_tributario_municipio = "",
-                        discriminacao = "ISS Tributado de acordo com a Lei Complementar Nº 460 de 22/10/2008 Processo Nº 9094604500 - Carga Tributária 18,45% fonte IBPT Serviços de Transporte/Remoção de Veículos",
+                        discriminacao =
+                            "ISS Tributado de acordo com a Lei Complementar Nº 460 de 22/10/2008 Processo Nº 9094604500 - Carga Tributária 18,45% fonte IBPT Serviços de Transporte/Remoção de Veículos",
                         item_lista_servico = "1101",
                         valor_iss = "0.05",
-                        valor_servicos = "1.0"
+                        valor_servicos = "1.0",
                     },
 
                     tomador = new Tomador()
@@ -441,15 +443,18 @@ namespace EnvioTeste
                             complemento = "Bloco 12 Apto 403",
                             logradouro = "estrada da paciencia",
                             numero = "2939",
-                            uf = "RJ"
-                        }
-                    }
-                }
+                            uf = "RJ",
+                        },
+                    },
+                },
             };
 
             try
             {
-                var nfe = new NfeSolicitarEmissaoNotaFiscalController().SolicitarEmissaoNotaFiscalAvulso(capaAutorizacaoNfse);
+                var nfe =
+                    new NfeSolicitarEmissaoNotaFiscalController().SolicitarEmissaoNotaFiscalAvulso(
+                        capaAutorizacaoNfse
+                    );
 
                 // Console.WriteLine(result + Environment.NewLine);
             }
@@ -458,7 +463,6 @@ namespace EnvioTeste
                 Console.WriteLine("ERRO: " + ex.Message);
             }
         }
-
     }
 
     public class Nota
