@@ -45,5 +45,6 @@
         public string percentual_total_tributos { get; set; }
 
         public string fonte_total_tributos { get; set; }
+        public string codigo_tributacao_nacional_iss { get; set; }
     }
 }
