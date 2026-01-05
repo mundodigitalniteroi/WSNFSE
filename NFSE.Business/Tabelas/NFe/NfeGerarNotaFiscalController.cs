@@ -866,6 +866,11 @@ namespace NFSE.Business.Tabelas.NFe
                 servico.codigo_tributacao_nacional_iss = CnaeListaServicoParametroMunicipio.CodigoTributacaoNacionalIss;
             }
 
+            if (!string.IsNullOrEmpty(CnaeListaServicoParametroMunicipio.CodigoNbs))
+            {
+                servico.codigo_nbs = CnaeListaServicoParametroMunicipio.CodigoNbs;
+            }
+
             if (!string.IsNullOrWhiteSpace(grv.Placa))
             {
                 servico.discriminacao += ", PLACA " + grv.Placa;
