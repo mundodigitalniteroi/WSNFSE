@@ -32,5 +32,6 @@
 
         public string CodigoTributarioMunicipio { get; set; }
         public string CodigoTributacaoNacionalIss { get; set; }
+        public string CodigoNbs { get; set; }
     }
 }

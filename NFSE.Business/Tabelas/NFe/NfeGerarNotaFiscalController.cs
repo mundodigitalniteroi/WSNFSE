@@ -868,6 +868,16 @@ namespace NFSE.Business.Tabelas.NFe
                 base_calculo = !string.IsNullOrWhiteSpace(baseCalculo) ? baseCalculo : null
             };
 
+            if (!string.IsNullOrEmpty(CnaeListaServicoParametroMunicipio.CodigoTributacaoNacionalIss))
+            {
+                servico.codigo_tributacao_nacional_iss = CnaeListaServicoParametroMunicipio.CodigoTributacaoNacionalIss;
+            }
+
+            if (!string.IsNullOrEmpty(CnaeListaServicoParametroMunicipio.CodigoNbs))
+            {
+                servico.codigo_nbs = CnaeListaServicoParametroMunicipio.CodigoNbs;
+            }
+
             if (!string.IsNullOrWhiteSpace(grv.Placa))
             {
                 servico.discriminacao += ", PLACA " + grv.Placa;

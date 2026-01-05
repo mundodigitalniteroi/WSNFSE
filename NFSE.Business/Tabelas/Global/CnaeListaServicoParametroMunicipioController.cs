@@ -44,6 +44,8 @@ namespace NFSE.Business.Tabelas.Global
 
             SQL.AppendLine("      ,vw_gov_cnae_lista_servico_parametro_municipio.CodigoTributacaoNacionalIss AS CodigoTributacaoNacionalIss");
 
+            SQL.AppendLine("      ,vw_gov_cnae_lista_servico_parametro_municipio.CodigoNbs AS CodigoNbs");
+
             SQL.AppendLine("  FROM db_global.dbo.vw_gov_cnae_lista_servico_parametro_municipio");
 
             SQL.AppendLine(" WHERE 1 = 1");
