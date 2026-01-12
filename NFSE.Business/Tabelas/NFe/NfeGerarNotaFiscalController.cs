@@ -670,12 +670,15 @@ namespace NFSE.Business.Tabelas.NFe
 
                 email = !string.IsNullOrWhiteSpace(atendimento.NotaFiscalEmail) ? atendimento.NotaFiscalEmail.Trim() : deposito.EmailNfe,
 
-                endereco = Endereco(atendimento),
-
-                inscricao_municipal = !string.IsNullOrWhiteSpace(atendimento.NotaFiscalEmailInscricaoMunicipalTomadorServico) ? atendimento.NotaFiscalEmailInscricaoMunicipalTomadorServico : deposito.EmailNfe
+                endereco = Endereco(atendimento)
             };
 
-            if(PossuiRegraNfe(nfeRegras, "OMITIR_INSC_MUNIC"))
+            if (atendimento.NotaFiscalCpf.Length.Equals(14))
+            {
+                tomador.inscricao_municipal = !string.IsNullOrWhiteSpace(atendimento.NotaFiscalEmailInscricaoMunicipalTomadorServico) ? atendimento.NotaFiscalEmailInscricaoMunicipalTomadorServico : null;
+            }
+
+            if (PossuiRegraNfe(nfeRegras, "OMITIR_INSC_MUNIC"))
             {
                 tomador.inscricao_municipal = null;
             }
