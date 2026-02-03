@@ -33,5 +33,9 @@
         public string CodigoTributarioMunicipio { get; set; }
         public string CodigoTributacaoNacionalIss { get; set; }
         public string CodigoNbs { get; set; }
+        public bool ItemListaServicoNacional { get; set; } = false;
+        public string IbsCbsClassificacaoTributaria { get; set; }
+        public string IbsCbsSituacaoTributaria { get; set; }
+        public string CodigoIndicadorOperacao { get; set; }
     }
 }
