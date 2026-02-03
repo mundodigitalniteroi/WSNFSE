@@ -47,5 +47,9 @@
         public string fonte_total_tributos { get; set; }
         public string codigo_tributacao_nacional_iss { get; set; }
         public string codigo_nbs { get; set; }
+        public string ibs_cbs_classificacao_tributaria { get; set; }
+        public string ibs_cbs_situacao_tributaria { get; set; }
+        public string codigo_indicador_operacao { get; set; }
+        public string codigo_municipio_incidencia { get; set; }
     }
 }

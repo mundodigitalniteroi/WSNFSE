@@ -634,7 +634,9 @@ namespace NFSE.Business.Tabelas.NFe
 
                 prestador = Prestador(empresa, composicao.FlagEnviarInscricaoEstadual),
 
-                tomador = Tomador(deposito, atendimento, nfeRegras)
+                tomador = Tomador(deposito, atendimento, nfeRegras),
+
+                percentual_total_tributos_simples_nacional = 0
             };
 
             Autorizacao.servico = Servico(grv, cliente, composicao, Autorizacao.prestador, clienteDeposito, nfeRegras, descricaoConfiguracaoNfe, isDev);
@@ -668,7 +670,7 @@ namespace NFSE.Business.Tabelas.NFe
 
                 telefone = (atendimento.NotaFiscalDdd + atendimento.NotaFiscalTelefone).Length.Equals(0) ? "2199999999" : atendimento.NotaFiscalDdd + atendimento.NotaFiscalTelefone,
 
-                email = !string.IsNullOrWhiteSpace(atendimento.NotaFiscalEmail) ? atendimento.NotaFiscalEmail.Trim() : deposito.EmailNfe,
+                email = !string.IsNullOrWhiteSpace(atendimento.NotaFiscalEmail) ? atendimento.NotaFiscalEmail.Trim() : deposito.EmailNfe.Trim(),
 
                 endereco = Endereco(atendimento)
             };
@@ -685,6 +687,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             return tomador;
         }
+
 
         private Endereco Endereco(AtendimentoEntity atendimento)
         {
@@ -860,7 +863,7 @@ namespace NFSE.Business.Tabelas.NFe
 
                 codigo_cnae = composicao.Cnae,
 
-                item_lista_servico = CnaeListaServicoParametroMunicipio.ListaServico,
+                item_lista_servico = !CnaeListaServicoParametroMunicipio.ItemListaServicoNacional ? CnaeListaServicoParametroMunicipio.ListaServico : CnaeListaServicoParametroMunicipio.CodigoTributacaoNacionalIss,
 
                 valor_iss = Math.Round(valorIss, 2, MidpointRounding.AwayFromZero).ToString(CultureInfo.GetCultureInfo("en-US")),
 
@@ -868,7 +871,9 @@ namespace NFSE.Business.Tabelas.NFe
 
                 valor_servicos = valorServicos,
 
-                base_calculo = !string.IsNullOrWhiteSpace(baseCalculo) ? baseCalculo : null
+                base_calculo = !string.IsNullOrWhiteSpace(baseCalculo) ? baseCalculo : null,
+
+                codigo_municipio_incidencia = prestador.codigo_municipio
             };
 
             if (!string.IsNullOrEmpty(CnaeListaServicoParametroMunicipio.CodigoTributacaoNacionalIss))
@@ -879,6 +884,21 @@ namespace NFSE.Business.Tabelas.NFe
             if (!string.IsNullOrEmpty(CnaeListaServicoParametroMunicipio.CodigoNbs))
             {
                 servico.codigo_nbs = CnaeListaServicoParametroMunicipio.CodigoNbs;
+            }
+
+            if (!string.IsNullOrEmpty(CnaeListaServicoParametroMunicipio.IbsCbsClassificacaoTributaria))
+            {
+                servico.ibs_cbs_classificacao_tributaria = CnaeListaServicoParametroMunicipio.IbsCbsClassificacaoTributaria;
+            }
+
+            if (!string.IsNullOrEmpty(CnaeListaServicoParametroMunicipio.IbsCbsSituacaoTributaria))
+            {
+                servico.ibs_cbs_situacao_tributaria = CnaeListaServicoParametroMunicipio.IbsCbsSituacaoTributaria;
+            }
+
+            if (!string.IsNullOrEmpty(CnaeListaServicoParametroMunicipio.CodigoIndicadorOperacao))
+            {
+                servico.codigo_indicador_operacao = CnaeListaServicoParametroMunicipio.CodigoIndicadorOperacao;
             }
 
             if (!string.IsNullOrWhiteSpace(grv.Placa))
