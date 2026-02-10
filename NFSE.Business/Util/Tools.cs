@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
@@ -109,7 +110,16 @@ namespace NFSE.Business.Util
 
         public static string ObjToJSON(object obj)
         {
-            return new JavaScriptSerializer() { MaxJsonLength = int.MaxValue }.Serialize(obj);
+
+            if (obj == null) return null;
+
+            var settings = new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore,
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            };
+
+            return JsonConvert.SerializeObject(obj, settings);
         }
 
         public static object JSONToObj(string serial, Type tipo)

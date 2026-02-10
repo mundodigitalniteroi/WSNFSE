@@ -41,6 +41,7 @@
         public string codigo_cnae { get; set; }
 
         public string codigo_municipio { get; set; }
+        public string codigo_municipio_prestacao { get; set; }
 
         public string percentual_total_tributos { get; set; }
 

@@ -867,7 +867,9 @@ namespace NFSE.Business.Tabelas.NFe
 
                 base_calculo = !string.IsNullOrWhiteSpace(baseCalculo) ? baseCalculo : null,
 
-                codigo_municipio_incidencia = prestador.codigo_municipio
+                codigo_municipio_incidencia = prestador.codigo_municipio,
+
+                codigo_municipio_prestacao = prestador.codigo_municipio
             };
 
             if (!string.IsNullOrEmpty(CnaeListaServicoParametroMunicipio.CodigoTributacaoNacionalIss))

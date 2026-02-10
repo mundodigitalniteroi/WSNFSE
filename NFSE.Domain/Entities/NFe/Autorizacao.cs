@@ -13,9 +13,14 @@ namespace NFSE.Domain.Entities.NFe
 
         public bool optante_simples_nacional { get; set; }
 
+        public int codigo_opcao_simples_nacional { get; set; } = 1;
+
         public string incentivador_cultural { get; set; }
 
         public string tributacao_rps { get; set; }
+
+        public int tributacao_iss { get; set; } = 1;
+        public int regime_tributario_simples_nacional { get; set; } = 3;
 
         public string codigo_obra { get; set; }
 
