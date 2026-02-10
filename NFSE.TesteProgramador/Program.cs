@@ -20,14 +20,14 @@ namespace EnvioTeste
 
             bool isDevelopment = DataBase.SystemEnvironment.Equals(SystemEnvironment.Development);
 
-            int grvId = 1124013;
+            //int grvId = 1124013;
 
             //GrvEntity grv;
 
-            string[] grvs =
-            {
-                "904112292"
-            };
+            //string[] grvs =
+            //{
+            //    "904112292"
+            //};
 
             //List<GrvEntity> resultado;
 
@@ -69,15 +69,112 @@ namespace EnvioTeste
             //    }
             //}
 
-            const string identificadorNota = "788690";
+            //const string identificadorNota = "865401";
 
             //SolicitarNotaFiscal(grvId, isDevelopment);
 
             // SolicitarNovaNotaFiscal(1012553, "899284", isDevelopment);
 
-            ReceberNotaFiscal(grvId, identificadorNota, isDevelopment);
+            //ReceberNotaFiscal(grvId, identificadorNota, isDevelopment);
 
-            // CancelarNotaFiscal(grvId, identificadorNota, isDevelopment);
+            var list = new List<Nota>
+            {
+                new Nota { Grv = 1318298, Identificador = "865402" },
+                new Nota { Grv = 1317405, Identificador = "865407" },
+                new Nota { Grv = 1313865, Identificador = "865409" },
+                new Nota { Grv = 1317199, Identificador = "865408" },
+                new Nota { Grv = 1318156, Identificador = "865410" },
+                new Nota { Grv = 1318414, Identificador = "865411" },
+                new Nota { Grv = 1316177, Identificador = "865422" },
+                new Nota { Grv = 1317033, Identificador = "865416" },
+                new Nota { Grv = 1317264, Identificador = "865418" },
+                new Nota { Grv = 1318177, Identificador = "865421" },
+                new Nota { Grv = 1318660, Identificador = "865413" },
+                new Nota { Grv = 1319195, Identificador = "865417" },
+                new Nota { Grv = 1319383, Identificador = "865420" },
+                new Nota { Grv = 1319520, Identificador = "865419" },
+                new Nota { Grv = 1314972, Identificador = "865439" },
+                new Nota { Grv = 1315352, Identificador = "865428" },
+                new Nota { Grv = 1316983, Identificador = "865434" },
+                new Nota { Grv = 1317152, Identificador = "865430" },
+                new Nota { Grv = 1318382, Identificador = "865427" },
+                new Nota { Grv = 1318569, Identificador = "865431" },
+                new Nota { Grv = 1318654, Identificador = "865425" },
+                new Nota { Grv = 1318669, Identificador = "865438" },
+                new Nota { Grv = 1318820, Identificador = "865423" },
+                new Nota { Grv = 1319148, Identificador = "865437" },
+                new Nota { Grv = 1319208, Identificador = "865436" },
+                new Nota { Grv = 1319242, Identificador = "865435" },
+                new Nota { Grv = 1319245, Identificador = "865433" },
+                new Nota { Grv = 1319262, Identificador = "865426" },
+                new Nota { Grv = 1319540, Identificador = "865440" },
+                new Nota { Grv = 1319550, Identificador = "865429" },
+                new Nota { Grv = 1319118, Identificador = "865441" },
+                new Nota { Grv = 1317420, Identificador = "865444" },
+                new Nota { Grv = 1318516, Identificador = "865443" },
+                new Nota { Grv = 1318841, Identificador = "865442" },
+                new Nota { Grv = 1318956, Identificador = "865458" },
+                new Nota { Grv = 1319114, Identificador = "865470" },
+                new Nota { Grv = 1318558, Identificador = "865464" },
+                new Nota { Grv = 1317738, Identificador = "865453" },
+                new Nota { Grv = 1317740, Identificador = "865468" },
+                new Nota { Grv = 1318099, Identificador = "865473" },
+                new Nota { Grv = 1318344, Identificador = "865446" },
+                new Nota { Grv = 1318368, Identificador = "865445" },
+                new Nota { Grv = 1317249, Identificador = "865485" },
+                new Nota { Grv = 1319144, Identificador = "865479" },
+                new Nota { Grv = 1319146, Identificador = "865483" },
+                new Nota { Grv = 1319192, Identificador = "865489" },
+                new Nota { Grv = 1319214, Identificador = "865477" },
+                new Nota { Grv = 1319219, Identificador = "865493" },
+                new Nota { Grv = 1319122, Identificador = "865462" },
+                new Nota { Grv = 1319124, Identificador = "865456" },
+                new Nota { Grv = 1319386, Identificador = "865457" },
+                new Nota { Grv = 1319510, Identificador = "865450" },
+                new Nota { Grv = 1319515, Identificador = "865467" },
+                new Nota { Grv = 1319611, Identificador = "865447" },
+                new Nota { Grv = 1319693, Identificador = "865471" },
+                new Nota { Grv = 1319694, Identificador = "865469" },
+                new Nota { Grv = 1319695, Identificador = "865463" },
+                new Nota { Grv = 1319715, Identificador = "865465" },
+                new Nota { Grv = 1319719, Identificador = "865449" },
+                new Nota { Grv = 1319729, Identificador = "865451" },
+                new Nota { Grv = 1307320, Identificador = "865482" },
+                new Nota { Grv = 1312757, Identificador = "865494" },
+                new Nota { Grv = 1314061, Identificador = "865490" },
+                new Nota { Grv = 1315065, Identificador = "865481" },
+                new Nota { Grv = 1317006, Identificador = "865475" },
+                new Nota { Grv = 1311331, Identificador = "865452" },
+                new Nota { Grv = 1314657, Identificador = "865461" },
+                new Nota { Grv = 1315027, Identificador = "865454" },
+                new Nota { Grv = 1315106, Identificador = "865474" },
+                new Nota { Grv = 1315119, Identificador = "865466" },
+                new Nota { Grv = 1317093, Identificador = "865459" },
+                new Nota { Grv = 1317104, Identificador = "865448" },
+                new Nota { Grv = 1317251, Identificador = "865472" },
+                new Nota { Grv = 1319236, Identificador = "865480" },
+                new Nota { Grv = 1319289, Identificador = "865487" },
+                new Nota { Grv = 1319519, Identificador = "865484" },
+                new Nota { Grv = 1319521, Identificador = "865476" },
+                new Nota { Grv = 1319530, Identificador = "865478" },
+                new Nota { Grv = 1319704, Identificador = "865492" },
+                new Nota { Grv = 1319707, Identificador = "865486" },
+                new Nota { Grv = 1319815, Identificador = "865488" },
+                new Nota { Grv = 1319820, Identificador = "865491" },
+                new Nota { Grv = 1319293, Identificador = "865495" },
+                new Nota { Grv = 1319508, Identificador = "865498" },
+                new Nota { Grv = 1317028, Identificador = "865497" },
+                new Nota { Grv = 1319235, Identificador = "865500" },
+                new Nota { Grv = 1319151, Identificador = "865501" },
+                new Nota { Grv = 1318350, Identificador = "865496" },
+                new Nota { Grv = 1319128, Identificador = "865499" }
+            };
+
+            foreach (var nota in list)
+            {
+                CancelarNotaFiscal(nota.Grv, nota.Identificador, isDevelopment);
+            }
+            //CancelarNotaFiscal(1314842, identificadorNota, isDevelopment);
             Console.WriteLine("CONCLUIDO");
             Console.ReadLine();
         }
@@ -176,7 +273,7 @@ namespace EnvioTeste
 
                     IdentificadorNota = identificadorNota,
 
-                    Justificativa = "TESTE",
+                    Justificativa = "Emissão duplicada",
 
                     Homologacao = isDevelopment,
 

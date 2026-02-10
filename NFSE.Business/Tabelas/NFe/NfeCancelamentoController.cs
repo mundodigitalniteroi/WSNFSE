@@ -31,7 +31,7 @@ namespace NFSE.Business.Tabelas.NFe
             #region Empresa
             EmpresaEntity Empresa;
 
-            if ((Empresa = new EmpresaController().Selecionar(new EmpresaEntity { EmpresaId = new DepositoController().Selecionar(grv.DepositoId).EmpresaId })) == null)
+            if ((Empresa = new EmpresaController().Selecionar(new EmpresaEntity { EmpresaId = new ClienteDepositoController().Selecionar(new Domain.Entities.DP.ClienteDepositoEntity { ClienteId = grv.ClienteId, DepositoId = grv.DepositoId }).EmpresaId })) == null)
             {
                 new NfeWsErroController().CadastrarErroGenerico(model.GrvId, model.UsuarioId, model.IdentificadorNota, OrigemErro.MobLink, Acao.Retorno, "Empresa associada não encontrada");
 
@@ -107,7 +107,7 @@ namespace NFSE.Business.Tabelas.NFe
                     return jsonRetorno;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 if (true)
                 {
