@@ -634,12 +634,10 @@ namespace NFSE.Business.Tabelas.NFe
 
                 prestador = Prestador(empresa, composicao.FlagEnviarInscricaoEstadual),
 
-                tomador = Tomador(deposito, atendimento, nfeRegras),
-
-                percentual_total_tributos_simples_nacional = 0
+                tomador = Tomador(deposito, atendimento, nfeRegras)
             };
 
-            Autorizacao.servico = Servico(grv, cliente, composicao, Autorizacao.prestador, clienteDeposito, nfeRegras, descricaoConfiguracaoNfe, isDev);
+            Autorizacao.servico = Servico(Autorizacao, grv, cliente, composicao, Autorizacao.prestador, clienteDeposito, nfeRegras, descricaoConfiguracaoNfe, isDev);
 
             return Autorizacao;
         }
@@ -722,7 +720,7 @@ namespace NFSE.Business.Tabelas.NFe
             };
         }
 
-        private Servico Servico(GrvEntity grv, ClienteEntity cliente, NfeViewFaturamentoComposicaoAgrupadoEntity composicao, Prestador prestador, ClienteDepositoEntity clienteDeposito, List<NfeRegraEntity> nfeRegras, string descricaoConfiguracaoNfe, bool isDev)
+        private Servico Servico(Autorizacao autorizacao, GrvEntity grv, ClienteEntity cliente, NfeViewFaturamentoComposicaoAgrupadoEntity composicao, Prestador prestador, ClienteDepositoEntity clienteDeposito, List<NfeRegraEntity> nfeRegras, string descricaoConfiguracaoNfe, bool isDev)
         {
             CnaeListaServicoParametroMunicipioEntity CnaeListaServicoParametroMunicipio = new CnaeListaServicoParametroMunicipioEntity
             {
@@ -736,6 +734,16 @@ namespace NFSE.Business.Tabelas.NFe
             if ((CnaeListaServicoParametroMunicipio = new CnaeListaServicoParametroMunicipioController().Selecionar(CnaeListaServicoParametroMunicipio)) == null)
             {
                 throw new Exception("Associação entre CNAE, Lista de Serviço e Município inexistente");
+            }
+
+            if (CnaeListaServicoParametroMunicipio.ConsumidorFinal.HasValue)
+            {
+                autorizacao.consumidor_final = CnaeListaServicoParametroMunicipio.ConsumidorFinal.Value;
+            }
+
+            if (CnaeListaServicoParametroMunicipio.IndicadorDestinatario.HasValue)
+            {
+                autorizacao.indicador_destinatario = CnaeListaServicoParametroMunicipio.IndicadorDestinatario.Value;
             }
 
             decimal valorIss = 0;
@@ -865,7 +873,7 @@ namespace NFSE.Business.Tabelas.NFe
 
                 item_lista_servico = !CnaeListaServicoParametroMunicipio.ItemListaServicoNacional ? CnaeListaServicoParametroMunicipio.ListaServico : CnaeListaServicoParametroMunicipio.CodigoTributacaoNacionalIss,
 
-                valor_iss = Math.Round(valorIss, 2, MidpointRounding.AwayFromZero).ToString(CultureInfo.GetCultureInfo("en-US")),
+                //valor_iss = Math.Round(valorIss, 2, MidpointRounding.AwayFromZero).ToString(CultureInfo.GetCultureInfo("en-US")),
 
                 codigo_tributario_municipio = CnaeListaServicoParametroMunicipio.CodigoTributarioMunicipio,
 

@@ -21,9 +21,9 @@ namespace NFSE.Domain.Entities.NFe
 
         public string art { get; set; }
 
-        public byte consumidor_final { get; set; } = 0;
-        public decimal percentual_total_tributos_simples_nacional { get; set; }
-        public byte indicador_destinatario { get; set; } = 0;
+        public byte? consumidor_final { get; set; }
+        public decimal percentual_total_tributos_simples_nacional { get; set; } = 0;
+        public byte? indicador_destinatario { get; set; }
 
         public Prestador prestador { get; set; }
 

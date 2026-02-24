@@ -54,6 +54,10 @@ namespace NFSE.Business.Tabelas.Global
 
             SQL.AppendLine("      ,vw_gov_cnae_lista_servico_parametro_municipio.CodigoIndicadorOperacao AS CodigoIndicadorOperacao");
 
+            SQL.AppendLine("      ,vw_gov_cnae_lista_servico_parametro_municipio.ConsumidorFinal AS ConsumidorFinal");
+
+            SQL.AppendLine("      ,vw_gov_cnae_lista_servico_parametro_municipio.IndicadorDestinatario AS IndicadorDestinatario");
+
             SQL.AppendLine("  FROM db_global.dbo.vw_gov_cnae_lista_servico_parametro_municipio");
 
             SQL.AppendLine(" WHERE 1 = 1");
