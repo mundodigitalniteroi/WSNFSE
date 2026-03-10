@@ -13,22 +13,24 @@ namespace NFSE.Domain.Entities.NFe
 
         public bool optante_simples_nacional { get; set; }
 
-        public int codigo_opcao_simples_nacional { get; set; } = 1;
+        public int? codigo_opcao_simples_nacional { get; set; }
 
         public string incentivador_cultural { get; set; }
 
         public string tributacao_rps { get; set; }
 
-        public int tributacao_iss { get; set; } = 1;
-        public int regime_tributario_simples_nacional { get; set; } = 3;
+        public int? tributacao_iss { get; set; }
+        public int? tipo_retencao_iss { get; set; }
+        public int? regime_tributario_simples_nacional { get; set; }
 
         public string codigo_obra { get; set; }
 
         public string art { get; set; }
 
-        public byte consumidor_final { get; set; } = 0;
-        public decimal percentual_total_tributos_simples_nacional { get; set; }
-        public byte indicador_destinatario { get; set; } = 0;
+        public byte? consumidor_final { get; set; }
+        public decimal? percentual_total_tributos_simples_nacional { get; set; }
+        public byte? indicador_destinatario { get; set; }
+        public int? finalidade_emissao { get; set; }
 
         public Prestador prestador { get; set; }
 

@@ -634,12 +634,10 @@ namespace NFSE.Business.Tabelas.NFe
 
                 prestador = Prestador(empresa, composicao.FlagEnviarInscricaoEstadual),
 
-                tomador = Tomador(deposito, atendimento, nfeRegras),
-
-                percentual_total_tributos_simples_nacional = 0
+                tomador = Tomador(deposito, atendimento, nfeRegras)
             };
 
-            Autorizacao.servico = Servico(grv, cliente, composicao, Autorizacao.prestador, clienteDeposito, nfeRegras, descricaoConfiguracaoNfe, isDev);
+            Autorizacao.servico = Servico(Autorizacao, grv, cliente, composicao, Autorizacao.prestador, clienteDeposito, nfeRegras, descricaoConfiguracaoNfe, isDev);
 
             return Autorizacao;
         }
@@ -716,7 +714,7 @@ namespace NFSE.Business.Tabelas.NFe
             };
         }
 
-        private Servico Servico(GrvEntity grv, ClienteEntity cliente, NfeViewFaturamentoComposicaoAgrupadoEntity composicao, Prestador prestador, ClienteDepositoEntity clienteDeposito, List<NfeRegraEntity> nfeRegras, string descricaoConfiguracaoNfe, bool isDev)
+        private Servico Servico(Autorizacao autorizacao, GrvEntity grv, ClienteEntity cliente, NfeViewFaturamentoComposicaoAgrupadoEntity composicao, Prestador prestador, ClienteDepositoEntity clienteDeposito, List<NfeRegraEntity> nfeRegras, string descricaoConfiguracaoNfe, bool isDev)
         {
             CnaeListaServicoParametroMunicipioEntity CnaeListaServicoParametroMunicipio = new CnaeListaServicoParametroMunicipioEntity
             {
@@ -731,6 +729,48 @@ namespace NFSE.Business.Tabelas.NFe
             {
                 throw new Exception("Associação entre CNAE, Lista de Serviço e Município inexistente");
             }
+
+            #region REFORMA TRIBUTARIA
+            if (CnaeListaServicoParametroMunicipio.ConsumidorFinal.HasValue)
+            {
+                autorizacao.consumidor_final = CnaeListaServicoParametroMunicipio.ConsumidorFinal.Value;
+            }
+
+            if (CnaeListaServicoParametroMunicipio.IndicadorDestinatario.HasValue)
+            {
+                autorizacao.indicador_destinatario = CnaeListaServicoParametroMunicipio.IndicadorDestinatario.Value;
+            }
+
+            if (CnaeListaServicoParametroMunicipio.TipoRetencaoIss.HasValue)
+            {
+                autorizacao.tipo_retencao_iss = CnaeListaServicoParametroMunicipio.TipoRetencaoIss.Value;
+            }
+
+            if (CnaeListaServicoParametroMunicipio.CodigoOpcaoSimplesNacional.HasValue)
+            {
+                autorizacao.codigo_opcao_simples_nacional = CnaeListaServicoParametroMunicipio.CodigoOpcaoSimplesNacional.Value;
+            }
+
+            if (CnaeListaServicoParametroMunicipio.TributacaoIss.HasValue)
+            {
+                autorizacao.tributacao_iss = CnaeListaServicoParametroMunicipio.TributacaoIss.Value;
+            }
+
+            if (CnaeListaServicoParametroMunicipio.RegimeTributarioSimplesNacional.HasValue)
+            {
+                autorizacao.regime_tributario_simples_nacional = CnaeListaServicoParametroMunicipio.RegimeTributarioSimplesNacional.Value;
+            }
+
+            if (CnaeListaServicoParametroMunicipio.PercentualTotalTributosSimplesNacional.HasValue)
+            {
+                autorizacao.percentual_total_tributos_simples_nacional = CnaeListaServicoParametroMunicipio.PercentualTotalTributosSimplesNacional.Value;
+            }
+
+            if (CnaeListaServicoParametroMunicipio.FinalidadeEmissao.HasValue)
+            {
+                autorizacao.finalidade_emissao = CnaeListaServicoParametroMunicipio.FinalidadeEmissao.Value;
+            }
+            #endregion REFORMA TRIBUTARIA
 
             decimal valorIss = 0;
 
