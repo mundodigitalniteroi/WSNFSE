@@ -1,13 +1,13 @@
-﻿using NFSE.Business.Tabelas.DP;
+﻿using System;
+using System.Collections.Generic;
+using System.Web.Script.Serialization;
+using NFSE.Business.Tabelas.DP;
 using NFSE.Business.Tabelas.Global;
 using NFSE.Business.Util;
 using NFSE.Domain.Entities.Global;
 using NFSE.Domain.Entities.NFe;
 using NFSE.Domain.Enum;
 using NFSE.Infra.Data;
-using System;
-using System.Collections.Generic;
-using System.Web.Script.Serialization;
 
 namespace NFSE.Business.Tabelas.NFe
 {
@@ -15,13 +15,27 @@ namespace NFSE.Business.Tabelas.NFe
     {
         public string CancelarNotaFiscal(Cancelamento model)
         {
-            DataBase.SystemEnvironment = model.Homologacao ? SystemEnvironment.Development : SystemEnvironment.Production;
+            DataBase.SystemEnvironment = model.Homologacao
+                ? SystemEnvironment.Development
+                : SystemEnvironment.Production;
 
-            var nfe = new NfeController().ConsultarNotaFiscal(model.GrvId, model.UsuarioId, model.IdentificadorNota, Acao.Cancelamento);
+            var nfe = new NfeController().ConsultarNotaFiscal(
+                model.GrvId,
+                model.UsuarioId,
+                model.IdentificadorNota,
+                Acao.Cancelamento
+            );
 
             if (nfe == null)
             {
-                new NfeWsErroController().CadastrarErroGenerico(model.GrvId, model.UsuarioId, model.IdentificadorNota, OrigemErro.MobLink, Acao.Retorno, "Nota Fiscal não encontrada");
+                new NfeWsErroController().CadastrarErroGenerico(
+                    model.GrvId,
+                    model.UsuarioId,
+                    model.IdentificadorNota,
+                    OrigemErro.MobLink,
+                    Acao.Retorno,
+                    "Nota Fiscal não encontrada"
+                );
 
                 return $"Nota Fiscal {model.GrvId}/{model.IdentificadorNota} não encontrada";
             }
@@ -31,37 +45,75 @@ namespace NFSE.Business.Tabelas.NFe
             #region Empresa
             EmpresaEntity Empresa;
 
-            if ((Empresa = new EmpresaController().Selecionar(new EmpresaEntity { EmpresaId = new DepositoController().Selecionar(grv.DepositoId).EmpresaId })) == null)
+            if (
+                (
+                    Empresa = new EmpresaController().Selecionar(
+                        new EmpresaEntity
+                        {
+                            EmpresaId = new ClienteDepositoController()
+                                .Selecionar(
+                                    new Domain.Entities.DP.ClienteDepositoEntity
+                                    {
+                                        ClienteId = grv.ClienteId,
+                                        DepositoId = grv.DepositoId,
+                                    }
+                                )
+                                .EmpresaId,
+                        }
+                    )
+                ) == null
+            )
             {
-                new NfeWsErroController().CadastrarErroGenerico(model.GrvId, model.UsuarioId, model.IdentificadorNota, OrigemErro.MobLink, Acao.Retorno, "Empresa associada não encontrada");
+                new NfeWsErroController().CadastrarErroGenerico(
+                    model.GrvId,
+                    model.UsuarioId,
+                    model.IdentificadorNota,
+                    OrigemErro.MobLink,
+                    Acao.Retorno,
+                    "Empresa associada não encontrada"
+                );
 
                 return "Empresa associada não encontrada";
             }
             else if (Empresa.Token == null)
             {
-                new NfeWsErroController().CadastrarErroGenerico(model.GrvId, model.UsuarioId, model.IdentificadorNota, OrigemErro.MobLink, Acao.Retorno, $"Empresa {Empresa.Nome} sem Token cadastrado");
+                new NfeWsErroController().CadastrarErroGenerico(
+                    model.GrvId,
+                    model.UsuarioId,
+                    model.IdentificadorNota,
+                    OrigemErro.MobLink,
+                    Acao.Retorno,
+                    $"Empresa {Empresa.Nome} sem Token cadastrado"
+                );
 
                 return $"Empresa {Empresa.Nome} sem Token cadastrado";
             }
             #endregion Empresa
 
-            string jsonEnvio = Tools.ObjToJSON(new Dictionary<string, string>()
-            {
-                {
-                    "justificativa",
-                    model.Justificativa
-                }
-            });
+            string jsonEnvio = Tools.ObjToJSON(
+                new Dictionary<string, string>() { { "justificativa", model.Justificativa } }
+            );
 
             string jsonRetorno;
 
             try
             {
-                jsonRetorno = Tools.CancelarNfse(new NfeConfiguracao().GetRemoteServer() + "/" + model.IdentificadorNota, jsonEnvio, Empresa.Token);
+                jsonRetorno = Tools.CancelarNfse(
+                    new NfeConfiguracao().GetRemoteServer() + "/" + model.IdentificadorNota,
+                    jsonEnvio,
+                    Empresa.Token
+                );
             }
             catch (Exception ex)
             {
-                new NfeWsErroController().CadastrarErroGenerico(nfe.GrvId, model.UsuarioId, nfe.IdentificadorNota, OrigemErro.WebService, Acao.Cancelamento, "Ocorreu um erro ao cancelar a Nota Fiscal: " + ex.Message);
+                new NfeWsErroController().CadastrarErroGenerico(
+                    nfe.GrvId,
+                    model.UsuarioId,
+                    nfe.IdentificadorNota,
+                    OrigemErro.WebService,
+                    Acao.Cancelamento,
+                    "Ocorreu um erro ao cancelar a Nota Fiscal: " + ex.Message
+                );
 
                 return $"Ocorreu um erro ao cancelar a Nota Fiscal ({model.GrvId}/{model.IdentificadorNota}): {ex.Message}";
             }
@@ -70,7 +122,7 @@ namespace NFSE.Business.Tabelas.NFe
             {
                 var retornoConsulta = new JavaScriptSerializer()
                 {
-                    MaxJsonLength = int.MaxValue
+                    MaxJsonLength = int.MaxValue,
                 }.Deserialize<RetornoCancelamentoEntity>(jsonRetorno);
 
                 if (retornoConsulta.erros != null)
@@ -88,7 +140,10 @@ namespace NFSE.Business.Tabelas.NFe
 
                         if (erro.codigo != null)
                         {
-                            retornoErro.CodigoErro = erro.codigo.Replace("  ", " ").Trim().ToUpper();
+                            retornoErro.CodigoErro = erro
+                                .codigo.Replace("  ", " ")
+                                .Trim()
+                                .ToUpper();
                         }
 
                         if (erro.mensagem != null)
@@ -109,13 +164,8 @@ namespace NFSE.Business.Tabelas.NFe
             }
             catch (Exception ex)
             {
-                if (true)
-                {
-
-                }
+                if (true) { }
             }
-
-
 
             nfe.Status = 'N';
 
@@ -126,13 +176,22 @@ namespace NFSE.Business.Tabelas.NFe
 
         public string CancelarNotaFiscalAvulso(Cancelamento model)
         {
-            DataBase.SystemEnvironment = model.Homologacao ? SystemEnvironment.Development : SystemEnvironment.Production;
+            DataBase.SystemEnvironment = model.Homologacao
+                ? SystemEnvironment.Development
+                : SystemEnvironment.Production;
 
             var nfe = new NfeController().ConsultarNotaFiscal(model.IdentificadorNota);
 
             if (nfe == null)
             {
-                new NfeWsErroController().CadastrarErroGenerico(model.GrvId, model.UsuarioId, model.IdentificadorNota, OrigemErro.MobLink, Acao.Retorno, "Nota Fiscal não encontrada");
+                new NfeWsErroController().CadastrarErroGenerico(
+                    model.GrvId,
+                    model.UsuarioId,
+                    model.IdentificadorNota,
+                    OrigemErro.MobLink,
+                    Acao.Retorno,
+                    "Nota Fiscal não encontrada"
+                );
 
                 throw new Exception("Nota Fiscal não encontrada");
             }
@@ -140,30 +199,40 @@ namespace NFSE.Business.Tabelas.NFe
             #region Empresa
             EmpresaEntity Empresa;
 
-            if ((Empresa = new EmpresaController().Selecionar(new EmpresaEntity { Cnpj = model.Cnpj })) == null)
+            if (
+                (
+                    Empresa = new EmpresaController().Selecionar(
+                        new EmpresaEntity { Cnpj = model.Cnpj }
+                    )
+                ) == null
+            )
             {
                 throw new Exception("Empresa associada não encontrada");
             }
             #endregion Empresa
 
-            string jsonEnvio = Tools.ObjToJSON(new Dictionary<string, string>()
-            {
-                {
-                    "justificativa",
-
-                    model.Justificativa
-                }
-            });
+            string jsonEnvio = Tools.ObjToJSON(
+                new Dictionary<string, string>() { { "justificativa", model.Justificativa } }
+            );
 
             string jsonRetorno;
 
             try
             {
-                jsonRetorno = Tools.CancelarNfse(new NfeConfiguracao().GetRemoteServer() + "/" + model.IdentificadorNota, jsonEnvio, Empresa.Token);
+                jsonRetorno = Tools.CancelarNfse(
+                    new NfeConfiguracao().GetRemoteServer() + "/" + model.IdentificadorNota,
+                    jsonEnvio,
+                    Empresa.Token
+                );
             }
             catch (Exception ex)
             {
-                throw new Exception("Ocorreu um erro ao cancelar a Nota Fiscal (" + model.IdentificadorNota + "): " + ex.Message);
+                throw new Exception(
+                    "Ocorreu um erro ao cancelar a Nota Fiscal ("
+                        + model.IdentificadorNota
+                        + "): "
+                        + ex.Message
+                );
             }
 
             nfe.Status = 'N';

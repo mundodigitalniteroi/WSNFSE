@@ -1,11 +1,11 @@
-﻿using NFSE.Business.Tabelas.DP;
+﻿using System;
+using System.Diagnostics;
+using NFSE.Business.Tabelas.DP;
 using NFSE.Business.Tabelas.NFe;
 using NFSE.Domain.Entities.DP;
 using NFSE.Domain.Entities.NFe;
 using NFSE.Domain.Enum;
 using NFSE.Infra.Data;
-using System;
-using System.Diagnostics;
 
 namespace EnvioTeste
 {
@@ -15,7 +15,7 @@ namespace EnvioTeste
         {
             // DataBase.SystemEnvironment = SystemEnvironment.Development;
 
-            DataBase.SystemEnvironment = SystemEnvironment.Production;
+            DataBase.SystemEnvironment = SystemEnvironment.Development;
 
             bool isDevelopment = DataBase.SystemEnvironment.Equals(SystemEnvironment.Development);
             //const string identificadorNota = "1079896";
@@ -73,13 +73,13 @@ namespace EnvioTeste
 
 
 
-            //SolicitarNotaFiscal(grvId, isDevelopment);
+            //SolicitarNotaFiscal(1149718, isDevelopment);
 
-            SolicitarNovaNotaFiscal(1151644, "1116759", isDevelopment);
+            //SolicitarNovaNotaFiscal(1150995, "1117895", isDevelopment);
 
             //ReceberNotaFiscal(1133019, "1082398", isDevelopment);
 
-            //CancelarNotaFiscal(grvId, identificadorNota, isDevelopment);
+            CancelarNotaFiscal(1145770, "870149", isDevelopment);
             Console.WriteLine("CONCLUIDO");
             Console.ReadLine();
         }
