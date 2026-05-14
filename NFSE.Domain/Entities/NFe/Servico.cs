@@ -51,5 +51,7 @@
         public string ibs_cbs_situacao_tributaria { get; set; }
         public string codigo_indicador_operacao { get; set; }
         public string codigo_municipio_incidencia { get; set; }
+        public string situacao_tributaria_pis_cofins { get; set; }
+        public string tipo_retencao_pis_cofins { get; set; }
     }
 }

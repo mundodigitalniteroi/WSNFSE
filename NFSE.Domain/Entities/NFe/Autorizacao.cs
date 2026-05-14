@@ -24,6 +24,11 @@ namespace NFSE.Domain.Entities.NFe
         public byte? consumidor_final { get; set; }
         public decimal percentual_total_tributos_simples_nacional { get; set; } = 0;
         public byte? indicador_destinatario { get; set; }
+        public int? tributacao_iss { get; set; }
+        public int? tipo_retencao_iss { get; set; }
+        public int? regime_tributario_simples_nacional { get; set; }
+        public int? codigo_opcao_simples_nacional { get; set; }
+        public int? finalidade_emissao { get; set; }
 
         public Prestador prestador { get; set; }
 

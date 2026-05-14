@@ -1,4 +1,5 @@
-﻿using NFSE.Domain.Entities.Global;
+﻿using NFSE.Business.Util;
+using NFSE.Domain.Entities.Global;
 using NFSE.Infra.Data;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,6 +51,29 @@ namespace NFSE.Business.Tabelas.Global
             SQL.AppendLine("  FROM db_global.dbo.tb_glo_loc_municipios");
 
             SQL.Append(" WHERE uf = '").Append(uf).AppendLine("'");
+            SQL.AppendLine("   AND codigo_municipio_ibge IS NOT NULL");
+
+            using (var result = DataBase.Select(SQL))
+            {
+                if (result == null)
+                {
+                    return string.Empty;
+                }
+
+                return result.Rows[0]["CodigoMunicipioIbge"].ToString();
+            }
+        }
+
+        public string SelecionarPrimeiroCodigoIbgeMunicipio(string uf, string municipio)
+        {
+            var SQL = new StringBuilder();
+
+            SQL.AppendLine("SELECT top 1 codigo_municipio_ibge AS CodigoMunicipioIbge");
+
+            SQL.AppendLine("  FROM db_global.dbo.tb_glo_loc_municipios");
+
+            SQL.Append(" WHERE lower(uf) = '").Append(Tools.RemoverAcentos(uf).ToLower()).AppendLine("'");
+            SQL.Append(" AND lower(nome) = '").Append(Tools.RemoverAcentos(municipio).ToLower()).AppendLine("'");
             SQL.AppendLine("   AND codigo_municipio_ibge IS NOT NULL");
 
             using (var result = DataBase.Select(SQL))

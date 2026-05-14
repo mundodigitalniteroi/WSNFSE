@@ -25,5 +25,13 @@
         public string CodigoIndicadorOperacao { get; set; }
         public byte? ConsumidorFinal { get; set; }
         public byte? IndicadorDestinatario { get; set; }
+        public string SituacaoTributariaPisCofins { get; set; }
+        public int? TipoRetencaoPisCofins { get; set; }
+        public int? TipoRetencaoIss { get; set; }
+        public int? CodigoOpcaoSimplesNacional { get; set; }
+        public int? TributacaoIss { get; set; }
+        public int? RegimeTributarioSimplesNacional { get; set; }
+        public decimal? PercentualTotalTributosSimplesNacional { get; set; }
+        public int? FinalidadeEmissao { get; set; }
     }
 }

@@ -58,6 +58,23 @@ namespace NFSE.Business.Tabelas.Global
 
             SQL.AppendLine("      ,vw_gov_cnae_lista_servico_parametro_municipio.IndicadorDestinatario AS IndicadorDestinatario");
 
+            SQL.AppendLine("      ,vw_gov_cnae_lista_servico_parametro_municipio.TipoRetencaoIss AS TipoRetencaoIss");
+
+            SQL.AppendLine("      ,vw_gov_cnae_lista_servico_parametro_municipio.CodigoOpcaoSimplesNacional AS CodigoOpcaoSimplesNacional");
+
+            SQL.AppendLine("      ,vw_gov_cnae_lista_servico_parametro_municipio.TributacaoIss AS TributacaoIss");
+
+            SQL.AppendLine("      ,vw_gov_cnae_lista_servico_parametro_municipio.RegimeTributarioSimplesNacional AS RegimeTributarioSimplesNacional");
+
+            SQL.AppendLine("      ,vw_gov_cnae_lista_servico_parametro_municipio.PercentualTotalTributosSimplesNacional AS PercentualTotalTributosSimplesNacional");
+
+            SQL.AppendLine("      ,vw_gov_cnae_lista_servico_parametro_municipio.FinalidadeEmissao AS FinalidadeEmissao");
+
+            SQL.AppendLine("      ,vw_gov_cnae_lista_servico_parametro_municipio.SituacaoTributariaPisCofins AS SituacaoTributariaPisCofins");
+
+            SQL.AppendLine("      ,vw_gov_cnae_lista_servico_parametro_municipio.TipoRetencaoPisCofins AS TipoRetencaoPisCofins");
+
+
             SQL.AppendLine("  FROM db_global.dbo.vw_gov_cnae_lista_servico_parametro_municipio");
 
             SQL.AppendLine(" WHERE 1 = 1");
