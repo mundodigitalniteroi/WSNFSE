@@ -15,7 +15,7 @@ namespace EnvioTeste
         {
             // DataBase.SystemEnvironment = SystemEnvironment.Development;
 
-            DataBase.SystemEnvironment = SystemEnvironment.Development;
+            DataBase.SystemEnvironment = SystemEnvironment.Production;
 
             bool isDevelopment = DataBase.SystemEnvironment.Equals(SystemEnvironment.Development);
             //const string identificadorNota = "1079896";
@@ -75,11 +75,11 @@ namespace EnvioTeste
 
             //SolicitarNotaFiscal(1149718, isDevelopment);
 
-            //SolicitarNovaNotaFiscal(1150995, "1117895", isDevelopment);
+            SolicitarNovaNotaFiscal(1156812, "1125784", isDevelopment);
 
             //ReceberNotaFiscal(1133019, "1082398", isDevelopment);
 
-            CancelarNotaFiscal(1145770, "870149", isDevelopment);
+            //CancelarNotaFiscal(1145770, "870149", isDevelopment);
             Console.WriteLine("CONCLUIDO");
             Console.ReadLine();
         }

@@ -3,6 +3,8 @@ using NFSE.Infra.Data;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Globalization;
+using System;
 
 namespace NFSE.Business.Tabelas.Global
 {
@@ -41,7 +43,7 @@ namespace NFSE.Business.Tabelas.Global
             return list?.FirstOrDefault();
         }
 
-        public string SelecionarPrimeiroCodigoIbge(string uf)
+        public string SelecionarPrimeiroCodigoIbge(string uf, string municipio)
         {
             var SQL = new StringBuilder();
 
@@ -50,6 +52,7 @@ namespace NFSE.Business.Tabelas.Global
             SQL.AppendLine("  FROM db_global.dbo.tb_glo_loc_municipios");
 
             SQL.Append(" WHERE uf = '").Append(uf).AppendLine("'");
+            SQL.Append(" AND lower(nome) = '").Append(RemoverAcentos(municipio.ToLower())).AppendLine("'");
             SQL.AppendLine("   AND codigo_municipio_ibge IS NOT NULL");
 
             using (var result = DataBase.Select(SQL))
@@ -61,6 +64,26 @@ namespace NFSE.Business.Tabelas.Global
 
                 return result.Rows[0]["CodigoMunicipioIbge"].ToString();
             }
+        }
+
+        public static string RemoverAcentos(string texto)
+        {
+            if (string.IsNullOrEmpty(texto))
+                return texto;
+
+            var normalizedString = texto.Normalize(NormalizationForm.FormD);
+            var stringBuilder = new StringBuilder();
+
+            foreach (var c in normalizedString)
+            {
+                var unicodeCategory = Char.GetUnicodeCategory(c);
+                if (unicodeCategory != UnicodeCategory.NonSpacingMark)
+                {
+                    stringBuilder.Append(c);
+                }
+            }
+
+            return stringBuilder.ToString().Normalize(NormalizationForm.FormC);
         }
     }
 }

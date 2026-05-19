@@ -621,7 +621,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             if (PossuiRegraNfe(nfeRegras, "REGIMEESPECTRIBUTAC"))
             {
-                regimeEspecialTributacao = nfeRegras.Where(w => w.RegraCodigo.Equals("REGIMEESPECTRIBUTAC")).Select(s => s.Valor).ToList()[0];
+                regimeEspecialTributacao = nfeRegras.Where(w => w.RegraCodigo.Equals("REGIMEESPECTRIBUTAC")).Select(s => s.Valor).FirstOrDefault();
             }
 
             var Autorizacao = new Autorizacao
@@ -637,7 +637,7 @@ namespace NFSE.Business.Tabelas.NFe
                 tomador = Tomador(deposito, atendimento, nfeRegras)
             };
 
-            Autorizacao.servico = Servico(Autorizacao, grv, cliente, composicao, Autorizacao.prestador, clienteDeposito, nfeRegras, descricaoConfiguracaoNfe, isDev);
+            Autorizacao.servico = Servico(Autorizacao, grv, cliente, composicao, Autorizacao.prestador, atendimento, clienteDeposito, nfeRegras, descricaoConfiguracaoNfe, isDev);
 
             return Autorizacao;
         }
@@ -693,7 +693,7 @@ namespace NFSE.Business.Tabelas.NFe
             }
             else
             {
-                CodigoMunicipioIbge = new MunicipioController().SelecionarPrimeiroCodigoIbge(atendimento.NotaFiscalUf);
+                CodigoMunicipioIbge = new MunicipioController().SelecionarPrimeiroCodigoIbge(atendimento.NotaFiscalUf, atendimento.NotaFiscalMunicipio);
             }
 
             return new Endereco
@@ -714,7 +714,7 @@ namespace NFSE.Business.Tabelas.NFe
             };
         }
 
-        private Servico Servico(Autorizacao autorizacao, GrvEntity grv, ClienteEntity cliente, NfeViewFaturamentoComposicaoAgrupadoEntity composicao, Prestador prestador, ClienteDepositoEntity clienteDeposito, List<NfeRegraEntity> nfeRegras, string descricaoConfiguracaoNfe, bool isDev)
+        private Servico Servico(Autorizacao autorizacao, GrvEntity grv, ClienteEntity cliente, NfeViewFaturamentoComposicaoAgrupadoEntity composicao, Prestador prestador, AtendimentoEntity atendimento, ClienteDepositoEntity clienteDeposito, List<NfeRegraEntity> nfeRegras, string descricaoConfiguracaoNfe, bool isDev)
         {
             CnaeListaServicoParametroMunicipioEntity CnaeListaServicoParametroMunicipio = new CnaeListaServicoParametroMunicipioEntity
             {
@@ -907,9 +907,27 @@ namespace NFSE.Business.Tabelas.NFe
 
                 base_calculo = !string.IsNullOrWhiteSpace(baseCalculo) ? baseCalculo : null,
 
-                codigo_municipio_incidencia = prestador.codigo_municipio,
+                //codigo_municipio_incidencia = prestador.codigo_municipio,
 
-                codigo_municipio_prestacao = prestador.codigo_municipio
+                //codigo_municipio_prestacao = prestador.codigo_municipio,
+
+                ibs_cbs_base_calculo = !string.IsNullOrWhiteSpace(baseCalculo) ? baseCalculo : null,
+                ibs_mun_percentual_reducao_aliquota = "0",
+                cbs_percentual_reducao_aliquota = "0",
+                ibs_uf_percentual_reducao_aliquota = "0",
+                cbs_aliquota_efetiva = "0",
+                ibs_valor_total = "0",
+                ibs_uf_valor = "0",
+                ibs_mun_valor = "0",
+                ibs_uf_aliquota = "0",
+                ibs_uf_aliquota_efetiva = "0",
+                cbs_valor = "0",
+                ibs_cbs_codigo_municipio_incidencia = prestador.codigo_municipio,
+                ibs_cbs_descricao_municipio_incidencia = atendimento.NotaFiscalMunicipio,
+                ibs_mun_aliquota_efetiva = "0",
+                ibs_mun_aliquota = "0",
+                cbs_aliquota = "0",
+                ibs_cbs_valor_total = "0"
             };
 
             if (!string.IsNullOrEmpty(CnaeListaServicoParametroMunicipio.CodigoTributacaoNacionalIss))
