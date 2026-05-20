@@ -54,11 +54,14 @@ namespace NFSE.Business.Tabelas.NFe
 
             Console.WriteLine(json);
 
+            var isNfseNacional = model.AutorizacaoNacional != null;
+
             try
             {
+                
                 resposta = Tools.PostNfse
                 (
-                    uri: new NfeConfiguracao().GetRemoteServer() + "?ref=" + model.IdentificadorNota,
+                    uri: new NfeConfiguracao().GetRemoteServer(isNfseNacional) + "?ref=" + model.IdentificadorNota,
                     json: json,
                     token: Empresa.Token
                 );
@@ -76,7 +79,10 @@ namespace NFSE.Business.Tabelas.NFe
 
             try
             {
-                new NfeRetornoSolicitacaoController().Cadastrar(nfe, model, resposta, json);
+                if (isNfseNacional)
+                    new NfeRetornoSolicitacaoController().CadastrarNacional(nfe, model, resposta, json);
+                else
+                    new NfeRetornoSolicitacaoController().Cadastrar(nfe, model, resposta, json);
             }
             catch (Exception ex)
             {
@@ -124,13 +130,24 @@ namespace NFSE.Business.Tabelas.NFe
 
         private string CreateJson(CapaAutorizacaoNfse model)
         {
-            string json = Tools.ObjToJSON(model.Autorizacao);
+            string json = model.Autorizacao != null ? Tools.ObjToJSON(model.Autorizacao) : Tools.ObjToJSON(model.AutorizacaoNacional);
 
             var jsonUtil = new JsonUtil.JsonUtil();
 
-            return string.IsNullOrWhiteSpace(model.Autorizacao.tomador.cnpj)
-                ? jsonUtil.RemoveElement(json, "tomador", "cnpj")
-                : jsonUtil.RemoveElement(json, "tomador", "cpf");
+            if(model.Autorizacao != null)
+            {
+                json = string.IsNullOrWhiteSpace(model.Autorizacao.tomador.cnpj)
+                    ? jsonUtil.RemoveElement(json, "tomador", "cnpj")
+                    : jsonUtil.RemoveElement(json, "tomador", "cpf");
+            }
+            else
+            {
+                json = string.IsNullOrWhiteSpace(model.AutorizacaoNacional.cnpj_tomador)
+                ? jsonUtil.RemoveElement(json, "", "cnpj_tomador")
+                : jsonUtil.RemoveElement(json, "", "cpf_tomador");
+            }
+
+            return json;
         }
     }
 }

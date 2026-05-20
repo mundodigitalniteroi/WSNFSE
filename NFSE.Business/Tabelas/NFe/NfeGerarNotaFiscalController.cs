@@ -387,7 +387,8 @@ namespace NFSE.Business.Tabelas.NFe
 
                             Homologacao = isDev,
 
-                            Autorizacao = Autorizar(grv, Cliente, Deposito, ClienteDeposito, NfeRegras, Empresa, Atendimento, agrupamento, descricaoConfiguracaoNfe.ToString().Trim(), isDev)
+                            Autorizacao = !PossuiRegraNfe(NfeRegras, "EMITIR_NFE_NACIONAL") ? Autorizar(grv, Cliente, Deposito, ClienteDeposito, NfeRegras, Empresa, Atendimento, agrupamento, descricaoConfiguracaoNfe.ToString().Trim(), isDev) : null,
+                            AutorizacaoNacional = PossuiRegraNfe(NfeRegras, "EMITIR_NFE_NACIONAL") ? AutorizarNacional(grv, Cliente, Deposito, ClienteDeposito, NfeRegras, Empresa, Atendimento, agrupamento, descricaoConfiguracaoNfe.ToString().Trim(), isDev) : null
                         };
                     }
                     catch (Exception ex)
@@ -642,6 +643,285 @@ namespace NFSE.Business.Tabelas.NFe
             return Autorizacao;
         }
 
+        private AutorizacaoNacional AutorizarNacional(GrvEntity grv, ClienteEntity cliente, DepositoEntity deposito, ClienteDepositoEntity clienteDeposito, List<NfeRegraEntity> nfeRegras, EmpresaEntity empresa, AtendimentoEntity atendimento, NfeViewFaturamentoComposicaoAgrupadoEntity composicao, string descricaoConfiguracaoNfe, bool isDev)
+        {
+            var now = DateTime.Now.AddHours(-1);
+
+            string regimeEspecialTributacao = null;
+
+            if (PossuiRegraNfe(nfeRegras, "REGIMEESPECTRIBUTAC"))
+            {
+                regimeEspecialTributacao = nfeRegras.Where(w => w.RegraCodigo.Equals("REGIMEESPECTRIBUTAC")).Select(s => s.Valor).FirstOrDefault();
+            }
+
+            EnderecoCompletoEntity CEP = new EnderecoCompletoController().Selecionar(atendimento.NotaFiscalCep);
+            string CodigoMunicipioIbgePrestador = new EnderecoCompletoController().Selecionar(empresa.CepId.Value).CodigoMunicipioIbge;
+
+            string CodigoMunicipioIbgeTomador;
+
+            if (CEP != null && !string.IsNullOrWhiteSpace(CEP.CodigoMunicipioIbge))
+            {
+                CodigoMunicipioIbgeTomador = CEP.CodigoMunicipioIbge;
+            }
+            else
+            {
+                CodigoMunicipioIbgeTomador = new MunicipioController().SelecionarPrimeiroCodigoIbge(atendimento.NotaFiscalUf, atendimento.NotaFiscalMunicipio);
+            }
+
+            CnaeListaServicoParametroMunicipioEntity CnaeListaServicoParametroMunicipio = new CnaeListaServicoParametroMunicipioEntity
+            {
+                CnaeId = composicao.CnaeId,
+
+                ListaServicoId = composicao.ListaServicoId,
+
+                CodigoMunicipioIbge = CodigoMunicipioIbgePrestador
+            };
+
+            if ((CnaeListaServicoParametroMunicipio = new CnaeListaServicoParametroMunicipioController().Selecionar(CnaeListaServicoParametroMunicipio)) == null)
+            {
+                throw new Exception("Associação entre CNAE, Lista de Serviço e Município inexistente");
+            }
+
+            #region CALCULO DO VALOR DO ISS
+            decimal valorIss = 0;
+
+            decimal AliquotaIss = 0;
+
+            GravarLog("");
+            GravarLog($"GRV {grv.NumeroFormularioGrv} ({(isDev ? "DEV" : "PROD")})");
+            GravarLog("");
+
+            composicao.TotalComDesconto = Math.Round(composicao.TotalComDesconto, 2);
+
+            if (isDev)
+            {
+                composicao.TotalComDesconto = 1;
+            }
+
+            if (PossuiRegraNfe(nfeRegras, "SEMALIQUOTA"))
+            {
+                GravarLog("R1: POSSUI REGRA 'SEMALIQUOTA'");
+
+                AliquotaIss = 0;
+            }
+            else if (PossuiRegraNfe(nfeRegras, "CODTRIBMUN_0000"))
+            {
+                GravarLog("R2: POSSUI REGRA 'CODTRIBMUN_0000'");
+
+                CnaeListaServicoParametroMunicipio.CodigoTributarioMunicipio = "0000";
+            }
+            else if (clienteDeposito.AliquotaIss > 0)
+            {
+                GravarLog($"R3: CLIDEP POSSUI ALIQUOTA ISS > 0: {clienteDeposito.AliquotaIss}");
+
+                AliquotaIss = clienteDeposito.AliquotaIss;
+            }
+            else
+            {
+                GravarLog($"R4: CNAE LISTA SERVICO PARAMETRO MUNICIPIO ALIQUOTA ISS: {CnaeListaServicoParametroMunicipio.AliquotaIss.Value}");
+
+                AliquotaIss = CnaeListaServicoParametroMunicipio.AliquotaIss.Value;
+            }
+
+            if (composicao.FlagEnviarValorIss == 'S')
+            {
+                GravarLog("R5: POSSUI FLAG ENVIAR VALOR ISS");
+
+                if (clienteDeposito.FlagValorIssIgualProdutoBaseCalculoAliquota == 'S')
+                {
+                    GravarLog("R5.1: POSSUI FLAG VALOR ISS IGUAL PRODUTO BASE CALCULO ALIQUOTA:");
+                    GravarLog("    ValorIss: (Composição * AliquotaIss) / 100");
+                    GravarLog($"    ValorIss: {(composicao.TotalComDesconto * AliquotaIss) / 100}");
+
+                    valorIss = (composicao.TotalComDesconto * AliquotaIss) / 100;
+                }
+                else
+                {
+                    GravarLog($"R5.2: AliquotaIss / 100 = {AliquotaIss / 100}");
+                    GravarLog("    ValorIss = AliquotaIss / 100:");
+                    GravarLog($"    ValorIss = {AliquotaIss / 100}");
+
+                    valorIss = AliquotaIss / 100;
+                }
+            }
+
+            if (PossuiRegraNfe(nfeRegras, "VALOR_ISS_TRUNCAR"))
+            {
+                GravarLog("R6: POSSUI REGRA 'VALOR_ISS_TRUNCAR'");
+
+                GravarLog($"    ValorIss = {Math.Truncate(100 * valorIss) / 100}");
+
+                valorIss = Math.Truncate(100 * valorIss) / 100;
+            }
+
+            string valorServicos;
+
+            if (isDev)
+            {
+                valorServicos = "1";
+            }
+            else
+            {
+                valorServicos = composicao.TotalComDesconto.ToString().Replace(",", ".");
+            }
+
+            string baseCalculo = string.Empty;
+
+            if (PossuiRegraNfe(nfeRegras, "BASE_CALCULO"))
+            {
+                GravarLog("R7: POSSUI REGRA 'BASE_CALCULO'");
+
+                GravarLog("R7.1: baseCalculo = valorServicos");
+                GravarLog($"     baseCalculo = {valorServicos}");
+
+                baseCalculo = valorServicos;
+            }
+
+            GravarLog($"F1: COMPOSIÇÃO DO FATURAMENTO (ARREDONDAMENTO EM DUAS CASAS DECIMAIS): {composicao.TotalComDesconto} >>> {Math.Round(composicao.TotalComDesconto, 2)}");
+
+            GravarLog($"F2: ALÍQUOTA ISS (ARREDONDAMENTO EM DUAS CASAS DECIMAIS): {string.Format("{0:N2}", AliquotaIss).Replace(",", ".")}");
+
+            GravarLog($"F3: DISCRIMINAÇÃO: {descricaoConfiguracaoNfe + " CONFORME PROCESSO " + grv.NumeroFormularioGrv}");
+
+            GravarLog($"F4: CÓDIGO CNAE: {composicao.Cnae}");
+
+            GravarLog($"F5: ITEM DA LISTA SERVIÇO: {CnaeListaServicoParametroMunicipio.ListaServico}");
+
+            GravarLog($"F6: VALOR ISS (ARREDONDAMENTO EM DUAS CASAS DECIMAIS): {string.Format("{0:N2}", valorIss).Replace(",", ".")}");
+
+            GravarLog($"F7: CÓDIGO TRIBUTÁRIO MUNICÍPIO: {(!string.IsNullOrWhiteSpace(CnaeListaServicoParametroMunicipio.CodigoTributarioMunicipio) ? CnaeListaServicoParametroMunicipio.CodigoTributarioMunicipio : "CNAE + LISTASERVICO NÃO ASSOCIADO AO MUNICÍPIO")}");
+
+            GravarLog($"F8: VALOR DOS SERVIÇOS: {valorServicos}. 1 SE FOR AMBIENTE DE DESENVOLVIMENTO");
+
+            GravarLog($"F9: BASE DE CÁLCULO: {(!string.IsNullOrWhiteSpace(baseCalculo) ? baseCalculo : "CLIDEP NÃO POSSUI A REGRA 'BASE_CALCULO'")}");
+
+            if (PossuiRegraNfe(nfeRegras, "ALIQUOTANULA"))
+            {
+                GravarLog("R1: POSSUI REGRA 'ALIQUOTANULA'");
+            }
+            #endregion
+
+            var autorizacao = new AutorizacaoNacional
+            {
+                data_emissao = now.ToString("yyyy-MM-dd") + "T" + now.ToString("HH:mm:ss"),
+                data_competencia = now.ToString("yyyy-MM-dd"),
+                regime_especial_tributacao = regimeEspecialTributacao ?? "0",
+                cnpj_prestador = empresa.Cnpj,
+                codigo_municipio_emissora = new EnderecoCompletoController().Selecionar(empresa.CepId.Value).CodigoMunicipioIbge,
+                codigo_municipio_prestacao = new EnderecoCompletoController().Selecionar(empresa.CepId.Value).CodigoMunicipioIbge,
+
+                cpf_tomador = atendimento.NotaFiscalCpf.Length.Equals(11) ? atendimento.NotaFiscalCpf : string.Empty,
+                cnpj_tomador = atendimento.NotaFiscalCpf.Length.Equals(14) ? atendimento.NotaFiscalCpf : string.Empty,
+                razao_social_tomador = atendimento.NotaFiscalNome.Trim(),
+                telefone_tomador = (atendimento.NotaFiscalDdd + atendimento.NotaFiscalTelefone).Length.Equals(0) ? "2199999999" : atendimento.NotaFiscalDdd + atendimento.NotaFiscalTelefone,
+                email_tomador = !string.IsNullOrWhiteSpace(atendimento.NotaFiscalEmail) ? atendimento.NotaFiscalEmail.Trim() : deposito.EmailNfe.Trim(),
+                cep_tomador = atendimento.NotaFiscalCep,
+                logradouro_tomador = atendimento.NotaFiscalEndereco.Trim(),
+                numero_tomador = !string.IsNullOrWhiteSpace(atendimento.NotaFiscalNumero) && atendimento.NotaFiscalNumero.Length > 10 ? atendimento.NotaFiscalNumero.Substring(0, 10) : atendimento.NotaFiscalNumero,
+                complemento_tomador = !string.IsNullOrWhiteSpace(atendimento.NotaFiscalComplemento) ? atendimento.NotaFiscalComplemento.Trim() : "...",
+                bairro_tomador = atendimento.NotaFiscalBairro.Trim(),
+                codigo_municipio_tomador = CodigoMunicipioIbgeTomador,
+                descricao_servico = descricaoConfiguracaoNfe + " CONFORME PROCESSO " + grv.NumeroFormularioGrv,
+                valor_iss = Math.Round(valorIss, 2, MidpointRounding.AwayFromZero).ToString(CultureInfo.GetCultureInfo("en-US")),
+                valor_servico = valorServicos,
+
+                situacao_tributaria_pis_cofins = "00",
+                valor_total_tributos_federais = "0",
+                valor_total_tributos_estaduais = "0",
+                valor_total_tributos_municipais = "0",
+                indicador_total_tributacao = null
+            };
+
+            #region REFORMA TRIBUTARIA
+            if (CnaeListaServicoParametroMunicipio.ConsumidorFinal.HasValue)
+            {
+                autorizacao.consumidor_final = CnaeListaServicoParametroMunicipio.ConsumidorFinal.Value;
+            }
+
+            if (CnaeListaServicoParametroMunicipio.IndicadorDestinatario.HasValue)
+            {
+                autorizacao.indicador_destinatario = CnaeListaServicoParametroMunicipio.IndicadorDestinatario.Value;
+            }
+
+            if (CnaeListaServicoParametroMunicipio.TipoRetencaoIss.HasValue)
+            {
+                autorizacao.tipo_retencao_iss = CnaeListaServicoParametroMunicipio.TipoRetencaoIss.Value;
+            }
+
+            if (CnaeListaServicoParametroMunicipio.CodigoOpcaoSimplesNacional.HasValue)
+            {
+                autorizacao.codigo_opcao_simples_nacional = CnaeListaServicoParametroMunicipio.CodigoOpcaoSimplesNacional.Value;
+            }
+
+            if (CnaeListaServicoParametroMunicipio.TributacaoIss.HasValue)
+            {
+                autorizacao.tributacao_iss = CnaeListaServicoParametroMunicipio.TributacaoIss.Value;
+            }
+
+            if (CnaeListaServicoParametroMunicipio.RegimeTributarioSimplesNacional.HasValue)
+            {
+                autorizacao.regime_tributario_simples_nacional = CnaeListaServicoParametroMunicipio.RegimeTributarioSimplesNacional.Value;
+            }
+
+            if (CnaeListaServicoParametroMunicipio.PercentualTotalTributosSimplesNacional.HasValue)
+            {
+                autorizacao.percentual_total_tributos_simples_nacional = CnaeListaServicoParametroMunicipio.PercentualTotalTributosSimplesNacional.Value;
+            }
+
+            if (CnaeListaServicoParametroMunicipio.FinalidadeEmissao.HasValue)
+            {
+                autorizacao.finalidade_emissao = CnaeListaServicoParametroMunicipio.FinalidadeEmissao.Value;
+            }
+
+            if (!string.IsNullOrEmpty(CnaeListaServicoParametroMunicipio.CodigoTributacaoNacionalIss))
+            {
+                autorizacao.codigo_tributacao_nacional_iss = CnaeListaServicoParametroMunicipio.CodigoTributacaoNacionalIss;
+            }
+
+            if (!string.IsNullOrEmpty(CnaeListaServicoParametroMunicipio.CodigoNbs))
+            {
+                autorizacao.codigo_nbs = CnaeListaServicoParametroMunicipio.CodigoNbs;
+            }
+
+            if (!string.IsNullOrEmpty(CnaeListaServicoParametroMunicipio.IbsCbsClassificacaoTributaria))
+            {
+                autorizacao.ibs_cbs_classificacao_tributaria = CnaeListaServicoParametroMunicipio.IbsCbsClassificacaoTributaria;
+            }
+
+            if (!string.IsNullOrEmpty(CnaeListaServicoParametroMunicipio.IbsCbsSituacaoTributaria))
+            {
+                autorizacao.ibs_cbs_situacao_tributaria = CnaeListaServicoParametroMunicipio.IbsCbsSituacaoTributaria;
+            }
+
+            if (!string.IsNullOrEmpty(CnaeListaServicoParametroMunicipio.CodigoIndicadorOperacao))
+            {
+                autorizacao.codigo_indicador_operacao = CnaeListaServicoParametroMunicipio.CodigoIndicadorOperacao;
+            }
+            #endregion REFORMA TRIBUTARIA
+
+            if (!string.IsNullOrWhiteSpace(grv.Placa))
+            {
+                autorizacao.descricao_servico += ", PLACA " + grv.Placa;
+            }
+
+            if (!string.IsNullOrWhiteSpace(grv.Chassi))
+            {
+                autorizacao.descricao_servico += ", CHASSI " + grv.Chassi;
+            }
+
+            if (cliente.FlagPossuiClienteCodigoIdentificacao == 'S')
+            {
+                CodigoIdentificacaoClienteEntity CodigoIdentificacaoCliente = CodigoIdentificacaoClienteController.Selecionar(grv.GrvId);
+
+                if (CodigoIdentificacaoCliente != null)
+                {
+                    autorizacao.descricao_servico += ", " + cliente.LabelClienteCodigoIdentificacao + " " + CodigoIdentificacaoCliente.CodigoIdentificacao;
+                }
+            }
+
+            return autorizacao;
+        }
+
         private Prestador Prestador(EmpresaEntity empresa, char flagEnviarInscricaoEstadual)
         {
             return new Prestador
@@ -650,7 +930,7 @@ namespace NFSE.Business.Tabelas.NFe
 
                 inscricao_estadual = flagEnviarInscricaoEstadual == 'S' ? empresa.InscricaoEstadual : string.Empty,
 
-                inscricao_municipal = empresa.InscricaoMunicipal,
+                //inscricao_municipal = empresa.InscricaoMunicipal,
 
                 codigo_municipio = new EnderecoCompletoController().Selecionar(empresa.CepId.Value).CodigoMunicipioIbge
             };
@@ -907,27 +1187,27 @@ namespace NFSE.Business.Tabelas.NFe
 
                 base_calculo = !string.IsNullOrWhiteSpace(baseCalculo) ? baseCalculo : null,
 
-                //codigo_municipio_incidencia = prestador.codigo_municipio,
+                codigo_municipio_incidencia = prestador.codigo_municipio,
 
                 //codigo_municipio_prestacao = prestador.codigo_municipio,
 
-                ibs_cbs_base_calculo = !string.IsNullOrWhiteSpace(baseCalculo) ? baseCalculo : null,
-                ibs_mun_percentual_reducao_aliquota = "0",
-                cbs_percentual_reducao_aliquota = "0",
-                ibs_uf_percentual_reducao_aliquota = "0",
-                cbs_aliquota_efetiva = "0",
-                ibs_valor_total = "0",
-                ibs_uf_valor = "0",
-                ibs_mun_valor = "0",
-                ibs_uf_aliquota = "0",
-                ibs_uf_aliquota_efetiva = "0",
-                cbs_valor = "0",
-                ibs_cbs_codigo_municipio_incidencia = prestador.codigo_municipio,
-                ibs_cbs_descricao_municipio_incidencia = atendimento.NotaFiscalMunicipio,
-                ibs_mun_aliquota_efetiva = "0",
-                ibs_mun_aliquota = "0",
-                cbs_aliquota = "0",
-                ibs_cbs_valor_total = "0"
+                //ibs_cbs_base_calculo = !string.IsNullOrWhiteSpace(baseCalculo) ? string.Format("{0:N2}", composicao.TotalComDesconto - valorIss).Replace(",", ".") : null,
+                //ibs_mun_percentual_reducao_aliquota = "0",
+                //cbs_percentual_reducao_aliquota = "0",
+                //ibs_uf_percentual_reducao_aliquota = "0",
+                //cbs_aliquota_efetiva = "0",
+                //ibs_valor_total = "0.8",
+                //ibs_uf_valor = "0.8",
+                //ibs_mun_valor = "0",
+                //ibs_uf_aliquota = "0.1",
+                //ibs_uf_aliquota_efetiva = "0.04",
+                //cbs_valor = "3.42",
+                //ibs_cbs_codigo_municipio_incidencia = prestador.codigo_municipio,
+                //ibs_cbs_descricao_municipio_incidencia = atendimento.NotaFiscalMunicipio,
+                //ibs_mun_aliquota_efetiva = "0",
+                //ibs_mun_aliquota = "0",
+                //cbs_aliquota = "0",
+                //ibs_cbs_valor_total = valorServicos
             };
 
             if (!string.IsNullOrEmpty(CnaeListaServicoParametroMunicipio.CodigoTributacaoNacionalIss))
