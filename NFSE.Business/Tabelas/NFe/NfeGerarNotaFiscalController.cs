@@ -907,7 +907,7 @@ namespace NFSE.Business.Tabelas.NFe
 
                 item_lista_servico = !CnaeListaServicoParametroMunicipio.ItemListaServicoNacional ? CnaeListaServicoParametroMunicipio.ListaServico : CnaeListaServicoParametroMunicipio.CodigoTributacaoNacionalIss,
 
-                //valor_iss = Math.Round(valorIss, 2, MidpointRounding.AwayFromZero).ToString(CultureInfo.GetCultureInfo("en-US")),
+                valor_iss = Math.Round(valorIss, 2, MidpointRounding.AwayFromZero).ToString(CultureInfo.GetCultureInfo("en-US")),
 
                 codigo_tributario_municipio = CnaeListaServicoParametroMunicipio.CodigoTributarioMunicipio,
 

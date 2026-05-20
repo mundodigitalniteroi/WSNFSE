@@ -73,7 +73,7 @@ namespace EnvioTeste
 
             //SolicitarNotaFiscal(1333794, isDevelopment);
 
-            SolicitarNovaNotaFiscal(1152396, "1125625", isDevelopment);
+            SolicitarNovaNotaFiscal(1338333, "879511", isDevelopment);
 
             //ReceberNotaFiscal(grvId, identificadorNota, isDevelopment);
 
