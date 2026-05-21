@@ -930,7 +930,7 @@ namespace NFSE.Business.Tabelas.NFe
 
                 inscricao_estadual = flagEnviarInscricaoEstadual == 'S' ? empresa.InscricaoEstadual : string.Empty,
 
-                //inscricao_municipal = empresa.InscricaoMunicipal,
+                inscricao_municipal = empresa.InscricaoMunicipal,
 
                 codigo_municipio = new EnderecoCompletoController().Selecionar(empresa.CepId.Value).CodigoMunicipioIbge
             };
@@ -1168,6 +1168,13 @@ namespace NFSE.Business.Tabelas.NFe
             {
                 GravarLog("R1: POSSUI REGRA 'ALIQUOTANULA'");
             }
+            var baseCalculoIbsCbs = composicao.TotalComDesconto - valorIss;
+            var aliquotaIbsMun = 0.05m;
+            var valorIbsMun = (baseCalculoIbsCbs * aliquotaIbsMun) / 100;
+            var aliquotaIbsUf = 0.1m;
+            var valorIbsUf = (baseCalculoIbsCbs * aliquotaIbsUf) / 100;
+            var aliquotaCbs = 0.9m;
+            var valorCbs = (baseCalculoIbsCbs * aliquotaCbs) / 100;
 
             Servico servico = new Servico
             {
@@ -1191,23 +1198,29 @@ namespace NFSE.Business.Tabelas.NFe
 
                 //codigo_municipio_prestacao = prestador.codigo_municipio,
 
-                //ibs_cbs_base_calculo = !string.IsNullOrWhiteSpace(baseCalculo) ? string.Format("{0:N2}", composicao.TotalComDesconto - valorIss).Replace(",", ".") : null,
-                //ibs_mun_percentual_reducao_aliquota = "0",
-                //cbs_percentual_reducao_aliquota = "0",
-                //ibs_uf_percentual_reducao_aliquota = "0",
-                //cbs_aliquota_efetiva = "0",
-                //ibs_valor_total = "0.8",
-                //ibs_uf_valor = "0.8",
-                //ibs_mun_valor = "0",
-                //ibs_uf_aliquota = "0.1",
-                //ibs_uf_aliquota_efetiva = "0.04",
-                //cbs_valor = "3.42",
-                //ibs_cbs_codigo_municipio_incidencia = prestador.codigo_municipio,
-                //ibs_cbs_descricao_municipio_incidencia = atendimento.NotaFiscalMunicipio,
-                //ibs_mun_aliquota_efetiva = "0",
-                //ibs_mun_aliquota = "0",
-                //cbs_aliquota = "0",
-                //ibs_cbs_valor_total = valorServicos
+                ibs_cbs_base_calculo = string.Format("{0:N2}", baseCalculoIbsCbs).Replace(",", "."),
+                ibs_mun_percentual_reducao_aliquota = "0.00",
+                cbs_percentual_reducao_aliquota = "0.00",
+                ibs_uf_percentual_reducao_aliquota = "0.00",
+
+                ibs_mun_aliquota = string.Format("{0:N2}", aliquotaIbsMun).Replace(",", "."),
+                ibs_mun_aliquota_efetiva = "0.00",//string.Format("{0:N2}", aliquotaIbsMun).Replace(",", "."),
+                ibs_mun_valor = string.Format("{0:N2}", valorIbsMun).Replace(",", "."),
+
+                ibs_uf_aliquota = string.Format("{0:N2}", aliquotaIbsUf).Replace(",", "."),
+                ibs_uf_aliquota_efetiva = "0.00",//string.Format("{0:N2}", aliquotaIbsUf).Replace(",", "."),
+                ibs_uf_valor = string.Format("{0:N2}", valorIbsUf).Replace(",", "."),
+
+                ibs_valor_total = string.Format("{0:N2}", valorIbsMun + valorIbsUf).Replace(",", "."),
+
+                cbs_aliquota = string.Format("{0:N2}", aliquotaCbs).Replace(",", "."),
+                cbs_aliquota_efetiva = "0.00",//string.Format("{0:N2}", aliquotaCbs).Replace(",", "."),
+                cbs_valor = string.Format("{0:N2}", valorCbs).Replace(",", "."),
+
+                ibs_cbs_valor_total = string.Format("{0:N2}", valorIbsMun + valorIbsUf + valorCbs).Replace(",", "."),
+
+                ibs_cbs_codigo_municipio_incidencia = prestador.codigo_municipio,
+                ibs_cbs_descricao_municipio_incidencia = atendimento.NotaFiscalMunicipio
             };
 
             if (!string.IsNullOrEmpty(CnaeListaServicoParametroMunicipio.CodigoTributacaoNacionalIss))
