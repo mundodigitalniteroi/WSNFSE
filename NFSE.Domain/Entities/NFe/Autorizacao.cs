@@ -32,6 +32,9 @@ namespace NFSE.Domain.Entities.NFe
         public byte? indicador_destinatario { get; set; }
         public int? finalidade_emissao { get; set; }
 
+        public int? tipo_operacao_governamental { get; set; }
+        public int? tipo_compra_governamental { get; set; }
+
         public Prestador prestador { get; set; }
 
         public Tomador tomador { get; set; }
