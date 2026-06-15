@@ -5,7 +5,7 @@ namespace NFSE.Business.Tabelas.NFe
 {
     public class NfeConfiguracao
     {
-        public string GetRemoteServer()
+        public string GetRemoteServer(bool isNFSeNacional = false)
         {
             var SQL = new StringBuilder();
 
@@ -14,7 +14,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             using (var dtConfiguracoes = DataBase.Select(SQL))
             {
-                return dtConfiguracoes.Rows[0]["Server"].ToString();
+                return dtConfiguracoes.Rows[0]["Server"].ToString() + (isNFSeNacional ? "n" : string.Empty);
             }
         }
 

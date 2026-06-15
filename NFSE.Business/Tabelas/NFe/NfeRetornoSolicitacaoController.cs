@@ -168,5 +168,86 @@ namespace NFSE.Business.Tabelas.NFe
 
             return DataBase.ExecuteScopeIdentity(SQL, sqlParameters);
         }
+
+        public int CadastrarNacional(NfeEntity nfe, CapaAutorizacaoNfse capaAutorizacaoNfse, string resposta, string json)
+        {
+            var SQL = new StringBuilder();
+
+            SQL.AppendLine("INSERT INTO dbo.tb_dep_nfe_retorno_solicitacao");
+
+            SQL.AppendLine("      (NfeId");
+            SQL.AppendLine("      ,NaturezaOperacao");
+            SQL.AppendLine("      ,OptanteSimplesNacional");
+            SQL.AppendLine("      ,TomadorCpfCnpj");
+            SQL.AppendLine("      ,TomadorCnpj");
+            SQL.AppendLine("      ,TomadorNomeRazaoSocial");
+            SQL.AppendLine("      ,TomadorTelefone");
+            SQL.AppendLine("      ,TomadorEmail");
+            SQL.AppendLine("      ,TomadorEnderecoLogradouro");
+            SQL.AppendLine("      ,TomadorEnderecoNumero");
+            SQL.AppendLine("      ,TomadorEnderecoComplemento");
+            SQL.AppendLine("      ,TomadorEnderecoBairro");
+            SQL.AppendLine("      ,TomadorEnderecoCodigoMunicipio");
+            SQL.AppendLine("      ,TomadorEnderecoUf");
+            SQL.AppendLine("      ,TomadorEnderecoCep");
+            SQL.AppendLine("      ,ServicoAliquota");
+            SQL.AppendLine("      ,ServicoDiscriminacao");
+            SQL.AppendLine("      ,ServicoIssRetido");
+            SQL.AppendLine("      ,ServicoValorIss");
+            SQL.AppendLine("      ,ServicoCodigoCnae");
+            SQL.AppendLine("      ,ServicoItemListaServico");
+            SQL.AppendLine("      ,ServicoValorServicos");
+            SQL.AppendLine("      ,ServicoCodigoTributarioMunicipio");
+            SQL.AppendLine("      ,RespostaEnvio");
+            SQL.AppendLine("      ,Json");
+            SQL.AppendLine("      ,DataEmissao)");
+
+            SQL.AppendLine("VALUES");
+
+            SQL.Append("      (").Append(nfe.NfeId).AppendLine();
+            SQL.Append("      ,").AppendLine(DataBase.SetNullIfEmpty(""));
+
+            SQL.Append("      ,").AppendLine(DataBase.SetNullIfEmpty(capaAutorizacaoNfse.AutorizacaoNacional.codigo_opcao_simples_nacional.ToString()));
+
+            SQL.Append("      ,").AppendLine(DataBase.SetNullIfEmpty(capaAutorizacaoNfse.AutorizacaoNacional.cpf_tomador));
+            SQL.Append("      ,").AppendLine(DataBase.SetNullIfEmpty(capaAutorizacaoNfse.AutorizacaoNacional.cnpj_tomador));
+            SQL.Append("      ,").AppendLine(DataBase.SetNullIfEmpty(capaAutorizacaoNfse.AutorizacaoNacional.razao_social_tomador));
+            SQL.Append("      ,").AppendLine(DataBase.SetNullIfEmpty(capaAutorizacaoNfse.AutorizacaoNacional.telefone_tomador));
+            SQL.Append("      ,").AppendLine(DataBase.SetNullIfEmpty(capaAutorizacaoNfse.AutorizacaoNacional.email_tomador));
+            SQL.Append("      ,").AppendLine(DataBase.SetNullIfEmpty(capaAutorizacaoNfse.AutorizacaoNacional.logradouro_tomador));
+            SQL.Append("      ,").AppendLine(DataBase.SetNullIfEmpty(capaAutorizacaoNfse.AutorizacaoNacional.numero_tomador));
+            SQL.Append("      ,").AppendLine(DataBase.SetNullIfEmpty(capaAutorizacaoNfse.AutorizacaoNacional.complemento_tomador));
+            SQL.Append("      ,").AppendLine(DataBase.SetNullIfEmpty(capaAutorizacaoNfse.AutorizacaoNacional.bairro_tomador));
+            SQL.Append("      ,").AppendLine(DataBase.SetNullIfEmpty(capaAutorizacaoNfse.AutorizacaoNacional.codigo_municipio_tomador));
+            SQL.Append("      ,").AppendLine(DataBase.SetNullIfEmpty("0"));
+            SQL.Append("      ,").AppendLine(DataBase.SetNullIfEmpty(capaAutorizacaoNfse.AutorizacaoNacional.cep_tomador));
+            SQL.Append("      ,").AppendLine(DataBase.SetNullIfEmpty("0"));
+            SQL.Append("      ,").AppendLine(DataBase.SetNullIfEmpty(capaAutorizacaoNfse.AutorizacaoNacional.descricao_servico));
+
+            SQL.Append("      ,").AppendLine("0");
+
+            SQL.Append("      ,").AppendLine(DataBase.SetNullIfEmpty(capaAutorizacaoNfse.AutorizacaoNacional.valor_iss));
+            SQL.Append("      ,").AppendLine(DataBase.SetNullIfEmpty("0"));
+            SQL.Append("      ,").AppendLine(DataBase.SetNullIfEmpty(capaAutorizacaoNfse.AutorizacaoNacional.codigo_tributacao_nacional_iss));
+            SQL.Append("      ,").AppendLine(DataBase.SetNullIfEmpty(capaAutorizacaoNfse.AutorizacaoNacional.valor_servico));
+            SQL.Append("      ,").AppendLine(DataBase.SetNullIfEmpty(capaAutorizacaoNfse.AutorizacaoNacional.codigo_municipio_prestacao));
+            SQL.AppendLine("      ,@RespostaEnvio");
+            SQL.AppendLine("      ,@Json");
+            SQL.Append("      ,").Append(DataBase.SetNullIfEmpty(capaAutorizacaoNfse.AutorizacaoNacional.data_emissao)).AppendLine(")");
+
+            var sqlParameters = new SqlParameter[2];
+
+            sqlParameters[0] = new SqlParameter("@RespostaEnvio", SqlDbType.VarChar)
+            {
+                Value = resposta
+            };
+
+            sqlParameters[1] = new SqlParameter("@Json", SqlDbType.VarChar)
+            {
+                Value = json
+            };
+
+            return DataBase.ExecuteScopeIdentity(SQL, sqlParameters);
+        }
     }
 }

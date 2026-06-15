@@ -4,6 +4,8 @@
     {
         public Autorizacao Autorizacao { get; set; }
 
+        public AutorizacaoNacional AutorizacaoNacional { get; set; }
+
         public int GrvId { get; set; }
 
         public string IdentificadorNota { get; set; }

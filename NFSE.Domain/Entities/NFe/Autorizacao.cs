@@ -29,6 +29,8 @@ namespace NFSE.Domain.Entities.NFe
         public int? regime_tributario_simples_nacional { get; set; }
         public int? codigo_opcao_simples_nacional { get; set; }
         public int? finalidade_emissao { get; set; }
+        public int? tipo_operacao_governamental { get; set; }
+        public int? tipo_compra_governamental { get; set; }
 
         public Prestador prestador { get; set; }
 
