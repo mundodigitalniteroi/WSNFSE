@@ -26,6 +26,7 @@ namespace NFSE.Domain.Entities.NFe
         public string telefone_tomador { get; set; }
         public string email_tomador { get; set; }
         public string codigo_municipio_prestacao { get; set; }
+        public string inscricao_municipal_prestador { get; set; }
         public string codigo_tributacao_nacional_iss { get; set; }
         public string codigo_nbs { get; set; }
         public string descricao_servico { get; set; }

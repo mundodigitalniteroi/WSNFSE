@@ -820,6 +820,8 @@ namespace NFSE.Business.Tabelas.NFe
                 codigo_municipio_emissora = new EnderecoCompletoController().Selecionar(empresa.CepId.Value).CodigoMunicipioIbge,
                 codigo_municipio_prestacao = new EnderecoCompletoController().Selecionar(empresa.CepId.Value).CodigoMunicipioIbge,
 
+                inscricao_municipal_prestador = PossuiRegraNfe(nfeRegras, "OMITIR_INSC_MUNIC") ? null : empresa.InscricaoMunicipal,
+
                 cpf_tomador = atendimento.NotaFiscalCpf.Length.Equals(11) ? atendimento.NotaFiscalCpf : string.Empty,
                 cnpj_tomador = atendimento.NotaFiscalCpf.Length.Equals(14) ? atendimento.NotaFiscalCpf : string.Empty,
                 razao_social_tomador = atendimento.NotaFiscalNome.Trim(),

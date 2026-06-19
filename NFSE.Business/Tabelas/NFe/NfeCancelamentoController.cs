@@ -1,6 +1,7 @@
 ﻿using NFSE.Business.Tabelas.DP;
 using NFSE.Business.Tabelas.Global;
 using NFSE.Business.Util;
+using NFSE.Domain.Entities.DP;
 using NFSE.Domain.Entities.Global;
 using NFSE.Domain.Entities.NFe;
 using NFSE.Domain.Enum;
@@ -31,7 +32,9 @@ namespace NFSE.Business.Tabelas.NFe
             #region Empresa
             EmpresaEntity Empresa;
 
-            if ((Empresa = new EmpresaController().Selecionar(new EmpresaEntity { EmpresaId = new ClienteDepositoController().Selecionar(new Domain.Entities.DP.ClienteDepositoEntity { ClienteId = grv.ClienteId, DepositoId = grv.DepositoId }).EmpresaId })) == null)
+            ClienteDepositoEntity ClienteDeposito = new ClienteDepositoController().Selecionar(new Domain.Entities.DP.ClienteDepositoEntity { ClienteId = grv.ClienteId, DepositoId = grv.DepositoId });
+
+            if ((Empresa = new EmpresaController().Selecionar(new EmpresaEntity { EmpresaId = ClienteDeposito.EmpresaId })) == null)
             {
                 new NfeWsErroController().CadastrarErroGenerico(model.GrvId, model.UsuarioId, model.IdentificadorNota, OrigemErro.MobLink, Acao.Retorno, "Empresa associada não encontrada");
 
@@ -45,6 +48,19 @@ namespace NFSE.Business.Tabelas.NFe
             }
             #endregion Empresa
 
+            #region Regras da Nfe
+            var NfeRegras = new NfeRegraController().Listar(new NfeRegraEntity
+            {
+                ClienteDepositoId = ClienteDeposito.ClienteDepositoId,
+
+                Ativo = 1,
+
+                RegraAtivo = 1
+            });
+            #endregion Regras da Nfe
+
+            var isNfseNacional = NfeRegras != null && NfeRegras.Exists(r => r.RegraCodigo == "EMITIR_NFE_NACIONAL" && r.Ativo == 1);
+
             string jsonEnvio = Tools.ObjToJSON(new Dictionary<string, string>()
             {
                 {
@@ -57,7 +73,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             try
             {
-                jsonRetorno = Tools.CancelarNfse(new NfeConfiguracao().GetRemoteServer() + "/" + model.IdentificadorNota, jsonEnvio, Empresa.Token);
+                jsonRetorno = Tools.CancelarNfse(new NfeConfiguracao().GetRemoteServer(isNfseNacional) + "/" + model.IdentificadorNota, jsonEnvio, Empresa.Token);
             }
             catch (Exception ex)
             {
