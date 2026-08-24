@@ -648,7 +648,7 @@ namespace NFSE.Business.Tabelas.NFe
                 Autorizacao.tipo_compra_governamental = int.Parse(nfeRegras.Where(w => w.RegraCodigo.Equals("TIPO_COMPRA_GOV")).Select(s => s.Valor).FirstOrDefault());
             }
 
-            Autorizacao.servico = Servico(Autorizacao, grv, cliente, composicao, Autorizacao.prestador, clienteDeposito, nfeRegras, descricaoConfiguracaoNfe, isDev);
+            Autorizacao.servico = Servico(Autorizacao, grv, cliente, composicao, Autorizacao.prestador, clienteDeposito, nfeRegras, descricaoConfiguracaoNfe, Endereco(atendimento), isDev);
 
             return Autorizacao;
         }
@@ -941,6 +941,7 @@ namespace NFSE.Business.Tabelas.NFe
 
         private Prestador Prestador(EmpresaEntity empresa, char flagEnviarInscricaoEstadual)
         {
+            var enderecoCompleto = new EnderecoCompletoController().Selecionar(empresa.CepId.Value);
             return new Prestador
             {
                 cnpj = empresa.Cnpj,
@@ -949,7 +950,9 @@ namespace NFSE.Business.Tabelas.NFe
 
                 inscricao_municipal = empresa.InscricaoMunicipal,
 
-                codigo_municipio = new EnderecoCompletoController().Selecionar(empresa.CepId.Value).CodigoMunicipioIbge
+                codigo_municipio = enderecoCompleto.CodigoMunicipioIbge,
+
+                nome_municipio = enderecoCompleto.Municipio
             };
         }
 
@@ -1013,11 +1016,13 @@ namespace NFSE.Business.Tabelas.NFe
 
                 cep = atendimento.NotaFiscalCep,
 
+                municipio = atendimento.NotaFiscalMunicipio,
+
                 codigo_municipio = CodigoMunicipioIbge
             };
         }
 
-        private Servico Servico(Autorizacao autorizacao, GrvEntity grv, ClienteEntity cliente, NfeViewFaturamentoComposicaoAgrupadoEntity composicao, Prestador prestador, ClienteDepositoEntity clienteDeposito, List<NfeRegraEntity> nfeRegras, string descricaoConfiguracaoNfe, bool isDev)
+        private Servico Servico(Autorizacao autorizacao, GrvEntity grv, ClienteEntity cliente, NfeViewFaturamentoComposicaoAgrupadoEntity composicao, Prestador prestador, ClienteDepositoEntity clienteDeposito, List<NfeRegraEntity> nfeRegras, string descricaoConfiguracaoNfe, Endereco endereco, bool isDev)
         {
             CnaeListaServicoParametroMunicipioEntity CnaeListaServicoParametroMunicipio = new CnaeListaServicoParametroMunicipioEntity
             {
@@ -1074,7 +1079,6 @@ namespace NFSE.Business.Tabelas.NFe
                 autorizacao.finalidade_emissao = CnaeListaServicoParametroMunicipio.FinalidadeEmissao.Value;
             }
             #endregion REFORMA TRIBUTARIA
-
 
 
             decimal valorIss = 0;
@@ -1214,6 +1218,45 @@ namespace NFSE.Business.Tabelas.NFe
 
                 codigo_municipio_incidencia = prestador.codigo_municipio
             };
+
+            //TODO - Criar regra para cada campo do IBS e CBS, verificando se deve ou não enviar, e quais valores enviar, hoje(22/05/2026) está enviando todos os campos caso não exista a regra "NAO_ENVIA_IBS_CBS"
+            if (!PossuiRegraNfe(nfeRegras, "NAO_ENVIA_IBS_CBS"))
+            {
+                decimal baseCalculoIbsCbs = composicao.TotalComDesconto - valorIss;
+
+                decimal aliquotaIbsMun = 0;
+                decimal reducaoAliquotaIbsMun = 0;
+                decimal aliquotaEfetivaIbsMun = aliquotaIbsMun * (1 - (reducaoAliquotaIbsMun / 100m));
+                decimal valorIbsMun = baseCalculoIbsCbs * (aliquotaEfetivaIbsMun / 100m);
+
+                decimal aliquotaIbsUf = 0.1m;
+                decimal reducaoAliquotaIbsUf = 0;
+                decimal aliquotaEfetivaIbsUf = aliquotaIbsUf * (1 - (reducaoAliquotaIbsUf / 100m));
+                decimal valorIbsUf = baseCalculoIbsCbs * (aliquotaEfetivaIbsUf / 100m);
+
+                decimal aliquotaCbs = 0.9m;
+                decimal reducaoAliquotaCbs = 0;
+                decimal aliquotaEfetivaCbs = aliquotaCbs * (1 - (reducaoAliquotaCbs / 100m));
+                decimal valorCbs = baseCalculoIbsCbs * (aliquotaEfetivaCbs / 100m);
+
+                servico.ibs_cbs_base_calculo = Math.Round(baseCalculoIbsCbs, 2, MidpointRounding.AwayFromZero).ToString(CultureInfo.GetCultureInfo("en-US"));
+                servico.ibs_mun_percentual_reducao_aliquota = null;//Math.Round(reducaoAliquotaIbsMun, 2, MidpointRounding.AwayFromZero).ToString(CultureInfo.GetCultureInfo("en-US"));
+                servico.cbs_percentual_reducao_aliquota = null;// Math.Round(reducaoAliquotaCbs, 2, MidpointRounding.AwayFromZero).ToString(CultureInfo.GetCultureInfo("en-US"));
+                servico.ibs_uf_percentual_reducao_aliquota = null; //Math.Round(reducaoAliquotaIbsUf, 2, MidpointRounding.AwayFromZero).ToString(CultureInfo.GetCultureInfo("en-US"));
+                servico.ibs_mun_aliquota = Math.Round(aliquotaIbsMun, 2, MidpointRounding.AwayFromZero).ToString(CultureInfo.GetCultureInfo("en-US"));
+                servico.ibs_mun_aliquota_efetiva = string.Format("{0:N2}", aliquotaEfetivaIbsMun).Replace(",", ".");
+                servico.ibs_mun_valor = Math.Round(valorIbsMun, 2, MidpointRounding.AwayFromZero).ToString(CultureInfo.GetCultureInfo("en-US"));
+                servico.ibs_uf_aliquota = Math.Round(aliquotaIbsUf, 2, MidpointRounding.AwayFromZero).ToString(CultureInfo.GetCultureInfo("en-US"));
+                servico.ibs_uf_aliquota_efetiva = string.Format("{0:N2}", aliquotaEfetivaIbsUf).Replace(",", ".");
+                servico.ibs_uf_valor = Math.Round(valorIbsUf, 2, MidpointRounding.AwayFromZero).ToString(CultureInfo.GetCultureInfo("en-US"));
+                servico.ibs_valor_total = Math.Round(valorIbsMun + valorIbsUf, 2, MidpointRounding.AwayFromZero).ToString(CultureInfo.GetCultureInfo("en-US"));
+                servico.cbs_aliquota = Math.Round(aliquotaCbs, 2, MidpointRounding.AwayFromZero).ToString(CultureInfo.GetCultureInfo("en-US"));
+                servico.cbs_aliquota_efetiva = string.Format("{0:N2}", aliquotaEfetivaCbs).Replace(",", ".");
+                servico.cbs_valor = Math.Round(valorCbs, 2, MidpointRounding.AwayFromZero).ToString(CultureInfo.GetCultureInfo("en-US"));
+                servico.ibs_cbs_valor_total = baseCalculo; //string.Format("{0:N2}", valorIbsMun + valorIbsUf + valorCbs).Replace(",", ".");
+                servico.ibs_cbs_codigo_municipio_incidencia = endereco.codigo_municipio;
+                servico.ibs_cbs_descricao_municipio_incidencia = endereco.municipio;
+            }
 
             if (!string.IsNullOrEmpty(CnaeListaServicoParametroMunicipio.CodigoTributacaoNacionalIss))
             {

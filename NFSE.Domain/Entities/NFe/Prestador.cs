@@ -9,5 +9,6 @@
         public string inscricao_municipal { get; set; }
 
         public string codigo_municipio { get; set; }
+        public string nome_municipio { get; set; }
     }
 }

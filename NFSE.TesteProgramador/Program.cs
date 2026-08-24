@@ -73,55 +73,55 @@ namespace EnvioTeste
 
             //SolicitarNotaFiscal(1333794, isDevelopment);
 
-            //SolicitarNovaNotaFiscal(1342739, "883013", isDevelopment);
+            SolicitarNovaNotaFiscal(1350520, "889543", isDevelopment);
 
             //ReceberNotaFiscal(grvId, identificadorNota, isDevelopment);
 
-            var list = new List<Nota>
-            {
-                new Nota { Grv = 1340664, Identificador = "881652" },
-                new Nota { Grv = 1336327, Identificador = "881691" },
-                new Nota { Grv = 1339360, Identificador = "881693" },
-                new Nota { Grv = 1335780, Identificador = "881690" },
-                new Nota { Grv = 1339679, Identificador = "881694" },
-                new Nota { Grv = 1340249, Identificador = "881696" },
-                new Nota { Grv = 1340903, Identificador = "881710" },
-                new Nota { Grv = 1339995, Identificador = "881695" },
-                new Nota { Grv = 1340250, Identificador = "881697" },
-                new Nota { Grv = 1341285, Identificador = "881715" },
-                new Nota { Grv = 1341287, Identificador = "881716" },
-                new Nota { Grv = 1340403, Identificador = "881701" },
-                new Nota { Grv = 1340571, Identificador = "881703" },
-                new Nota { Grv = 1340742, Identificador = "881705" },
-                new Nota { Grv = 1340902, Identificador = "881709" },
-                new Nota { Grv = 1340760, Identificador = "881707" },
-                new Nota { Grv = 1340253, Identificador = "881698" },
-                new Nota { Grv = 1340768, Identificador = "881708" },
-                new Nota { Grv = 1341057, Identificador = "881711" },
-                new Nota { Grv = 1341060, Identificador = "881713" },
-                new Nota { Grv = 1341160, Identificador = "881717" },
-                new Nota { Grv = 1340758, Identificador = "881706" },
-                new Nota { Grv = 1341340, Identificador = "881718" },
-                new Nota { Grv = 1322622, Identificador = "881689" },
-                new Nota { Grv = 1340741, Identificador = "881704" },
-                new Nota { Grv = 1338478, Identificador = "884056" },
-                new Nota { Grv = 1340206, Identificador = "884057" },
-                new Nota { Grv = 1342580, Identificador = "884058" },
-                new Nota { Grv = 1342542, Identificador = "884059" },
-                new Nota { Grv = 1342137, Identificador = "884060" },
-                new Nota { Grv = 1342316, Identificador = "884062" },
-                new Nota { Grv = 1341341, Identificador = "884063" },
-                new Nota { Grv = 1340529, Identificador = "884066" },
-                new Nota { Grv = 1337281, Identificador = "884070" },
-                new Nota { Grv = 1337121, Identificador = "884073" },
-                new Nota { Grv = 1339705, Identificador = "884074" },
-                new Nota { Grv = 1340400, Identificador = "884075" }
-            };
+            //var list = new List<Nota>
+            //{
+            //    new Nota { Grv = 1340664, Identificador = "881652" },
+            //    new Nota { Grv = 1336327, Identificador = "881691" },
+            //    new Nota { Grv = 1339360, Identificador = "881693" },
+            //    new Nota { Grv = 1335780, Identificador = "881690" },
+            //    new Nota { Grv = 1339679, Identificador = "881694" },
+            //    new Nota { Grv = 1340249, Identificador = "881696" },
+            //    new Nota { Grv = 1340903, Identificador = "881710" },
+            //    new Nota { Grv = 1339995, Identificador = "881695" },
+            //    new Nota { Grv = 1340250, Identificador = "881697" },
+            //    new Nota { Grv = 1341285, Identificador = "881715" },
+            //    new Nota { Grv = 1341287, Identificador = "881716" },
+            //    new Nota { Grv = 1340403, Identificador = "881701" },
+            //    new Nota { Grv = 1340571, Identificador = "881703" },
+            //    new Nota { Grv = 1340742, Identificador = "881705" },
+            //    new Nota { Grv = 1340902, Identificador = "881709" },
+            //    new Nota { Grv = 1340760, Identificador = "881707" },
+            //    new Nota { Grv = 1340253, Identificador = "881698" },
+            //    new Nota { Grv = 1340768, Identificador = "881708" },
+            //    new Nota { Grv = 1341057, Identificador = "881711" },
+            //    new Nota { Grv = 1341060, Identificador = "881713" },
+            //    new Nota { Grv = 1341160, Identificador = "881717" },
+            //    new Nota { Grv = 1340758, Identificador = "881706" },
+            //    new Nota { Grv = 1341340, Identificador = "881718" },
+            //    new Nota { Grv = 1322622, Identificador = "881689" },
+            //    new Nota { Grv = 1340741, Identificador = "881704" },
+            //    new Nota { Grv = 1338478, Identificador = "884056" },
+            //    new Nota { Grv = 1340206, Identificador = "884057" },
+            //    new Nota { Grv = 1342580, Identificador = "884058" },
+            //    new Nota { Grv = 1342542, Identificador = "884059" },
+            //    new Nota { Grv = 1342137, Identificador = "884060" },
+            //    new Nota { Grv = 1342316, Identificador = "884062" },
+            //    new Nota { Grv = 1341341, Identificador = "884063" },
+            //    new Nota { Grv = 1340529, Identificador = "884066" },
+            //    new Nota { Grv = 1337281, Identificador = "884070" },
+            //    new Nota { Grv = 1337121, Identificador = "884073" },
+            //    new Nota { Grv = 1339705, Identificador = "884074" },
+            //    new Nota { Grv = 1340400, Identificador = "884075" }
+            //};
 
-            foreach (var nota in list)
-            {
-                CancelarNotaFiscal(nota.Grv, nota.Identificador, isDevelopment);
-            }
+            //foreach (var nota in list)
+            //{
+            //    CancelarNotaFiscal(nota.Grv, nota.Identificador, isDevelopment);
+            //}
             //CancelarNotaFiscal(1314842, identificadorNota, isDevelopment);
             Console.WriteLine("CONCLUIDO");
             Console.ReadLine();

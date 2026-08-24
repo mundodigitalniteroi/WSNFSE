@@ -14,6 +14,8 @@
 
         public string codigo_municipio { get; set; }
 
+        public string municipio { get; set; }
+
         public string uf { get; set; }
 
         public string cep { get; set; }

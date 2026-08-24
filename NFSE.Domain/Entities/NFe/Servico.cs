@@ -53,5 +53,28 @@
         public string codigo_municipio_incidencia { get; set; }
         public string situacao_tributaria_pis_cofins { get; set; }
         public string tipo_retencao_pis_cofins { get; set; }
+
+        #region REFORMA TRIBUTÁRIA
+
+        // Teste - 14/05/2026 - Leonardo
+        public string ibs_cbs_base_calculo { get; set; }
+        public string ibs_mun_percentual_reducao_aliquota { get; set; }
+        public string cbs_percentual_reducao_aliquota { get; set; }
+        public string ibs_uf_percentual_reducao_aliquota { get; set; }
+        public string cbs_aliquota_efetiva { get; set; }
+        public string ibs_valor_total { get; set; }
+        public string ibs_uf_valor { get; set; }
+        public string ibs_mun_valor { get; set; }
+        public string ibs_uf_aliquota { get; set; }
+        public string ibs_uf_aliquota_efetiva { get; set; }
+        public string cbs_valor { get; set; }
+        public string ibs_cbs_codigo_municipio_incidencia { get; set; }
+        public string ibs_cbs_descricao_municipio_incidencia { get; set; }
+        public string ibs_mun_aliquota_efetiva { get; set; }
+        public string ibs_mun_aliquota { get; set; }
+        public string cbs_aliquota { get; set; }
+        public string ibs_cbs_valor_total { get; set; }
+
+        #endregion REFORMA TRIBUTÁRIA
     }
 }
