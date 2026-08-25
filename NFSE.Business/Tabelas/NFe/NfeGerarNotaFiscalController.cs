@@ -934,6 +934,7 @@ namespace NFSE.Business.Tabelas.NFe
 
         private Prestador Prestador(EmpresaEntity empresa, char flagEnviarInscricaoEstadual)
         {
+            var endereco = new EnderecoCompletoController().Selecionar(empresa.CepId.Value);
             return new Prestador
             {
                 cnpj = empresa.Cnpj,
@@ -942,7 +943,9 @@ namespace NFSE.Business.Tabelas.NFe
 
                 inscricao_municipal = empresa.InscricaoMunicipal,
 
-                codigo_municipio = new EnderecoCompletoController().Selecionar(empresa.CepId.Value).CodigoMunicipioIbge
+                codigo_municipio = endereco.CodigoMunicipioIbge,
+
+                descricao_municipio = endereco.Municipio
             };
         }
 
@@ -1203,44 +1206,6 @@ namespace NFSE.Business.Tabelas.NFe
                 //codigo_municipio_prestacao = prestador.codigo_municipio,
             };
 
-            //TODO - Criar regra para cada campo do IBS e CBS, verificando se deve ou não enviar, e quais valores enviar, hoje(22/05/2026) está enviando todos os campos caso não exista a regra "NAO_ENVIA_IBS_CBS"
-            if (!PossuiRegraNfe(nfeRegras, "NAO_ENVIA_IBS_CBS"))
-            {
-                decimal baseCalculoIbsCbs = composicao.TotalComDesconto - valorIss;
-
-                decimal aliquotaIbsMun = 0;
-                decimal reducaoAliquotaIbsMun = 0;
-                decimal aliquotaEfetivaIbsMun = aliquotaIbsMun * (1 - (reducaoAliquotaIbsMun / 100m));
-                decimal valorIbsMun = baseCalculoIbsCbs * (aliquotaEfetivaIbsMun / 100m);
-
-                decimal aliquotaIbsUf = 0.1m;
-                decimal reducaoAliquotaIbsUf = 0;
-                decimal aliquotaEfetivaIbsUf = aliquotaIbsUf * (1 - (reducaoAliquotaIbsUf / 100m));
-                decimal valorIbsUf = baseCalculoIbsCbs * (aliquotaEfetivaIbsUf / 100m);
-
-                decimal aliquotaCbs = 0.9m;
-                decimal reducaoAliquotaCbs = 0;
-                decimal aliquotaEfetivaCbs = aliquotaCbs * (1 - (reducaoAliquotaCbs / 100m));
-                decimal valorCbs = baseCalculoIbsCbs * (aliquotaEfetivaCbs / 100m);
-
-                servico.ibs_cbs_base_calculo = Math.Round(baseCalculoIbsCbs, 2, MidpointRounding.AwayFromZero).ToString(CultureInfo.GetCultureInfo("en-US"));
-                servico.ibs_mun_percentual_reducao_aliquota = Math.Round(reducaoAliquotaIbsMun, 2, MidpointRounding.AwayFromZero).ToString(CultureInfo.GetCultureInfo("en-US"));
-                servico.cbs_percentual_reducao_aliquota = Math.Round(reducaoAliquotaCbs, 2, MidpointRounding.AwayFromZero).ToString(CultureInfo.GetCultureInfo("en-US"));
-                servico.ibs_uf_percentual_reducao_aliquota = Math.Round(reducaoAliquotaIbsUf, 2, MidpointRounding.AwayFromZero).ToString(CultureInfo.GetCultureInfo("en-US"));
-                servico.ibs_mun_aliquota = Math.Round(aliquotaIbsMun, 2, MidpointRounding.AwayFromZero).ToString(CultureInfo.GetCultureInfo("en-US"));
-                servico.ibs_mun_aliquota_efetiva = "0";// string.Format("{0:N2}", aliquotaEfetivaIbsMun).Replace(",", ".");
-                servico.ibs_mun_valor = Math.Round(valorIbsMun, 2, MidpointRounding.AwayFromZero).ToString(CultureInfo.GetCultureInfo("en-US"));
-                servico.ibs_uf_aliquota = Math.Round(aliquotaIbsUf, 2, MidpointRounding.AwayFromZero).ToString(CultureInfo.GetCultureInfo("en-US"));
-                servico.ibs_uf_aliquota_efetiva = "0"; //string.Format("{0:N2}", aliquotaEfetivaIbsUf).Replace(",", ".");
-                servico.ibs_uf_valor = Math.Round(valorIbsUf, 2, MidpointRounding.AwayFromZero).ToString(CultureInfo.GetCultureInfo("en-US"));
-                servico.ibs_valor_total = Math.Round(valorIbsMun + valorIbsUf, 2, MidpointRounding.AwayFromZero).ToString(CultureInfo.GetCultureInfo("en-US"));
-                servico.cbs_aliquota = Math.Round(aliquotaCbs, 2, MidpointRounding.AwayFromZero).ToString(CultureInfo.GetCultureInfo("en-US"));
-                servico.cbs_aliquota_efetiva = "0"; //string.Format("{0:N2}", aliquotaEfetivaCbs).Replace(",", ".");
-                servico.cbs_valor = Math.Round(valorCbs, 2, MidpointRounding.AwayFromZero).ToString(CultureInfo.GetCultureInfo("en-US"));
-                servico.ibs_cbs_valor_total = baseCalculo; //string.Format("{0:N2}", valorIbsMun + valorIbsUf + valorCbs).Replace(",", ".");
-                servico.ibs_cbs_codigo_municipio_incidencia = prestador.codigo_municipio;
-                servico.ibs_cbs_descricao_municipio_incidencia = atendimento.NotaFiscalMunicipio;
-            }
 
             if (!string.IsNullOrEmpty(CnaeListaServicoParametroMunicipio.CodigoTributacaoNacionalIss))
             {
@@ -1276,6 +1241,73 @@ namespace NFSE.Business.Tabelas.NFe
             {
                 servico.discriminacao += ", CHASSI " + grv.Chassi;
             }
+
+            EnderecoCompletoEntity CEP = new EnderecoCompletoController().Selecionar(atendimento.NotaFiscalCep);
+
+            string CodigoMunicipioIbge;
+
+            if (CEP != null && !string.IsNullOrWhiteSpace(CEP.CodigoMunicipioIbge))
+            {
+                CodigoMunicipioIbge = CEP.CodigoMunicipioIbge;
+            }
+            else
+            {
+                CodigoMunicipioIbge = new MunicipioController().SelecionarPrimeiroCodigoIbge(atendimento.NotaFiscalUf, atendimento.NotaFiscalMunicipio);
+            }
+
+            //TODO - Criar regra para cada campo do IBS e CBS, verificando se deve ou não enviar, e quais valores enviar, hoje(22/05/2026) está enviando todos os campos caso não exista a regra "NAO_ENVIA_IBS_CBS"
+            if (!PossuiRegraNfe(nfeRegras, "NAO_ENVIA_IBS_CBS"))
+            {
+                decimal baseCalculoIbsCbs = composicao.TotalComDesconto - valorIss;
+
+                decimal aliquotaIbsMun = 0;
+                decimal reducaoAliquotaIbsMun = 0;
+                decimal aliquotaEfetivaIbsMun = aliquotaIbsMun * (1 - (reducaoAliquotaIbsMun / 100m));
+                decimal valorIbsMun = baseCalculoIbsCbs * (aliquotaEfetivaIbsMun / 100m);
+
+                decimal aliquotaIbsUf = 0.1m;
+                decimal reducaoAliquotaIbsUf = 0;
+                decimal aliquotaEfetivaIbsUf = aliquotaIbsUf * (1 - (reducaoAliquotaIbsUf / 100m));
+                decimal valorIbsUf = baseCalculoIbsCbs * (aliquotaEfetivaIbsUf / 100m);
+
+                decimal aliquotaCbs = 0.9m;
+                decimal reducaoAliquotaCbs = 0;
+                decimal aliquotaEfetivaCbs = aliquotaCbs * (1 - (reducaoAliquotaCbs / 100m));
+                decimal valorCbs = baseCalculoIbsCbs * (aliquotaEfetivaCbs / 100m);
+
+                servico.ibs_cbs_base_calculo = Math.Round(baseCalculoIbsCbs, 2, MidpointRounding.AwayFromZero).ToString(CultureInfo.GetCultureInfo("en-US"));
+                if (PossuiRegraNfe(nfeRegras, "PERC_REDUCAO_IBS_CBS"))
+                {
+                    servico.ibs_mun_percentual_reducao_aliquota = Math.Round(reducaoAliquotaIbsMun, 2, MidpointRounding.AwayFromZero).ToString(CultureInfo.GetCultureInfo("en-US"));
+                    servico.cbs_percentual_reducao_aliquota = Math.Round(reducaoAliquotaCbs, 2, MidpointRounding.AwayFromZero).ToString(CultureInfo.GetCultureInfo("en-US"));
+                    servico.ibs_uf_percentual_reducao_aliquota = Math.Round(reducaoAliquotaIbsUf, 2, MidpointRounding.AwayFromZero).ToString(CultureInfo.GetCultureInfo("en-US"));
+                }
+                servico.ibs_mun_aliquota = Math.Round(aliquotaIbsMun, 2, MidpointRounding.AwayFromZero).ToString(CultureInfo.GetCultureInfo("en-US"));
+                servico.ibs_mun_aliquota_efetiva = string.Format("{0:N2}", aliquotaEfetivaIbsMun).Replace(",", ".");
+                servico.ibs_mun_valor = Math.Round(valorIbsMun, 2, MidpointRounding.AwayFromZero).ToString(CultureInfo.GetCultureInfo("en-US"));
+                servico.ibs_uf_aliquota = Math.Round(aliquotaIbsUf, 2, MidpointRounding.AwayFromZero).ToString(CultureInfo.GetCultureInfo("en-US"));
+                servico.ibs_uf_aliquota_efetiva = string.Format("{0:N2}", aliquotaEfetivaIbsUf).Replace(",", ".");
+                servico.ibs_uf_valor = Math.Round(valorIbsUf, 2, MidpointRounding.AwayFromZero).ToString(CultureInfo.GetCultureInfo("en-US"));
+                servico.ibs_valor_total = Math.Round(valorIbsMun + valorIbsUf, 2, MidpointRounding.AwayFromZero).ToString(CultureInfo.GetCultureInfo("en-US"));
+                servico.cbs_aliquota = Math.Round(aliquotaCbs, 2, MidpointRounding.AwayFromZero).ToString(CultureInfo.GetCultureInfo("en-US"));
+                servico.cbs_aliquota_efetiva = string.Format("{0:N2}", aliquotaEfetivaCbs).Replace(",", ".");
+                servico.cbs_valor = Math.Round(valorCbs, 2, MidpointRounding.AwayFromZero).ToString(CultureInfo.GetCultureInfo("en-US"));
+                servico.ibs_cbs_valor_total = baseCalculo; //string.Format("{0:N2}", valorIbsMun + valorIbsUf + valorCbs).Replace(",", ".");
+
+                servico.ibs_cbs_codigo_municipio_incidencia = prestador.codigo_municipio;
+                servico.ibs_cbs_descricao_municipio_incidencia = prestador.descricao_municipio;
+
+                if (PossuiRegraNfe(nfeRegras, "VAL_MUN_INCIDENCIA"))
+                {
+                    if (servico.codigo_indicador_operacao != "050101")
+                    {
+                        servico.ibs_cbs_codigo_municipio_incidencia = CodigoMunicipioIbge;
+                        servico.ibs_cbs_descricao_municipio_incidencia = atendimento.NotaFiscalMunicipio;
+                    }
+                }
+            }
+
+    
 
             if (cliente.FlagPossuiClienteCodigoIdentificacao == 'S')
             {
