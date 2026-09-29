@@ -633,6 +633,8 @@ namespace NFSE.Business.Tabelas.NFe
 
                 optante_simples_nacional = empresa.OptanteSimplesNacional.Equals('S'),
 
+                percentual_total_tributos_simples_nacional = 0,
+
                 prestador = Prestador(empresa, composicao.FlagEnviarInscricaoEstadual),
 
                 tomador = Tomador(deposito, atendimento, nfeRegras)
@@ -648,9 +650,12 @@ namespace NFSE.Business.Tabelas.NFe
                 Autorizacao.tipo_compra_governamental = int.Parse(nfeRegras.Where(w => w.RegraCodigo.Equals("TIPO_COMPRA_GOV")).Select(s => s.Valor).FirstOrDefault());
             }
 
-            if (PossuiRegraNfe(nfeRegras, "IND_TOTAL_TRIB"))
+            if (PossuiRegraNfe(nfeRegras, "PERC_TOTAL_TRIB"))
             {
-                Autorizacao.indicador_total_tributacao = int.Parse(nfeRegras.Where(w => w.RegraCodigo.Equals("IND_TOTAL_TRIB")).Select(s => s.Valor).FirstOrDefault());
+                Autorizacao.percentual_total_tributos_estaduais = 0;
+                Autorizacao.percentual_total_tributos_federais = 0;
+                Autorizacao.percentual_total_tributos_municipais = 0;
+                Autorizacao.percentual_total_tributos_simples_nacional = null;
             }
 
             Autorizacao.servico = Servico(Autorizacao, grv, cliente, composicao, Autorizacao.prestador, clienteDeposito, nfeRegras, descricaoConfiguracaoNfe, Endereco(atendimento), atendimento, isDev);
@@ -1009,19 +1014,19 @@ namespace NFSE.Business.Tabelas.NFe
 
             return new Endereco
             {
-                logradouro = atendimento.NotaFiscalEndereco.Trim(),
+                logradouro = atendimento.NotaFiscalEndereco.Replace("'", "").Trim(),
 
                 numero = !string.IsNullOrWhiteSpace(atendimento.NotaFiscalNumero) && atendimento.NotaFiscalNumero.Length > 10 ? atendimento.NotaFiscalNumero.Substring(0, 10) : atendimento.NotaFiscalNumero,
 
-                complemento = !string.IsNullOrWhiteSpace(atendimento.NotaFiscalComplemento) ? atendimento.NotaFiscalComplemento.Trim() : "...",
+                complemento = !string.IsNullOrWhiteSpace(atendimento.NotaFiscalComplemento) ? atendimento.NotaFiscalComplemento.Replace("'", "").Trim() : "...",
 
-                bairro = atendimento.NotaFiscalBairro.Trim(),
+                bairro = atendimento.NotaFiscalBairro.Replace("'", "").Trim(),
 
                 uf = atendimento.NotaFiscalUf,
 
                 cep = atendimento.NotaFiscalCep,
 
-                municipio = atendimento.NotaFiscalMunicipio,
+                municipio = atendimento.NotaFiscalMunicipio.Replace("'", "").Trim(),
 
                 codigo_municipio = CodigoMunicipioIbge
             };

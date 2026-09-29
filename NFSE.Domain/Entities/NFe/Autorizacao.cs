@@ -22,7 +22,10 @@ namespace NFSE.Domain.Entities.NFe
         public string art { get; set; }
 
         public byte? consumidor_final { get; set; }
-        public decimal percentual_total_tributos_simples_nacional { get; set; } = 0;
+        public decimal? percentual_total_tributos_simples_nacional { get; set; }
+        public decimal? percentual_total_tributos_municipais { get; set; }
+        public decimal? percentual_total_tributos_federais { get; set; }
+        public decimal? percentual_total_tributos_estaduais { get; set; }
         public byte? indicador_destinatario { get; set; }
         public int? tributacao_iss { get; set; }
         public int? tipo_retencao_iss { get; set; }
