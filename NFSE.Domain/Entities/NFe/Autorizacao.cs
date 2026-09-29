@@ -32,6 +32,8 @@ namespace NFSE.Domain.Entities.NFe
         public int? tipo_operacao_governamental { get; set; }
         public int? tipo_compra_governamental { get; set; }
 
+        public int? indicador_total_tributacao { get; set; }
+
         public Prestador prestador { get; set; }
 
         public Tomador tomador { get; set; }
