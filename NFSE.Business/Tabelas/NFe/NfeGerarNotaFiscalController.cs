@@ -648,6 +648,16 @@ namespace NFSE.Business.Tabelas.NFe
                 Autorizacao.tipo_compra_governamental = int.Parse(nfeRegras.Where(w => w.RegraCodigo.Equals("TIPO_COMPRA_GOV")).Select(s => s.Valor).FirstOrDefault());
             }
 
+            if (PossuiRegraNfe(nfeRegras, "PERC_TOTAL_TRIB"))
+            {
+                Autorizacao.percentual_total_tributos_estaduais = 0;
+                Autorizacao.percentual_total_tributos_federais = 0;
+                Autorizacao.percentual_total_tributos_municipais = 0;
+                Autorizacao.percentual_total_tributos_simples_nacional = null;
+
+            }
+
+
             Autorizacao.servico = Servico(Autorizacao, grv, cliente, composicao, Autorizacao.prestador, atendimento, clienteDeposito, nfeRegras, descricaoConfiguracaoNfe, isDev);
 
             return Autorizacao;

@@ -6,39 +6,29 @@ namespace NFSE.Domain.Entities.NFe
     {
         // [JsonProperty("data_emissao")]
         public string data_emissao { get; set; }
-
         public byte natureza_operacao { get; set; } = 1;
-
         public string regime_especial_tributacao { get; set; }
-
         public bool optante_simples_nacional { get; set; }
-
         public int? codigo_opcao_simples_nacional { get; set; }
-
         public string incentivador_cultural { get; set; }
-
         public string tributacao_rps { get; set; }
-
         public int? tributacao_iss { get; set; }
         public int? tipo_retencao_iss { get; set; }
         public int? regime_tributario_simples_nacional { get; set; }
-
         public string codigo_obra { get; set; }
-
         public string art { get; set; }
-
         public byte? consumidor_final { get; set; }
         public decimal? percentual_total_tributos_simples_nacional { get; set; }
         public byte? indicador_destinatario { get; set; }
         public int? finalidade_emissao { get; set; }
-
         public int? tipo_operacao_governamental { get; set; }
         public int? tipo_compra_governamental { get; set; }
-
+        public decimal? percentual_total_tributos_municipais { get; set; }
+        public decimal? percentual_total_tributos_federais { get; set; }
+        public decimal? percentual_total_tributos_estaduais { get; set; }
+        public int? indicador_total_tributacao { get; set; }
         public Prestador prestador { get; set; }
-
         public Tomador tomador { get; set; }
-
         public Servico servico { get; set; }
     }
 }
