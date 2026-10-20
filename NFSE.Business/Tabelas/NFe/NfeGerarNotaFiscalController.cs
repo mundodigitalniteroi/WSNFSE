@@ -834,7 +834,7 @@ namespace NFSE.Business.Tabelas.NFe
                 cnpj_tomador = atendimento.NotaFiscalCpf.Length.Equals(14) ? atendimento.NotaFiscalCpf : string.Empty,
                 razao_social_tomador = atendimento.NotaFiscalNome.Trim(),
                 telefone_tomador = (atendimento.NotaFiscalDdd + atendimento.NotaFiscalTelefone).Length.Equals(0) ? "2199999999" : atendimento.NotaFiscalDdd + atendimento.NotaFiscalTelefone,
-                email_tomador = !string.IsNullOrWhiteSpace(atendimento.NotaFiscalEmail) ? atendimento.NotaFiscalEmail.Trim() : deposito.EmailNfe.Trim(),
+                //email_tomador = !string.IsNullOrWhiteSpace(atendimento.NotaFiscalEmail) ? atendimento.NotaFiscalEmail.Trim() : deposito.EmailNfe.Trim(),
                 cep_tomador = atendimento.NotaFiscalCep,
                 logradouro_tomador = atendimento.NotaFiscalEndereco.Trim(),
                 numero_tomador = !string.IsNullOrWhiteSpace(atendimento.NotaFiscalNumero) && atendimento.NotaFiscalNumero.Length > 10 ? atendimento.NotaFiscalNumero.Substring(0, 10) : atendimento.NotaFiscalNumero,
@@ -851,6 +851,11 @@ namespace NFSE.Business.Tabelas.NFe
                 valor_total_tributos_municipais = "0",
                 indicador_total_tributacao = null
             };
+
+            if(!string.IsNullOrEmpty(empresa.InscricaoMunicipal))
+            {
+                autorizacao.inscricao_municipal_prestador = empresa.InscricaoMunicipal;
+            }
 
             #region REFORMA TRIBUTARIA
             if (CnaeListaServicoParametroMunicipio.ConsumidorFinal.HasValue)
@@ -916,6 +921,11 @@ namespace NFSE.Business.Tabelas.NFe
             if (!string.IsNullOrEmpty(CnaeListaServicoParametroMunicipio.CodigoIndicadorOperacao))
             {
                 autorizacao.codigo_indicador_operacao = CnaeListaServicoParametroMunicipio.CodigoIndicadorOperacao;
+            }
+
+            if(!string.IsNullOrEmpty(CnaeListaServicoParametroMunicipio.CodigoTributarioMunicipio))
+            {
+                autorizacao.codigo_tributacao_municipal_iss = CnaeListaServicoParametroMunicipio.CodigoTributarioMunicipio;
             }
             #endregion REFORMA TRIBUTARIA
 

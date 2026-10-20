@@ -12,6 +12,7 @@ namespace NFSE.Domain.Entities.NFe
         public string data_competencia { get; set; }
         public string codigo_municipio_emissora { get; set; }
         public string cnpj_prestador { get; set; }
+        public string inscricao_municipal_prestador { get; set; }
         public int? codigo_opcao_simples_nacional { get; set; } = 1;
         public string regime_especial_tributacao { get; set; }
         public string cnpj_tomador { get; set; }
@@ -27,6 +28,7 @@ namespace NFSE.Domain.Entities.NFe
         public string email_tomador { get; set; }
         public string codigo_municipio_prestacao { get; set; }
         public string codigo_tributacao_nacional_iss { get; set; }
+        public string codigo_tributacao_municipal_iss { get; set; }
         public string codigo_nbs { get; set; }
         public string descricao_servico { get; set; }
         public string valor_servico { get; set; }
