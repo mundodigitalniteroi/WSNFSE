@@ -854,7 +854,7 @@ namespace NFSE.Business.Tabelas.NFe
 
             if(!string.IsNullOrEmpty(empresa.InscricaoMunicipal))
             {
-                autorizacao.inscricao_municipal_prestador = empresa.InscricaoMunicipal;
+                autorizacao.inscricao_municipal_prestador = PossuiRegraNfe(nfeRegras, "OMITIR_INSC_MUNIC") ? null : empresa.InscricaoMunicipal;
             }
 
             #region REFORMA TRIBUTARIA
