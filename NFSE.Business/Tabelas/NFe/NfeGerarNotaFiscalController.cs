@@ -851,10 +851,16 @@ namespace NFSE.Business.Tabelas.NFe
                 valor_total_tributos_federais = "0",
                 valor_total_tributos_estaduais = "0",
                 valor_total_tributos_municipais = "0",
-                indicador_total_tributacao = null
+                indicador_total_tributacao = null,
+                percentual_aliquota_relativa_municipio = PossuiRegraNfe(nfeRegras, "ALIQUOTANULA") ? null : string.Format("{0:N2}", AliquotaIss).Replace(",", "."),
             };
 
             #region REFORMA TRIBUTARIA
+            if(PossuiRegraNfe(nfeRegras, "COD_CONTRIB"))
+            {
+                autorizacao.codigo_interno_contribuinte = nfeRegras.Where(w => w.RegraCodigo.Equals("COD_CONTRIB")).Select(s => s.Valor).FirstOrDefault();
+            }
+
             if (!string.IsNullOrEmpty(CnaeListaServicoParametroMunicipio.CodigoTributarioMunicipio))
             {
                 autorizacao.codigo_tributacao_municipal_iss = CnaeListaServicoParametroMunicipio.CodigoTributarioMunicipio;

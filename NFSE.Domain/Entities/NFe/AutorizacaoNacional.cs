@@ -44,7 +44,7 @@ namespace NFSE.Domain.Entities.NFe
         public string valor_total_tributos_estaduais { get; set; } = "0";
         public string valor_total_tributos_municipais { get; set; } = "0";
 
-        public byte? consumidor_final { get; set; } = 0;
+        public byte? consumidor_final { get; set; }
         public byte? indicador_destinatario { get; set; }
         public int? regime_tributario_simples_nacional { get; set; }
         public decimal? percentual_total_tributos_simples_nacional { get; set; }
@@ -75,6 +75,8 @@ namespace NFSE.Domain.Entities.NFe
         public string ibs_cbs_valor_total { get; set; }
 
         public string codigo_tributacao_municipal_iss { get; set; }
+        public string percentual_aliquota_relativa_municipio { get; set; }
+        public string codigo_interno_contribuinte { get; set; } //Codigo de Serviço com 4 digitos
 
     }
 }
