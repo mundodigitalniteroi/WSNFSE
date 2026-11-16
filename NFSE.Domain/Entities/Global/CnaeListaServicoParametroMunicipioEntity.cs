@@ -31,5 +31,6 @@
         public int? RegimeTributarioSimplesNacional { get; set; }
         public decimal? PercentualTotalTributosSimplesNacional { get; set; }
         public int? FinalidadeEmissao { get; set; }
+        public string CodigoInternoContribuinte { get; set; }
     }
 }

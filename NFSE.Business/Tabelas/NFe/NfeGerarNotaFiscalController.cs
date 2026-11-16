@@ -936,6 +936,11 @@ namespace NFSE.Business.Tabelas.NFe
                 autorizacao.codigo_tributacao_municipal_iss = CnaeListaServicoParametroMunicipio.CodigoTributarioMunicipio;
             }
 
+            if (!string.IsNullOrEmpty(CnaeListaServicoParametroMunicipio.CodigoInternoContribuinte))
+            {
+                autorizacao.codigo_interno_contribuinte = CnaeListaServicoParametroMunicipio.CodigoInternoContribuinte;
+            }
+
             if (PossuiRegraNfe(nfeRegras, "PERC_TOTAL_TRIB"))
             {
                 autorizacao.percentual_total_tributos_estaduais = "0";

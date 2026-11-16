@@ -65,6 +65,7 @@ namespace NFSE.Business.Tabelas.Global
             SQL.AppendLine("      ,vw_gov_cnae_lista_servico_parametro_municipio.RegimeTributarioSimplesNacional AS RegimeTributarioSimplesNacional");
             SQL.AppendLine("      ,vw_gov_cnae_lista_servico_parametro_municipio.PercentualTotalTributosSimplesNacional AS PercentualTotalTributosSimplesNacional");
             SQL.AppendLine("      ,vw_gov_cnae_lista_servico_parametro_municipio.FinalidadeEmissao AS FinalidadeEmissao");
+            SQL.AppendLine("      ,vw_gov_cnae_lista_servico_parametro_municipio.CodigoInternoContribuinte AS CodigoInternoContribuinte");
 
             SQL.AppendLine("  FROM db_global.dbo.vw_gov_cnae_lista_servico_parametro_municipio");
 

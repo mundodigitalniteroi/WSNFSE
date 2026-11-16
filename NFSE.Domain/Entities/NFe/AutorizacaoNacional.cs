@@ -63,6 +63,7 @@ namespace NFSE.Domain.Entities.NFe
         public string codigo_indicador_operacao { get; set; }
         public string codigo_municipio_incidencia { get; set; }
         public string percentual_aliquota_relativa_municipio { get; set; }
+        public string codigo_interno_contribuinte { get; set; }
 
         // Teste - 14/05/2026 - Leonardo
         public string ibs_cbs_base_calculo { get; set; }
