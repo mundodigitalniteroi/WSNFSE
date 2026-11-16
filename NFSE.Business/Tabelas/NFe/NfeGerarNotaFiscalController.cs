@@ -654,7 +654,6 @@ namespace NFSE.Business.Tabelas.NFe
                 Autorizacao.percentual_total_tributos_federais = 0;
                 Autorizacao.percentual_total_tributos_municipais = 0;
                 Autorizacao.percentual_total_tributos_simples_nacional = null;
-
             }
 
 
@@ -675,7 +674,8 @@ namespace NFSE.Business.Tabelas.NFe
             }
 
             EnderecoCompletoEntity CEP = new EnderecoCompletoController().Selecionar(atendimento.NotaFiscalCep);
-            string CodigoMunicipioIbgePrestador = new EnderecoCompletoController().Selecionar(empresa.CepId.Value).CodigoMunicipioIbge;
+            EnderecoCompletoEntity enderecoPrestador = new EnderecoCompletoController().Selecionar(empresa.CepId.Value);
+            string CodigoMunicipioIbgePrestador = enderecoPrestador.CodigoMunicipioIbge;
 
             string CodigoMunicipioIbgeTomador;
 
@@ -827,8 +827,15 @@ namespace NFSE.Business.Tabelas.NFe
                 data_competencia = now.ToString("yyyy-MM-dd"),
                 regime_especial_tributacao = regimeEspecialTributacao ?? "0",
                 cnpj_prestador = empresa.Cnpj,
-                codigo_municipio_emissora = new EnderecoCompletoController().Selecionar(empresa.CepId.Value).CodigoMunicipioIbge,
-                codigo_municipio_prestacao = new EnderecoCompletoController().Selecionar(empresa.CepId.Value).CodigoMunicipioIbge,
+                codigo_municipio_emissora = CodigoMunicipioIbgePrestador,
+                codigo_municipio_prestacao = CodigoMunicipioIbgePrestador,
+                codigo_municipio_prestador = CodigoMunicipioIbgePrestador,
+                cep_prestador = enderecoPrestador.Cep,
+                logradouro_prestador = enderecoPrestador.Logradouro,
+                bairro_prestador = enderecoPrestador.Bairro,
+                numero_prestador = empresa.Numero,
+                complemento_prestador = empresa.Complemento,
+                municipio_prestador = enderecoPrestador.Municipio,
 
                 cpf_tomador = atendimento.NotaFiscalCpf.Length.Equals(11) ? atendimento.NotaFiscalCpf : string.Empty,
                 cnpj_tomador = atendimento.NotaFiscalCpf.Length.Equals(14) ? atendimento.NotaFiscalCpf : string.Empty,
@@ -845,11 +852,12 @@ namespace NFSE.Business.Tabelas.NFe
                 valor_iss = Math.Round(valorIss, 2, MidpointRounding.AwayFromZero).ToString(CultureInfo.GetCultureInfo("en-US")),
                 valor_servico = valorServicos,
 
-                situacao_tributaria_pis_cofins = "00",
-                valor_total_tributos_federais = "0",
-                valor_total_tributos_estaduais = "0",
-                valor_total_tributos_municipais = "0",
-                indicador_total_tributacao = null
+                situacao_tributaria_pis_cofins = null,
+                valor_total_tributos_federais = null,
+                valor_total_tributos_estaduais = null,
+                valor_total_tributos_municipais = null,
+                indicador_total_tributacao = "0",
+                percentual_aliquota_relativa_municipio = PossuiRegraNfe(nfeRegras, "ALIQUOTANULA") ? null : string.Format("{0:N2}", AliquotaIss).Replace(",", ".")
             };
 
             if(!string.IsNullOrEmpty(empresa.InscricaoMunicipal))
@@ -926,6 +934,14 @@ namespace NFSE.Business.Tabelas.NFe
             if(!string.IsNullOrEmpty(CnaeListaServicoParametroMunicipio.CodigoTributarioMunicipio))
             {
                 autorizacao.codigo_tributacao_municipal_iss = CnaeListaServicoParametroMunicipio.CodigoTributarioMunicipio;
+            }
+
+            if (PossuiRegraNfe(nfeRegras, "PERC_TOTAL_TRIB"))
+            {
+                autorizacao.percentual_total_tributos_estaduais = "0";
+                autorizacao.percentual_total_tributos_federais = "0";
+                autorizacao.percentual_total_tributos_municipais = "0";
+                autorizacao.percentual_total_tributos_simples_nacional = null;
             }
             #endregion REFORMA TRIBUTARIA
 

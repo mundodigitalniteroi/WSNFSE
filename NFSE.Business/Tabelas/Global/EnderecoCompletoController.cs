@@ -20,7 +20,7 @@ namespace NFSE.Business.Tabelas.Global
 
             SQL.AppendLine("      ,vw_glo_consultar_endereco_completo.id_tipo_logradouro AS TipoLogradouroId");
 
-            SQL.AppendLine("      ,vw_glo_consultar_endereco_completo.CEP AS CEP");
+            SQL.AppendLine("      ,vw_glo_consultar_endereco_completo.Cep AS Cep");
 
             SQL.AppendLine("      ,vw_glo_consultar_endereco_completo.tipo_logradouro AS TipoLogradouro");
 

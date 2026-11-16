@@ -12,6 +12,12 @@ namespace NFSE.Domain.Entities.NFe
         public string data_competencia { get; set; }
         public string codigo_municipio_emissora { get; set; }
         public string cnpj_prestador { get; set; }
+        public string cep_prestador { get; set; }
+        public string logradouro_prestador { get; set; }
+        public string bairro_prestador { get; set; }
+        public string numero_prestador { get; set; }
+        public string complemento_prestador { get; set; }
+        public string municipio_prestador { get; set; }
         public string inscricao_municipal_prestador { get; set; }
         public int? codigo_opcao_simples_nacional { get; set; } = 1;
         public string regime_especial_tributacao { get; set; }
@@ -27,6 +33,7 @@ namespace NFSE.Domain.Entities.NFe
         public string telefone_tomador { get; set; }
         public string email_tomador { get; set; }
         public string codigo_municipio_prestacao { get; set; }
+        public string codigo_municipio_prestador { get; set; }
         public string codigo_tributacao_nacional_iss { get; set; }
         public string codigo_tributacao_municipal_iss { get; set; }
         public string codigo_nbs { get; set; }
@@ -45,7 +52,7 @@ namespace NFSE.Domain.Entities.NFe
         public string valor_total_tributos_estaduais { get; set; } = "0";
         public string valor_total_tributos_municipais { get; set; } = "0";
 
-        public byte? consumidor_final { get; set; } = 0;
+        public byte? consumidor_final { get; set; }
         public byte? indicador_destinatario { get; set; }
         public int? regime_tributario_simples_nacional { get; set; }
         public decimal? percentual_total_tributos_simples_nacional { get; set; }
@@ -55,6 +62,7 @@ namespace NFSE.Domain.Entities.NFe
         public string ibs_cbs_situacao_tributaria { get; set; }
         public string codigo_indicador_operacao { get; set; }
         public string codigo_municipio_incidencia { get; set; }
+        public string percentual_aliquota_relativa_municipio { get; set; }
 
         // Teste - 14/05/2026 - Leonardo
         public string ibs_cbs_base_calculo { get; set; }
