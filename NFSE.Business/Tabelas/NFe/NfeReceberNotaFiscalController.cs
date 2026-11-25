@@ -22,15 +22,17 @@ namespace NFSE.Business.Tabelas.NFe
     {
         public RetornoNotaFiscalEntity ReceberNotaFiscal(Consulta identificaoNotaFiscal)
         {
-            DataBase.SystemEnvironment = identificaoNotaFiscal.Homologacao ? SystemEnvironment.Development : SystemEnvironment.Production;
+            try
+            {
+                DataBase.SystemEnvironment = identificaoNotaFiscal.Homologacao ? SystemEnvironment.Development : SystemEnvironment.Production;
 
-            NfeEntity nfe = new NfeController().ConsultarNotaFiscal(identificaoNotaFiscal.GrvId, identificaoNotaFiscal.UsuarioId, identificaoNotaFiscal.IdentificadorNota, Acao.Retorno);
+                NfeEntity nfe = new NfeController().ConsultarNotaFiscal(identificaoNotaFiscal.GrvId, identificaoNotaFiscal.UsuarioId, identificaoNotaFiscal.IdentificadorNota, Acao.Retorno);
 
-            identificaoNotaFiscal.NfeId = nfe.NfeId;
+                identificaoNotaFiscal.NfeId = nfe.NfeId;
 
-            GrvEntity grv = new GrvController().Selecionar(identificaoNotaFiscal.GrvId);
+                GrvEntity grv = new GrvController().Selecionar(identificaoNotaFiscal.GrvId);
 
-            ClienteDepositoEntity ClienteDeposito = new ClienteDepositoController().Selecionar(new ClienteDepositoEntity { ClienteId = grv.ClienteId, DepositoId = grv.DepositoId });
+                ClienteDepositoEntity ClienteDeposito = new ClienteDepositoController().Selecionar(new ClienteDepositoEntity { ClienteId = grv.ClienteId, DepositoId = grv.DepositoId });
 
             #region Empresa
             EmpresaEntity Empresa;
@@ -50,41 +52,46 @@ namespace NFSE.Business.Tabelas.NFe
             }
             #endregion Empresa
 
-            string json;
+                string json;
 
-        Outer:
+            Outer:
 
-            try
-            {
-                json = new Tools().GetNfse(new NfeConfiguracao().GetRemoteServer() + "/" + identificaoNotaFiscal.IdentificadorNota, Empresa.Token);
-            }
-            catch (Exception ex)
-            {
-                if (ex.Message.Contains("por minuto"))
+                try
                 {
-                    goto Outer;
+                    json = new Tools().GetNfse(new NfeConfiguracao().GetRemoteServer() + "/" + identificaoNotaFiscal.IdentificadorNota, Empresa.Token);
+                }
+                catch (Exception ex)
+                {
+                    if (ex.Message.Contains("por minuto"))
+                    {
+                        goto Outer;
+                    }
+
+                    AtualizarStatusNotaFiscal(nfe);
+
+                    new NfeWsErroController().CadastrarErroGenerico(nfe.GrvId, identificaoNotaFiscal.UsuarioId, nfe.IdentificadorNota, OrigemErro.WebService, Acao.Retorno, "Ocorreu um erro ao receber a Nota Fiscal: " + ex.Message);
+
+                    throw new Exception("Ocorreu um erro ao receber a Nota Fiscal (" + identificaoNotaFiscal.IdentificadorNota + "): " + ex.Message);
                 }
 
-                AtualizarStatusNotaFiscal(nfe);
+                Console.WriteLine(json);
 
-                new NfeWsErroController().CadastrarErroGenerico(nfe.GrvId, identificaoNotaFiscal.UsuarioId, nfe.IdentificadorNota, OrigemErro.WebService, Acao.Retorno, "Ocorreu um erro ao receber a Nota Fiscal: " + ex.Message);
+                try
+                {
+                    return ProcessarRetorno(grv, nfe, identificaoNotaFiscal, json);
+                }
+                catch (Exception ex)
+                {
+                    AtualizarStatusNotaFiscal(nfe);
 
-                throw new Exception("Ocorreu um erro ao receber a Nota Fiscal (" + identificaoNotaFiscal.IdentificadorNota + "): " + ex.Message);
+                    new NfeWsErroController().CadastrarErroGenerico(nfe.GrvId, identificaoNotaFiscal.UsuarioId, nfe.IdentificadorNota, OrigemErro.MobLink, Acao.Retorno, "Ocorreu um erro ao cadastrar a Nota Fiscal: " + ex.Message);
+
+                    throw new Exception("Ocorreu um erro ao cadastrar a Nota Fiscal (" + identificaoNotaFiscal.IdentificadorNota + "): " + ex.Message);
+                }
             }
-
-            Console.WriteLine(json);
-
-            try
+            finally
             {
-                return ProcessarRetorno(grv, nfe, identificaoNotaFiscal, json);
-            }
-            catch (Exception ex)
-            {
-                AtualizarStatusNotaFiscal(nfe);
-
-                new NfeWsErroController().CadastrarErroGenerico(nfe.GrvId, identificaoNotaFiscal.UsuarioId, nfe.IdentificadorNota, OrigemErro.MobLink, Acao.Retorno, "Ocorreu um erro ao cadastrar a Nota Fiscal: " + ex.Message);
-
-                throw new Exception("Ocorreu um erro ao cadastrar a Nota Fiscal (" + identificaoNotaFiscal.IdentificadorNota + "): " + ex.Message);
+                DataBase.DisconnectDataBase();
             }
         }
 
@@ -364,11 +371,13 @@ namespace NFSE.Business.Tabelas.NFe
 
         public RetornoNotaFiscalEntity ReceberNotaFiscalAvulso(Consulta model)
         {
-            DataBase.SystemEnvironment = model.Homologacao ? SystemEnvironment.Development : SystemEnvironment.Production;
+            try
+            {
+                DataBase.SystemEnvironment = model.Homologacao ? SystemEnvironment.Development : SystemEnvironment.Production;
 
-            NfeEntity nfe = new NfeController().ConsultarNotaFiscal(model.IdentificadorNota);
+                NfeEntity nfe = new NfeController().ConsultarNotaFiscal(model.IdentificadorNota);
 
-            model.NfeId = nfe.NfeId;
+                model.NfeId = nfe.NfeId;
 
             #region Empresa
             EmpresaEntity Empresa;
@@ -384,35 +393,40 @@ namespace NFSE.Business.Tabelas.NFe
             }
             #endregion Empresa
 
-            string json;
+                string json;
 
-        Outer:
+            Outer:
 
-            try
-            {
-                json = new Tools().GetNfse(new NfeConfiguracao().GetRemoteServer() + "/" + model.IdentificadorNota, Empresa.Token);
-            }
-            catch (Exception ex)
-            {
-                if (ex.Message.Contains("por minuto"))
+                try
                 {
-                    goto Outer;
+                    json = new Tools().GetNfse(new NfeConfiguracao().GetRemoteServer() + "/" + model.IdentificadorNota, Empresa.Token);
+                }
+                catch (Exception ex)
+                {
+                    if (ex.Message.Contains("por minuto"))
+                    {
+                        goto Outer;
+                    }
+
+                    AtualizarStatusNotaFiscal(nfe);
+
+                    throw new Exception("Ocorreu um erro ao receber a Nota Fiscal (" + model.IdentificadorNota + "): " + ex.Message);
                 }
 
-                AtualizarStatusNotaFiscal(nfe);
+                try
+                {
+                    return ProcessarRetornoAvulso(nfe, model, json);
+                }
+                catch (Exception ex)
+                {
+                    AtualizarStatusNotaFiscal(nfe);
 
-                throw new Exception("Ocorreu um erro ao receber a Nota Fiscal (" + model.IdentificadorNota + "): " + ex.Message);
+                    throw new Exception("Ocorreu um erro ao cadastrar a Nota Fiscal Avulso (" + model.IdentificadorNota + "): " + ex.Message);
+                }
             }
-
-            try
+            finally
             {
-                return ProcessarRetornoAvulso(nfe, model, json);
-            }
-            catch (Exception ex)
-            {
-                AtualizarStatusNotaFiscal(nfe);
-
-                throw new Exception("Ocorreu um erro ao cadastrar a Nota Fiscal Avulso (" + model.IdentificadorNota + "): " + ex.Message);
+                DataBase.DisconnectDataBase();
             }
         }
 
