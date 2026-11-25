@@ -829,13 +829,7 @@ namespace NFSE.Business.Tabelas.NFe
                 cnpj_prestador = empresa.Cnpj,
                 codigo_municipio_emissora = CodigoMunicipioIbgePrestador,
                 codigo_municipio_prestacao = CodigoMunicipioIbgePrestador,
-                codigo_municipio_prestador = CodigoMunicipioIbgePrestador,
-                cep_prestador = enderecoPrestador.Cep,
-                logradouro_prestador = enderecoPrestador.Logradouro,
-                bairro_prestador = enderecoPrestador.Bairro,
-                numero_prestador = empresa.Numero,
-                complemento_prestador = empresa.Complemento,
-                municipio_prestador = enderecoPrestador.Municipio,
+                //codigo_municipio_prestador = CodigoMunicipioIbgePrestador,               
 
                 cpf_tomador = atendimento.NotaFiscalCpf.Length.Equals(11) ? atendimento.NotaFiscalCpf : string.Empty,
                 cnpj_tomador = atendimento.NotaFiscalCpf.Length.Equals(14) ? atendimento.NotaFiscalCpf : string.Empty,
@@ -851,16 +845,24 @@ namespace NFSE.Business.Tabelas.NFe
                 descricao_servico = descricaoConfiguracaoNfe + " CONFORME PROCESSO " + grv.NumeroFormularioGrv,
                 valor_iss = Math.Round(valorIss, 2, MidpointRounding.AwayFromZero).ToString(CultureInfo.GetCultureInfo("en-US")),
                 valor_servico = valorServicos,
-
-                situacao_tributaria_pis_cofins = null,
-                valor_total_tributos_federais = null,
-                valor_total_tributos_estaduais = null,
-                valor_total_tributos_municipais = null,
-                indicador_total_tributacao = "0",
                 percentual_aliquota_relativa_municipio = PossuiRegraNfe(nfeRegras, "ALIQUOTANULA") ? null : string.Format("{0:N2}", AliquotaIss).Replace(",", ".")
             };
 
-            if(!string.IsNullOrEmpty(empresa.InscricaoMunicipal))
+            if (PossuiRegraNfe(nfeRegras, "ENDERECO_PRESTADOR"))
+            {
+                autorizacao.cep_prestador = enderecoPrestador.Cep;
+                autorizacao.logradouro_prestador = enderecoPrestador.Logradouro;
+                autorizacao.numero_prestador = empresa.Numero;
+                autorizacao.bairro_prestador = enderecoPrestador.Bairro;
+                autorizacao.numero_prestador = empresa.Numero;
+                autorizacao.complemento_prestador = empresa.Complemento;
+                autorizacao.municipio_prestador = enderecoPrestador.Municipio;
+                autorizacao.telefone_prestador = !string.IsNullOrWhiteSpace(deposito.TelefoneMob) ? deposito.TelefoneMob : "2199999999";
+                autorizacao.email_prestador = !string.IsNullOrWhiteSpace(deposito.EmailNfe) ? deposito.EmailNfe.Trim() : "";
+
+            }
+
+            if (!string.IsNullOrEmpty(empresa.InscricaoMunicipal))
             {
                 autorizacao.inscricao_municipal_prestador = PossuiRegraNfe(nfeRegras, "OMITIR_INSC_MUNIC") ? null : empresa.InscricaoMunicipal;
             }
@@ -939,6 +941,14 @@ namespace NFSE.Business.Tabelas.NFe
             if (!string.IsNullOrEmpty(CnaeListaServicoParametroMunicipio.CodigoInternoContribuinte))
             {
                 autorizacao.codigo_interno_contribuinte = CnaeListaServicoParametroMunicipio.CodigoInternoContribuinte;
+            }
+
+            if (PossuiRegraNfe(nfeRegras, "VALOR_TOTAL_TRIB"))
+            {
+                autorizacao.situacao_tributaria_pis_cofins = "00";
+                autorizacao.valor_total_tributos_federais = "0";
+                autorizacao.valor_total_tributos_estaduais = "0";
+                autorizacao.valor_total_tributos_municipais = "0";
             }
 
             if (PossuiRegraNfe(nfeRegras, "PERC_TOTAL_TRIB"))

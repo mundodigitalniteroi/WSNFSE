@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,6 +19,8 @@ namespace NFSE.Domain.Entities.NFe
         public string numero_prestador { get; set; }
         public string complemento_prestador { get; set; }
         public string municipio_prestador { get; set; }
+        public string telefone_prestador { get; set; }
+        public string email_prestador { get; set; }
         public string inscricao_municipal_prestador { get; set; }
         public int? codigo_opcao_simples_nacional { get; set; } = 1;
         public string regime_especial_tributacao { get; set; }
@@ -46,11 +49,13 @@ namespace NFSE.Domain.Entities.NFe
         public string percentual_total_tributos_estaduais { get; set; }
         public string percentual_total_tributos_municipais { get; set; }
         public string situacao_tributaria_pis_cofins { get; set; }
-        public string indicador_total_tributacao { get; set; } = "0";
 
-        public string valor_total_tributos_federais { get; set; } = "0";
-        public string valor_total_tributos_estaduais { get; set; } = "0";
-        public string valor_total_tributos_municipais { get; set; } = "0";
+        [JsonProperty(NullValueHandling = NullValueHandling.Include)]
+        public string indicador_total_tributacao { get; set; }
+
+        public string valor_total_tributos_federais { get; set; }
+        public string valor_total_tributos_estaduais { get; set; }
+        public string valor_total_tributos_municipais { get; set; }
 
         public byte? consumidor_final { get; set; }
         public byte? indicador_destinatario { get; set; }
